@@ -1,0 +1,23 @@
+//
+//  CubeEngine-Prefix.pch
+//  CubeEngine
+//
+//  Created by chance on 15/3/5.
+//  Copyright (c) 2015年 ByChance. All rights reserved.
+//
+
+#ifndef GubeEngine_CubeEngine_Prefix_pch
+#define GubeEngine_CubeEngine_Prefix_pch
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
+#import <GLKit/GLKit.h>
+
+#define CUBE_ENGINE_VERSION @"0.0.1"
+
+#endif // end of __OBJC__
+#endif // end of GubeEngine_GubeEngine_Prefix_pch
