@@ -1,5 +1,5 @@
 //
-//  CubeEngine.h
+//  CERenderer.h
 //  CubeEngine
 //
 //  Created by chance on 15/3/5.
@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
 
-#define CUBE_ENGINE_VERSION @"0.0.1"
-
-@interface CubeEngine : NSObject
+@interface CERenderer : NSObject
 
 @end

@@ -12,12 +12,22 @@
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-
-#import <OpenGLES/ES2/gl.h>
-#import <OpenGLES/ES2/glext.h>
 #import <GLKit/GLKit.h>
 
-#define CUBE_ENGINE_VERSION @"0.0.1"
+// debugs
+#if ENABLE_DEBUG
+#define CELog(xx, ...) NSLog(@"%s(%d): " xx, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#else
+#define CELog(xx, ...)
+#endif
+
+// define printf
+#if ENABLE_DEBUG
+#define GEPrintf(xx, ...) printf(xx, ##__VA_ARGS__)
+#else
+#define GEPrintf(xx, ...)
+#endif
+
 
 #endif // end of __OBJC__
 #endif // end of GubeEngine_GubeEngine_Prefix_pch

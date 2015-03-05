@@ -9,29 +9,20 @@
 /* Begin PBXBuildFile section */
 		26193F4C1AA8324600787C64 /* CubeEngine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26193F4B1AA8324600787C64 /* CubeEngine.h */; };
 		26193F4E1AA8324600787C64 /* CubeEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193F4D1AA8324600787C64 /* CubeEngine.m */; };
-		26193F541AA8324600787C64 /* libCubeEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193F481AA8324600787C64 /* libCubeEngine.a */; };
 		26193F651AA832E400787C64 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193F641AA832E400787C64 /* UIKit.framework */; };
 		26193F671AA832E700787C64 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193F661AA832E700787C64 /* GLKit.framework */; };
 		26193F691AA832EB00787C64 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193F681AA832EB00787C64 /* QuartzCore.framework */; };
 		26193F6B1AA832F000787C64 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193F6A1AA832F000787C64 /* CoreGraphics.framework */; };
 		26193F6D1AA832F800787C64 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193F6C1AA832F800787C64 /* Foundation.framework */; };
+		26193FB91AA8574000787C64 /* CERenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193FB81AA8574000787C64 /* CERenderer.m */; };
+		26193FBF1AA85F3F00787C64 /* CEProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193FBE1AA85F3F00787C64 /* CEProgram.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		26193F551AA8324600787C64 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 26193F401AA8324600787C64 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 26193F471AA8324600787C64;
-			remoteInfo = CubeEngine;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		26193F461AA8324600787C64 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
+			dstPath = "$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
 				26193F4C1AA8324600787C64 /* CubeEngine.h in CopyFiles */,
@@ -44,14 +35,16 @@
 		26193F481AA8324600787C64 /* libCubeEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCubeEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		26193F4B1AA8324600787C64 /* CubeEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CubeEngine.h; sourceTree = "<group>"; };
 		26193F4D1AA8324600787C64 /* CubeEngine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CubeEngine.m; sourceTree = "<group>"; };
-		26193F531AA8324600787C64 /* CubeEngineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CubeEngineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		26193F591AA8324600787C64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26193F631AA8327A00787C64 /* CubeEngine-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CubeEngine-Prefix.pch"; sourceTree = "<group>"; };
 		26193F641AA832E400787C64 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		26193F661AA832E700787C64 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		26193F681AA832EB00787C64 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		26193F6A1AA832F000787C64 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		26193F6C1AA832F800787C64 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		26193FB71AA8574000787C64 /* CERenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer.h; sourceTree = "<group>"; };
+		26193FB81AA8574000787C64 /* CERenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERenderer.m; sourceTree = "<group>"; };
+		26193FBD1AA85F3F00787C64 /* CEProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEProgram.h; sourceTree = "<group>"; };
+		26193FBE1AA85F3F00787C64 /* CEProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEProgram.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,14 +60,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		26193F501AA8324600787C64 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				26193F541AA8324600787C64 /* libCubeEngine.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -82,7 +67,6 @@
 			isa = PBXGroup;
 			children = (
 				26193F4A1AA8324600787C64 /* CubeEngine */,
-				26193F571AA8324600787C64 /* CubeEngineTests */,
 				26193F621AA8326900787C64 /* Frameworks */,
 				26193F491AA8324600787C64 /* Products */,
 			);
@@ -92,7 +76,6 @@
 			isa = PBXGroup;
 			children = (
 				26193F481AA8324600787C64 /* libCubeEngine.a */,
-				26193F531AA8324600787C64 /* CubeEngineTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -100,27 +83,15 @@
 		26193F4A1AA8324600787C64 /* CubeEngine */ = {
 			isa = PBXGroup;
 			children = (
+				26193FBD1AA85F3F00787C64 /* CEProgram.h */,
+				26193FBE1AA85F3F00787C64 /* CEProgram.m */,
 				26193F4B1AA8324600787C64 /* CubeEngine.h */,
 				26193F4D1AA8324600787C64 /* CubeEngine.m */,
+				26193FB71AA8574000787C64 /* CERenderer.h */,
+				26193FB81AA8574000787C64 /* CERenderer.m */,
 				26193F631AA8327A00787C64 /* CubeEngine-Prefix.pch */,
 			);
 			path = CubeEngine;
-			sourceTree = "<group>";
-		};
-		26193F571AA8324600787C64 /* CubeEngineTests */ = {
-			isa = PBXGroup;
-			children = (
-				26193F581AA8324600787C64 /* Supporting Files */,
-			);
-			path = CubeEngineTests;
-			sourceTree = "<group>";
-		};
-		26193F581AA8324600787C64 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				26193F591AA8324600787C64 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		26193F621AA8326900787C64 /* Frameworks */ = {
@@ -155,24 +126,6 @@
 			productReference = 26193F481AA8324600787C64 /* libCubeEngine.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		26193F521AA8324600787C64 /* CubeEngineTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 26193F5F1AA8324600787C64 /* Build configuration list for PBXNativeTarget "CubeEngineTests" */;
-			buildPhases = (
-				26193F4F1AA8324600787C64 /* Sources */,
-				26193F501AA8324600787C64 /* Frameworks */,
-				26193F511AA8324600787C64 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				26193F561AA8324600787C64 /* PBXTargetDependency */,
-			);
-			name = CubeEngineTests;
-			productName = CubeEngineTests;
-			productReference = 26193F531AA8324600787C64 /* CubeEngineTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -183,9 +136,6 @@
 				ORGANIZATIONNAME = ByChance;
 				TargetAttributes = {
 					26193F471AA8324600787C64 = {
-						CreatedOnToolsVersion = 6.1;
-					};
-					26193F521AA8324600787C64 = {
 						CreatedOnToolsVersion = 6.1;
 					};
 				};
@@ -203,46 +153,22 @@
 			projectRoot = "";
 			targets = (
 				26193F471AA8324600787C64 /* CubeEngine */,
-				26193F521AA8324600787C64 /* CubeEngineTests */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		26193F511AA8324600787C64 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		26193F441AA8324600787C64 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26193FB91AA8574000787C64 /* CERenderer.m in Sources */,
 				26193F4E1AA8324600787C64 /* CubeEngine.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		26193F4F1AA8324600787C64 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				26193FBF1AA85F3F00787C64 /* CEProgram.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		26193F561AA8324600787C64 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 26193F471AA8324600787C64 /* CubeEngine */;
-			targetProxy = 26193F551AA8324600787C64 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		26193F5A1AA8324600787C64 /* Debug */ = {
@@ -323,6 +249,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREFIX_HEADER = "CubeEngine/CubeEngine-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -334,40 +264,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREFIX_HEADER = "CubeEngine/CubeEngine-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		26193F601AA8324600787C64 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = CubeEngineTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		26193F611AA8324600787C64 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = CubeEngineTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -390,14 +294,7 @@
 				26193F5E1AA8324600787C64 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-		};
-		26193F5F1AA8324600787C64 /* Build configuration list for PBXNativeTarget "CubeEngineTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				26193F601AA8324600787C64 /* Debug */,
-				26193F611AA8324600787C64 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

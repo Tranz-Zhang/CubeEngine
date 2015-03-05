@@ -13,6 +13,7 @@
 		26193F861AA833BF00787C64 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26193F841AA833BF00787C64 /* Main.storyboard */; };
 		26193F881AA833BF00787C64 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26193F871AA833BF00787C64 /* Images.xcassets */; };
 		26193F971AA833C000787C64 /* CubeEngineDevTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193F961AA833C000787C64 /* CubeEngineDevTests.m */; };
+		26193FB51AA853D300787C64 /* libCubeEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193FA91AA839AC00787C64 /* libCubeEngine.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,13 @@
 			remoteGlobalIDString = 26193F531AA8324600787C64;
 			remoteInfo = CubeEngineTests;
 		};
+		26193FB21AA853AA00787C64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 26193FA31AA839AC00787C64 /* CubeEngine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 26193F471AA8324600787C64;
+			remoteInfo = CubeEngine;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26193FB51AA853D300787C64 /* libCubeEngine.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +88,7 @@
 				26193FA31AA839AC00787C64 /* CubeEngine.xcodeproj */,
 				26193F791AA833BF00787C64 /* CubeEngineDev */,
 				26193F931AA833C000787C64 /* CubeEngineDevTests */,
+				26193FB41AA853BF00787C64 /* Frameworks */,
 				26193F781AA833BF00787C64 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -141,6 +151,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		26193FB41AA853BF00787C64 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -155,6 +172,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				26193FB31AA853AA00787C64 /* PBXTargetDependency */,
 			);
 			name = CubeEngineDev;
 			productName = CubeEngineDev;
@@ -285,6 +303,11 @@
 			target = 26193F761AA833BF00787C64 /* CubeEngineDev */;
 			targetProxy = 26193F911AA833C000787C64 /* PBXContainerItemProxy */;
 		};
+		26193FB31AA853AA00787C64 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CubeEngine;
+			targetProxy = 26193FB21AA853AA00787C64 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -380,6 +403,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(BUILT_PRODUCTS_DIR)/CubeEngine/",
+				);
 				INFOPLIST_FILE = CubeEngineDev/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -393,6 +421,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(BUILT_PRODUCTS_DIR)/CubeEngine/",
+				);
 				INFOPLIST_FILE = CubeEngineDev/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -454,6 +487,7 @@
 				26193F9C1AA833C000787C64 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		26193F9D1AA833C000787C64 /* Build configuration list for PBXNativeTarget "CubeEngineDevTests" */ = {
 			isa = XCConfigurationList;
@@ -462,6 +496,7 @@
 				26193F9F1AA833C000787C64 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
