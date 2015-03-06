@@ -9,7 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
+#import "CEObject.h"
 
 @interface CERenderer : NSObject
+@property (nonatomic, readonly) EAGLContext *context;
+
+- (void)renderObject:(CEObject *)object;
 
 @end

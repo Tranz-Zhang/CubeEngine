@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CEViewController.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : CEViewController
 
 
 @end

@@ -16,6 +16,9 @@
 		26193F6D1AA832F800787C64 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193F6C1AA832F800787C64 /* Foundation.framework */; };
 		26193FB91AA8574000787C64 /* CERenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193FB81AA8574000787C64 /* CERenderer.m */; };
 		26193FBF1AA85F3F00787C64 /* CEProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193FBE1AA85F3F00787C64 /* CEProgram.m */; };
+		263C88EB1AA98CE9005A2623 /* CEObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 263C88EA1AA98CE9005A2623 /* CEObject.m */; };
+		263C88EF1AA99151005A2623 /* CEViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 263C88EE1AA99151005A2623 /* CEViewController.m */; };
+		263C88F11AA99B0A005A2623 /* CEViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 263C88ED1AA99151005A2623 /* CEViewController.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,6 +29,7 @@
 			dstSubfolderSpec = 16;
 			files = (
 				26193F4C1AA8324600787C64 /* CubeEngine.h in CopyFiles */,
+				263C88F11AA99B0A005A2623 /* CEViewController.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,6 +49,11 @@
 		26193FB81AA8574000787C64 /* CERenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERenderer.m; sourceTree = "<group>"; };
 		26193FBD1AA85F3F00787C64 /* CEProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEProgram.h; sourceTree = "<group>"; };
 		26193FBE1AA85F3F00787C64 /* CEProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEProgram.m; sourceTree = "<group>"; };
+		263C88E91AA98CE9005A2623 /* CEObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObject.h; sourceTree = "<group>"; };
+		263C88EA1AA98CE9005A2623 /* CEObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEObject.m; sourceTree = "<group>"; };
+		263C88EC1AA98DEB005A2623 /* CEDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CEDefines.h; sourceTree = "<group>"; };
+		263C88ED1AA99151005A2623 /* CEViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEViewController.h; sourceTree = "<group>"; };
+		263C88EE1AA99151005A2623 /* CEViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,12 +92,17 @@
 		26193F4A1AA8324600787C64 /* CubeEngine */ = {
 			isa = PBXGroup;
 			children = (
+				263C88E91AA98CE9005A2623 /* CEObject.h */,
+				263C88EA1AA98CE9005A2623 /* CEObject.m */,
 				26193FBD1AA85F3F00787C64 /* CEProgram.h */,
 				26193FBE1AA85F3F00787C64 /* CEProgram.m */,
 				26193F4B1AA8324600787C64 /* CubeEngine.h */,
 				26193F4D1AA8324600787C64 /* CubeEngine.m */,
 				26193FB71AA8574000787C64 /* CERenderer.h */,
 				26193FB81AA8574000787C64 /* CERenderer.m */,
+				263C88EC1AA98DEB005A2623 /* CEDefines.h */,
+				263C88ED1AA99151005A2623 /* CEViewController.h */,
+				263C88EE1AA99151005A2623 /* CEViewController.m */,
 				26193F631AA8327A00787C64 /* CubeEngine-Prefix.pch */,
 			);
 			path = CubeEngine;
@@ -162,6 +176,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				263C88EF1AA99151005A2623 /* CEViewController.m in Sources */,
+				263C88EB1AA98CE9005A2623 /* CEObject.m in Sources */,
 				26193FB91AA8574000787C64 /* CERenderer.m in Sources */,
 				26193F4E1AA8324600787C64 /* CubeEngine.m in Sources */,
 				26193FBF1AA85F3F00787C64 /* CEProgram.m in Sources */,
