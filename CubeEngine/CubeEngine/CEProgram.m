@@ -64,34 +64,6 @@ typedef void (*GLLogFunction) (GLuint program,
     return self;
 }
 
-- (id)initWithVertexShaderString:(NSString *)vShaderString 
-          fragmentShaderFilename:(NSString *)fShaderFilename;
-{
-    NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:fShaderFilename ofType:@"fsh"];
-    NSString *fragmentShaderString = [NSString stringWithContentsOfFile:fragShaderPathname encoding:NSUTF8StringEncoding error:nil];
-    
-    if ((self = [self initWithVertexShaderString:vShaderString fragmentShaderString:fragmentShaderString])) 
-    {
-    }
-    
-    return self;
-}
-
-- (id)initWithVertexShaderFilename:(NSString *)vShaderFilename 
-            fragmentShaderFilename:(NSString *)fShaderFilename;
-{
-    NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:vShaderFilename ofType:@"vsh"];
-    NSString *vertexShaderString = [NSString stringWithContentsOfFile:vertShaderPathname encoding:NSUTF8StringEncoding error:nil];
-
-    NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:fShaderFilename ofType:@"fsh"];
-    NSString *fragmentShaderString = [NSString stringWithContentsOfFile:fragShaderPathname encoding:NSUTF8StringEncoding error:nil];
-    
-    if ((self = [self initWithVertexShaderString:vertexShaderString fragmentShaderString:fragmentShaderString])) 
-    {
-    }
-    
-    return self;
-}
 // END:init
 // START:compile
 - (BOOL)compileShader:(GLuint *)shader 

@@ -29,10 +29,7 @@
 
 - (id)initWithVertexShaderString:(NSString *)vShaderString 
             fragmentShaderString:(NSString *)fShaderString;
-- (id)initWithVertexShaderString:(NSString *)vShaderString 
-          fragmentShaderFilename:(NSString *)fShaderFilename;
-- (id)initWithVertexShaderFilename:(NSString *)vShaderFilename 
-            fragmentShaderFilename:(NSString *)fShaderFilename;
+
 - (void)addAttribute:(NSString *)attributeName;
 - (GLuint)attributeIndex:(NSString *)attributeName;
 - (GLuint)uniformIndex:(NSString *)uniformName;

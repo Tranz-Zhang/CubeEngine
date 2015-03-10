@@ -7,33 +7,17 @@
 //
 
 #import "CERenderer.h"
-#import "CEProgram.h"
-
-NSString *const kTestVertexShader = SHADER_STRING
-(
- attribute highp vec4 position;
- uniform mat4 projection;
- 
- void main () {
-     gl_Position = projection * position;
- }
-);
-
-NSString *const kTestFragmentSahder = SHADER_STRING
-(
- uniform lowp vec4 drawColor;
- void main() {
-     gl_FragColor = drawColor;
- }
-);
+#import "CETestProgram.h"
+#import "CEObject_Rendering.h"
 
 @implementation CERenderer {
-    CEProgram *_program;
-    GLuint _vertexBuffer;
+    CETestProgram *_program;
     
-    GLint _attribPosition;
-    GLint _uniformProjection;
-    GLint _uniformDrawColor;
+    // clear color
+    CGFloat _clearColorRed;
+    CGFloat _clearColorGreen;
+    CGFloat _clearColorBlue;
+    CGFloat _clearColorAlpha;
 }
 
 - (instancetype)init
@@ -57,54 +41,70 @@ NSString *const kTestFragmentSahder = SHADER_STRING
     
     [EAGLContext setCurrentContext:_context];
     
-    _program = [[CEProgram alloc] initWithVertexShaderString:kTestVertexShader
-                                        fragmentShaderString:kTestFragmentSahder];
-    if (!_program.initialized) {
-        [_program addAttribute:@"position"];
-        if (![_program link])
-        {
-            NSString *progLog = [_program programLog];
-            CELog(@"Program link log: %@", progLog);
-            NSString *fragLog = [_program fragmentShaderLog];
-            CELog(@"Fragment shader compile log: %@", fragLog);
-            NSString *vertLog = [_program vertexShaderLog];
-            CELog(@"Vertex shader compile log: %@", vertLog);
-            return;
-            
-        } else {
-            _attribPosition = [_program attributeIndex:@"position"];
-            _uniformProjection = [_program uniformIndex:@"projection"];
-            _uniformDrawColor = [_program uniformIndex:@"drawColor"];
-        }
+    _program = [CETestProgram defaultProgram];
+    if (![_program link]) {
+        _program = nil;
+        CELog(@"Fail to setup program");
+        
+    } else {
+        CELog(@"Setup program OK");
     }
 }
 
-- (void)renderObject:(CEObject *)object {
-    glClearColor(1, 1, 1, 1);
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
+    if (_backgroundColor != backgroundColor) {
+        _backgroundColor = backgroundColor;
+        [_backgroundColor getRed:&_clearColorRed
+                           green:&_clearColorGreen
+                            blue:&_clearColorBlue
+                           alpha:&_clearColorAlpha];
+    }
+}
+
+
+- (void)renderObject:(CEModel *)object {
+    if (!object || !_program) {
+        CELog(@"Can not render object");
+        return;
+    }
+    
+    glClearColor(_clearColorRed, _clearColorGreen, _clearColorBlue, _clearColorAlpha);
     glClear(GL_COLOR_BUFFER_BIT);
     
     [EAGLContext setCurrentContext:_context];
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, object.vertexData.length, object.vertexData.bytes, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(_attribPosition);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, object.vertexBufferIndex);
+    glEnableVertexAttribArray(_program.attributePosotion);
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 24, 0);
     [_program use];
     
-    // projection
-    float aspect = fabsf(320.0f / 568.0f);
-    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65), aspect, 0.1, 100);
-    projectionMatrix = GLKMatrix4Translate(projectionMatrix, 0, 0, -4);
-    projectionMatrix = GLKMatrix4Multiply(projectionMatrix, object.transformMatrix);
-    
-    glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
-    glUniform4f(_uniformDrawColor, 0.6, 0.6, 0.6, 1.0);
+    // TODO:render object with different programs
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_cameraProjectionMatrix, [self tranformMatrixForObject:object]);
+    glUniformMatrix4fv(_program.uniformProjection, 1, 0, projectionMatrix.m);
+    glUniform4f(_program.uniformDrawColor, 0.6, 0.6, 0.6, 1.0);
     
     glDrawArrays(GL_TRIANGLES, 0, 36);
     
-    glLineWidth(2.0f);
-    glUniform4f(_uniformDrawColor, 1, 1, 1, 1.0);
-    glDrawArrays(GL_LINES, 0, 36);
+    glUniform4f(_program.uniformDrawColor, 1.0, 1.0, 1.0, 1.0);
+    glDrawArrays(GL_LINE_STRIP, 0, 36);
+}
+
+
+- (GLKMatrix4)tranformMatrixForObject:(CEModel *)object {
+    GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(object.location.x,
+                                                          object.location.y,
+                                                          object.location.z);
+    if (object.rotationPivot) {
+        tranformMatrix = GLKMatrix4Rotate(tranformMatrix,
+                                          GLKMathDegreesToRadians(object.rotationDegree),
+                                          object.rotationPivot & CERotationPivotX ? 1 : 0,
+                                          object.rotationPivot & CERotationPivotY ? 1 : 0,
+                                          object.rotationPivot & CERotationPivotZ ? 1 : 0);
+    }
+    if (object.scale != 1) {
+        tranformMatrix = GLKMatrix4Scale(tranformMatrix, object.scale, object.scale, object.scale);
+    }
+    return tranformMatrix;
 }
 
 

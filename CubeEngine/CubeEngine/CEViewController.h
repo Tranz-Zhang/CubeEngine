@@ -7,7 +7,12 @@
 //
 
 #import <GLKit/GLKit.h>
+#import "CEScene.h"
+#import "CEModel.h"
 
 @interface CEViewController : GLKViewController
+
+@property (nonatomic, readonly) CEScene *scene;
+@property (nonatomic, readonly) CEModel *testObject;
 
 @end

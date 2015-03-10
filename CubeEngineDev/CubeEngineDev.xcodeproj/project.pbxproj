@@ -31,13 +31,6 @@
 			remoteGlobalIDString = 26193F481AA8324600787C64;
 			remoteInfo = CubeEngine;
 		};
-		26193FAA1AA839AC00787C64 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 26193FA31AA839AC00787C64 /* CubeEngine.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 26193F531AA8324600787C64;
-			remoteInfo = CubeEngineTests;
-		};
 		26193FB21AA853AA00787C64 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 26193FA31AA839AC00787C64 /* CubeEngine.xcodeproj */;
@@ -146,7 +139,6 @@
 			isa = PBXGroup;
 			children = (
 				26193FA91AA839AC00787C64 /* libCubeEngine.a */,
-				26193FAB1AA839AC00787C64 /* CubeEngineTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -246,13 +238,6 @@
 			fileType = archive.ar;
 			path = libCubeEngine.a;
 			remoteRef = 26193FA81AA839AC00787C64 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		26193FAB1AA839AC00787C64 /* CubeEngineTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = CubeEngineTests.xctest;
-			remoteRef = 26193FAA1AA839AC00787C64 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
