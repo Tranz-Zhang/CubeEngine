@@ -8,10 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, CEProjectionType) {
+    CEProjectionPerpective = 0,
+    CEProjectionOrthographic,
+};
+
 /**
  Representing a camera in 3d world.
  */
 @interface CECamera : NSObject
+
+/**
+ The projection type of the camera.
+ */
+@property (atomic, assign) CEProjectionType projectionType;
 
 /**
  The angle of the vertical viewing area. Default is 65

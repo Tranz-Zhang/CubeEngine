@@ -7,7 +7,7 @@
 //
 
 #import "CEModel.h"
-#import "CEObject_Rendering.h"
+#import "CEModel_Rendering.h"
 
 @implementation CEModel {
     NSData *_vertexData;
@@ -45,14 +45,42 @@
     }
 }
 
-- (GLuint)vertexBufferIndex {
+#pragma mark - Rendering
+- (void)generateVertexBufferInContext:(EAGLContext *)context {
     if (!_vertexBufferIndex && _vertexData.length) {
+        [EAGLContext setCurrentContext:context];
         glGenBuffers(1, &_vertexBufferIndex);
         glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
         glBufferData(GL_ARRAY_BUFFER, _vertexData.length, _vertexData.bytes, GL_STATIC_DRAW);
     }
-    return _vertexBufferIndex;
 }
 
 
+- (GLKMatrix4)transformMatrix {
+#warning Consider offer center transfrom
+    @synchronized(self) {
+        GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(_location.x,
+                                                              _location.y,
+                                                              _location.z);
+        if (_rotationPivot) {
+            tranformMatrix = GLKMatrix4Rotate(tranformMatrix,
+                                              GLKMathDegreesToRadians(_rotationDegree),
+                                              _rotationPivot & CERotationPivotX ? 1 : 0,
+                                              _rotationPivot & CERotationPivotY ? 1 : 0,
+                                              _rotationPivot & CERotationPivotZ ? 1 : 0);
+        }
+        if (_scale != 1) {
+            GLKMatrix4 scaleMatrix = GLKMatrix4MakeScale(_scale, _scale, _scale);
+            GLKMatrix4 adjustMatrix = GLKMatrix4MakeTranslation(-1, 0, 0);
+            GLKMatrix4 transposeAdjustMatrix = GLKMatrix4Invert(adjustMatrix, NULL);
+            tranformMatrix = GLKMatrix4Multiply(transposeAdjustMatrix, GLKMatrix4Multiply(scaleMatrix, GLKMatrix4Multiply(adjustMatrix, tranformMatrix)));
+        }
+        return tranformMatrix;
+    }
+}
+
+
+
 @end
+
+

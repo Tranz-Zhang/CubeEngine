@@ -19,6 +19,7 @@
     if (self) {
         _location = GLKVector3Make(0, 0, 0);
         _rotationQuaternion = GLKQuaternionIdentity;
+        _projectionType = CEProjectionPerpective;
     }
     return self;
 }
@@ -27,8 +28,6 @@
     @synchronized(self) {
         GLKMatrix4 lookAtMatrix = GLKMatrix4MakeLookAt(_location.x, _location.y, _location.z, targetLocation.x, targetLocation.y, targetLocation.z, 0, 1, 0);
         _rotationQuaternion = GLKQuaternionMakeWithMatrix4(lookAtMatrix);
-        GLKMatrix4 reverseMatrix = GLKMatrix4MakeWithQuaternion(_rotationQuaternion);
-        reverseMatrix = GLKMatrix4Translate(reverseMatrix, _location.x, _location.y, _location.z);
     }
 }
 
@@ -37,7 +36,19 @@
     @synchronized(self) {
         GLKMatrix4 transformMatrix = GLKMatrix4MakeWithQuaternion(_rotationQuaternion);
         transformMatrix = GLKMatrix4Translate(transformMatrix, -_location.x, -_location.y, -_location.z);
-        GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(_radianDegree), _aspect, _nearZ, _farZ);
+        
+        GLKMatrix4 projectionMatrix;
+        if (_projectionType == CEProjectionPerpective) {
+            projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(_radianDegree), _aspect, _nearZ, _farZ);
+
+        } else if (_projectionType == CEProjectionOrthographic) {
+            projectionMatrix = GLKMatrix4MakeOrtho(-1, 1, -1 / _aspect, 1 / _aspect, _nearZ, _farZ);
+            
+        } else {
+            CELog(@"Error: Unknown projection type");
+            projectionMatrix = GLKMatrix4Identity;
+        }
+        
         projectionMatrix = GLKMatrix4Multiply(projectionMatrix, transformMatrix);
         return projectionMatrix;
     }

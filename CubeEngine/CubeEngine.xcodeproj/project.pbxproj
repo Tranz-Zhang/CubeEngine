@@ -49,7 +49,7 @@
 		261089651AAD31AF0041E142 /* CEScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEScene.m; sourceTree = "<group>"; };
 		261089671AAD31C60041E142 /* CECamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CECamera.h; sourceTree = "<group>"; };
 		261089681AAD31C60041E142 /* CECamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CECamera.m; sourceTree = "<group>"; };
-		2610896D1AAD39D70041E142 /* CEObject_Rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObject_Rendering.h; sourceTree = "<group>"; };
+		2610896D1AAD39D70041E142 /* CEModel_Rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEModel_Rendering.h; sourceTree = "<group>"; };
 		2610896E1AAD3D700041E142 /* CECamera_Rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CECamera_Rendering.h; sourceTree = "<group>"; };
 		26193F481AA8324600787C64 /* libCubeEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCubeEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		26193F4B1AA8324600787C64 /* CubeEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CubeEngine.h; sourceTree = "<group>"; };
@@ -109,7 +109,7 @@
 				261089651AAD31AF0041E142 /* CEScene.m */,
 				263C88E91AA98CE9005A2623 /* CEModel.h */,
 				263C88EA1AA98CE9005A2623 /* CEModel.m */,
-				2610896D1AAD39D70041E142 /* CEObject_Rendering.h */,
+				2610896D1AAD39D70041E142 /* CEModel_Rendering.h */,
 				261089671AAD31C60041E142 /* CECamera.h */,
 				261089681AAD31C60041E142 /* CECamera.m */,
 				2610896E1AAD3D700041E142 /* CECamera_Rendering.h */,

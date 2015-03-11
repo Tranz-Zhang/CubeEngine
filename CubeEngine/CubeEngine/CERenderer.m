@@ -8,7 +8,7 @@
 
 #import "CERenderer.h"
 #import "CETestProgram.h"
-#import "CEObject_Rendering.h"
+#import "CEModel_Rendering.h"
 
 @implementation CERenderer {
     CETestProgram *_program;
@@ -67,11 +67,15 @@
         CELog(@"Can not render object");
         return;
     }
+    [EAGLContext setCurrentContext:_context];
     
+    // set background
     glClearColor(_clearColorRed, _clearColorGreen, _clearColorBlue, _clearColorAlpha);
     glClear(GL_COLOR_BUFFER_BIT);
-    
-    [EAGLContext setCurrentContext:_context];
+    // check vertex buffer
+    if (!object.vertexBufferIndex) {
+        [object generateVertexBufferInContext:_context];
+    }
     
     glBindBuffer(GL_ARRAY_BUFFER, object.vertexBufferIndex);
     glEnableVertexAttribArray(_program.attributePosotion);
@@ -79,7 +83,7 @@
     [_program use];
     
     // TODO:render object with different programs
-    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_cameraProjectionMatrix, [self tranformMatrixForObject:object]);
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_cameraProjectionMatrix, object.transformMatrix);
     glUniformMatrix4fv(_program.uniformProjection, 1, 0, projectionMatrix.m);
     glUniform4f(_program.uniformDrawColor, 0.6, 0.6, 0.6, 1.0);
     
