@@ -115,16 +115,19 @@ GLfloat gTriangleVertexData[108] =
     [super viewDidLoad];
     _scene.camera.aspect = self.view.bounds.size.width / self.view.bounds.size.height;
     NSData *vertexData = [NSData dataWithBytes:gTriangleVertexData length:sizeof(gTriangleVertexData)];
-    _testObject = [[CEModel alloc] initWithVertexData:vertexData dataType:CEVertextDataType_V3];
-    _testObject.location = GLKVector3Make(0, 0, 0);
+    _testObject = [CEModel modelWithVertexData:vertexData type:CEVertextDataType_V3N3];
 //    _testObject.transformMatrix = GLKMatrix4Identity;
-    
+
     [_scene addRenderObject:_testObject];
+    
+    NSInteger size = sizeof(gCubeVertexData);
+    NSData *vertexData2 = [NSData dataWithBytes:gCubeVertexData length:sizeof(gCubeVertexData)];
+    CEModel *testObject2 = [CEModel modelWithVertexData:vertexData2 type:CEVertextDataType_V3N3];
+    [_scene addRenderObject:testObject2];
     
     GLKView *view = (GLKView *)self.view;
     view.context = _scene.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
-    
     
     //
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
@@ -135,7 +138,32 @@ GLfloat gTriangleVertexData[108] =
 //    GLKMatrix4 returnMatrix = GLKMatrix4MakeWithQuaternion(quarternion);
 //    returnMatrix = GLKMatrix(returnMatrix, radian, axis);
     printf("CalculationDuration: %.8f", CFAbsoluteTimeGetCurrent() - startTime);
+
 }
+
+
+
+#pragma mark - rotation
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    CGFloat aspect1 = self.view.bounds.size.width / self.view.bounds.size.height;
+    CGFloat aspect2 = self.view.bounds.size.height / self.view.bounds.size.width;
+    if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation)) {
+        _scene.camera.aspect = MIN(aspect1, aspect2);
+        
+    } else {
+        _scene.camera.aspect = MAX(aspect1, aspect2);
+    }
+}
+
+// for iOS 8
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    _scene.camera.aspect = size.width / size.height;
+}
+
+
+#pragma mark - rendering
 
 static float rotation = 0;
 - (void)update {

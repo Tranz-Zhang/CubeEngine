@@ -9,6 +9,12 @@
 #ifndef CubeEngine_CEDefines_h
 #define CubeEngine_CEDefines_h
 
+// shader string
+#define CE_SHADER_STRING(text) @ #text
+
+// buffer offset
+#define CE_BUFFER_OFFSET(i) ((char *)NULL + (i))
+
 
 
 #endif

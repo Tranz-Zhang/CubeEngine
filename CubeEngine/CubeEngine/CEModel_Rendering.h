@@ -17,6 +17,9 @@
 // an auto generated vertex buffer in OpenGLES
 @property (nonatomic, readonly) GLuint vertexBufferIndex;
 
+// number of vertext in model
+@property (atomic, readonly) GLsizei vertextCount;
+
 - (void)generateVertexBufferInContext:(EAGLContext *)context;
 
 @end

@@ -60,7 +60,7 @@
 
 - (IBAction)onObjectSettingChanged:(id)sender {
     _cameraSegment.selectedSegmentIndex = UISegmentedControlNoSegment;
-    [_valueSlider setValue:0.0 animated:YES];
+    [_valueSlider setValue:0.5 animated:YES];
 }
 
 - (void)updateInfoView {
@@ -120,15 +120,15 @@
     GLKVector3 location = self.testObject.location;
     switch (_selectionSegment.selectedSegmentIndex) {
         case 0:
-            location.x = slider.value;
+            location.x = slider.value * 6 - 3;
             break;
             
         case 1:
-            location.y = slider.value;
+            location.y = slider.value* 6 - 3;
             break;
             
         case 2:
-            location.z = slider.value;
+            location.z = slider.value* 6 - 3;
             break;
             
         default:
@@ -140,17 +140,17 @@
 - (void)testObjectRotationWithSlider:(UISlider *)slider {
     switch (_selectionSegment.selectedSegmentIndex) {
         case 0:
-            [self.testObject setRotation:slider.value * 180
+            [self.testObject setRotation:slider.value * 360 - 180
                                  onPivot:CERotationPivotX];
             break;
             
         case 1:
-            [self.testObject setRotation:slider.value * 180
+            [self.testObject setRotation:slider.value * 360 - 180
                                  onPivot:CERotationPivotY];
             break;
             
         case 2:
-            [self.testObject setRotation:slider.value * 180
+            [self.testObject setRotation:slider.value * 360 - 180
                                  onPivot:CERotationPivotZ];
             break;
             
@@ -160,7 +160,7 @@
 }
 
 - (void)testObjectScaleWithSlider:(UISlider *)slider {
-    self.testObject.scale = slider.value + 1;
+    self.testObject.scale = slider.value * 2 - 1;
 }
 
 #pragma mark - Test Camera Transfrom

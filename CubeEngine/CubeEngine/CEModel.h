@@ -24,8 +24,13 @@ typedef NS_ENUM(NSInteger, CEVertextDataType) {
 @interface CEModel : NSObject
 
 // size of the model
-@property (nonatomic, readonly) GLKVector3 size;
+@property (atomic, readonly) GLKVector3 size;
 
+/**
+ Act as the same as the anchorPoint of CALayer, but in 3D. the range of value should be 0.0f - 1.0f,
+ The default value is (0.5f, 0.5f, 0.5f), which is the center of the model.
+ */
+@property (atomic, assign) GLKVector3 anchorPoint;
 
 // transform properties
 @property (atomic, assign) GLKVector3 location;
@@ -36,7 +41,10 @@ typedef NS_ENUM(NSInteger, CEVertextDataType) {
 // positive value for counter clockwise
 - (void)setRotation:(GLfloat)rotationDegree onPivot:(CERotationPivot)rotationPivot;
 
++ (instancetype)modelWithVertexData:(NSData *)vertexData type:(CEVertextDataType)dataType;
 
-- (instancetype)initWithVertexData:(NSData *)vertexData dataType:(CEVertextDataType)dataType;
+//- (instancetype)initWithVertexData:(NSData *)vertexData dataType:(CEVertextDataType)dataType;
+
 
 @end
+

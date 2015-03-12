@@ -45,8 +45,11 @@
 
 #pragma mark -
 - (void)addRenderObject:(CEModel *)renderObject {
-    if (renderObject) {
+    if ([renderObject isKindOfClass:[CEModel class]]) {
         [_renderObjects addObject:renderObject];
+        
+    } else {
+        CEError(@"Can not add model to scene");
     }
 }
 
@@ -59,7 +62,8 @@
 
 - (void)update {
     _renderer.cameraProjectionMatrix = _camera.projectionMatrix;
-    [_renderer renderObject:_renderObjects.lastObject];
+//    [_renderer renderObject:_renderObjects.lastObject];
+    [_renderer renderObjects:_renderObjects];
 }
 
 

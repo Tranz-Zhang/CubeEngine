@@ -34,7 +34,7 @@
     if (!_context) {
         _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         if (!_context) {
-            GEPrintf("Fail to init context");
+            CEError("Fail to init context");
             return;
         }
     }
@@ -44,7 +44,7 @@
     _program = [CETestProgram defaultProgram];
     if (![_program link]) {
         _program = nil;
-        CELog(@"Fail to setup program");
+        CEError(@"Fail to setup program");
         
     } else {
         CELog(@"Setup program OK");
@@ -64,14 +64,18 @@
 
 - (void)renderObject:(CEModel *)object {
     if (!object || !_program) {
-        CELog(@"Can not render object");
+        CEError(@"Can not render object");
         return;
     }
     [EAGLContext setCurrentContext:_context];
     
     // set background
     glClearColor(_clearColorRed, _clearColorGreen, _clearColorBlue, _clearColorAlpha);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClearDepthf(1.0f);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    
+    
+    
     // check vertex buffer
     if (!object.vertexBufferIndex) {
         [object generateVertexBufferInContext:_context];
@@ -79,18 +83,66 @@
     
     glBindBuffer(GL_ARRAY_BUFFER, object.vertexBufferIndex);
     glEnableVertexAttribArray(_program.attributePosotion);
-    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 24, 0);
+    glVertexAttribPointer(_program.attributePosotion, 3, GL_FLOAT, GL_FALSE, 24, CE_BUFFER_OFFSET(0));
     [_program use];
     
     // TODO:render object with different programs
     GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_cameraProjectionMatrix, object.transformMatrix);
     glUniformMatrix4fv(_program.uniformProjection, 1, 0, projectionMatrix.m);
-    glUniform4f(_program.uniformDrawColor, 0.6, 0.6, 0.6, 1.0);
     
+    glUniform4f(_program.uniformDrawColor, 0.6, 0.6, 0.6, 1.0);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     
     glUniform4f(_program.uniformDrawColor, 1.0, 1.0, 1.0, 1.0);
     glDrawArrays(GL_LINE_STRIP, 0, 36);
+}
+
+
+- (void)renderObjects:(NSArray *)objects {
+    if (!objects.count || !_program) {
+        CEError(@"Can not render object");
+        return;
+    }
+    [EAGLContext setCurrentContext:_context];
+    
+    // set background
+    glClearColor(_clearColorRed, _clearColorGreen, _clearColorBlue, _clearColorAlpha);
+    glClearDepthf(1.0f);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    
+    // enable depth test
+    glEnable(GL_DEPTH_TEST);
+//        glDepthMask(GL_TRUE);
+//        glDepthFunc(GL_LEQUAL);
+//        glDepthRangef(0.0f, 1.0f);
+    
+    for (CEModel *object in objects) {
+        // check vertex buffer
+        if (!object.vertexBufferIndex) {
+            [object generateVertexBufferInContext:_context];
+        }
+        
+        glBindBuffer(GL_ARRAY_BUFFER, object.vertexBufferIndex);
+        glEnableVertexAttribArray(_program.attributePosotion);
+        glVertexAttribPointer(_program.attributePosotion, 3, GL_FLOAT, GL_FALSE, 24, CE_BUFFER_OFFSET(0));
+        [_program use];
+        
+        // TODO:render object with different programs
+        GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_cameraProjectionMatrix, object.transformMatrix);
+        glUniformMatrix4fv(_program.uniformProjection, 1, 0, projectionMatrix.m);
+        
+        if (objects.lastObject == object) {
+            glUniform4f(_program.uniformDrawColor, 0.6, 0.6, 0.6, 1.0);
+        } else {
+            glUniform4f(_program.uniformDrawColor, 0.6, 0.0, 0.6, 1.0);
+        }
+        
+        glDrawArrays(GL_TRIANGLES, 0, object.vertextCount);
+        
+        glUniform4f(_program.uniformDrawColor, 0.5, 0.5, 0.5, 1.0);
+        glLineWidth(2.0f);
+        glDrawArrays(GL_LINE_STRIP, 0, object.vertextCount);
+    }
 }
 
 

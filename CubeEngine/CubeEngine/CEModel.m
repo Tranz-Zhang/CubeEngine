@@ -10,10 +10,23 @@
 #import "CEModel_Rendering.h"
 
 @implementation CEModel {
+    GLKVector3 _originalOffset;
+    
     NSData *_vertexData;
     CEVertextDataType _dataType;
     GLuint _vertexBufferIndex;
 }
+
+
++ (instancetype)modelWithVertexData:(NSData *)vertexData type:(CEVertextDataType)dataType {
+    CEModel *model = [[CEModel alloc] initWithVertexData:vertexData dataType:dataType];
+    if (!model.vertextCount) {
+        CEError(@"Can not initialized CEModel, vertextCount is 0");
+        return nil;
+    }
+    return model;
+}
+
 
 - (instancetype)initWithVertexData:(NSData *)vertexData
                           dataType:(CEVertextDataType)dataType
@@ -21,9 +34,13 @@
     self = [super init];
     if (self) {
         _vertexData = vertexData;
+        _dataType = dataType;
         _location = GLKVector3Make(0, 0, 0);
         _scale = 1;
         _vertexBufferIndex = 0;
+        _vertextCount = 0;
+        _anchorPoint = GLKVector3Make(0.5f, 0.5f, 0.5f);
+        [self setupModel];
     }
     return self;
 }
@@ -34,6 +51,56 @@
         glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
         glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_STATIC_DRAW);
         glDeleteBuffers(1, &_vertexBufferIndex);
+    }
+}
+
+- (void)setupModel {
+    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+    // calculate vertex count
+    NSInteger elementCount = [self elementCountForDataType:_dataType];
+    NSInteger elementSize = elementCount * sizeof(GLfloat);
+    if (_vertexData.length % elementSize) {
+        CEError(@"Wrong vertext size");
+        return;
+    }
+    _vertextCount = (int)(_vertexData.length / elementSize);
+    
+    // calculate model size
+    NSRange readRange = NSMakeRange(0, 3 * sizeof(GLfloat));
+    GLfloat maxX = FLT_MIN, maxY = FLT_MIN, maxZ = FLT_MIN;
+    GLfloat minX = FLT_MAX, minY = FLT_MAX, minZ = FLT_MAX;
+    for (int i = 0; i < _vertextCount; i++) {
+        GLfloat vertexLocation[3];
+        [_vertexData getBytes:vertexLocation range:readRange];
+        maxX = MAX(maxX, vertexLocation[0]);
+        maxY = MAX(maxY, vertexLocation[1]);
+        maxZ = MAX(maxZ, vertexLocation[2]);
+        minX = MIN(minX, vertexLocation[0]);
+        minY = MIN(minY, vertexLocation[1]);
+        minZ = MIN(minZ, vertexLocation[2]);
+        readRange.location += elementSize;
+    }
+    
+    // original offset
+    _originalOffset = GLKVector3Make((maxX + minX) / 2,
+                                     (maxY + minY) / 2,
+                                     (maxZ + minZ) / 2);
+    _size = GLKVector3Make(maxX - minX, maxY - minY, maxZ - minZ);
+    
+    CELog(@"Setup model OK: %.8f", CFAbsoluteTimeGetCurrent() - startTime);
+}
+
+- (NSUInteger)elementCountForDataType:(CEVertextDataType)dataType {
+    switch (dataType) {
+        case CEVertextDataType_V3:
+            return 3;
+        case CEVertextDataType_V3N3:
+            return 6;
+        case CEVertextDataType_V3N3T2:
+            return 8;
+            
+        default:
+            return 0;
     }
 }
 

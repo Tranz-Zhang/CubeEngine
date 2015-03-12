@@ -45,7 +45,7 @@
             projectionMatrix = GLKMatrix4MakeOrtho(-1, 1, -1 / _aspect, 1 / _aspect, _nearZ, _farZ);
             
         } else {
-            CELog(@"Error: Unknown projection type");
+            CEError(@"Error: Unknown projection type");
             projectionMatrix = GLKMatrix4Identity;
         }
         

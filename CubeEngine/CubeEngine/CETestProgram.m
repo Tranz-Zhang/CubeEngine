@@ -8,7 +8,7 @@
 
 #import "CETestProgram.h"
 
-NSString *const kTestVertexShader = SHADER_STRING
+NSString *const kTestVertexShader = CE_SHADER_STRING
 (
  attribute highp vec4 position;
  uniform mat4 projection;
@@ -18,7 +18,7 @@ NSString *const kTestVertexShader = SHADER_STRING
  }
  );
 
-NSString *const kTestFragmentSahder = SHADER_STRING
+NSString *const kTestFragmentSahder = CE_SHADER_STRING
 (
  uniform lowp vec4 drawColor;
  void main() {
@@ -49,11 +49,11 @@ NSString *const kTestFragmentSahder = SHADER_STRING
     } else {
         // print error info
         NSString *progLog = [self programLog];
-        CELog(@"Program link log: %@", progLog);
+        CEError(@"Program link log: %@", progLog);
         NSString *fragLog = [self fragmentShaderLog];
-        CELog(@"Fragment shader compile log: %@", fragLog);
+        CEError(@"Fragment shader compile log: %@", fragLog);
         NSString *vertLog = [self vertexShaderLog];
-        CELog(@"Vertex shader compile log: %@", vertLog);
+        CEError(@"Vertex shader compile log: %@", vertLog);
     }
     
     return isOK;

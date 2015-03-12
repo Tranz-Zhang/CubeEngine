@@ -13,23 +13,28 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
+#import "CEDefines.h"
 
-// debugs
+// debug
 #if 1
-#define CELog(xx, ...) NSLog(@"%s(%d): " xx, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#define CELog(xx, ...) NSLog(xx, ##__VA_ARGS__)
 #else
 #define CELog(xx, ...)
 #endif
 
-// define printf
 #if 1
-#define GEPrintf(xx, ...) printf(xx, ##__VA_ARGS__)
+#define CEError(xx, ...) NSLog(@"%s(%d): " xx, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 #else
-#define GEPrintf(xx, ...)
+#define CEError(xx, ...)
 #endif
 
-// shader string
-#define SHADER_STRING(text) @ #text
+
+// define printf
+#if 1
+#define CEPrintf(xx, ...) printf(xx, ##__VA_ARGS__)
+#else
+#define CEPrintf(xx, ...)
+#endif
 
 #endif // end of __OBJC__
 #endif // end of GubeEngine_GubeEngine_Prefix_pch
