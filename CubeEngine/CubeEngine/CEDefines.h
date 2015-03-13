@@ -16,5 +16,4 @@
 #define CE_BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 
-
 #endif

@@ -16,11 +16,13 @@
     BOOL _isLookingAtObject;
 }
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *coordinateSegment;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *selectionSegment;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *objectSegment;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *cameraSegment;
 @property (weak, nonatomic) IBOutlet UISlider *valueSlider;
 @property (weak, nonatomic) IBOutlet UITextView *infoTextView;
+
 
 @end
 
@@ -39,8 +41,8 @@
 
 - (IBAction)onReset:(id)sender {
     self.testObject.location = GLKVector3Make(0, 0, 0);
-    [self.testObject setRotation:0 onPivot:CERotationPivotNone];
-    self.testObject.scale = 1;
+//    [self.testObject setRotation:0 onPivot:CERotationPivotNone];
+//    self.testObject.scale = 1;
     self.scene.camera.location = GLKVector3Make(0, 0, 4);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
@@ -138,29 +140,29 @@
 }
 
 - (void)testObjectRotationWithSlider:(UISlider *)slider {
-    switch (_selectionSegment.selectedSegmentIndex) {
-        case 0:
-            [self.testObject setRotation:slider.value * 360 - 180
-                                 onPivot:CERotationPivotX];
-            break;
-            
-        case 1:
-            [self.testObject setRotation:slider.value * 360 - 180
-                                 onPivot:CERotationPivotY];
-            break;
-            
-        case 2:
-            [self.testObject setRotation:slider.value * 360 - 180
-                                 onPivot:CERotationPivotZ];
-            break;
-            
-        default:
-            break;
-    }
+//    switch (_selectionSegment.selectedSegmentIndex) {
+//        case 0:
+//            [self.testObject setRotation:slider.value * 360 - 180
+//                                 onPivot:CERotationPivotX];
+//            break;
+//            
+//        case 1:
+//            [self.testObject setRotation:slider.value * 360 - 180
+//                                 onPivot:CERotationPivotY];
+//            break;
+//            
+//        case 2:
+//            [self.testObject setRotation:slider.value * 360 - 180
+//                                 onPivot:CERotationPivotZ];
+//            break;
+//            
+//        default:
+//            break;
+//    }
 }
 
 - (void)testObjectScaleWithSlider:(UISlider *)slider {
-    self.testObject.scale = slider.value * 2 - 1;
+//    self.testObject.scale = slider.value * 2 - 1;
 }
 
 #pragma mark - Test Camera Transfrom

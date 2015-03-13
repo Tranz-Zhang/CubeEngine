@@ -146,22 +146,5 @@
 }
 
 
-- (GLKMatrix4)tranformMatrixForObject:(CEModel *)object {
-    GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(object.location.x,
-                                                          object.location.y,
-                                                          object.location.z);
-    if (object.rotationPivot) {
-        tranformMatrix = GLKMatrix4Rotate(tranformMatrix,
-                                          GLKMathDegreesToRadians(object.rotationDegree),
-                                          object.rotationPivot & CERotationPivotX ? 1 : 0,
-                                          object.rotationPivot & CERotationPivotY ? 1 : 0,
-                                          object.rotationPivot & CERotationPivotZ ? 1 : 0);
-    }
-    if (object.scale != 1) {
-        tranformMatrix = GLKMatrix4Scale(tranformMatrix, object.scale, object.scale, object.scale);
-    }
-    return tranformMatrix;
-}
-
 
 @end

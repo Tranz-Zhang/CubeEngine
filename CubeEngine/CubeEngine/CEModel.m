@@ -36,7 +36,7 @@
         _vertexData = vertexData;
         _dataType = dataType;
         _location = GLKVector3Make(0, 0, 0);
-        _scale = 1;
+//        _scale = 1;
         _vertexBufferIndex = 0;
         _vertextCount = 0;
         _anchorPoint = GLKVector3Make(0.5f, 0.5f, 0.5f);
@@ -105,12 +105,12 @@
 }
 
 
-- (void)setRotation:(GLfloat)rotationDegree onPivot:(CERotationPivot)rotationPivot {
-    @synchronized(self) {
-        _rotationDegree = rotationDegree;
-        _rotationPivot = rotationPivot;
-    }
-}
+//- (void)setRotation:(GLfloat)rotationDegree onPivot:(CERotationPivot)rotationPivot {
+//    @synchronized(self) {
+//        _rotationDegree = rotationDegree;
+//        _rotationPivot = rotationPivot;
+//    }
+//}
 
 #pragma mark - Rendering
 - (void)generateVertexBufferInContext:(EAGLContext *)context {
@@ -129,19 +129,19 @@
         GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(_location.x,
                                                               _location.y,
                                                               _location.z);
-        if (_rotationPivot) {
-            tranformMatrix = GLKMatrix4Rotate(tranformMatrix,
-                                              GLKMathDegreesToRadians(_rotationDegree),
-                                              _rotationPivot & CERotationPivotX ? 1 : 0,
-                                              _rotationPivot & CERotationPivotY ? 1 : 0,
-                                              _rotationPivot & CERotationPivotZ ? 1 : 0);
-        }
-        if (_scale != 1) {
-            GLKMatrix4 scaleMatrix = GLKMatrix4MakeScale(_scale, _scale, _scale);
-            GLKMatrix4 adjustMatrix = GLKMatrix4MakeTranslation(-1, 0, 0);
-            GLKMatrix4 transposeAdjustMatrix = GLKMatrix4Invert(adjustMatrix, NULL);
-            tranformMatrix = GLKMatrix4Multiply(transposeAdjustMatrix, GLKMatrix4Multiply(scaleMatrix, GLKMatrix4Multiply(adjustMatrix, tranformMatrix)));
-        }
+//        if (_rotationPivot) {
+//            tranformMatrix = GLKMatrix4Rotate(tranformMatrix,
+//                                              GLKMathDegreesToRadians(_rotationDegree),
+//                                              _rotationPivot & CERotationPivotX ? 1 : 0,
+//                                              _rotationPivot & CERotationPivotY ? 1 : 0,
+//                                              _rotationPivot & CERotationPivotZ ? 1 : 0);
+//        }
+//        if (_scale != 1) {
+//            GLKMatrix4 scaleMatrix = GLKMatrix4MakeScale(_scale, _scale, _scale);
+//            GLKMatrix4 adjustMatrix = GLKMatrix4MakeTranslation(-1, 0, 0);
+//            GLKMatrix4 transposeAdjustMatrix = GLKMatrix4Invert(adjustMatrix, NULL);
+//            tranformMatrix = GLKMatrix4Multiply(transposeAdjustMatrix, GLKMatrix4Multiply(scaleMatrix, GLKMatrix4Multiply(adjustMatrix, tranformMatrix)));
+//        }
         return tranformMatrix;
     }
 }

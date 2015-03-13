@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_OPTIONS(NSInteger, CERotationPivot) {
-    CERotationPivotNone = 0,
-    CERotationPivotX = 1 << 0,
-    CERotationPivotY = 1 << 1,
-    CERotationPivotZ = 1 << 2,
+typedef NS_OPTIONS(NSInteger, CEAxisMask) {
+    CEAxisNone = 0,
+    CEAxisX = 1 << 0,
+    CEAxisY = 1 << 1,
+    CEAxisZ = 1 << 2,
 };
+
 
 typedef NS_ENUM(NSInteger, CEVertextDataType) {
     CEVertextDataType_V3 = 0,   // vertex XYZ                           (size:3)
@@ -33,18 +34,24 @@ typedef NS_ENUM(NSInteger, CEVertextDataType) {
 @property (atomic, assign) GLKVector3 anchorPoint;
 
 // transform properties
+/**
+ The location of the model, actually it's the location of model's anchor point.
+ */
 @property (atomic, assign) GLKVector3 location;
-@property (atomic, assign) float scale;
-@property (atomic, readonly) CERotationPivot rotationPivot;
-@property (atomic, readonly) float rotationDegree;
 
-// positive value for counter clockwise
-- (void)setRotation:(GLfloat)rotationDegree onPivot:(CERotationPivot)rotationPivot;
+@property (atomic, readonly) GLfloat rotationDegree;
+@property (atomic, readonly) CEAxisMask rotationAxis;
+
+@property (atomic, assign) GLKVector3 scale;
 
 + (instancetype)modelWithVertexData:(NSData *)vertexData type:(CEVertextDataType)dataType;
 
-//- (instancetype)initWithVertexData:(NSData *)vertexData dataType:(CEVertextDataType)dataType;
+- (void)setRotationWithDegree:(GLfloat)rotationDegree axis:(CEAxisMask)axis;
+- (void)setScale:(GLfloat)scaleFactor axis:(CEAxisMask)axis ;
 
 
 @end
+
+
+
 

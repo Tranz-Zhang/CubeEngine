@@ -114,6 +114,9 @@ GLfloat gTriangleVertexData[108] =
 - (void)viewDidLoad {
     [super viewDidLoad];
     _scene.camera.aspect = self.view.bounds.size.width / self.view.bounds.size.height;
+    _scene.camera.location = GLKVector3Make(0, 5, 5);
+    [_scene.camera lookAt:GLKVector3Make(0, 0, 0)];
+    
     NSData *vertexData = [NSData dataWithBytes:gTriangleVertexData length:sizeof(gTriangleVertexData)];
     _testObject = [CEModel modelWithVertexData:vertexData type:CEVertextDataType_V3N3];
 //    _testObject.transformMatrix = GLKMatrix4Identity;
@@ -129,16 +132,24 @@ GLfloat gTriangleVertexData[108] =
     view.context = _scene.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
-    //
-    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    GLKMatrix4 testMatrix = GLKMatrix4MakeLookAt(2, 2, 2, 0, 0, 0, 0, 1, 0);
-    GLKQuaternion quarternion = GLKQuaternionMakeWithMatrix4(testMatrix);
-//    GLKVector3 axis = GLKQuaternionAxis(quarternion);
-//    float radian = GLKQuaternionAngle(quarternion);
-//    GLKMatrix4 returnMatrix = GLKMatrix4MakeWithQuaternion(quarternion);
-//    returnMatrix = GLKMatrix(returnMatrix, radian, axis);
-    printf("CalculationDuration: %.8f", CFAbsoluteTimeGetCurrent() - startTime);
-
+    
+//    GLKQuaternion qX = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(60), 1, 0, 0);
+//    GLKQuaternion qy = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(60), 0, 1, 0);
+//    GLKQuaternion combine = GLKQuaternionMultiply(qX, qy);
+//    float angle = GLKQuaternionAngle(combine);
+//    GLKVector3 axis = GLKQuaternionAxis(combine);
+//    
+//    GLKVector3 direction = GLKVector3Make(0, 0, 1);
+//    GLKMatrix3 rotationMatrix = GLKMatrix3MakeXRotation(GLKMathDegreesToRadians(60));
+//    rotationMatrix = GLKMatrix3RotateWithVector3(<#GLKMatrix3 matrix#>, <#float radians#>, <#GLKVector3 axisVector#>)
+//    
+////    rotationMatrix = GLKMatrix3MakeXRotation(GLKMathDegreesToRadians(60));
+//    
+//    float angleX = atan2(rotationMatrix.m12, rotationMatrix.m22);
+//    angleX = GLKMathRadiansToDegrees(angleX);
+//    
+//    float angleY = atan2(-rotationMatrix.m02, sqrt(pow(rotationMatrix.m12, 2) + pow(rotationMatrix.m22, 2)));
+//    angleY = GLKMathRadiansToDegrees(angleY);
 }
 
 
