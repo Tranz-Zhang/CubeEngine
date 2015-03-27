@@ -58,35 +58,126 @@ GLfloat gCubeVertexData[216] =
 };
 
 
+//GLfloat gTriangleVertexData[108] =
+//{
+//    // Data layout for each line below is:
+//    // positionX, positionY, positionZ,     normalX, normalY, normalZ,
+//    
+//    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+//    1.5f, -0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+//    1.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+//    
+//    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+//    0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+//    0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+//    
+//    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+//    1.5f, -0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+//    0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+//    
+//    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+//    1.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+//    0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+//    
+//    // bottom
+//    0.5f, -0.5f, -0.5f,    0.0f, -1.0f, 0.0f,
+//    1.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+//    0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+//    0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+//    1.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+//    1.5f, -0.5f, 0.5f,      0.0f, -1.0f, 0.0f,
+//};
+
 GLfloat gTriangleVertexData[108] =
 {
     // Data layout for each line below is:
     // positionX, positionY, positionZ,     normalX, normalY, normalZ,
     
-    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
-    1.5f, -0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
-    1.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    0.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
     
-    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
-    0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
-    0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    0.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
     
-    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
-    1.5f, -0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
-    0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+    0.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
     
-    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
-    1.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
-    0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    0.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    -0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
     
     // bottom
-    0.5f, -0.5f, -0.5f,    0.0f, -1.0f, 0.0f,
-    1.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
-    0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
-    0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
-    1.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
-    1.5f, -0.5f, 0.5f,      0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,    0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, 0.5f,      0.0f, -1.0f, 0.0f,
 };
+
+GLfloat gArrowZVertexData[108] =
+{
+    // Data layout for each line below is:
+    // positionX, positionY, positionZ,     normalX, normalY, normalZ,
+    
+    0.0f, 0.0f, 0.5f,       1.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, -0.5f,       1.0f, 1.0f, 1.0f,
+    -0.5f, 0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    
+    0.0f, 0.0f, 0.5f,       1.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, -0.5f,      -1.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    
+    0.0f, 0.0f, 0.5f,       1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,       1.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f,      -1.0f, 1.0f, 1.0f,
+    
+    0.0f, 0.0f, 0.5f,       1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    -0.5f, 0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    
+    // bottom
+    0.5f, 0.5f, -0.5f,    0.0f, -1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f,      0.0f, -1.0f, 0.0f,
+};
+
+GLfloat gArrowXVertexData[108] =
+{
+    // Data layout for each line below is:
+    // positionX, positionY, positionZ,     normalX, normalY, normalZ,
+    
+    0.5f, 0.0f, 0.0f,       1.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+    -0.5f, 0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    
+    0.5f, 0.0f, 0.0f,       1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    
+    0.5f, 0.0f, 0.0f,       1.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+    
+    0.5f, 0.0f, 0.0f,       1.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    -0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    
+    // bottom
+    -0.5f, 0.5f, 0.5f,    0.0f, -1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,      0.0f, -1.0f, 0.0f,
+};
+
 
 @implementation CEViewController {
     CEModel *_testObject;
@@ -117,42 +208,68 @@ GLfloat gTriangleVertexData[108] =
     _scene.camera.location = GLKVector3Make(0, 5, 5);
     [_scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
-    NSData *vertexData = [NSData dataWithBytes:gTriangleVertexData length:sizeof(gTriangleVertexData)];
+    NSData *vertexData = [NSData dataWithBytes:gArrowZVertexData length:sizeof(gArrowZVertexData)];
     _testObject = [CEModel modelWithVertexData:vertexData type:CEVertextDataType_V3N3];
+    _testObject.position = GLKVector3Make(1, 0, 0);
 //    _testObject.transformMatrix = GLKMatrix4Identity;
 
     [_scene addRenderObject:_testObject];
     
-    NSInteger size = sizeof(gCubeVertexData);
     NSData *vertexData2 = [NSData dataWithBytes:gCubeVertexData length:sizeof(gCubeVertexData)];
-    CEModel *testObject2 = [CEModel modelWithVertexData:vertexData2 type:CEVertextDataType_V3N3];
-    [_scene addRenderObject:testObject2];
+    _testObject2 = [CEModel modelWithVertexData:vertexData2 type:CEVertextDataType_V3N3];
+    [_scene addRenderObject:_testObject2];
     
     GLKView *view = (GLKView *)self.view;
     view.context = _scene.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
+    GLKMatrix4 rotationMatrix = GLKMatrix4Identity;
+//    rotationMatrix = GLKMatrix4Multiply(GLKMatrix4MakeRotation(GLKMathDegreesToRadians(45), 1, 0, 0), rotationMatrix);
+//    rotationMatrix = GLKMatrix4Multiply(GLKMatrix4MakeRotation(GLKMathDegreesToRadians(45), 0, 1, 0), rotationMatrix);
+//    rotationMatrix = GLKMatrix4Multiply(GLKMatrix4MakeRotation(GLKMathDegreesToRadians(45), 0, 0, 1), rotationMatrix);
     
-//    GLKQuaternion qX = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(60), 1, 0, 0);
-//    GLKQuaternion qy = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(60), 0, 1, 0);
-//    GLKQuaternion combine = GLKQuaternionMultiply(qX, qy);
-//    float angle = GLKQuaternionAngle(combine);
-//    GLKVector3 axis = GLKQuaternionAxis(combine);
-//    
-//    GLKVector3 direction = GLKVector3Make(0, 0, 1);
-//    GLKMatrix3 rotationMatrix = GLKMatrix3MakeXRotation(GLKMathDegreesToRadians(60));
-//    rotationMatrix = GLKMatrix3RotateWithVector3(<#GLKMatrix3 matrix#>, <#float radians#>, <#GLKVector3 axisVector#>)
-//    
-////    rotationMatrix = GLKMatrix3MakeXRotation(GLKMathDegreesToRadians(60));
-//    
-//    float angleX = atan2(rotationMatrix.m12, rotationMatrix.m22);
-//    angleX = GLKMathRadiansToDegrees(angleX);
-//    
-//    float angleY = atan2(-rotationMatrix.m02, sqrt(pow(rotationMatrix.m12, 2) + pow(rotationMatrix.m22, 2)));
-//    angleY = GLKMathRadiansToDegrees(angleY);
+    GLKQuaternion rotationQuaternion = GLKQuaternionIdentity;
+    rotationQuaternion = GLKQuaternionMultiply(GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(88), 1, 0, 0), rotationQuaternion);
+    rotationQuaternion = GLKQuaternionMultiply(GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(15), 0, 1, 0), rotationQuaternion);
+    rotationQuaternion = GLKQuaternionMultiply(GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(23), 0, 0, 1), rotationQuaternion);
+    
+    rotationMatrix = GLKMatrix4MakeWithQuaternion(rotationQuaternion);
+    float angleX = atan2(rotationMatrix.m12, rotationMatrix.m22);
+    float angleY = atan2(-rotationMatrix.m02, sqrt(pow(rotationMatrix.m12, 2) + pow(rotationMatrix.m22, 2)));
+    float angleZ = atan2(rotationMatrix.m10, rotationMatrix.m00);
+    
+    angleX = GLKMathRadiansToDegrees(angleX);
+    angleY = GLKMathRadiansToDegrees(angleY);
+    angleZ = GLKMathRadiansToDegrees(angleZ);
+    printf("(%.1f, %.1f, %.1f)\n", angleX, angleY, angleZ);
+    
+    GLKQuaternion quaternion = rotationQuaternion;
+    angleX = atan2(2 * (quaternion.w * quaternion.x + quaternion.z * quaternion.y),
+                   1 - 2 * (pow(quaternion.x, 2) + pow(quaternion.y, 2)));
+    angleY = asin(2 * (quaternion.w * quaternion.y - quaternion.x * quaternion.z));
+    angleZ = atan2(2 * (quaternion.w * quaternion.z + quaternion.x * quaternion.y),
+                   1- 2 * (pow(quaternion.y, 2) + pow(quaternion.z, 2)));
+    
+    angleX = GLKMathRadiansToDegrees(angleX);
+    angleY = GLKMathRadiansToDegrees(angleY);
+    angleZ = GLKMathRadiansToDegrees(angleZ);
+    printf("(%.1f, %.1f, %.1f)\n", angleX, angleY, angleZ);
+    
+    
+    printf("onTestRotation\n\n");
+    CEObject *testObject = [CEObject new];
+    testObject.eulerAngles = GLKVector3Make(30, 40, 50);
+    testObject.eulerAngles = GLKVector3Make(12.4, 56.7, 89.9);
+    testObject.eulerAngles = GLKVector3Make(-30, 40, 50);
+    testObject.eulerAngles = GLKVector3Make(30, -40, -50);
+    testObject.eulerAngles = GLKVector3Make(230, 190, 260);
+    testObject.eulerAngles = GLKVector3Make(25, 90, 45);
+    testObject.eulerAngles = GLKVector3Make(-135, 135, 135);
+    testObject.eulerAngles = GLKVector3Make(-135, -197, 270);
+    testObject.eulerAngles = GLKVector3Make(20, -180, -160);
+    double value = pow(3, 2);
+    printf("test value: %f\n", value);
 }
-
-
 
 #pragma mark - rotation
 

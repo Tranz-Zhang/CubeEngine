@@ -38,21 +38,6 @@
                                     <segment title="Rotation"/>
                                     <segment title="Scale"/>
                                 </segments>
-                                <connections>
-                                    <action selector="onObjectSettingChanged:" destination="vXZ-lx-hvc" eventType="valueChanged" id="FZo-iM-Nv7"/>
-                                </connections>
-                            </segmentedControl>
-                            <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="BzG-xZ-8eZ">
-                                <rect key="frame" x="16" y="401" width="288" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <segments>
-                                    <segment title="NearZ"/>
-                                    <segment title="FarZ"/>
-                                    <segment title="Position"/>
-                                </segments>
-                                <connections>
-                                    <action selector="onCameraSettingChanged:" destination="vXZ-lx-hvc" eventType="valueChanged" id="I0x-Nc-pvg"/>
-                                </connections>
                             </segmentedControl>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VAy-aU-sft">
                                 <rect key="frame" x="114" y="363" width="93" height="30"/>
@@ -84,29 +69,39 @@
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="mh5-4a-iZs">
                                 <rect key="frame" x="16" y="401" width="288" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <segments>
-                                    <segment title="World"/>
-                                    <segment title="Local"/>
-                                    <segment title="Parent"/>
+                                    <segment title="Trangle"/>
+                                    <segment title="Cube"/>
+                                    <segment title="Camera"/>
                                 </segments>
                             </segmentedControl>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" id="3r0-vO-WiC">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="3r0-vO-WiC">
                                 <rect key="frame" x="14" y="518" width="292" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <connections>
+                                    <action selector="onSliderStop:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fPy-d8-Xmz"/>
                                     <action selector="onSliderValueChange:" destination="vXZ-lx-hvc" eventType="valueChanged" id="gWr-fv-eHn"/>
                                 </connections>
                             </slider>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="w91-K1-S74">
+                                <rect key="frame" x="16" y="363" width="80" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <state key="normal" title="Attach">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onAttach:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="yFS-GD-7Uf"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="cameraSegment" destination="BzG-xZ-8eZ" id="uAt-X4-fNW"/>
-                        <outlet property="coordinateSegment" destination="mh5-4a-iZs" id="DAH-hF-mnB"/>
+                        <outlet property="coordinateSegment" destination="LoF-AE-G7l" id="GwP-WD-6Yk"/>
                         <outlet property="infoTextView" destination="UQ1-f3-hdE" id="WIn-SI-nGa"/>
-                        <outlet property="objectSegment" destination="5uY-of-rT3" id="Pg9-XD-Kve"/>
-                        <outlet property="selectionSegment" destination="LoF-AE-G7l" id="Kd5-kH-GuG"/>
+                        <outlet property="objectSegment" destination="mh5-4a-iZs" id="DFP-iI-cZa"/>
+                        <outlet property="operationSegment" destination="5uY-of-rT3" id="MZ9-mo-OpV"/>
                         <outlet property="valueSlider" destination="3r0-vO-WiC" id="RxA-ff-ROc"/>
                         <outlet property="versionLabel" destination="Yzj-5O-dRu" id="seq-Jt-1uS"/>
                     </connections>

@@ -12,7 +12,7 @@
 @interface CEModel ()
 
 // current model transform
-@property (nonatomic, readonly) GLKMatrix4 transformMatrix;
+//@property (nonatomic, readonly) GLKMatrix4 transformMatrix;
 
 // an auto generated vertex buffer in OpenGLES
 @property (nonatomic, readonly) GLuint vertexBufferIndex;

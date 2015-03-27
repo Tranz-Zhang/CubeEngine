@@ -61,7 +61,7 @@
     }
 }
 
-
+/*
 - (void)renderObject:(CEModel *)object {
     if (!object || !_program) {
         CEError(@"Can not render object");
@@ -93,10 +93,10 @@
     glUniform4f(_program.uniformDrawColor, 0.6, 0.6, 0.6, 1.0);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     
-    glUniform4f(_program.uniformDrawColor, 1.0, 1.0, 1.0, 1.0);
+    glUniform4f(_program.uniformDrawColor, 0.2, 0.2, 0.2, 1.0);
     glDrawArrays(GL_LINE_STRIP, 0, 36);
 }
-
+//*/
 
 - (void)renderObjects:(NSArray *)objects {
     if (!objects.count || !_program) {
@@ -123,8 +123,8 @@
         }
         
         glBindBuffer(GL_ARRAY_BUFFER, object.vertexBufferIndex);
-        glEnableVertexAttribArray(_program.attributePosotion);
-        glVertexAttribPointer(_program.attributePosotion, 3, GL_FLOAT, GL_FALSE, 24, CE_BUFFER_OFFSET(0));
+        glEnableVertexAttribArray(_program.attributePosition);
+        glVertexAttribPointer(_program.attributePosition, 3, GL_FLOAT, GL_FALSE, 24, CE_BUFFER_OFFSET(0));
         [_program use];
         
         // TODO:render object with different programs
@@ -139,7 +139,7 @@
         
         glDrawArrays(GL_TRIANGLES, 0, object.vertextCount);
         
-        glUniform4f(_program.uniformDrawColor, 0.5, 0.5, 0.5, 1.0);
+        glUniform4f(_program.uniformDrawColor, 0.2, 0.2, 0.2, 1.0);
         glLineWidth(2.0f);
         glDrawArrays(GL_LINE_STRIP, 0, object.vertextCount);
     }

@@ -1,14 +1,14 @@
 //
-//  CETestProgram.m
+//  CELinesProgram.m
 //  CubeEngine
 //
-//  Created by chance on 15/3/10.
+//  Created by chance on 15/3/16.
 //  Copyright (c) 2015年 ByChance. All rights reserved.
 //
 
-#import "CETestProgram.h"
+#import "CELinesProgram.h"
 
-NSString *const kTestVertexShader = CE_SHADER_STRING
+NSString *const kLinesVertexShader = CE_SHADER_STRING
 (
  attribute highp vec4 position;
  uniform mat4 projection;
@@ -16,22 +16,22 @@ NSString *const kTestVertexShader = CE_SHADER_STRING
  void main () {
      gl_Position = projection * position;
  }
- );
+);
 
-NSString *const kTestFragmentSahder = CE_SHADER_STRING
+NSString *const kLinesFragmentSahder = CE_SHADER_STRING
 (
  uniform lowp vec4 drawColor;
  void main() {
      gl_FragColor = drawColor;
  }
- );
+);
 
 
-@implementation CETestProgram
+@implementation CELinesProgram
 
 + (instancetype)defaultProgram {
-    CETestProgram *program = [[CETestProgram alloc] initWithVertexShaderString:kTestVertexShader
-                                                          fragmentShaderString:kTestFragmentSahder];
+    CELinesProgram *program = [[CELinesProgram alloc] initWithVertexShaderString:kLinesVertexShader
+                                                            fragmentShaderString:kLinesFragmentSahder];
     return program;
 }
 
@@ -42,7 +42,7 @@ NSString *const kTestFragmentSahder = CE_SHADER_STRING
     [self addAttribute:@"position"];
     BOOL isOK = [super link];
     if (isOK) {
-        _attributePosition = [self attributeIndex:@"position"];
+        _attributePosotion = [self attributeIndex:@"position"];
         _uniformProjection = [self uniformIndex:@"projection"];
         _uniformDrawColor = [self uniformIndex:@"drawColor"];
         
@@ -60,7 +60,5 @@ NSString *const kTestFragmentSahder = CE_SHADER_STRING
 }
 
 
+
 @end
-
-
-

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CEVector3.h"
 
 typedef NS_ENUM(NSInteger, CERelativeSpace) {
     CERelativeSpaceSelf = 0,
@@ -18,20 +19,18 @@ typedef NS_ENUM(NSInteger, CERelativeSpace) {
  */
 @interface CETransform : NSObject
 
-@property (nonatomic, assign) GLKVector3 right;     // The axis X of the transform in world space.
-@property (nonatomic, assign) GLKVector3 up;        // The axis Y of the transform in world space.
-@property (nonatomic, assign) GLKVector3 forward;   // The axis Z of the transform in world space.
+@property (nonatomic, readonly) CEVector3 *right;     // The axis X of the transform in world space.
+@property (nonatomic, readonly) CEVector3 *up;        // The axis Y of the transform in world space.
+@property (nonatomic, readonly) CEVector3 *forward;   // The axis Z of the transform in world space.
 
 // world space, absolute value
-@property (nonatomic, assign) GLKVector3 position;      // The position of the transform in world space.
-@property (nonatomic, assign) GLKQuaternion rotation;   // The rotation of the transform in world space stored as a Quaternion.
-@property (nonatomic, assign) GLKVector3 rotationAngles;   // The eular angles in XYZ axis, in degree.
-@property (nonatomic, assign) GLKVector3 scale;         // The scale of the transform in world space.
+@property (nonatomic, strong) CEVector3 *position;      // The position of the transform in world space.
+@property (nonatomic, strong) CEVector3 *rotationAngles;   // The eular angles in XYZ axis, in degree.
+@property (nonatomic, strong) CEVector3 *scale;         // The scale of the transform in world space.
 
 // self space, ref to parent
-@property (nonatomic, assign) GLKVector3 localPosition;     // Position of the transform relative to the parent transform.
-@property (nonatomic, assign) GLKQuaternion localRotation;  // // The eular angles in XYZ axis relative to the parent, in degree.
-@property (nonatomic, assign) GLKVector3 localRotationAngles;  // The rotation as Euler angles in degrees relative to the parent transform's rotation.
+@property (nonatomic, strong) CEVector3 *localPosition;     // Position of the transform relative to the parent transform.
+@property (nonatomic, strong) CEVector3 *localRotationAngles;  // The rotation as Euler angles in degrees relative to the parent transform's rotation.
 
 // Rotates the transform so the forward vector points at the target's position.
 - (void)lookAt:(GLKVector3)targetPosition;
@@ -45,12 +44,16 @@ typedef NS_ENUM(NSInteger, CERelativeSpace) {
 // scale around specific point other than the object's center.
 - (void)scaleAroundPoint:(GLKVector3)centerPoint withSacleFactor:(GLKVector3)scaleFactor;
 
-// Transform child
+
+#pragma mark - Transform child
 @property (nonatomic, readonly) CETransform *parentTransform;
 
 - (void)addChildTransform:(CETransform *)childTransform;
 - (void)removeChildTransfrom:(CETransform *)childTransform;
 
+
+#pragma mark - Matrix
+@property (nonatomic, readonly) GLKMatrix4 transformMatrix;
 
 @end
 

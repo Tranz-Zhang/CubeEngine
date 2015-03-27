@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CEObject.h"
 
 typedef NS_OPTIONS(NSInteger, CEAxisMask) {
     CEAxisNone = 0,
@@ -22,32 +23,12 @@ typedef NS_ENUM(NSInteger, CEVertextDataType) {
     CEVertextDataType_V3N3T2,   // vertex XYZ + normal XYZ + texture UV (size:8)
 };
 
-@interface CEModel : NSObject
+@interface CEModel : CEObject
 
 // size of the model
-@property (atomic, readonly) GLKVector3 size;
-
-/**
- Act as the same as the anchorPoint of CALayer, but in 3D. the range of value should be 0.0f - 1.0f,
- The default value is (0.5f, 0.5f, 0.5f), which is the center of the model.
- */
-@property (atomic, assign) GLKVector3 anchorPoint;
-
-// transform properties
-/**
- The location of the model, actually it's the location of model's anchor point.
- */
-@property (atomic, assign) GLKVector3 location;
-
-@property (atomic, readonly) GLfloat rotationDegree;
-@property (atomic, readonly) CEAxisMask rotationAxis;
-
-@property (atomic, assign) GLKVector3 scale;
+@property (atomic, readonly) GLKVector3 bounds;
 
 + (instancetype)modelWithVertexData:(NSData *)vertexData type:(CEVertextDataType)dataType;
-
-- (void)setRotationWithDegree:(GLfloat)rotationDegree axis:(CEAxisMask)axis;
-- (void)setScale:(GLfloat)scaleFactor axis:(CEAxisMask)axis ;
 
 
 @end

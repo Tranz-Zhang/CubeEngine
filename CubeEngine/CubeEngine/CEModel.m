@@ -35,11 +35,8 @@
     if (self) {
         _vertexData = vertexData;
         _dataType = dataType;
-        _location = GLKVector3Make(0, 0, 0);
-//        _scale = 1;
         _vertexBufferIndex = 0;
         _vertextCount = 0;
-        _anchorPoint = GLKVector3Make(0.5f, 0.5f, 0.5f);
         [self setupModel];
     }
     return self;
@@ -85,7 +82,7 @@
     _originalOffset = GLKVector3Make((maxX + minX) / 2,
                                      (maxY + minY) / 2,
                                      (maxZ + minZ) / 2);
-    _size = GLKVector3Make(maxX - minX, maxY - minY, maxZ - minZ);
+    _bounds = GLKVector3Make(maxX - minX, maxY - minY, maxZ - minZ);
     
     CELog(@"Setup model OK: %.8f", CFAbsoluteTimeGetCurrent() - startTime);
 }
@@ -123,12 +120,12 @@
 }
 
 
-- (GLKMatrix4)transformMatrix {
-#warning Consider offer center transfrom
-    @synchronized(self) {
-        GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(_location.x,
-                                                              _location.y,
-                                                              _location.z);
+//- (GLKMatrix4)transformMatrix {
+//#warning Consider offer center transfrom
+//    @synchronized(self) {
+//        GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(_location.x,
+//                                                              _location.y,
+//                                                              _location.z);
 //        if (_rotationPivot) {
 //            tranformMatrix = GLKMatrix4Rotate(tranformMatrix,
 //                                              GLKMathDegreesToRadians(_rotationDegree),
@@ -142,9 +139,9 @@
 //            GLKMatrix4 transposeAdjustMatrix = GLKMatrix4Invert(adjustMatrix, NULL);
 //            tranformMatrix = GLKMatrix4Multiply(transposeAdjustMatrix, GLKMatrix4Multiply(scaleMatrix, GLKMatrix4Multiply(adjustMatrix, tranformMatrix)));
 //        }
-        return tranformMatrix;
-    }
-}
+//        return tranformMatrix;
+//    }
+//}
 
 
 

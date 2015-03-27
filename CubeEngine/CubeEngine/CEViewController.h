@@ -14,5 +14,6 @@
 
 @property (nonatomic, readonly) CEScene *scene;
 @property (nonatomic, readonly) CEModel *testObject;
+@property (nonatomic, readonly) CEModel *testObject2;
 
 @end

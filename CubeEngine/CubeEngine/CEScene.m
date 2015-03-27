@@ -9,9 +9,11 @@
 #import "CEScene.h"
 #import "CECamera_Rendering.h"
 #import "CERenderer.h"
+#import "CECoordinateRenderer.h"
 
 @interface CEScene () {
     CERenderer *_renderer;
+    CECoordinateRenderer *_coordinateRenderer;
     NSMutableArray *_renderObjects;
 }
 
@@ -34,6 +36,9 @@
         
         _renderer = [CERenderer new];
         _renderer.backgroundColor = [UIColor whiteColor];
+        
+        _coordinateRenderer = [[CECoordinateRenderer alloc] initWithContext:_renderer.context];
+        _coordinateRenderer.showWorldCoordinate = YES;
     }
     return self;
 }
@@ -47,6 +52,7 @@
 - (void)addRenderObject:(CEModel *)renderObject {
     if ([renderObject isKindOfClass:[CEModel class]]) {
         [_renderObjects addObject:renderObject];
+        [_coordinateRenderer addModel:renderObject];
         
     } else {
         CEError(@"Can not add model to scene");
@@ -56,14 +62,17 @@
 - (void)removeRenderObject:(CEModel *)renderObject {
     if (renderObject) {
         [_renderObjects removeObject:renderObject];
+        [_coordinateRenderer removeModel:renderObject];
     }
 }
 
 
 - (void)update {
     _renderer.cameraProjectionMatrix = _camera.projectionMatrix;
-//    [_renderer renderObject:_renderObjects.lastObject];
     [_renderer renderObjects:_renderObjects];
+    
+    _coordinateRenderer.cameraProjectionMatrix = _camera.projectionMatrix;
+    [_coordinateRenderer render];
 }
 
 
