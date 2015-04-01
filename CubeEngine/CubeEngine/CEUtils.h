@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 
-// calcualte the transfer quaternion between two vectors
-GLKQuaternion QuaternionWithVectors(GLKVector3 fromVector, GLKVector3 toVector);
+// calculate in order of y, z, x (yaw, pitch, roll)
+GLKQuaternion CEQuaternionWithEulerAngles(float y, float z, float x);
 
-// calculate in order of y, z, x
-GLKQuaternion QuaternionWithEulerAngles(float y, float z, float x);
+// get the rotation angles from quaternion, in degree
+void CEGetEulerAngles(GLKQuaternion q, float *y, float *z, float *x);
+

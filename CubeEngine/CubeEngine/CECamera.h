@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CEObject.h"
 
 typedef NS_ENUM(NSInteger, CEProjectionType) {
     CEProjectionPerpective = 0,
@@ -16,49 +17,49 @@ typedef NS_ENUM(NSInteger, CEProjectionType) {
 /**
  Representing a camera in 3d world.
  */
-@interface CECamera : NSObject
+@interface CECamera : CEObject
 
 /**
  The projection type of the camera.
  */
-@property (atomic, assign) CEProjectionType projectionType;
+@property (nonatomic, assign) CEProjectionType projectionType;
 
 /**
  The angle of the vertical viewing area. Default is 65
  */
-@property (atomic, assign) float radianDegree;
+@property (nonatomic, assign) float radianDegree;
 
 /**
  The ratio between the horizontal and the vertical viewing area.
  */
-@property (atomic, assign) float aspect;
+@property (nonatomic, assign) float aspect;
 
 /** 
  The near clipping distance. Must be positive. Default is 0.1
  */
-@property (atomic, assign) float nearZ;
+@property (nonatomic, assign) float nearZ;
 
 /**
  The far clipping distance. Must be positive and greater than the near distance.
  Default is 100
  */
-@property (atomic, assign) float farZ;
+@property (nonatomic, assign) float farZ;
 
 
-/**
- Location of the camera.
- */
-@property (atomic) GLKVector3 location;
-
-/**
- The angle of the rotation for the camera (a positive angle is counterclockwise).
- */
-@property (atomic) GLKVector3 rotationAxis;
-
-/**
- The axis to perform the rotation around.
- */
-@property (atomic) float rotationRadians;
+///**
+// Location of the camera.
+// */
+//@property (atomic) GLKVector3 location;
+//
+///**
+// The angle of the rotation for the camera (a positive angle is counterclockwise).
+// */
+//@property (atomic) GLKVector3 rotationAxis;
+//
+///**
+// The axis to perform the rotation around.
+// */
+//@property (atomic) float rotationRadians;
 
 
 /**

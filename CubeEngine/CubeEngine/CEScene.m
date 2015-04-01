@@ -32,7 +32,7 @@
         _camera.aspect = 320.0 / 568.0;
         _camera.nearZ = 0.1;
         _camera.farZ = 100;
-        _camera.location = GLKVector3Make(0, 0, 4);
+        _camera.position = GLKVector3Make(0, 0, 4);
         
         _renderer = [CERenderer new];
         _renderer.backgroundColor = [UIColor whiteColor];

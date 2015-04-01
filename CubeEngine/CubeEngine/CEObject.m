@@ -7,13 +7,10 @@
 //
 
 #import "CEObject.h"
+#import "CEUtils.h"
 
 @interface CEObject () {
-    __weak CEObject *_parentObject;
-    NSMutableArray *_childObjects;
     
-    BOOL _hasChanged;
-    GLKMatrix4 _localTransformMatrix;
 }
 
 @end
@@ -32,6 +29,9 @@
         _eulerAngles = GLKVector3Make(0, 0, 0);
         _localTransformMatrix = GLKMatrix4Identity;
         _scale = GLKVector3Make(1.0f, 1.0f, 1.0f);
+        _right = GLKVector3Make(1.0f, 0.0f, 0.0f);
+        _up = GLKVector3Make(0.0f, 1.0f, 0.0f);
+        _forward = GLKVector3Make(0.0f, 0.0f, 1.0f);
         _hasChanged = YES;
     }
     return self;
@@ -64,89 +64,34 @@
     if (rotation.s != _rotation.s ||
         !GLKVector3AllEqualToVector3(rotation.v, _rotation.v)) {
         _rotation = rotation;
-        // TODO: calcuate angles
-        
         _right = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(1, 0, 0));
         _up = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 1, 0));
         _forward = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 0, 1));
         
+        float angleX, angleY, angleZ;
+        CEGetEulerAngles(rotation, &angleY, &angleZ, &angleX);
+        _eulerAngles = GLKVector3Make(angleX, angleY, angleZ);
         _hasChanged = YES;
     }
 }
 
 
 - (void)setEulerAngles:(GLKVector3)eulerAngles {
-#warning hey, you may want to change the order to y z x.
     /*
      roll yaw pitch
       x    y    z
       0    1    2
      */
     if (!GLKVector3AllEqualToVector3(_eulerAngles, eulerAngles)) {
-        GLKQuaternion rotationX = GLKQuaternionIdentity;
-        GLKQuaternion rotationY = GLKQuaternionIdentity;
-        GLKQuaternion rotationZ = GLKQuaternionIdentity;
-        GLKVector3 vectorY = GLKVector3Make(0, 1, 0);
-        GLKVector3 vectorZ = GLKVector3Make(0, 0, 1);
-        // axis X
-        if (eulerAngles.x != 0) {
-            rotationX = GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(eulerAngles.x), 1, 0, 0);
-            vectorY = GLKQuaternionRotateVector3(rotationX, vectorY);
-            vectorZ = GLKQuaternionRotateVector3(rotationX, vectorZ);
-        }
-        
-        // axis Y, should limit to [-PI_2, PI_2]?
-        if (eulerAngles.y != 0) {
-            rotationY = GLKQuaternionMakeWithAngleAndVector3Axis(GLKMathDegreesToRadians(eulerAngles.y), vectorY);
-            vectorZ = GLKQuaternionRotateVector3(rotationY, vectorZ);
-        }
-        
-        // axix Z
-        if (eulerAngles.z != 0) {
-            rotationZ = GLKQuaternionMakeWithAngleAndVector3Axis(GLKMathDegreesToRadians(eulerAngles.z), vectorZ);
-        }
         _eulerAngles = eulerAngles;
-        _rotation = GLKQuaternionMultiply(rotationZ, GLKQuaternionMultiply(rotationY, rotationX));
+        _rotation = CEQuaternionWithEulerAngles(eulerAngles.y, eulerAngles.z, eulerAngles.x);
         _right = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(1, 0, 0));
         _up = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 1, 0));
         _forward = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 0, 1));
-        
-        GLKQuaternion q = _rotation;
-        float angleX = atan2(2 * (q.x * q.w - q.y * q.z), 1 - 2 * (pow(q.x, 2) + pow(q.y, 2)));
-        float angleY = asin(2 * (q.x * q.z + q.y * q.w));
-        float angleZ = atan2(2 * (q.z * q.w - q.y * q.x), 1 - 2 * (pow(q.z, 2) + pow(q.y, 2)));
-        
-        
 //        GLKQuaternion q = _rotation;
-        double sqw = q.w*q.w;
-        double sqx = q.x*q.x;
-        double sqy = q.y*q.y;
-        double sqz = q.z*q.z;
-        double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
-        double test = q.x*q.z + q.y*q.w;
-        if (test > 0.499 * unit) { // singularity at north pole
-            angleX = M_PI_2;
-            angleY = 2 * atan2(q.z, q.w);
-            angleZ = 0;
-            
-        } else if (test < -0.499 * unit) { // singularity at south pole
-            angleX = M_PI_2;
-            angleY = -2 * atan2(q.z, q.w);
-            angleZ = 0;
-            
-        } else {
-            angleX = atan2(2 * (q.x * q.w - q.y * q.z) , sqw + sqz - sqx - sqy);
-            angleY = asin(2 * test / unit);
-            angleZ = atan2(2 * (q.z * q.w - q.y * q.x) , sqw + sqx - sqy - sqz);
-        }
-//        angleX = atan2(2 * (q.x * q.w - q.y * q.z) , sqw + sqz - sqx - sqy);
-//        angleY = asin(2 * test / unit);
-//        angleZ = atan2(2 * (q.z * q.w - q.y * q.x) , sqw + sqx - sqy - sqz);
-        
-        angleX = GLKMathRadiansToDegrees(angleX);
-        angleY = GLKMathRadiansToDegrees(angleY);
-        angleZ = GLKMathRadiansToDegrees(angleZ);
-        printf("(%.1f, %.1f, %.1f) -> (%.1f, %.1f, %.1f)\n",_eulerAngles.x, _eulerAngles.y, _eulerAngles.z, angleX, angleY, angleZ);
+//        float angleX, angleY, angleZ;
+//        CEGetEulerAngles(q, &angleY, &angleZ, &angleX);
+//        printf("(%.1f, %.1f, %.1f) -> (%.1f, %.1f, %.1f)\n",_eulerAngles.x, _eulerAngles.y, _eulerAngles.z, angleX, angleY, angleZ);
         
         _hasChanged = YES;
     }
@@ -164,28 +109,55 @@
 
 
 #pragma mark - Transform
-- (void)lookAt:(GLKVector3)targetPosition {
-//    GLKMatrix4 rotationMatrix = GLKMatrix4MakeLookAt(_position.x, _position.y, _position.z, targetPosition.x, targetPosition.y, targetPosition.z, 0.0f, 1.0f, 0.0f);
-//    // calculate axis angles
-//    float angleX = atan2(rotationMatrix.m22, rotationMatrix.m12);
-//    float angleY = atan2(-rotationMatrix.m02, sqrt(pow(rotationMatrix.m12, 2) + pow(rotationMatrix.m22, 2)));
-//    float angleZ = atan2(rotationMatrix.m01, rotationMatrix.m00);
-//    [self setRotation:GLKVector3Make(GLKMathRadiansToDegrees(angleX),
-//                                     GLKMathRadiansToDegrees(angleY),
-//                                     GLKMathRadiansToDegrees(angleZ))];
-//    _rotation = GLKVector3Make(GLKMathRadiansToDegrees(angleX),
-//                               GLKMathRadiansToDegrees(angleY),
-//                               GLKMathRadiansToDegrees(angleZ));
-//    _hasChanged = YES;
+- (void)moveTowards:(GLKVector3)directionVector withDistance:(float)direction {
+    GLKVector3 normalizedVector = GLKVector3Normalize(directionVector);
+    GLKVector3 newPosition = GLKVector3Make(_position.x + direction * normalizedVector.x,
+                                            _position.y + direction * normalizedVector.y,
+                                            _position.z + direction * normalizedVector.z);
+    _position = newPosition;
+    _hasChanged = YES;
 }
+
+
+- (void)lookAt:(GLKVector3)targetPosition {
+    GLKVector3 v1 = _right;//(1, 0, 0);
+    GLKVector3 v2 = GLKVector3Make(targetPosition.x - _position.x,
+                                   targetPosition.y - _position.y,
+                                   targetPosition.z - _position.z);
+    GLKVector3 deltaVector = GLKVector3CrossProduct(v1, v2);
+    double w = sqrt(pow(GLKVector3Length(v1), 2) * pow(GLKVector3Length(v2), 2)) + GLKVector3DotProduct(v1, v2);
+    GLKQuaternion deltaRotation;
+    if (w < 0.0001) {
+        // vectors are 180 degrees apart
+        deltaRotation = GLKQuaternionNormalize(GLKQuaternionMake(-v1.z, v1.x, v1.y, 0));
+        
+    } else {
+        deltaRotation = GLKQuaternionMake(deltaVector.x, deltaVector.y, deltaVector.z, w);
+        
+    }
+    GLKQuaternion rotation = GLKQuaternionMultiply(GLKQuaternionNormalize(deltaRotation), _rotation);
+    [self setRotation:rotation];
+}
+
+//- (glk) angleBetween(sfvec3f v1,sfvec3f v2) {
+//    float d = sfvec3f.dot(v1,v2);
+//    sfvec3f axis = v1;
+//    axis.cross(v2);
+//    float qw = (float)Math.sqrt(v1.len_squared()*v2.len_squared()) + d;
+//    if (qw < 0.0001) {
+//        return (new sfquat(0,-v1.z,v1.y,v1.x)).norm;
+//    }
+//    sfquat q= new sfquat(qw,axis.x,axis.y,axis.z);
+//    return q.norm();
+//}
 
 
 - (GLKMatrix4)transformMatrix {
     if (_hasChanged) {
         // update direction vector
-        _forward = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 0, 1));
-        _right = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(1, 0, 0));
-        _up = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 2, 0));
+//        _forward = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 0, 1));
+//        _right = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(1, 0, 0));
+//        _up = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 2, 0));
         
         // update local transfrom matrix
         GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(_position.x, _position.y, _position.z);

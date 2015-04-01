@@ -11,7 +11,22 @@
 /**
  Represting an object in 3D world, which can be points, lines or meshes.
  */
-@interface CEObject : NSObject
+@interface CEObject : NSObject {
+    __weak CEObject *_parentObject;
+    NSMutableArray *_childObjects;
+    
+    GLKVector3 _position;
+    GLKQuaternion _rotation;
+    GLKVector3 _eulerAngles;
+    GLKVector3 _scale;
+    
+    GLKMatrix4 _localTransformMatrix;
+    GLKVector3 _right;
+    GLKVector3 _up;
+    GLKVector3 _forward;
+    
+    BOOL _hasChanged;
+}
 
 @property (nonatomic, assign) NSInteger tag;
 @property (nonatomic, readonly) CEObject *parentObject;
@@ -36,10 +51,8 @@
 /**
  The vector3 contain the euler angles around x, y, z axis, in degrees, relative 
  to the parent transform's rotation.
- The object rotates euler.x degrees around the x axis, euler.y degrees around
- the y axis and euler.z degrees around the z axis, and  (in that order).
- Only use this variable to read and set the angles to absolute values. Don't
- increment them, as it will fail when the angle exceeds 360 degrees. 
+ !!!IMPORTANT: the rotation is applied in the order of Y(yaw), Z(pitch) and X(roll).
+ Only use this variable to read and set the angles to absolute values.
  Use Transform.Rotate instead.
  */
 @property (nonatomic, assign) GLKVector3 eulerAngles;

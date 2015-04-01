@@ -36,6 +36,7 @@
     [self updateInfoView];
 }
 
+
 - (IBAction)onReset:(id)sender {
     self.testObject.position = GLKVector3Make(0, 0, 0);
     self.testObject.scale = GLKVector3Make(1, 1, 1);
@@ -43,7 +44,9 @@
     self.testObject2.position = GLKVector3Make(0, 0, 0);
     self.testObject2.scale = GLKVector3Make(1, 1, 1);
     self.testObject2.rotation = GLKQuaternionIdentity;
-    self.scene.camera.location = GLKVector3Make(0, 5, 5);
+    self.scene.camera.position = GLKVector3Make(0, 5, 5);
+    self.scene.camera.scale = GLKVector3Make(1, 1, 1);
+    self.scene.camera.rotation = GLKQuaternionIdentity;
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
     _objectSegment.selectedSegmentIndex = 0;
@@ -57,13 +60,8 @@
 - (void)updateInfoView {
     NSMutableString *infoString = [NSMutableString string];
     [infoString appendFormat:@"Object (%.2f, %.2f, %.2f)\n", self.testObject.position.x, self.testObject.position.y, self.testObject.position.z];
-    [infoString appendFormat:@"Camera (%.2f, %.2f, %.2f)", self.scene.camera.location.x, self.scene.camera.location.y, self.scene.camera.location.z];
+    [infoString appendFormat:@"Camera (%.2f, %.2f, %.2f)", self.scene.camera.position.x, self.scene.camera.position.y, self.scene.camera.position.z];
     self.infoTextView.text = infoString;
-}
-
-- (IBAction)onLookAt:(UIButton *)button {
-    CEObject *currentObject = [self currentObject];
-    [currentObject lookAt:self.testObject2.position];
 }
 
 - (IBAction)onAttach:(UIButton *)button {
@@ -114,7 +112,7 @@
             return self.testObject2;
             
         case 2:
-            return nil;
+            return self.scene.camera;
             
         default:
             return nil;
@@ -194,8 +192,28 @@
 }
 
 
+#pragma mark - Test Move
+static float lastSliderValue;
+- (IBAction)onMovingObject:(UISlider *)slider {
+    CEObject *object = [self currentObject];
+    [object moveTowards:object.right withDistance:(slider.value - lastSliderValue)];
+    lastSliderValue = slider.value;
+}
 
+
+- (IBAction)onEndMoving:(UISlider *)slider {
+    [slider setValue:0 animated:YES];
+    lastSliderValue = 0;
+}
+
+
+- (IBAction)onLookAt:(UIButton *)button {
+    CEObject *currentObject = [self currentObject];
+    [currentObject lookAt:self.testObject2.position];
+}
 
 
 
 @end
+
+

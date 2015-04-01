@@ -205,10 +205,10 @@ GLfloat gArrowXVertexData[108] =
 - (void)viewDidLoad {
     [super viewDidLoad];
     _scene.camera.aspect = self.view.bounds.size.width / self.view.bounds.size.height;
-    _scene.camera.location = GLKVector3Make(0, 5, 5);
+    _scene.camera.position = GLKVector3Make(0, 5, 5);
     [_scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
-    NSData *vertexData = [NSData dataWithBytes:gArrowZVertexData length:sizeof(gArrowZVertexData)];
+    NSData *vertexData = [NSData dataWithBytes:gArrowXVertexData length:sizeof(gArrowXVertexData)];
     _testObject = [CEModel modelWithVertexData:vertexData type:CEVertextDataType_V3N3];
     _testObject.position = GLKVector3Make(1, 0, 0);
 //    _testObject.transformMatrix = GLKMatrix4Identity;
@@ -259,7 +259,7 @@ GLfloat gArrowXVertexData[108] =
     printf("onTestRotation\n\n");
     CEObject *testObject = [CEObject new];
     testObject.eulerAngles = GLKVector3Make(30, 40, 50);
-    testObject.eulerAngles = GLKVector3Make(12.4, 56.7, 89.9);
+    testObject.eulerAngles = GLKVector3Make(12.4, 56.7, 89.6);
     testObject.eulerAngles = GLKVector3Make(-30, 40, 50);
     testObject.eulerAngles = GLKVector3Make(30, -40, -50);
     testObject.eulerAngles = GLKVector3Make(230, 190, 260);
@@ -267,8 +267,7 @@ GLfloat gArrowXVertexData[108] =
     testObject.eulerAngles = GLKVector3Make(-135, 135, 135);
     testObject.eulerAngles = GLKVector3Make(-135, -197, 270);
     testObject.eulerAngles = GLKVector3Make(20, -180, -160);
-    double value = pow(3, 2);
-    printf("test value: %f\n", value);
+        
 }
 
 #pragma mark - rotation
