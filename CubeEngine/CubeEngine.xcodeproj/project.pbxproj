@@ -28,6 +28,7 @@
 		265ACD511AB2C212000277F2 /* CEVector3.m in Sources */ = {isa = PBXBuildFile; fileRef = 265ACD501AB2C212000277F2 /* CEVector3.m */; };
 		265ACD591AB2D406000277F2 /* CEObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 265ACD581AB2D406000277F2 /* CEObject.m */; };
 		267C42B01AB2E9280011CDC0 /* CEObject.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 265ACD571AB2D406000277F2 /* CEObject.h */; };
+		26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A4E1281ACD734900847553 /* CEObjFileLoader.m */; };
 		26EBAB701AAE896F00E65022 /* CETestProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EBAB6F1AAE896F00E65022 /* CETestProgram.m */; };
 		26EBAB711AAECAA100E65022 /* CEScene.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261089641AAD31AF0041E142 /* CEScene.h */; };
 		26EBAB721AAECAA400E65022 /* CEModel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 263C88E91AA98CE9005A2623 /* CEModel.h */; };
@@ -90,6 +91,8 @@
 		265ACD561AB2C5CE000277F2 /* CEVector3_Delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEVector3_Delegate.h; sourceTree = "<group>"; };
 		265ACD571AB2D406000277F2 /* CEObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObject.h; sourceTree = "<group>"; };
 		265ACD581AB2D406000277F2 /* CEObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEObject.m; sourceTree = "<group>"; };
+		26A4E1271ACD734900847553 /* CEObjFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObjFileLoader.h; sourceTree = "<group>"; };
+		26A4E1281ACD734900847553 /* CEObjFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEObjFileLoader.m; sourceTree = "<group>"; };
 		26EBAB6E1AAE896F00E65022 /* CETestProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CETestProgram.h; sourceTree = "<group>"; };
 		26EBAB6F1AAE896F00E65022 /* CETestProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CETestProgram.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -145,6 +148,8 @@
 				265ACD4F1AB2C212000277F2 /* CEVector3.h */,
 				265ACD501AB2C212000277F2 /* CEVector3.m */,
 				265ACD561AB2C5CE000277F2 /* CEVector3_Delegate.h */,
+				26A4E1271ACD734900847553 /* CEObjFileLoader.h */,
+				26A4E1281ACD734900847553 /* CEObjFileLoader.m */,
 			);
 			name = 3DScene;
 			sourceTree = "<group>";
@@ -273,6 +278,7 @@
 				265ACD591AB2D406000277F2 /* CEObject.m in Sources */,
 				263EC7BC1AB67A990089B87E /* CECoordinateRenderer.m in Sources */,
 				263BBBE11AB91A3600F88F65 /* CEUtils.m in Sources */,
+				26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
