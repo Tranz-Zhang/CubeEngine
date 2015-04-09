@@ -34,6 +34,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
     GLint _uniformProjection;
 }
 
+
 - (BOOL)prepareRender {
     if (_program.initialized) return YES;
     
@@ -64,8 +65,8 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
     if (!_program || !model.mesh) return;
     CEMesh *mesh = model.mesh;
     BOOL prepared = [mesh prepareDrawingWithPositionIndex:_attributePosition
-                                        textureCoordIndex:0
-                                              normalIndex:0];
+                                        textureCoordIndex:-1
+                                              normalIndex:-1];
     if (prepared) {
         // setup camera projection
         GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);

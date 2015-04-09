@@ -200,8 +200,8 @@ Byte gTriangleIndicesData[18] = {
 @property (weak, nonatomic) IBOutlet UISlider *valueSlider;
 @property (weak, nonatomic) IBOutlet UITextView *infoTextView;
 
-@property (nonatomic, readonly) CEModel *testObject;
-@property (nonatomic, readonly) CEModel_Deprecated *testObject2;
+@property (nonatomic, readonly) CEModel *triangleObject;
+@property (nonatomic, readonly) CEModel *cubeObject;
 
 @end
 
@@ -214,19 +214,18 @@ Byte gTriangleIndicesData[18] = {
     self.scene.camera.position = GLKVector3Make(0, 5, 5);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
-    NSData *vertexData = [NSData dataWithBytes:gArrowXVertexData length:sizeof(gArrowXVertexData)];
-    NSData *indicesData = [NSData dataWithBytes:gTriangleIndicesData length:sizeof(gTriangleIndicesData)];
-    CEMesh *mesh = [[CEMesh alloc] initWithVertexData:vertexData vertexDataType:CEVertexDataType_V
-                                          indicesData:indicesData indicesDataType:CEIndicesDataType_UByte];
-    _testObject = [[CEModel alloc] initWithMesh:mesh];
-    _testObject.position = GLKVector3Make(1, 0, 0);
+    NSData *triangleData = [NSData dataWithBytes:gArrowXVertexData length:sizeof(gArrowXVertexData)];
+    CEMesh *triangleMesh = [[CEMesh alloc] initWithVertexData:triangleData vertexDataType:CEVertexDataType_V_VN];
+    _triangleObject = [[CEModel alloc] initWithMesh:triangleMesh];
+    _triangleObject.position = GLKVector3Make(1, 0, 0);
     //    _testObject.transformMatrix = GLKMatrix4Identity;
     
-    [self.scene addModel:_testObject];
+    [self.scene addModel:_triangleObject];
     
-//    NSData *vertexData2 = [NSData dataWithBytes:gCubeVertexData length:sizeof(gCubeVertexData)];
-//    _testObject2 = [CEModel_Deprecated modelWithVertexData:vertexData2 type:CEVertextDataType_V3N3];
-//    [self.scene addRenderObject:_testObject2];
+    NSData *cubeData = [NSData dataWithBytes:gCubeVertexData length:sizeof(gCubeVertexData)];
+    CEMesh *cubeMesh = [[CEMesh alloc] initWithVertexData:cubeData vertexDataType:CEVertexDataType_V_VN];
+    _cubeObject = [[CEModel alloc] initWithMesh:cubeMesh];
+    [self.scene addModel:_cubeObject];
     
     self.versionLabel.text = [NSString stringWithFormat:@"Cube Engine Dev: %@", CUBE_ENGINE_VERSION];
     _isLookingAtObject = NO;
@@ -235,12 +234,12 @@ Byte gTriangleIndicesData[18] = {
 
 
 - (IBAction)onReset:(id)sender {
-    self.testObject.position = GLKVector3Make(0, 0, 0);
-    self.testObject.scale = GLKVector3Make(1, 1, 1);
-    self.testObject.rotation = GLKQuaternionIdentity;
-    self.testObject2.position = GLKVector3Make(0, 0, 0);
-    self.testObject2.scale = GLKVector3Make(1, 1, 1);
-    self.testObject2.rotation = GLKQuaternionIdentity;
+    self.triangleObject.position = GLKVector3Make(0, 0, 0);
+    self.triangleObject.scale = GLKVector3Make(1, 1, 1);
+    self.triangleObject.rotation = GLKQuaternionIdentity;
+    self.cubeObject.position = GLKVector3Make(0, 0, 0);
+    self.cubeObject.scale = GLKVector3Make(1, 1, 1);
+    self.cubeObject.rotation = GLKQuaternionIdentity;
     self.scene.camera.position = GLKVector3Make(0, 5, 5);
     self.scene.camera.scale = GLKVector3Make(1, 1, 1);
     self.scene.camera.rotation = GLKQuaternionIdentity;
@@ -256,7 +255,7 @@ Byte gTriangleIndicesData[18] = {
 
 - (void)updateInfoView {
     NSMutableString *infoString = [NSMutableString string];
-    [infoString appendFormat:@"Object (%.2f, %.2f, %.2f)\n", self.testObject.position.x, self.testObject.position.y, self.testObject.position.z];
+    [infoString appendFormat:@"Object (%.2f, %.2f, %.2f)\n", self.triangleObject.position.x, self.triangleObject.position.y, self.triangleObject.position.z];
     [infoString appendFormat:@"Camera (%.2f, %.2f, %.2f)", self.scene.camera.position.x, self.scene.camera.position.y, self.scene.camera.position.z];
     self.infoTextView.text = infoString;
 }
@@ -266,10 +265,10 @@ Byte gTriangleIndicesData[18] = {
     button.selected = _isAttachingObject;
     
     if (_isAttachingObject) {
-        [self.testObject2 addChildObject:self.testObject];
+        [self.cubeObject addChildObject:self.triangleObject];
         
     } else {
-        [self.testObject removeFromParent];
+        [self.triangleObject removeFromParent];
     }
 }
 
@@ -294,7 +293,7 @@ Byte gTriangleIndicesData[18] = {
     }
     
     if (_isLookingAtObject) {
-        [self.scene.camera lookAt:self.testObject.position];
+        [self.scene.camera lookAt:self.triangleObject.position];
     }
 }
 
@@ -303,10 +302,10 @@ Byte gTriangleIndicesData[18] = {
 - (CEObject *)currentObject {
     switch (_objectSegment.selectedSegmentIndex) {
         case 0:
-            return self.testObject;
+            return self.triangleObject;
             
         case 1:
-            return self.testObject2;
+            return self.cubeObject;
             
         case 2:
             return self.scene.camera;
@@ -406,7 +405,7 @@ static float lastSliderValue;
 
 - (IBAction)onLookAt:(UIButton *)button {
     CEObject *currentObject = [self currentObject];
-    [currentObject lookAt:self.testObject2.position];
+    [currentObject lookAt:self.cubeObject.position];
 }
 
 

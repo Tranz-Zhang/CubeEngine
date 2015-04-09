@@ -14,7 +14,6 @@
 #import "CECoordinateRenderer.h"
 
 @interface CEScene () {
-    CERenderer *_renderer;
     CECoordinateRenderer *_coordinateRenderer;
     
     EAGLContext *_context;
@@ -42,10 +41,7 @@
         _camera.farZ = 100;
         _camera.position = GLKVector3Make(0, 0, 4);
         
-        _renderer = [CERenderer new];
-        _renderer.backgroundColor = [UIColor whiteColor];
-        
-        _coordinateRenderer = [[CECoordinateRenderer alloc] initWithContext:_renderer.context];
+        _coordinateRenderer = [[CECoordinateRenderer alloc] initWithContext:_context];
         _coordinateRenderer.showWorldCoordinate = YES;
     }
     return self;
@@ -54,28 +50,11 @@
 
 #pragma mark - Setters & Getters
 - (EAGLContext *)context {
-    return _renderer.context;
+    return _context;
 }
+
 
 #pragma mark -
-- (void)addRenderObject:(CEModel_Deprecated *)renderObject {
-    if ([renderObject isKindOfClass:[CEModel_Deprecated class]]) {
-        [_renderObjects addObject:renderObject];
-        [_coordinateRenderer addModel:renderObject];
-        
-    } else {
-        CEError(@"Can not add model to scene");
-    }
-}
-
-- (void)removeRenderObject:(CEModel_Deprecated *)renderObject {
-    if (renderObject) {
-        [_renderObjects removeObject:renderObject];
-        [_coordinateRenderer removeModel:renderObject];
-    }
-}
-
-
 - (void)addModel:(CEModel *)model {
     if ([model isKindOfClass:[CEModel class]]) {
         [_renderObjects addObject:model];
@@ -95,7 +74,7 @@
 
 
 - (void)update {
-    _renderer.cameraProjectionMatrix = _camera.projectionMatrix;
+    _renderManager.cameraProjectionMatrix = _camera.projectionMatrix;
     [_renderManager renderModels:_renderObjects];
 //    [_renderer renderObjects:_renderObjects];
 //    

@@ -14,6 +14,8 @@
  */
 @interface CERenderManager : NSObject
 
+@property (nonatomic, assign) GLKMatrix4 cameraProjectionMatrix;
+
 - (instancetype)initWithContext:(EAGLContext *)context;
 
 - (void)renderModels:(NSArray *)models;

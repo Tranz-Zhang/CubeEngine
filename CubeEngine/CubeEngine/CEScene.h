@@ -25,8 +25,6 @@
 
 @property (nonatomic, assign) BOOL displayOriginalPivot;
 
-- (void)addRenderObject:(CEModel_Deprecated *)renderObject;
-- (void)removeRenderObject:(CEModel_Deprecated *)renderObject;
 
 - (void)addModel:(CEModel *)model;
 - (void)removeModel:(CEModel *)model;

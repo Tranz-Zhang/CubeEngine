@@ -31,9 +31,18 @@
 - (void)renderModels:(NSArray *)models {
     if (!models.count) return;
     [EAGLContext setCurrentContext:_context];
+    
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearDepthf(1.0f);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    
+    // enable depth test
+    glEnable(GL_DEPTH_TEST);
+    
     for (CEModel *model in models) {
         // TODO: select render base on current model
         [model.mesh setupArrayBuffersWithContext:_context];
+        _testRender.cameraProjectionMatrix = _cameraProjectionMatrix;
         [_testRender renderModel:model];
     }
 }

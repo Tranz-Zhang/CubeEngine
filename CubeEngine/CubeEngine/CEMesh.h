@@ -26,6 +26,11 @@ typedef NS_ENUM(NSInteger, CEIndicesDataType) {
 @property (nonatomic, readonly) GLKVector3 bounds;          // 模型空间大小
 @property (nonatomic, readonly) GLKVector3 offsetFromOrigin; // 模型中心相对与坐标原点的偏移值
 
+
+// 此方法会自动生成indicesData
+- (instancetype)initWithVertexData:(NSData *)vertexData
+                    vertexDataType:(CEVertexDataType)vertexDataType;
+
 - (instancetype)initWithVertexData:(NSData *)vertexData
                     vertexDataType:(CEVertexDataType)vertexDataType
                        indicesData:(NSData *)indicesData

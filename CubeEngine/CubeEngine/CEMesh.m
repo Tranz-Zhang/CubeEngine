@@ -14,16 +14,26 @@
 }
 
 - (instancetype)initWithVertexData:(NSData *)vertexData
+                    vertexDataType:(CEVertexDataType)vertexDataType {
+    return [self initWithVertexData:vertexData vertexDataType:vertexDataType
+                        indicesData:nil indicesDataType:0];
+}
+
+- (instancetype)initWithVertexData:(NSData *)vertexData
                     vertexDataType:(CEVertexDataType)vertexDataType
                        indicesData:(NSData *)indicesData
                    indicesDataType:(CEIndicesDataType)indicesDataType {
     
     self = [super init];
     if (self) {
-        _vertexData = [vertexData copy];
-        _vertexDataType = vertexDataType;
-        _indicesData = [indicesData copy];
-        _indicesDataType = indicesDataType;
+        if (vertexDataType != CEVertexDataType_Unknown) {
+            _vertexData = [vertexData copy];
+            _vertexDataType = vertexDataType;
+            _indicesData = [indicesData copy];
+            _indicesDataType = indicesDataType;
+            
+            [self setupMesh];
+        }
     }
     return self;
 }
@@ -43,9 +53,6 @@
 
 
 - (void)setupMesh {
-    // indices info
-    _indicesCount = (GLsizei)_indicesData.length / [self bytesForIndicesDataType:_indicesDataType];
-    
     // vertex info
     _vertexStride = [self bytesPerVertexForDataType:_vertexDataType];
     if (_vertexData.length % _vertexStride) {
@@ -75,6 +82,28 @@
                                        (maxY + minY) / 2,
                                        (maxZ + minZ) / 2);
     _bounds = GLKVector3Make(maxX - minX, maxY - minY, maxZ - minZ);
+
+    // indices info
+    if (_indicesData.length) {
+        _indicesCount = (GLsizei)_indicesData.length / [self bytesForIndicesDataType:_indicesDataType];
+        
+    } else { // auto generate indices data
+        _indicesDataType = vertexCount < 256 ? CEIndicesDataType_UByte : CEIndicesDataType_UShort;
+        int dataSize = vertexCount * (vertexCount < 256 ? sizeof(GLbyte) : sizeof(GLushort));
+        NSMutableData *indicesData = [NSMutableData dataWithCapacity:dataSize];
+        for (int i = 0; i < vertexCount; i++) {
+            if (_indicesDataType == CEIndicesDataType_UByte) {
+                GLbyte idx = i;
+                [indicesData appendBytes:&idx length:sizeof(idx)];
+                
+            } else {
+                GLushort idx = i;
+                [indicesData appendBytes:&idx length:sizeof(idx)];
+            }
+        }
+        _indicesData = [indicesData copy];
+        _indicesCount = vertexCount;
+    }
 }
 
 
@@ -105,22 +134,25 @@
                             normalIndex:(GLint)normalIndex {
     if (_vertexDataType == CEVertexDataType_Unknown ||
         !_vertexBufferIndex ||
-        !_indicesBufferIndex) {
+        !_indicesBufferIndex ||
+        !_vertexStride) {
         return NO;
     }
     
     // setup indices buffer
-    if (positionIndex && _vertexStride) {
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indicesBufferIndex);
+    if (positionIndex >= 0 && _vertexStride) {
         glVertexAttribPointer(positionIndex, 3, GL_FLOAT, GL_FALSE, _vertexStride, CE_BUFFER_OFFSET(0));
         glEnableVertexAttribArray(positionIndex);
     }
-    if (textureCoordIndex &&
+    if (textureCoordIndex >= 0 &&
         (_vertexDataType == CEVertexDataType_V_VT ||
          _vertexDataType == CEVertexDataType_V_VT_VN)) {
         glVertexAttribPointer(textureCoordIndex, 2, GL_FLOAT, GL_FALSE, _vertexStride, CE_BUFFER_OFFSET(3 * sizeof(GLfloat)));
         glEnableVertexAttribArray(textureCoordIndex);
     }
-    if (normalIndex) {
+    if (normalIndex >= 0) {
         if (_vertexDataType == CEVertexDataType_V_VN) {
             glVertexAttribPointer(normalIndex, 3, GL_FLOAT, GL_FALSE, _vertexStride, CE_BUFFER_OFFSET(3 * sizeof(GLfloat)));
             glEnableVertexAttribArray(normalIndex);
