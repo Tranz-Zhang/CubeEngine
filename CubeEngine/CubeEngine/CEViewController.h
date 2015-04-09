@@ -8,12 +8,10 @@
 
 #import <GLKit/GLKit.h>
 #import "CEScene.h"
-#import "CEModel.h"
+#import "CEModel_Deprecated.h"
 
 @interface CEViewController : GLKViewController
 
 @property (nonatomic, readonly) CEScene *scene;
-@property (nonatomic, readonly) CEModel *testObject;
-@property (nonatomic, readonly) CEModel *testObject2;
 
 @end

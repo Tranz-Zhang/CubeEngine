@@ -117,14 +117,14 @@ GLfloat kCoordinateLineData[42] =
     }
 }
 
-- (void)addModel:(CEModel *)model {
-    if ([model isKindOfClass:[CEModel class]]) {
+- (void)addModel:(CEModel_Deprecated *)model {
+    if ([model isKindOfClass:[CEModel_Deprecated class]]) {
         [_models addObject:model];
     }
 }
 
-- (void)removeModel:(CEModel *)model {
-    if ([model isKindOfClass:[CEModel class]]) {
+- (void)removeModel:(CEModel_Deprecated *)model {
+    if ([model isKindOfClass:[CEModel_Deprecated class]]) {
         [_models removeObject:model];
     }
 }
@@ -133,7 +133,7 @@ GLfloat kCoordinateLineData[42] =
 
 - (void)render {
     [EAGLContext setCurrentContext:_context];
-    for (CEModel *model in _models) {
+    for (CEModel_Deprecated *model in _models) {
         [self drawCoordinateLinesWithTransformMatrix:model.transformMatrix];
     }
     

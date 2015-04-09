@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CEModel.h"
+#import "CEModel_Deprecated.h"
 
 @interface CECoordinateRenderer : NSObject
 
@@ -16,8 +16,8 @@
 
 - (instancetype)initWithContext:(EAGLContext *)context;
 
-- (void)addModel:(CEModel* )model;
-- (void)removeModel:(CEModel *)model;
+- (void)addModel:(CEModel_Deprecated* )model;
+- (void)removeModel:(CEModel_Deprecated *)model;
 
 - (void)render;
 

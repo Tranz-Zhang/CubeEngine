@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
-#import "CEModel.h"
+#import "CEModel_Deprecated.h"
 
 @interface CERenderer : NSObject
 
@@ -17,7 +17,7 @@
 @property (nonatomic, readonly) EAGLContext *context;
 @property (nonatomic, assign) GLKMatrix4 cameraProjectionMatrix;
 
-- (void)renderObject:(CEModel *)object;
+//- (void)renderObject:(CEModel_Deprecated *)object;
 - (void)renderObjects:(NSArray *)objects;
 
 @end

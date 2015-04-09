@@ -96,7 +96,7 @@
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-2" maxValue="2" id="Uvy-1z-ICF">
                                 <rect key="frame" x="14" y="313" width="292" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <action selector="onEndMoving:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="g2r-sJ-9np"/>
                                     <action selector="onMovingObject:" destination="vXZ-lx-hvc" eventType="valueChanged" id="1K3-BP-L5w"/>
@@ -117,6 +117,32 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1906" y="-38"/>
+        </scene>
+        <!--Model View Controller-->
+        <scene sceneID="fpX-uj-gqv">
+            <objects>
+                <viewController id="LLu-Zq-wEI" customClass="ModelViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2By-A5-exp" customClass="GLKView">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2RR-rU-Mxm">
+                                <rect key="frame" x="98" y="464" width="125" height="51"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onTest:" destination="LLu-Zq-wEI" eventType="touchUpInside" id="o8d-K6-tEM"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="B8e-mS-f86" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1971" y="600"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

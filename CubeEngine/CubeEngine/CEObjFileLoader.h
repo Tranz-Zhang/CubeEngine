@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CEModel.h"
+#import "CEModel_Deprecated.h"
 
 @interface CEObjFileLoader : NSObject
 
 + (instancetype)shareLoader;
 
-- (CEModel *)loadModelWithObjFilePath:(NSString *)filePath;
+- (CEModel_Deprecated *)loadModelWithObjFilePath:(NSString *)filePath;
 
 @end

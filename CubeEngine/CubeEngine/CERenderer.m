@@ -100,7 +100,9 @@
 
 - (void)renderObjects:(NSArray *)objects {
     if (!objects.count || !_program) {
-        CEError(@"Can not render object");
+        if (!_program) {
+            CEError(@"NULL program!!! Can not render object");
+        }
         return;
     }
     [EAGLContext setCurrentContext:_context];
@@ -116,7 +118,7 @@
 //        glDepthFunc(GL_LEQUAL);
 //        glDepthRangef(0.0f, 1.0f);
     
-    for (CEModel *object in objects) {
+    for (CEModel_Deprecated *object in objects) {
         // check vertex buffer
         if (!object.vertexBufferIndex) {
             [object generateVertexBufferInContext:_context];
@@ -124,7 +126,7 @@
         
         glBindBuffer(GL_ARRAY_BUFFER, object.vertexBufferIndex);
         glEnableVertexAttribArray(_program.attributePosition);
-        glVertexAttribPointer(_program.attributePosition, 3, GL_FLOAT, GL_FALSE, 24, CE_BUFFER_OFFSET(0));
+        glVertexAttribPointer(_program.attributePosition, 3, GL_FLOAT, GL_FALSE, 12, CE_BUFFER_OFFSET(0));
         [_program use];
         
         // TODO:render object with different programs

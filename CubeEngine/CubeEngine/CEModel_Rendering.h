@@ -6,10 +6,10 @@
 //  Copyright (c) 2015年 ByChance. All rights reserved.
 //
 
-#import "CEModel.h"
+#import "CEModel_Deprecated.h"
 #import "CEProgram.h"
 
-@interface CEModel ()
+@interface CEModel_Deprecated ()
 
 // current model transform
 //@property (nonatomic, readonly) GLKMatrix4 transformMatrix;

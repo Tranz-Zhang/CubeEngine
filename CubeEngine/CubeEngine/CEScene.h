@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CEModel_Deprecated.h"
 #import "CEModel.h"
 #import "CECamera.h"
 
@@ -24,8 +25,11 @@
 
 @property (nonatomic, assign) BOOL displayOriginalPivot;
 
-- (void)addRenderObject:(CEModel *)renderObject;
-- (void)removeRenderObject:(CEModel *)renderObject;
+- (void)addRenderObject:(CEModel_Deprecated *)renderObject;
+- (void)removeRenderObject:(CEModel_Deprecated *)renderObject;
+
+- (void)addModel:(CEModel *)model;
+- (void)removeModel:(CEModel *)model;
 
 - (void)update;
 

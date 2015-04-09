@@ -14,6 +14,14 @@
 		26193F881AA833BF00787C64 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26193F871AA833BF00787C64 /* Images.xcassets */; };
 		26193F971AA833C000787C64 /* CubeEngineDevTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193F961AA833C000787C64 /* CubeEngineDevTests.m */; };
 		26193FB51AA853D300787C64 /* libCubeEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193FA91AA839AC00787C64 /* libCubeEngine.a */; };
+		261CD42D1AD3DE0000C521CC /* ModelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 261CD42C1AD3DE0000C521CC /* ModelViewController.m */; };
+		261CD4331AD3DE8B00C521CC /* cylinder_group.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 261CD42F1AD3DE8B00C521CC /* cylinder_group.mtl */; };
+		261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */ = {isa = PBXBuildFile; fileRef = 261CD4301AD3DE8B00C521CC /* cylinder_group.obj */; };
+		261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 261CD4311AD3DE8B00C521CC /* cylinder.mtl */; };
+		261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 261CD4321AD3DE8B00C521CC /* cylinder.obj */; };
+		262A713F1AD4D77A0095F225 /* MeshGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 262A713E1AD4D77A0095F225 /* MeshGroup.m */; };
+		2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 2648E6AA1AD516DA00E146D8 /* test_obj.mtl */; };
+		2648E6AD1AD516DA00E146D8 /* test_obj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2648E6AB1AD516DA00E146D8 /* test_obj.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +62,16 @@
 		26193F951AA833C000787C64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26193F961AA833C000787C64 /* CubeEngineDevTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CubeEngineDevTests.m; sourceTree = "<group>"; };
 		26193FA31AA839AC00787C64 /* CubeEngine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CubeEngine.xcodeproj; path = ../CubeEngine/CubeEngine.xcodeproj; sourceTree = "<group>"; };
+		261CD42B1AD3DE0000C521CC /* ModelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelViewController.h; sourceTree = "<group>"; };
+		261CD42C1AD3DE0000C521CC /* ModelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelViewController.m; sourceTree = "<group>"; };
+		261CD42F1AD3DE8B00C521CC /* cylinder_group.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder_group.mtl; sourceTree = "<group>"; };
+		261CD4301AD3DE8B00C521CC /* cylinder_group.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder_group.obj; sourceTree = "<group>"; };
+		261CD4311AD3DE8B00C521CC /* cylinder.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder.mtl; sourceTree = "<group>"; };
+		261CD4321AD3DE8B00C521CC /* cylinder.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder.obj; sourceTree = "<group>"; };
+		262A713D1AD4D77A0095F225 /* MeshGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshGroup.h; sourceTree = "<group>"; };
+		262A713E1AD4D77A0095F225 /* MeshGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeshGroup.m; sourceTree = "<group>"; };
+		2648E6AA1AD516DA00E146D8 /* test_obj.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_obj.mtl; sourceTree = "<group>"; };
+		2648E6AB1AD516DA00E146D8 /* test_obj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_obj.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,10 +116,15 @@
 		26193F791AA833BF00787C64 /* CubeEngineDev */ = {
 			isa = PBXGroup;
 			children = (
+				261CD42E1AD3DE3D00C521CC /* Models */,
 				26193F7E1AA833BF00787C64 /* AppDelegate.h */,
 				26193F7F1AA833BF00787C64 /* AppDelegate.m */,
 				26193F811AA833BF00787C64 /* ViewController.h */,
 				26193F821AA833BF00787C64 /* ViewController.m */,
+				261CD42B1AD3DE0000C521CC /* ModelViewController.h */,
+				261CD42C1AD3DE0000C521CC /* ModelViewController.m */,
+				262A713D1AD4D77A0095F225 /* MeshGroup.h */,
+				262A713E1AD4D77A0095F225 /* MeshGroup.m */,
 				26193F841AA833BF00787C64 /* Main.storyboard */,
 				26193F871AA833BF00787C64 /* Images.xcassets */,
 				26193F7A1AA833BF00787C64 /* Supporting Files */,
@@ -148,6 +171,19 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		261CD42E1AD3DE3D00C521CC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2648E6AA1AD516DA00E146D8 /* test_obj.mtl */,
+				2648E6AB1AD516DA00E146D8 /* test_obj.obj */,
+				261CD42F1AD3DE8B00C521CC /* cylinder_group.mtl */,
+				261CD4301AD3DE8B00C521CC /* cylinder_group.obj */,
+				261CD4311AD3DE8B00C521CC /* cylinder.mtl */,
+				261CD4321AD3DE8B00C521CC /* cylinder.obj */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -247,8 +283,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				261CD4331AD3DE8B00C521CC /* cylinder_group.mtl in Resources */,
+				261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */,
+				261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */,
+				2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */,
+				261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */,
 				26193F861AA833BF00787C64 /* Main.storyboard in Resources */,
 				26193F881AA833BF00787C64 /* Images.xcassets in Resources */,
+				2648E6AD1AD516DA00E146D8 /* test_obj.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,8 +308,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				261CD42D1AD3DE0000C521CC /* ModelViewController.m in Sources */,
 				26193F831AA833BF00787C64 /* ViewController.m in Sources */,
 				26193F801AA833BF00787C64 /* AppDelegate.m in Sources */,
+				262A713F1AD4D77A0095F225 /* MeshGroup.m in Sources */,
 				26193F7D1AA833BF00787C64 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

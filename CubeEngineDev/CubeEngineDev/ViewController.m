@@ -11,6 +11,183 @@
 #import "CubeEngine.h"
 
 
+GLfloat gCubeVertexData[216] =
+{
+    // Data layout for each line below is:
+    // positionX, positionY, positionZ,     normalX, normalY, normalZ,
+    0.5f, -0.5f, -0.5f,        1.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, -0.5f,         1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, -0.5f,          1.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
+    
+    0.5f, 0.5f, -0.5f,         0.0f, 1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f,        0.0f, 1.0f, 0.0f,
+    0.5f, 0.5f, 0.5f,          0.0f, 1.0f, 0.0f,
+    0.5f, 0.5f, 0.5f,          0.0f, 1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f,        0.0f, 1.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f,         0.0f, 1.0f, 0.0f,
+    
+    -0.5f, 0.5f, -0.5f,        -1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,       -1.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f,         -1.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f,         -1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,       -1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,        -1.0f, 0.0f, 0.0f,
+    
+    -0.5f, -0.5f, -0.5f,       0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,        0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,        0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,        0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,        0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, 0.5f,         0.0f, -1.0f, 0.0f,
+    
+    0.5f, 0.5f, 0.5f,          0.0f, 0.0f, 1.0f,
+    -0.5f, 0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
+    0.5f, -0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
+    0.5f, -0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
+    -0.5f, 0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f,        0.0f, 0.0f, 1.0f,
+    
+    0.5f, -0.5f, -0.5f,        0.0f, 0.0f, -1.0f,
+    -0.5f, -0.5f, -0.5f,       0.0f, 0.0f, -1.0f,
+    0.5f, 0.5f, -0.5f,         0.0f, 0.0f, -1.0f,
+    0.5f, 0.5f, -0.5f,         0.0f, 0.0f, -1.0f,
+    -0.5f, -0.5f, -0.5f,       0.0f, 0.0f, -1.0f,
+    -0.5f, 0.5f, -0.5f,        0.0f, 0.0f, -1.0f
+};
+
+Byte gCubeIndicesData[36] = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+    18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35
+};
+
+
+//GLfloat gTriangleVertexData[108] =
+//{
+//    // Data layout for each line below is:
+//    // positionX, positionY, positionZ,     normalX, normalY, normalZ,
+//
+//    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+//    1.5f, -0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+//    1.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+//
+//    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+//    0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+//    0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+//
+//    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+//    1.5f, -0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+//    0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+//
+//    1.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+//    1.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+//    0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+//
+//    // bottom
+//    0.5f, -0.5f, -0.5f,    0.0f, -1.0f, 0.0f,
+//    1.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+//    0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+//    0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+//    1.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+//    1.5f, -0.5f, 0.5f,      0.0f, -1.0f, 0.0f,
+//};
+
+GLfloat gTriangleVertexData[108] =
+{
+    // Data layout for each line below is:
+    // positionX, positionY, positionZ,     normalX, normalY, normalZ,
+    
+    0.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    
+    0.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    
+    0.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+    
+    0.0f, 0.5f, 0.0f,       1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    -0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    
+    // bottom
+    -0.5f, -0.5f, -0.5f,    0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, 0.5f,      0.0f, -1.0f, 0.0f,
+};
+
+GLfloat gArrowZVertexData[108] =
+{
+    // Data layout for each line below is:
+    // positionX, positionY, positionZ,     normalX, normalY, normalZ,
+    
+    0.0f, 0.0f, 0.5f,       1.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, -0.5f,       1.0f, 1.0f, 1.0f,
+    -0.5f, 0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    
+    0.0f, 0.0f, 0.5f,       1.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, -0.5f,      -1.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    
+    0.0f, 0.0f, 0.5f,       1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,       1.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f,      -1.0f, 1.0f, 1.0f,
+    
+    0.0f, 0.0f, 0.5f,       1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    -0.5f, 0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    
+    // bottom
+    0.5f, 0.5f, -0.5f,    0.0f, -1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f,      0.0f, -1.0f, 0.0f,
+};
+
+GLfloat gArrowXVertexData[108] =
+{
+    // Data layout for each line below is:
+    // positionX, positionY, positionZ,     normalX, normalY, normalZ,
+    
+    0.5f, 0.0f, 0.0f,       1.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+    -0.5f, 0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    
+    0.5f, 0.0f, 0.0f,       1.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    
+    0.5f, 0.0f, 0.0f,       1.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f,       1.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f,      -1.0f, 1.0f, 1.0f,
+    
+    0.5f, 0.0f, 0.0f,       1.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f,      1.0f, 1.0f, -1.0f,
+    -0.5f, -0.5f, -0.5f,     -1.0f, 1.0f, -1.0f,
+    
+    // bottom
+    -0.5f, 0.5f, 0.5f,    0.0f, -1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,     0.0f, -1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,      0.0f, -1.0f, 0.0f,
+};
+
+Byte gTriangleIndicesData[18] = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
+};
+
 
 @interface ViewController () {
     BOOL _isLookingAtObject;
@@ -23,6 +200,8 @@
 @property (weak, nonatomic) IBOutlet UISlider *valueSlider;
 @property (weak, nonatomic) IBOutlet UITextView *infoTextView;
 
+@property (nonatomic, readonly) CEModel *testObject;
+@property (nonatomic, readonly) CEModel_Deprecated *testObject2;
 
 @end
 
@@ -31,6 +210,24 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.scene.camera.position = GLKVector3Make(0, 5, 5);
+    [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
+    
+    NSData *vertexData = [NSData dataWithBytes:gArrowXVertexData length:sizeof(gArrowXVertexData)];
+    NSData *indicesData = [NSData dataWithBytes:gTriangleIndicesData length:sizeof(gTriangleIndicesData)];
+    CEMesh *mesh = [[CEMesh alloc] initWithVertexData:vertexData vertexDataType:CEVertexDataType_V
+                                          indicesData:indicesData indicesDataType:CEIndicesDataType_UByte];
+    _testObject = [[CEModel alloc] initWithMesh:mesh];
+    _testObject.position = GLKVector3Make(1, 0, 0);
+    //    _testObject.transformMatrix = GLKMatrix4Identity;
+    
+    [self.scene addModel:_testObject];
+    
+//    NSData *vertexData2 = [NSData dataWithBytes:gCubeVertexData length:sizeof(gCubeVertexData)];
+//    _testObject2 = [CEModel_Deprecated modelWithVertexData:vertexData2 type:CEVertextDataType_V3N3];
+//    [self.scene addRenderObject:_testObject2];
+    
     self.versionLabel.text = [NSString stringWithFormat:@"Cube Engine Dev: %@", CUBE_ENGINE_VERSION];
     _isLookingAtObject = NO;
     [self updateInfoView];
