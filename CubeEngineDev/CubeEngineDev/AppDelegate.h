@@ -14,7 +14,3 @@
 
 
 @end
-
-Clean up deprecated codes
-resume coordinate render
-more renderer
