@@ -39,8 +39,9 @@ GLfloat kCoordinateLineData[42] =
     0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Axis X
     1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Axis X
     
-    0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, // Axis Y
     0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, // Axis Y
+    0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, // Axis Y
+//    0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, // Axis Y
     
     0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, // Axis Z
     0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f  // Axis Z
@@ -56,7 +57,7 @@ GLfloat kCoordinateLineData[42] =
     GLuint _coordinateBuffer;
     
     NSMutableArray *_models;
-    NSData *_vertextData;
+    NSMutableData *_lineData;
 }
 
 - (instancetype)initWithContext:(EAGLContext *)context
@@ -117,26 +118,33 @@ GLfloat kCoordinateLineData[42] =
     }
 }
 
-- (void)addModel:(CEModel_Deprecated *)model {
-    if ([model isKindOfClass:[CEModel_Deprecated class]]) {
+- (void)addModel:(CEModel *)model {
+    if ([model isKindOfClass:[CEModel class]]) {
         [_models addObject:model];
     }
 }
 
-- (void)removeModel:(CEModel_Deprecated *)model {
-    if ([model isKindOfClass:[CEModel_Deprecated class]]) {
+- (void)removeModel:(CEModel *)model {
+    if ([model isKindOfClass:[CEModel class]]) {
         [_models removeObject:model];
     }
 }
 
 
-
 - (void)render {
-    [EAGLContext setCurrentContext:_context];
-    for (CEModel_Deprecated *model in _models) {
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _coordinateBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glEnableVertexAttribArray(_attributePosition);
+    glVertexAttribPointer(_attributePosition, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), CE_BUFFER_OFFSET(0));
+    glEnableVertexAttribArray(_attributeVertexColor);
+    glVertexAttribPointer(_attributeVertexColor, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), CE_BUFFER_OFFSET(3 * sizeof(GLfloat)));
+    glLineWidth(2.0f);
+    
+    [_program use];
+    for (CEModel *model in _models) {
         [self drawCoordinateLinesWithTransformMatrix:model.transformMatrix];
     }
-    
     if (_showWorldCoordinate) {
         [self drawCoordinateLinesWithTransformMatrix:GLKMatrix4Identity];
     }
@@ -144,18 +152,24 @@ GLfloat kCoordinateLineData[42] =
 
 
 - (void)drawCoordinateLinesWithTransformMatrix:(GLKMatrix4)transformMatrix {
-    glBindBuffer(GL_ARRAY_BUFFER, _coordinateBuffer);
-    glEnableVertexAttribArray(_attributePosition);
-    // ???: why
-    glVertexAttribPointer(_attributePosition, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), CE_BUFFER_OFFSET(0));
     
-    [_program use];
     GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_cameraProjectionMatrix, transformMatrix);
     glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
     
-    glDrawArrays(GL_LINES, 0, 6);
+//    glDrawArrays(GL_LINES, 0, 6);
+    static GLubyte indices[8] = {0, 1, 1, 2, 2, 3, 4, 5};
+    const GLvoid* bodyIndices = &indices[0];
+    glDrawElements(GL_LINE_LOOP, 8, GL_UNSIGNED_BYTE, bodyIndices);
 }
 
+
+- (void)updateData {
+    
+}
+
+
+
 @end
+
 
 

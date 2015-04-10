@@ -16,7 +16,6 @@
 		26193F691AA832EB00787C64 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193F681AA832EB00787C64 /* QuartzCore.framework */; };
 		26193F6B1AA832F000787C64 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193F6A1AA832F000787C64 /* CoreGraphics.framework */; };
 		26193F6D1AA832F800787C64 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193F6C1AA832F800787C64 /* Foundation.framework */; };
-		26193FB91AA8574000787C64 /* CERenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193FB81AA8574000787C64 /* CERenderer.m */; };
 		26193FBF1AA85F3F00787C64 /* CEProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193FBE1AA85F3F00787C64 /* CEProgram.m */; };
 		2624AB981AD6286E00FC863C /* CEBaseRender.m in Sources */ = {isa = PBXBuildFile; fileRef = 2624AB971AD6286E00FC863C /* CEBaseRender.m */; };
 		2624AB9B1AD62B9C00FC863C /* CEMesh.m in Sources */ = {isa = PBXBuildFile; fileRef = 2624AB9A1AD62B9C00FC863C /* CEMesh.m */; };
@@ -30,18 +29,16 @@
 		2624ABB31AD6B0BC00FC863C /* CETexture.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2624AB9C1AD62BAE00FC863C /* CETexture.h */; };
 		2624ABB41AD6B0BC00FC863C /* CEMeterial.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2624AB9F1AD62BC800FC863C /* CEMeterial.h */; };
 		263BBBE11AB91A3600F88F65 /* CEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 263BBBE01AB91A3600F88F65 /* CEUtils.m */; };
-		263C88EB1AA98CE9005A2623 /* CEModel_Deprecated.m in Sources */ = {isa = PBXBuildFile; fileRef = 263C88EA1AA98CE9005A2623 /* CEModel_Deprecated.m */; };
 		263C88EF1AA99151005A2623 /* CEViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 263C88EE1AA99151005A2623 /* CEViewController.m */; };
 		263C88F11AA99B0A005A2623 /* CEViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 263C88ED1AA99151005A2623 /* CEViewController.h */; };
 		263EC7BC1AB67A990089B87E /* CECoordinateRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 263EC7BB1AB67A990089B87E /* CECoordinateRenderer.m */; };
 		263EC7F31AB6FA880089B87E /* CELinesProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 263EC7F21AB6FA880089B87E /* CELinesProgram.m */; };
-		265ACD511AB2C212000277F2 /* CEVector3.m in Sources */ = {isa = PBXBuildFile; fileRef = 265ACD501AB2C212000277F2 /* CEVector3.m */; };
+		265878681AD7C5B400BA2137 /* CEMeshWireFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 265878671AD7C5B400BA2137 /* CEMeshWireFrame.m */; };
 		265ACD591AB2D406000277F2 /* CEObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 265ACD581AB2D406000277F2 /* CEObject.m */; };
 		267C42B01AB2E9280011CDC0 /* CEObject.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 265ACD571AB2D406000277F2 /* CEObject.h */; };
 		26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A4E1281ACD734900847553 /* CEObjFileLoader.m */; };
 		26EBAB701AAE896F00E65022 /* CETestProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EBAB6F1AAE896F00E65022 /* CETestProgram.m */; };
 		26EBAB711AAECAA100E65022 /* CEScene.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261089641AAD31AF0041E142 /* CEScene.h */; };
-		26EBAB721AAECAA400E65022 /* CEModel_Deprecated.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 263C88E91AA98CE9005A2623 /* CEModel_Deprecated.h */; };
 		26EBAB731AAECAA700E65022 /* CECamera.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261089671AAD31C60041E142 /* CECamera.h */; };
 /* End PBXBuildFile section */
 
@@ -58,7 +55,6 @@
 				2624ABB41AD6B0BC00FC863C /* CEMeterial.h in CopyFiles */,
 				267C42B01AB2E9280011CDC0 /* CEObject.h in CopyFiles */,
 				26EBAB731AAECAA700E65022 /* CECamera.h in CopyFiles */,
-				26EBAB721AAECAA400E65022 /* CEModel_Deprecated.h in CopyFiles */,
 				26EBAB711AAECAA100E65022 /* CEScene.h in CopyFiles */,
 				26193F4C1AA8324600787C64 /* CubeEngine.h in CopyFiles */,
 				263C88F11AA99B0A005A2623 /* CEViewController.h in CopyFiles */,
@@ -72,7 +68,6 @@
 		261089651AAD31AF0041E142 /* CEScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEScene.m; sourceTree = "<group>"; };
 		261089671AAD31C60041E142 /* CECamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CECamera.h; sourceTree = "<group>"; };
 		261089681AAD31C60041E142 /* CECamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CECamera.m; sourceTree = "<group>"; };
-		2610896D1AAD39D70041E142 /* CEModel_Rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEModel_Rendering.h; sourceTree = "<group>"; };
 		2610896E1AAD3D700041E142 /* CECamera_Rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CECamera_Rendering.h; sourceTree = "<group>"; };
 		26193F481AA8324600787C64 /* libCubeEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCubeEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		26193F4B1AA8324600787C64 /* CubeEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CubeEngine.h; sourceTree = "<group>"; };
@@ -83,8 +78,6 @@
 		26193F681AA832EB00787C64 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		26193F6A1AA832F000787C64 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		26193F6C1AA832F800787C64 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		26193FB71AA8574000787C64 /* CERenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer.h; sourceTree = "<group>"; };
-		26193FB81AA8574000787C64 /* CERenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERenderer.m; sourceTree = "<group>"; };
 		26193FBD1AA85F3F00787C64 /* CEProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEProgram.h; sourceTree = "<group>"; };
 		26193FBE1AA85F3F00787C64 /* CEProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEProgram.m; sourceTree = "<group>"; };
 		2624AB961AD6286E00FC863C /* CEBaseRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEBaseRender.h; sourceTree = "<group>"; };
@@ -104,8 +97,6 @@
 		2624ABAE1AD6ABC800FC863C /* CERender_V.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERender_V.m; sourceTree = "<group>"; };
 		263BBBDF1AB91A3600F88F65 /* CEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEUtils.h; sourceTree = "<group>"; };
 		263BBBE01AB91A3600F88F65 /* CEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEUtils.m; sourceTree = "<group>"; };
-		263C88E91AA98CE9005A2623 /* CEModel_Deprecated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEModel_Deprecated.h; sourceTree = "<group>"; };
-		263C88EA1AA98CE9005A2623 /* CEModel_Deprecated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEModel_Deprecated.m; sourceTree = "<group>"; };
 		263C88EC1AA98DEB005A2623 /* CEDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CEDefines.h; sourceTree = "<group>"; };
 		263C88ED1AA99151005A2623 /* CEViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEViewController.h; sourceTree = "<group>"; };
 		263C88EE1AA99151005A2623 /* CEViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEViewController.m; sourceTree = "<group>"; };
@@ -113,9 +104,8 @@
 		263EC7BB1AB67A990089B87E /* CECoordinateRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CECoordinateRenderer.m; sourceTree = "<group>"; };
 		263EC7F11AB6FA880089B87E /* CELinesProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CELinesProgram.h; sourceTree = "<group>"; };
 		263EC7F21AB6FA880089B87E /* CELinesProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CELinesProgram.m; sourceTree = "<group>"; };
-		265ACD4F1AB2C212000277F2 /* CEVector3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEVector3.h; sourceTree = "<group>"; };
-		265ACD501AB2C212000277F2 /* CEVector3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEVector3.m; sourceTree = "<group>"; };
-		265ACD561AB2C5CE000277F2 /* CEVector3_Delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEVector3_Delegate.h; sourceTree = "<group>"; };
+		265878661AD7C5B400BA2137 /* CEMeshWireFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEMeshWireFrame.h; sourceTree = "<group>"; };
+		265878671AD7C5B400BA2137 /* CEMeshWireFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEMeshWireFrame.m; sourceTree = "<group>"; };
 		265ACD571AB2D406000277F2 /* CEObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObject.h; sourceTree = "<group>"; };
 		265ACD581AB2D406000277F2 /* CEObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEObject.m; sourceTree = "<group>"; };
 		26A4E1271ACD734900847553 /* CEObjFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObjFileLoader.h; sourceTree = "<group>"; };
@@ -155,8 +145,6 @@
 				26EBAB6F1AAE896F00E65022 /* CETestProgram.m */,
 				263EC7F11AB6FA880089B87E /* CELinesProgram.h */,
 				263EC7F21AB6FA880089B87E /* CELinesProgram.m */,
-				26193FB71AA8574000787C64 /* CERenderer.h */,
-				26193FB81AA8574000787C64 /* CERenderer.m */,
 				263EC7BA1AB67A990089B87E /* CECoordinateRenderer.h */,
 				263EC7BB1AB67A990089B87E /* CECoordinateRenderer.m */,
 			);
@@ -170,24 +158,20 @@
 				261089651AAD31AF0041E142 /* CEScene.m */,
 				265ACD571AB2D406000277F2 /* CEObject.h */,
 				265ACD581AB2D406000277F2 /* CEObject.m */,
-				263C88E91AA98CE9005A2623 /* CEModel_Deprecated.h */,
-				263C88EA1AA98CE9005A2623 /* CEModel_Deprecated.m */,
 				2624ABA71AD6A56A00FC863C /* CEModel.h */,
 				2624ABA81AD6A56A00FC863C /* CEModel.m */,
 				2624AB991AD62B9C00FC863C /* CEMesh.h */,
 				2624AB9A1AD62B9C00FC863C /* CEMesh.m */,
 				2624ABA51AD6570E00FC863C /* CEMesh_Rendering.h */,
+				265878661AD7C5B400BA2137 /* CEMeshWireFrame.h */,
+				265878671AD7C5B400BA2137 /* CEMeshWireFrame.m */,
 				2624AB9C1AD62BAE00FC863C /* CETexture.h */,
 				2624AB9D1AD62BAE00FC863C /* CETexture.m */,
 				2624AB9F1AD62BC800FC863C /* CEMeterial.h */,
 				2624ABA01AD62BC800FC863C /* CEMeterial.m */,
-				2610896D1AAD39D70041E142 /* CEModel_Rendering.h */,
 				261089671AAD31C60041E142 /* CECamera.h */,
 				261089681AAD31C60041E142 /* CECamera.m */,
 				2610896E1AAD3D700041E142 /* CECamera_Rendering.h */,
-				265ACD4F1AB2C212000277F2 /* CEVector3.h */,
-				265ACD501AB2C212000277F2 /* CEVector3.m */,
-				265ACD561AB2C5CE000277F2 /* CEVector3_Delegate.h */,
 				26A4E1271ACD734900847553 /* CEObjFileLoader.h */,
 				26A4E1281ACD734900847553 /* CEObjFileLoader.m */,
 			);
@@ -305,17 +289,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				263C88EF1AA99151005A2623 /* CEViewController.m in Sources */,
-				263C88EB1AA98CE9005A2623 /* CEModel_Deprecated.m in Sources */,
 				263EC7F31AB6FA880089B87E /* CELinesProgram.m in Sources */,
 				26EBAB701AAE896F00E65022 /* CETestProgram.m in Sources */,
-				265ACD511AB2C212000277F2 /* CEVector3.m in Sources */,
+				265878681AD7C5B400BA2137 /* CEMeshWireFrame.m in Sources */,
 				261089661AAD31AF0041E142 /* CEScene.m in Sources */,
 				261089691AAD31C60041E142 /* CECamera.m in Sources */,
 				2624ABA11AD62BC800FC863C /* CEMeterial.m in Sources */,
 				2624ABA91AD6A56A00FC863C /* CEModel.m in Sources */,
 				2624AB9B1AD62B9C00FC863C /* CEMesh.m in Sources */,
 				2624AB9E1AD62BAE00FC863C /* CETexture.m in Sources */,
-				26193FB91AA8574000787C64 /* CERenderer.m in Sources */,
 				26193F4E1AA8324600787C64 /* CubeEngine.m in Sources */,
 				26193FBF1AA85F3F00787C64 /* CEProgram.m in Sources */,
 				265ACD591AB2D406000277F2 /* CEObject.m in Sources */,

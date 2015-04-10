@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CEModel_Deprecated.h"
 #import "CEModel.h"
 #import "CECamera.h"
 

@@ -9,8 +9,6 @@
 #import "CEScene.h"
 #import "CECamera_Rendering.h"
 #import "CERenderManager.h"
-
-#import "CERenderer.h"
 #import "CECoordinateRenderer.h"
 
 @interface CEScene () {
@@ -32,7 +30,6 @@
         _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         _renderManager = [[CERenderManager alloc] initWithContext:_context];
         _renderObjects = [NSMutableArray array];
-        
         
         _camera = [[CECamera alloc] init];
         _camera.radianDegree = 65;
@@ -58,7 +55,7 @@
 - (void)addModel:(CEModel *)model {
     if ([model isKindOfClass:[CEModel class]]) {
         [_renderObjects addObject:model];
-//        [_coordinateRenderer addModel:renderObject];
+        [_coordinateRenderer addModel:model];
         
     } else {
         CEError(@"Can not add model to scene");
@@ -69,17 +66,18 @@
 - (void)removeModel:(CEModel *)model {
     if (model) {
         [_renderObjects removeObject:model];
+        [_coordinateRenderer removeModel:model];
     }
 }
 
 
 - (void)update {
+    [EAGLContext setCurrentContext:_context];
     _renderManager.cameraProjectionMatrix = _camera.projectionMatrix;
     [_renderManager renderModels:_renderObjects];
-//    [_renderer renderObjects:_renderObjects];
-//    
-//    _coordinateRenderer.cameraProjectionMatrix = _camera.projectionMatrix;
-//    [_coordinateRenderer render];
+
+    _coordinateRenderer.cameraProjectionMatrix = _camera.projectionMatrix;
+    [_coordinateRenderer render];
 }
 
 

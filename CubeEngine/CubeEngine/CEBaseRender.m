@@ -12,7 +12,7 @@
 
 @implementation CEBaseRender
 
-- (BOOL)prepareRender {
+- (BOOL)setupRenderer {
     // !!!: MUST IMPLEMENTED BY SUBCLASS
     return NO;
 }

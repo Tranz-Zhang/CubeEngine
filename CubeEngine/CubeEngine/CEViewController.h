@@ -8,7 +8,7 @@
 
 #import <GLKit/GLKit.h>
 #import "CEScene.h"
-#import "CEModel_Deprecated.h"
+#import "CEModel.h"
 
 @interface CEViewController : GLKViewController
 

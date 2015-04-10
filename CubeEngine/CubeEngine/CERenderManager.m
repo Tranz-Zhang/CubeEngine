@@ -30,7 +30,6 @@
 
 - (void)renderModels:(NSArray *)models {
     if (!models.count) return;
-    [EAGLContext setCurrentContext:_context];
     
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClearDepthf(1.0f);

@@ -137,8 +137,9 @@
             size_t size = sizeof(float) * 480 * 3;
             size_t test = sizeof(double);
             memcpy(testArray, group.meshData.bytes, group.meshData.length);
-            CEModel_Deprecated *model = [CEModel_Deprecated modelWithVertexData:[group.meshData copy] type:CEVertextDataType_V3];
-            [self.scene addRenderObject:model];
+            CEMesh *mesh = [[CEMesh alloc] initWithVertexData:group.meshData vertexDataType:CEVertexDataType_V];
+            CEModel *model = [[CEModel alloc] initWithMesh:mesh];
+            [self.scene addModel:model];
         }
     });
 }

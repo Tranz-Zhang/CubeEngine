@@ -22,11 +22,11 @@
 }
 
 
-- (CEModel_Deprecated *)loadModelWithObjFilePath:(NSString *)filePath {
-    CEModel_Deprecated *model = [CEModel_Deprecated modelWithVertexData:[self parseVertextDataWithFilePath:filePath]
-                                             type:CEVertextDataType_V3];
-    return model;
-}
+//- (CEModel_Deprecated *)loadModelWithObjFilePath:(NSString *)filePath {
+//    CEModel_Deprecated *model = [CEModel_Deprecated modelWithVertexData:[self parseVertextDataWithFilePath:filePath]
+//                                             type:CEVertextDataType_V3];
+//    return model;
+//}
 
 - (NSData *)parseVertextDataWithFilePath:(NSString *)filePath {
     return nil;

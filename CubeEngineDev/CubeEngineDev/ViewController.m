@@ -58,11 +58,6 @@ GLfloat gCubeVertexData[216] =
     -0.5f, 0.5f, -0.5f,        0.0f, 0.0f, -1.0f
 };
 
-Byte gCubeIndicesData[36] = {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-    18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35
-};
-
 
 //GLfloat gTriangleVertexData[108] =
 //{
@@ -184,10 +179,6 @@ GLfloat gArrowXVertexData[108] =
     -0.5f, -0.5f, -0.5f,      0.0f, -1.0f, 0.0f,
 };
 
-Byte gTriangleIndicesData[18] = {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
-};
-
 
 @interface ViewController () {
     BOOL _isLookingAtObject;
@@ -214,17 +205,28 @@ Byte gTriangleIndicesData[18] = {
     self.scene.camera.position = GLKVector3Make(0, 5, 5);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
-    NSData *triangleData = [NSData dataWithBytes:gArrowXVertexData length:sizeof(gArrowXVertexData)];
-    CEMesh *triangleMesh = [[CEMesh alloc] initWithVertexData:triangleData vertexDataType:CEVertexDataType_V_VN];
-    _triangleObject = [[CEModel alloc] initWithMesh:triangleMesh];
-    _triangleObject.position = GLKVector3Make(1, 0, 0);
-    //    _testObject.transformMatrix = GLKMatrix4Identity;
+//    NSData *triangleData = [NSData dataWithBytes:gCubeVertexData length:sizeof(gCubeVertexData)];
+//    CEMesh *triangleMesh = [[CEMesh alloc] initWithVertexData:cubeData vertexDataType:CEVertexDataType_V_VN];
+//    _triangleObject = [[CEModel alloc] initWithMesh:triangleMesh];
+//    _triangleObject.position = GLKVector3Make(1, 0, 0);
+//    [self.scene addModel:_triangleObject];
     
-    [self.scene addModel:_triangleObject];
+//    NSData *cubeData1 = [NSData dataWithBytes:gCubeVertexData length:sizeof(gCubeVertexData)];
+//    CEMesh *cubeMesh1 = [[CEMesh alloc] initWithVertexData:cubeData1 vertexDataType:CEVertexDataType_V_VN];
+//    CEModel *cubeObject = [[CEModel alloc] initWithMesh:cubeMesh1];
+//    cubeObject.position = GLKVector3Make(1, 0, 0);
+//    [self.scene addModel:cubeObject];
+//    
+//    NSData *triangleData = [NSData dataWithBytes:gArrowXVertexData length:sizeof(gArrowXVertexData)];
+//    CEMesh *triangleMesh = [[CEMesh alloc] initWithVertexData:triangleData vertexDataType:CEVertexDataType_V_VN];
+//    _triangleObject = [[CEModel alloc] initWithMesh:triangleMesh];
+//    _triangleObject.position = GLKVector3Make(1, 0, 0);
+//    [self.scene addModel:_triangleObject];
     
     NSData *cubeData = [NSData dataWithBytes:gCubeVertexData length:sizeof(gCubeVertexData)];
     CEMesh *cubeMesh = [[CEMesh alloc] initWithVertexData:cubeData vertexDataType:CEVertexDataType_V_VN];
     _cubeObject = [[CEModel alloc] initWithMesh:cubeMesh];
+    _cubeObject.position = GLKVector3Make(-1, 0, 0);
     [self.scene addModel:_cubeObject];
     
     self.versionLabel.text = [NSString stringWithFormat:@"Cube Engine Dev: %@", CUBE_ENGINE_VERSION];

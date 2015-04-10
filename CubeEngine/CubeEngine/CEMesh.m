@@ -125,6 +125,7 @@
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indicesBufferIndex);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indicesData.length, _indicesData.bytes, GL_STATIC_DRAW);
         }
+        
     }
     #warning ???: should we release data after creation?
 }

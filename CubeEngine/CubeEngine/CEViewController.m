@@ -7,13 +7,11 @@
 //
 
 #import "CEViewController.h"
-#import "CEModel_Deprecated.h"
-#import "CERenderer.h"
 
 @implementation CEViewController {
-    CEModel_Deprecated *_testObject;
     CEScene *_scene;
 }
+
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

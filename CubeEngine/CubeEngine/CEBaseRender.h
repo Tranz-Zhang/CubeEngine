@@ -15,7 +15,7 @@
 
 @property (nonatomic, assign) GLKMatrix4 cameraProjectionMatrix;
 
-- (BOOL)prepareRender;
+- (BOOL)setupRenderer;
 - (void)renderModel:(CEModel *)model;
 
 @end

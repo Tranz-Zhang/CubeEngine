@@ -35,7 +35,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
 }
 
 
-- (BOOL)prepareRender {
+- (BOOL)setupRenderer {
     if (_program.initialized) return YES;
     
     _program = [[CEProgram alloc] initWithVertexShaderString:kVertexShader
@@ -64,17 +64,21 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
 - (void)renderModel:(CEModel *)model {
     if (!_program || !model.mesh) return;
     CEMesh *mesh = model.mesh;
+    
     BOOL prepared = [mesh prepareDrawingWithPositionIndex:_attributePosition
                                         textureCoordIndex:-1
                                               normalIndex:-1];
+    
     if (prepared) {
+        [_program use]; // must call before setting uniform?
         // setup camera projection
         GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);
         glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
         
-        [_program use];
         GLenum indicesType = (mesh.indicesDataType == CEIndicesDataType_UByte ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT);
         glDrawElements(GL_TRIANGLES, mesh.indicesCount, indicesType, 0);
+//        glLineWidth(2.0);
+//        glDrawElements(GL_LINE_LOOP, mesh.indicesCount, indicesType, 0);
     }
 }
 
