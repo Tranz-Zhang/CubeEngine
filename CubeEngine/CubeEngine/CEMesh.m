@@ -9,9 +9,7 @@
 #import "CEMesh.h"
 #import "CEMesh_Rendering.h"
 
-@implementation CEMesh {
-    GLsizei _vertexStride;   // 每组vertex大小
-}
+@implementation CEMesh
 
 - (instancetype)initWithVertexData:(NSData *)vertexData
                     vertexDataType:(CEVertexDataType)vertexDataType {

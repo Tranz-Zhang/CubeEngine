@@ -6,18 +6,18 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEBaseRender.h"
+#import "CERenderer.h"
 
 
 
-@implementation CEBaseRender
+@implementation CERenderer
 
 - (BOOL)setupRenderer {
     // !!!: MUST IMPLEMENTED BY SUBCLASS
     return NO;
 }
 
-- (void)renderModel:(CEModel *)model {
+- (void)renderObject:(id)object {
     // !!!: MUST IMPLEMENTED BY SUBCLASS
 }
 

@@ -6,9 +6,11 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEBaseRender.h"
+#import "CERenderer.h"
+#import "CEModel.h"
 
-@interface CERender_V : CEBaseRender
+@interface CERender_V : CERenderer
 
+- (void)renderObject:(CEModel *)model;
 
 @end

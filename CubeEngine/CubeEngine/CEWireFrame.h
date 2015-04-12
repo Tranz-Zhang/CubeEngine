@@ -10,14 +10,12 @@
 #import "CEMesh.h"
 
 // presenting the wireframe of a given mesh
-@interface CEMeshWireFrame : NSObject
+@interface CEWireFrame : NSObject
 
-@property (nonatomic, copy) UIColor *wireFrameColor;
+@property (nonatomic, copy) UIColor *lineColor;
+@property (nonatomic, assign) GLfloat lineWidth;
 @property (nonatomic, assign) BOOL showCoordinateIndicator;
-@property (nonatomic, readonly) NSData *vertexData;
-@property (nonatomic, assign) GLint vertexBufferIndex;
 
-+ (CEMeshWireFrame *)wireFrameWithMesh:(CEMesh *)mesh;
-
+- (instancetype)initWithMesh:(CEMesh *)mesh;
 
 @end

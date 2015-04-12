@@ -12,7 +12,7 @@
 
 @implementation CERenderManager {
     EAGLContext *_context;
-    CEBaseRender *_testRender;
+    CERenderer *_testRender;
 }
 
 - (instancetype)initWithContext:(EAGLContext *)context
@@ -22,7 +22,7 @@
         _context = context;
         _testRender = [CERender_V new];
         [EAGLContext setCurrentContext:context];
-        [_testRender prepareRender];
+        [_testRender setupRenderer];
     }
     return self;
 }
@@ -42,7 +42,7 @@
         // TODO: select render base on current model
         [model.mesh setupArrayBuffersWithContext:_context];
         _testRender.cameraProjectionMatrix = _cameraProjectionMatrix;
-        [_testRender renderModel:model];
+        [_testRender renderObject:model];
     }
 }
 

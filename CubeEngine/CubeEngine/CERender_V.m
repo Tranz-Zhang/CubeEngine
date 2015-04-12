@@ -61,7 +61,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
 }
 
 
-- (void)renderModel:(CEModel *)model {
+- (void)renderObject:(CEModel *)model {
     if (!_program || !model.mesh) return;
     CEMesh *mesh = model.mesh;
     

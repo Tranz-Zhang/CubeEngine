@@ -16,6 +16,7 @@
 @property (nonatomic, readonly) GLuint vertexBufferIndex;
 @property (nonatomic, readonly) NSData *vertexData;
 @property (nonatomic, readonly) CEVertexDataType vertexDataType;
+@property (nonatomic, readonly) GLsizei vertexStride;
 
 // indices buffer info
 @property (nonatomic, readonly) GLuint indicesBufferIndex;
@@ -31,5 +32,7 @@
 - (BOOL)prepareDrawingWithPositionIndex:(GLint)positionIndex
                       textureCoordIndex:(GLint)textureCoordIndex
                             normalIndex:(GLint)normalIndex;
+
+#warning change to three methods
 
 @end
