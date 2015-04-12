@@ -8,8 +8,11 @@
 
 #import "CEMesh.h"
 #import "CEMesh_Rendering.h"
+#import "CEMesh_Wireframe.h"
 
 @implementation CEMesh
+
+#pragma mark - Init
 
 - (instancetype)initWithVertexData:(NSData *)vertexData
                     vertexDataType:(CEVertexDataType)vertexDataType {
@@ -104,7 +107,6 @@
     }
 }
 
-
 #pragma mark - Rendering Extension
 - (void)setupArrayBuffersWithContext:(EAGLContext *)context {
     // setup vertex buffer
@@ -162,6 +164,95 @@
         }
     }
     
+    return YES;
+}
+
+
+#pragma mark - Wireframe
+- (void)setShowWireframe:(BOOL)showWireframe {
+    if (showWireframe != _showWireframe) {
+        _showWireframe = showWireframe;
+        if (showWireframe && !_wireframeIndicesData) {
+            // 性能上考虑，这里即使取消显示线框，线框的索引数据依然会保存直到mesh销毁
+            [self parseWireframeIndices];
+        }
+    }
+}
+
+
+- (void)parseWireframeIndices {
+    if (!_indicesCount || (_indicesCount % 3 != 0) || !_vertexDataType) {
+        return;
+    }
+    NSMutableData *lineIndicesData = [NSMutableData data];
+    unsigned int indicesCount = 0;
+    NSMutableSet *insertedLineSet = [NSMutableSet set];
+    int stride = 3 * (_indicesDataType == CEIndicesDataType_UByte ? sizeof(unsigned char) : sizeof(unsigned short));
+    NSRange readRange = NSMakeRange(0, stride);
+    for (int i = 0; i < _indicesCount; i += 3) {
+        unsigned short indices[3];
+        if (_indicesDataType == CEIndicesDataType_UByte) {
+            Byte tmpIndices[3];
+            [_indicesData getBytes:tmpIndices range:readRange];
+            indices[0] = tmpIndices[0];
+            indices[1] = tmpIndices[1];
+            indices[2] = tmpIndices[2];
+            
+        } else {
+            [_indicesData getBytes:indices range:readRange];
+        }
+        
+        // change to line indices
+        for (int i = 0; i < 3; i++) {
+            unsigned short index0 = indices[i];
+            unsigned short index1 = indices[(i + 1) % 3];
+            NSString *lineId = [NSString stringWithFormat:@"%d%d", index0 + index1, abs(index0 - index1)];
+            if (![insertedLineSet containsObject:lineId]) {
+                [lineIndicesData appendBytes:&index0 length:sizeof(unsigned short)];
+                [lineIndicesData appendBytes:&index1 length:sizeof(unsigned short)];
+                [insertedLineSet addObject:lineId];
+                indicesCount += 2;
+            }
+        }
+        
+        readRange.location += stride;
+    }
+    
+    // TODO: check if should change ushort to ubyte!!!
+    _wireframeIndicesDataType = CEIndicesDataType_UShort;
+    _wireframeIndicesData = [lineIndicesData copy];
+    _wireframeIndicesCount = indicesCount;
+}
+
+
+- (void)setupWireframeArrayBufferWithContext:(EAGLContext *)context {
+    // setup wireframe buffer
+    if (_showWireframe && !_wireframeIndicesBufferIndex && _wireframeIndicesData.length) {
+        glGenBuffers(1, &_wireframeIndicesBufferIndex);
+        if (_wireframeIndicesBufferIndex) {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _wireframeIndicesBufferIndex);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, _wireframeIndicesData.length,
+                         _wireframeIndicesData.bytes, GL_STATIC_DRAW);
+        }
+    }
+}
+
+
+- (BOOL)prepareWireframeDrawingWithPositionIndex:(GLint)positionIndex {
+    if (_wireframeIndicesDataType == CEVertexDataType_Unknown ||
+        !_vertexBufferIndex ||
+        !_wireframeIndicesBufferIndex ||
+        !_vertexStride) {
+        return NO;
+    }
+    
+    // setup indices buffer
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _wireframeIndicesBufferIndex);
+    if (positionIndex >= 0 && _vertexStride) {
+        glVertexAttribPointer(positionIndex, 3, GL_FLOAT, GL_FALSE, _vertexStride, CE_BUFFER_OFFSET(0));
+        glEnableVertexAttribArray(positionIndex);
+    }
     return YES;
 }
 

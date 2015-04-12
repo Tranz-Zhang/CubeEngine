@@ -9,6 +9,7 @@
 #import <GLKit/GLKit.h>
 #import "ViewController.h"
 #import "CubeEngine.h"
+#import "CEWireframe.h"
 
 
 GLfloat gCubeVertexData[216] =
@@ -225,6 +226,7 @@ GLfloat gArrowXVertexData[108] =
     
     NSData *cubeData = [NSData dataWithBytes:gCubeVertexData length:sizeof(gCubeVertexData)];
     CEMesh *cubeMesh = [[CEMesh alloc] initWithVertexData:cubeData vertexDataType:CEVertexDataType_V_VN];
+    cubeMesh.showWireframe = YES;
     _cubeObject = [[CEModel alloc] initWithMesh:cubeMesh];
     _cubeObject.position = GLKVector3Make(-1, 0, 0);
     [self.scene addModel:_cubeObject];

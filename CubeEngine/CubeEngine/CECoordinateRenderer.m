@@ -157,9 +157,9 @@ GLfloat kCoordinateLineData[42] =
     glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
     
 //    glDrawArrays(GL_LINES, 0, 6);
-    static GLubyte indices[8] = {0, 1, 1, 2, 2, 3, 4, 5};
+    static GLubyte indices[8] = {0, 1, 2, 3, 4, 5, 0, 0};
     const GLvoid* bodyIndices = &indices[0];
-    glDrawElements(GL_LINE_LOOP, 8, GL_UNSIGNED_BYTE, bodyIndices);
+    glDrawElements(GL_LINES, 6, GL_UNSIGNED_BYTE, bodyIndices);
 }
 
 

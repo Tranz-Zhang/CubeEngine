@@ -8,11 +8,14 @@
 
 #import "CERenderManager.h"
 #import "CERender_V.h"
+#import "CEWireframeRenderer.h"
 #import "CEMesh_Rendering.h"
+#import "CEMesh_Wireframe.h"
 
 @implementation CERenderManager {
     EAGLContext *_context;
-    CERenderer *_testRender;
+    CERenderer *_testRenderer;
+    CEWireframeRenderer *_wireframeRenderer;
 }
 
 - (instancetype)initWithContext:(EAGLContext *)context
@@ -20,9 +23,11 @@
     self = [super init];
     if (self) {
         _context = context;
-        _testRender = [CERender_V new];
         [EAGLContext setCurrentContext:context];
-        [_testRender setupRenderer];
+        _testRenderer = [CERender_V new];
+        [_testRenderer setupRenderer];
+        _wireframeRenderer = [CEWireframeRenderer new];
+        [_wireframeRenderer setupRenderer];
     }
     return self;
 }
@@ -41,8 +46,14 @@
     for (CEModel *model in models) {
         // TODO: select render base on current model
         [model.mesh setupArrayBuffersWithContext:_context];
-        _testRender.cameraProjectionMatrix = _cameraProjectionMatrix;
-        [_testRender renderObject:model];
+        _testRenderer.cameraProjectionMatrix = _cameraProjectionMatrix;
+        [_testRenderer renderObject:model];
+        
+        if (model.mesh.showWireframe) {
+            glLineWidth(2);
+            [model.mesh setupWireframeArrayBufferWithContext:_context];
+            [_wireframeRenderer renderObject:model];
+        }
     }
 }
 

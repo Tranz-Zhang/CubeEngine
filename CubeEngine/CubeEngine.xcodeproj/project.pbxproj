@@ -41,6 +41,7 @@
 		26EBAB701AAE896F00E65022 /* CETestProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EBAB6F1AAE896F00E65022 /* CETestProgram.m */; };
 		26EBAB711AAECAA100E65022 /* CEScene.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261089641AAD31AF0041E142 /* CEScene.h */; };
 		26EBAB731AAECAA700E65022 /* CECamera.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261089671AAD31C60041E142 /* CECamera.h */; };
+		4C70BBE31ADABE360056E72E /* CEWireFrame.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 265878661AD7C5B400BA2137 /* CEWireFrame.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +51,7 @@
 			dstPath = "$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				4C70BBE31ADABE360056E72E /* CEWireFrame.h in CopyFiles */,
 				2624ABB11AD6B0BB00FC863C /* CEModel.h in CopyFiles */,
 				2624ABB21AD6B0BB00FC863C /* CEMesh.h in CopyFiles */,
 				2624ABB31AD6B0BC00FC863C /* CETexture.h in CopyFiles */,
@@ -116,6 +118,7 @@
 		26A4E1281ACD734900847553 /* CEObjFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEObjFileLoader.m; sourceTree = "<group>"; };
 		26EBAB6E1AAE896F00E65022 /* CETestProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CETestProgram.h; sourceTree = "<group>"; };
 		26EBAB6F1AAE896F00E65022 /* CETestProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CETestProgram.m; sourceTree = "<group>"; };
+		4C70BBE41ADAD0110056E72E /* CEMesh_Wireframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEMesh_Wireframe.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +171,7 @@
 				2624ABA81AD6A56A00FC863C /* CEModel.m */,
 				2624AB991AD62B9C00FC863C /* CEMesh.h */,
 				2624ABA51AD6570E00FC863C /* CEMesh_Rendering.h */,
+				4C70BBE41ADAD0110056E72E /* CEMesh_Wireframe.h */,
 				2624AB9A1AD62B9C00FC863C /* CEMesh.m */,
 				265878661AD7C5B400BA2137 /* CEWireFrame.h */,
 				2658786C1AD7CD8D00BA2137 /* CEWireFrame_Rendering.h */,

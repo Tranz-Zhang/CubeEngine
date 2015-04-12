@@ -7,10 +7,10 @@
 //
 
 #import "CERenderer.h"
-#import "CEWireFrame.h"
+#import "CEModel.h"
 
 @interface CEWireframeRenderer : CERenderer
 
-- (void)renderObject:(CEWireFrame *)wireframe;
+- (void)renderObject:(CEModel *)model;
 
 @end
