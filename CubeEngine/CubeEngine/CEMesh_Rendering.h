@@ -10,6 +10,8 @@
 
 #define kMaxIndicesCount 65535
 
+
+
 @interface CEMesh ()
 
 // vertex buffer info
@@ -32,6 +34,30 @@
 - (BOOL)prepareDrawingWithPositionIndex:(GLint)positionIndex
                       textureCoordIndex:(GLint)textureCoordIndex
                             normalIndex:(GLint)normalIndex;
+
+- (BOOL)prepareAttributeWithPositionIndex:(GLint)positionIndex;
+- (BOOL)prepareAttributeWithTextureCoordIndex:(GLint)textureCoordIndex;
+- (BOOL)prepareAttributeWithNormalIndex:(GLint)normalIndex;
+
+// a more common method to setup attribute vertex info
+- (BOOL)prepareAttribute:(int)attribute withProgramIndex:(GLint)programIndex;
+
+// ? should the super class deal with vertex buffer
+
+/**
+ subclass offer vertex base infos, and the super use these info to deal with initialization.
+ 
+ - (NSData *)vertexBufferData;
+ - (NSArray *)vertexBufferElementLayout;
+ 
+ */
+
+/**
+ CEVertexBufferLayout
+ - attributeName
+ - attributeCount
+ - attribyteSize
+ */
 
 #warning change to three methods
 
