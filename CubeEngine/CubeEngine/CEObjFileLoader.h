@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CEModel.h"
 
 @interface CEObjFileLoader : NSObject
 
-+ (instancetype)shareLoader;
-
+- (CEModel *)loadModelWithObjFileName:(NSString *)fileName;
 
 @end

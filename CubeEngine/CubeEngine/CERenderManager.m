@@ -15,7 +15,7 @@
 @implementation CERenderManager {
     EAGLContext *_context;
     CERenderer *_testRenderer;
-    CEWireframeRenderer *_wireframeRenderer;
+    CERenderer *_wireframeRenderer;
 }
 
 - (instancetype)initWithContext:(EAGLContext *)context
@@ -52,6 +52,7 @@
         if (model.mesh.showWireframe) {
             glLineWidth(2);
             [model.mesh setupWireframeArrayBufferWithContext:_context];
+            _wireframeRenderer.cameraProjectionMatrix = _cameraProjectionMatrix;
             [_wireframeRenderer renderObject:model];
         }
     }

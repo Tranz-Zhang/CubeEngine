@@ -8,6 +8,7 @@
 
 #import "ModelViewController.h"
 #import "MeshGroup.h"
+#import "CEObjFileLoader.h"
 
 @implementation ModelViewController {
     NSMutableArray *_vertices;
@@ -20,9 +21,16 @@
     
     self.scene.camera.position = GLKVector3Make(20, 20, 20);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
-    
-    [self onTest:nil];
+    [self testObjFileLoader];
 }
+
+
+- (void)testObjFileLoader {
+    CEObjFileLoader *fileLoader =  [CEObjFileLoader new];
+    CEModel *test = [fileLoader loadModelWithObjFileName:@"test_obj"];
+    [self.scene addModel:test];
+}
+
 
 - (IBAction)onTest:(id)sender {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"test_obj" ofType:@"obj"];

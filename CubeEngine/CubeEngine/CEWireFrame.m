@@ -20,7 +20,7 @@
         _vertexData = [mesh.vertexData copy];
         _vertexDataType = mesh.vertexDataType;
         _vertexStride = mesh.vertexStride;
-        _indicesDataType = CEIndicesDataType_UShort;
+        _indicesDataType = CEIndicesDataTypeU16;
         [self parseMesh:mesh];
     }
     return self;
@@ -34,29 +34,30 @@
     NSMutableData *lineIndicesData = [NSMutableData data];
     unsigned int indicesCount = 0;
     NSMutableSet *insertedLineSet = [NSMutableSet set];
-    int stride = 3 * (mesh.indicesDataType == CEIndicesDataType_UByte ? sizeof(unsigned char) : sizeof(unsigned short));
+    int stride = 3 * (mesh.indicesDataType == CEIndicesDataTypeU8 ? sizeof(unsigned char) : sizeof(unsigned short));
     NSRange readRange = NSMakeRange(0, stride);
     for (int i = 0; i < mesh.indicesCount; i += 3) {
-        unsigned short indices[3];
-        if (mesh.indicesDataType == CEIndicesDataType_UByte) {
-            Byte tmpIndices[3];
-            [indicesData getBytes:tmpIndices range:readRange];
-            indices[0] = tmpIndices[0];
-            indices[1] = tmpIndices[1];
-            indices[2] = tmpIndices[2];
-            
-        } else {
-            [indicesData getBytes:indices range:readRange];
-        }
+        GLubyte indices[3];
+        [indicesData getBytes:indices range:readRange];
+//        if (mesh.indicesDataType == CEIndicesDataTypeU8) {
+//            Byte tmpIndices[3];
+//            [indicesData getBytes:tmpIndices range:readRange];
+//            indices[0] = tmpIndices[0];
+//            indices[1] = tmpIndices[1];
+//            indices[2] = tmpIndices[2];
+//            
+//        } else {
+//            [indicesData getBytes:indices range:readRange];
+//        }
         
         // change to line indices
         for (int i = 0; i < 3; i++) {
-            unsigned short index0 = indices[i];
-            unsigned short index1 = indices[(i + 1) % 3];
+            GLubyte index0 = indices[i];
+            GLubyte index1 = indices[(i + 1) % 3];
             NSString *lineId = [NSString stringWithFormat:@"%d%d", index0 + index1, abs(index0 - index1)];
             if (![insertedLineSet containsObject:lineId]) {
-                [lineIndicesData appendBytes:&index0 length:sizeof(unsigned short)];
-                [lineIndicesData appendBytes:&index1 length:sizeof(unsigned short)];
+                [lineIndicesData appendBytes:&index0 length:sizeof(GLubyte)];
+                [lineIndicesData appendBytes:&index1 length:sizeof(GLubyte)];
                 [insertedLineSet addObject:lineId];
                 indicesCount += 2;
             }
@@ -67,7 +68,7 @@
     
     // TODO: check if should change ushort to ubyte!!!
     
-    _indicesDataType = CEIndicesDataType_UShort;
+    _indicesDataType = CEIndicesDataTypeU8;
     _indicesData = [lineIndicesData copy];
     _indicesCount = indicesCount;
 }
@@ -102,7 +103,7 @@
 
 
 - (BOOL)prepareDrawingWithPositionIndex:(GLint)positionIndex {
-    if (_vertexDataType == CEVertexDataType_Unknown ||
+    if (_vertexDataType == CEVertexDataTypeUnknown ||
         !_vertexBufferIndex ||
         !_indicesBufferIndex ||
         !_vertexStride) {

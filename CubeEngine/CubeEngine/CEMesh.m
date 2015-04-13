@@ -9,6 +9,7 @@
 #import "CEMesh.h"
 #import "CEMesh_Rendering.h"
 #import "CEMesh_Wireframe.h"
+#import "CEUtils.h"
 
 @implementation CEMesh
 
@@ -27,7 +28,7 @@
     
     self = [super init];
     if (self) {
-        if (vertexDataType != CEVertexDataType_Unknown) {
+        if (vertexDataType != CEVertexDataTypeUnknown) {
             _vertexData = [vertexData copy];
             _vertexDataType = vertexDataType;
             _indicesData = [indicesData copy];
@@ -87,20 +88,20 @@
     // indices info
     if (_indicesData.length) {
         _indicesCount = (GLsizei)_indicesData.length / [self bytesForIndicesDataType:_indicesDataType];
+        NSData *compressedData = nil;
+        GLsizei elementSize = _indicesDataType;
+        CompressIndicesData(_indicesData, &compressedData, &elementSize);
+        if (compressedData) {
+            _indicesData = compressedData;
+            _indicesDataType = elementSize;
+        }
         
     } else { // auto generate indices data
-        _indicesDataType = vertexCount < 256 ? CEIndicesDataType_UByte : CEIndicesDataType_UShort;
-        int dataSize = vertexCount * (vertexCount < 256 ? sizeof(GLbyte) : sizeof(GLushort));
-        NSMutableData *indicesData = [NSMutableData dataWithCapacity:dataSize];
-        for (int i = 0; i < vertexCount; i++) {
-            if (_indicesDataType == CEIndicesDataType_UByte) {
-                GLbyte idx = i;
-                [indicesData appendBytes:&idx length:sizeof(idx)];
-                
-            } else {
-                GLushort idx = i;
-                [indicesData appendBytes:&idx length:sizeof(idx)];
-            }
+        _indicesDataType = vertexCount < 256 ? CEIndicesDataTypeU8 : CEIndicesDataTypeU16;
+        int stride = vertexCount < 256 ? sizeof(GLbyte) : sizeof(GLushort);
+        NSMutableData *indicesData = [NSMutableData dataWithCapacity:stride * vertexCount];
+        for (int index = 0; index < vertexCount; index++) {
+            [indicesData appendBytes:&index length:stride];
         }
         _indicesData = [indicesData copy];
         _indicesCount = vertexCount;
@@ -115,7 +116,6 @@
         if (_vertexBufferIndex) {
             glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
             glBufferData(GL_ARRAY_BUFFER, _vertexData.length, _vertexData.bytes, GL_STATIC_DRAW);
-            
         }
     }
     // setup indices buffer
@@ -125,7 +125,6 @@
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indicesBufferIndex);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indicesData.length, _indicesData.bytes, GL_STATIC_DRAW);
         }
-        
     }
     #warning ???: should we release data after creation?
 }
@@ -133,7 +132,7 @@
 - (BOOL)prepareDrawingWithPositionIndex:(GLint)positionIndex
                       textureCoordIndex:(GLint)textureCoordIndex
                             normalIndex:(GLint)normalIndex {
-    if (_vertexDataType == CEVertexDataType_Unknown ||
+    if (_vertexDataType == CEVertexDataTypeUnknown ||
         !_vertexBufferIndex ||
         !_indicesBufferIndex ||
         !_vertexStride) {
@@ -163,7 +162,6 @@
             glEnableVertexAttribArray(normalIndex);
         }
     }
-    
     return YES;
 }
 
@@ -187,39 +185,31 @@
     NSMutableData *lineIndicesData = [NSMutableData data];
     unsigned int indicesCount = 0;
     NSMutableSet *insertedLineSet = [NSMutableSet set];
-    int stride = 3 * (_indicesDataType == CEIndicesDataType_UByte ? sizeof(unsigned char) : sizeof(unsigned short));
+    int stride = (_indicesDataType == CEIndicesDataTypeU8 ? sizeof(GLubyte) : sizeof(GLushort));
     NSRange readRange = NSMakeRange(0, stride);
     for (int i = 0; i < _indicesCount; i += 3) {
-        unsigned short indices[3];
-        if (_indicesDataType == CEIndicesDataType_UByte) {
-            Byte tmpIndices[3];
-            [_indicesData getBytes:tmpIndices range:readRange];
-            indices[0] = tmpIndices[0];
-            indices[1] = tmpIndices[1];
-            indices[2] = tmpIndices[2];
-            
-        } else {
-            [_indicesData getBytes:indices range:readRange];
+        GLuint indices[3];
+        for (int i = 0; i < 3; i++) {
+            [_indicesData getBytes:(indices + i) range:readRange];
+            readRange.location += stride;
         }
         
         // change to line indices
         for (int i = 0; i < 3; i++) {
-            unsigned short index0 = indices[i];
-            unsigned short index1 = indices[(i + 1) % 3];
+            GLuint index0 = indices[i];
+            GLuint index1 = indices[(i + 1) % 3];
             NSString *lineId = [NSString stringWithFormat:@"%d%d", index0 + index1, abs(index0 - index1)];
             if (![insertedLineSet containsObject:lineId]) {
-                [lineIndicesData appendBytes:&index0 length:sizeof(unsigned short)];
-                [lineIndicesData appendBytes:&index1 length:sizeof(unsigned short)];
+                [lineIndicesData appendBytes:&index0 length:stride];
+                [lineIndicesData appendBytes:&index1 length:stride];
                 [insertedLineSet addObject:lineId];
                 indicesCount += 2;
             }
         }
-        
-        readRange.location += stride;
     }
     
     // TODO: check if should change ushort to ubyte!!!
-    _wireframeIndicesDataType = CEIndicesDataType_UShort;
+    _wireframeIndicesDataType = _indicesDataType;
     _wireframeIndicesData = [lineIndicesData copy];
     _wireframeIndicesCount = indicesCount;
 }
@@ -239,7 +229,7 @@
 
 
 - (BOOL)prepareWireframeDrawingWithPositionIndex:(GLint)positionIndex {
-    if (_wireframeIndicesDataType == CEVertexDataType_Unknown ||
+    if (_vertexDataType == CEVertexDataTypeUnknown ||
         !_vertexBufferIndex ||
         !_wireframeIndicesBufferIndex ||
         !_vertexStride) {
@@ -248,7 +238,7 @@
     
     // setup indices buffer
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _wireframeIndicesBufferIndex);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _wireframeIndicesBufferIndex);
     if (positionIndex >= 0 && _vertexStride) {
         glVertexAttribPointer(positionIndex, 3, GL_FLOAT, GL_FALSE, _vertexStride, CE_BUFFER_OFFSET(0));
         glEnableVertexAttribArray(positionIndex);
@@ -271,7 +261,7 @@
         case CEVertexDataType_V_VT_VN:
             return 8 * sizeof(GLfloat);
             
-        case CEVertexDataType_Unknown:
+        case CEVertexDataTypeUnknown:
         default:
             return -1;
     }
@@ -279,9 +269,9 @@
 
 - (GLsizei)bytesForIndicesDataType:(CEIndicesDataType)dataType {
     switch (dataType) {
-        case CEIndicesDataType_UByte:
+        case CEIndicesDataTypeU8:
             return sizeof(GLubyte);
-        case CEIndicesDataType_UShort:
+        case CEIndicesDataTypeU16:
             return sizeof(GLushort);
         default:
             return -1;

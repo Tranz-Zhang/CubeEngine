@@ -75,8 +75,14 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
         GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);
         glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
         
-        GLenum indicesType = (mesh.indicesDataType == CEIndicesDataType_UByte ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT);
-        glDrawElements(GL_TRIANGLES, mesh.indicesCount, indicesType, 0);
+        
+        
+//        GLenum indicesType = (mesh.indicesDataType == CEIndicesDataTypeU8 ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT);
+//        glDrawElements(GL_TRIANGLES, mesh.indicesCount, indicesType, 0);
+        
+        GLsizei vertexCount = (GLsizei)mesh.vertexData.length / mesh.vertexStride;
+        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+        
 //        glLineWidth(2.0);
 //        glDrawElements(GL_LINE_LOOP, mesh.indicesCount, indicesType, 0);
     }

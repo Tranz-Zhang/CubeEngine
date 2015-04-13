@@ -17,6 +17,17 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+//    int testList[3] = {3, 5, 7};
+//    NSMutableData *data = [NSMutableData dataWithCapacity:6];
+//    [data appendBytes:testList length:2];
+//    [data appendBytes:testList + 1 length:2];
+//    [data appendBytes:testList + 2 length:2];
+//    
+//    int output[3] = {0};
+//    [data getBytes:output range:NSMakeRange(0, 2)];
+//    [data getBytes:output + 1 range:NSMakeRange(2, 2)];
+//    [data getBytes:output + 2 range:NSMakeRange(4, 2)];
+    
     return YES;
 }
 

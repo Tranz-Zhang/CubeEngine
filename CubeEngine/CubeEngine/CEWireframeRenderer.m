@@ -23,9 +23,9 @@ NSString *const kWireframeVertexShader = CE_SHADER_STRING
 
 NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
 (
-// uniform lowp vec4 drawColor;
+ uniform lowp vec4 drawColor;
  void main() {
-     gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+     gl_FragColor = drawColor;
  }
 );
 
@@ -35,7 +35,7 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
     CEProgram *_program;
     GLint _attributePosition;
     GLint _uniformProjection;
-//    GLint _uniformDrawColor;
+    GLint _uniformDrawColor;
 }
 
 - (BOOL)setupRenderer {
@@ -48,7 +48,7 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
     if (isOK) {
         _attributePosition = [_program attributeIndex:@"position"];
         _uniformProjection = [_program uniformIndex:@"projection"];
-//        _uniformDrawColor = [_program uniformIndex:@"drawColor"];
+        _uniformDrawColor = [_program uniformIndex:@"drawColor"];
         
     } else {
         // print error info
@@ -74,8 +74,8 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
         // setup camera projection
         GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);
         glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
-//        glUniform4f(_uniformDrawColor, 1.0, 0.0, 0.0, 1.0);
-        GLenum indicesType = (mesh.wireframeIndicesDataType == CEIndicesDataType_UByte ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT);
+        glUniform4f(_uniformDrawColor, 0.0, 0.0, 0.0, 1.0);
+        GLenum indicesType = (mesh.wireframeIndicesDataType == CEIndicesDataTypeU8 ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT);
         glDrawElements(GL_LINES, mesh.wireframeIndicesCount, indicesType, 0);
     }
 }

@@ -36,6 +36,7 @@
 		265878681AD7C5B400BA2137 /* CEWireFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 265878671AD7C5B400BA2137 /* CEWireFrame.m */; };
 		2658786B1AD7C99100BA2137 /* CEWireframeRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2658786A1AD7C99100BA2137 /* CEWireframeRenderer.m */; };
 		265ACD591AB2D406000277F2 /* CEObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 265ACD581AB2D406000277F2 /* CEObject.m */; };
+		266E59C21ADBAA0A00F00C90 /* CEObjFileLoader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26A4E1271ACD734900847553 /* CEObjFileLoader.h */; };
 		267C42B01AB2E9280011CDC0 /* CEObject.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 265ACD571AB2D406000277F2 /* CEObject.h */; };
 		26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A4E1281ACD734900847553 /* CEObjFileLoader.m */; };
 		26EBAB701AAE896F00E65022 /* CETestProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EBAB6F1AAE896F00E65022 /* CETestProgram.m */; };
@@ -51,6 +52,7 @@
 			dstPath = "$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				266E59C21ADBAA0A00F00C90 /* CEObjFileLoader.h in CopyFiles */,
 				4C70BBE31ADABE360056E72E /* CEWireFrame.h in CopyFiles */,
 				2624ABB11AD6B0BB00FC863C /* CEModel.h in CopyFiles */,
 				2624ABB21AD6B0BB00FC863C /* CEMesh.h in CopyFiles */,

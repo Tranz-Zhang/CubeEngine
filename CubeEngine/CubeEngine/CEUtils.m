@@ -54,3 +54,109 @@ void CEGetEulerAngles(GLKQuaternion q, float *y, float *z, float *x) {
     *x = GLKMathRadiansToDegrees(angleX);
 }
 
+
+void CompressIndicesData(NSData *originalData, NSData **compressedData, GLsizei *elementSize) {
+    if (!originalData || !compressedData || !elementSize || *elementSize <= 0) {
+        CEError(@"Fail to compress indices data: wrong inputs");
+        return;
+    }
+    
+    if (originalData.length % *elementSize) {
+        CEError(@"Fail to compress indices data: wrong data alignment");
+        *compressedData = nil;
+        return;
+    }
+    
+    // get max index
+    GLsizei inputStride = *elementSize;
+    GLsizei indicesCount = (GLsizei)(originalData.length / inputStride);
+    GLint maxIndex = -1;
+    NSRange readRange = NSMakeRange(0, inputStride);
+    for (int i = 0; i < indicesCount; i++) {
+        GLint index = 0;
+        [originalData getBytes:&index range:readRange];
+        if (maxIndex < index) maxIndex = index;
+        readRange.location += inputStride;
+    }
+    
+    // output stride
+    GLsizei outputStride = 0;
+    if (maxIndex > 65525) {
+        outputStride = sizeof(GLuint);
+        
+    } else if (maxIndex > 255) {
+        outputStride = sizeof(GLushort);
+        
+    } else if (maxIndex >= 0) {
+        outputStride = sizeof(GLubyte);
+        
+    } else {
+        CEError(@"Fail to compress indices data: can not find max index");
+        *compressedData = nil;
+        return;
+    }
+    
+    // compress
+    if (outputStride == inputStride) {
+        *compressedData = originalData;
+        return;
+    }
+    
+    NSUInteger outputSize = originalData.length * ((float)inputStride / outputStride);
+    NSMutableData *outputData = [NSMutableData dataWithCapacity:outputSize];
+    readRange.location = 0;
+    for (int i = 0; i < indicesCount; i++) {
+        GLint index = 0;
+        [originalData getBytes:&index range:readRange];
+        [outputData appendBytes:&index length:outputStride];
+        readRange.location += inputStride;
+    }
+    *compressedData = [outputData copy];
+    *elementSize = outputStride;
+}
+
+
+/*
+void CompressUnsignedShortIndicesData(NSData *originalData, NSData **outputData, BOOL *hasCompressed) {
+    if (!originalData.length || !outputData || !hasCompressed) {
+        CEError(@"Fail to compress indices data: wrong inputs");
+        *outputData = nil;
+        return;
+    }
+    
+    GLsizei elementSize = sizeof(GLushort);
+    // check data alignment
+    if (originalData.length % elementSize) {
+        CEError(@"Fail to compress indices data: wrong data alignment");
+        *outputData = nil;
+        *hasCompressed = NO;
+        return;
+    }
+    
+    GLsizei indicesCount = (GLsizei)(originalData.length / elementSize);    
+    // do compress
+    NSMutableData *compressedData = [NSMutableData dataWithCapacity:originalData.length / 2];
+    NSRange readRange = NSMakeRange(0, elementSize);
+    for (int i = 0; i < indicesCount; i++) {
+        GLushort ushortIndex = 0;
+        [originalData getBytes:&ushortIndex range:readRange];
+        if (ushortIndex > 255) { // max indices overflow, should not compress
+            *outputData = originalData;
+            *hasCompressed = NO;
+            return;
+        }
+        GLbyte byteIndex = ushortIndex;
+        [compressedData appendBytes:&byteIndex length:sizeof(GLbyte)];
+        readRange.location += elementSize;
+    }
+    
+    *hasCompressed = YES;
+    *outputData = [compressedData copy];
+}
+//*/
+
+
+
+
+
+
