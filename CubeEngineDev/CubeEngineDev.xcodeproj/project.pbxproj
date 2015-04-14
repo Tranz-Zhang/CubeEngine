@@ -22,6 +22,11 @@
 		262A713F1AD4D77A0095F225 /* MeshGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 262A713E1AD4D77A0095F225 /* MeshGroup.m */; };
 		2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 2648E6AA1AD516DA00E146D8 /* test_obj.mtl */; };
 		2648E6AD1AD516DA00E146D8 /* test_obj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2648E6AB1AD516DA00E146D8 /* test_obj.obj */; };
+		268CBC661ADD412200795A6D /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC651ADD412200795A6D /* cube.obj */; };
+		268CBC681ADD42A900795A6D /* cube_triangle.obj in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC671ADD42A900795A6D /* cube_triangle.obj */; };
+		268CBC6C1ADD466E00795A6D /* teapot.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC691ADD466E00795A6D /* teapot.mtl */; };
+		268CBC6E1ADD466E00795A6D /* teapot.png in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC6B1ADD466E00795A6D /* teapot.png */; };
+		268CBC721ADD48CB00795A6D /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC711ADD48CB00795A6D /* teapot.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +77,11 @@
 		262A713E1AD4D77A0095F225 /* MeshGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeshGroup.m; sourceTree = "<group>"; };
 		2648E6AA1AD516DA00E146D8 /* test_obj.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_obj.mtl; sourceTree = "<group>"; };
 		2648E6AB1AD516DA00E146D8 /* test_obj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_obj.obj; sourceTree = "<group>"; };
+		268CBC651ADD412200795A6D /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
+		268CBC671ADD42A900795A6D /* cube_triangle.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube_triangle.obj; sourceTree = "<group>"; };
+		268CBC691ADD466E00795A6D /* teapot.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.mtl; sourceTree = "<group>"; };
+		268CBC6B1ADD466E00795A6D /* teapot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = teapot.png; sourceTree = "<group>"; };
+		268CBC711ADD48CB00795A6D /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +186,11 @@
 		261CD42E1AD3DE3D00C521CC /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				268CBC711ADD48CB00795A6D /* teapot.obj */,
+				268CBC691ADD466E00795A6D /* teapot.mtl */,
+				268CBC6B1ADD466E00795A6D /* teapot.png */,
+				268CBC671ADD42A900795A6D /* cube_triangle.obj */,
+				268CBC651ADD412200795A6D /* cube.obj */,
 				2648E6AA1AD516DA00E146D8 /* test_obj.mtl */,
 				2648E6AB1AD516DA00E146D8 /* test_obj.obj */,
 				261CD42F1AD3DE8B00C521CC /* cylinder_group.mtl */,
@@ -285,12 +300,17 @@
 			files = (
 				261CD4331AD3DE8B00C521CC /* cylinder_group.mtl in Resources */,
 				261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */,
+				268CBC6E1ADD466E00795A6D /* teapot.png in Resources */,
 				261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */,
 				2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */,
+				268CBC661ADD412200795A6D /* cube.obj in Resources */,
 				261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */,
+				268CBC721ADD48CB00795A6D /* teapot.obj in Resources */,
 				26193F861AA833BF00787C64 /* Main.storyboard in Resources */,
 				26193F881AA833BF00787C64 /* Images.xcassets in Resources */,
+				268CBC6C1ADD466E00795A6D /* teapot.mtl in Resources */,
 				2648E6AD1AD516DA00E146D8 /* test_obj.obj in Resources */,
+				268CBC681ADD42A900795A6D /* cube_triangle.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

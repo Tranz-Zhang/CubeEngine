@@ -9,8 +9,7 @@
 #import "CERenderManager.h"
 #import "CERender_V.h"
 #import "CEWireframeRenderer.h"
-#import "CEMesh_Rendering.h"
-#import "CEMesh_Wireframe.h"
+#import "CEModel_Rendering.h"
 
 @implementation CERenderManager {
     EAGLContext *_context;
@@ -45,13 +44,9 @@
     
     for (CEModel *model in models) {
         // TODO: select render base on current model
-        [model.mesh setupArrayBuffersWithContext:_context];
         _testRenderer.cameraProjectionMatrix = _cameraProjectionMatrix;
         [_testRenderer renderObject:model];
-        
-        if (model.mesh.showWireframe) {
-            glLineWidth(2);
-            [model.mesh setupWireframeArrayBufferWithContext:_context];
+        if (model.showWireframe && model.wireframeBuffer) {
             _wireframeRenderer.cameraProjectionMatrix = _cameraProjectionMatrix;
             [_wireframeRenderer renderObject:model];
         }

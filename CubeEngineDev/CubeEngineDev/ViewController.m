@@ -224,12 +224,12 @@ GLfloat gArrowXVertexData[108] =
 //    _triangleObject.position = GLKVector3Make(1, 0, 0);
 //    [self.scene addModel:_triangleObject];
     
-    NSData *cubeData = [NSData dataWithBytes:gCubeVertexData length:sizeof(gCubeVertexData)];
-    CEMesh *cubeMesh = [[CEMesh alloc] initWithVertexData:cubeData vertexDataType:CEVertexDataType_V_VN];
-    cubeMesh.showWireframe = YES;
-    _cubeObject = [[CEModel alloc] initWithMesh:cubeMesh];
-    _cubeObject.position = GLKVector3Make(-1, 0, 0);
-    [self.scene addModel:_cubeObject];
+//    NSData *cubeData = [NSData dataWithBytes:gCubeVertexData length:sizeof(gCubeVertexData)];
+//    CEMesh *cubeMesh = [[CEMesh alloc] initWithVertexData:cubeData vertexDataType:CEVertexDataType_V_VN];
+//    cubeMesh.showWireframe = YES;
+//    _cubeObject = [[CEModel alloc] initWithMesh:cubeMesh];
+//    _cubeObject.position = GLKVector3Make(-1, 0, 0);
+//    [self.scene addModel:_cubeObject];
     
     self.versionLabel.text = [NSString stringWithFormat:@"Cube Engine Dev: %@", CUBE_ENGINE_VERSION];
     _isLookingAtObject = NO;

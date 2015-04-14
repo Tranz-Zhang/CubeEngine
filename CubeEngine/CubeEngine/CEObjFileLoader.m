@@ -7,6 +7,8 @@
 //
 
 #import "CEObjFileLoader.h"
+#import "CEMesh_Rendering.h"
+#import "CEModel_Rendering.h"
 
 #pragma mark - CEMeshGroup
 @interface CEMeshGroup : NSObject
@@ -34,7 +36,7 @@
 
 - (CEModel *)loadModelWithObjFileName:(NSString *)fileName {
     
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"test_obj" ofType:@"obj"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"obj"];
     NSError *error;
     NSString *objContent = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
     if (error) {
@@ -114,9 +116,9 @@
             } else if (attributeIndies.count == 4) {
                 // quadrilateral to triangle
                 NSData *vertex0 = [self vertexElementDataWithIndies:attributeIndies[0]];
-                NSData *vertex1 = [self vertexElementDataWithIndies:attributeIndies[0]];
-                NSData *vertex2 = [self vertexElementDataWithIndies:attributeIndies[0]];
-                NSData *vertex3 = [self vertexElementDataWithIndies:attributeIndies[0]];
+                NSData *vertex1 = [self vertexElementDataWithIndies:attributeIndies[1]];
+                NSData *vertex2 = [self vertexElementDataWithIndies:attributeIndies[2]];
+                NSData *vertex3 = [self vertexElementDataWithIndies:attributeIndies[3]];
                 [currentGroup.meshData appendData:vertex0];
                 [currentGroup.meshData appendData:vertex1];
                 [currentGroup.meshData appendData:vertex3];
@@ -130,10 +132,22 @@
         // parse meterial file
         // parse meterial ref
     }
-    CEMeshGroup *group = groups[1];
-    CEMesh *mesh = [[CEMesh alloc] initWithVertexData:group.meshData vertexDataType:CEVertexDataType_V];
-    mesh.showWireframe = YES;
-    CEModel *model = [[CEModel alloc] initWithMesh:mesh];
+    CEMeshGroup *group = nil;
+    for (CEMeshGroup *parsedGroup in groups) {
+        if (parsedGroup.elementType != CEVertexDataTypeUnknown &&
+            parsedGroup.meshData.length) {
+            group = parsedGroup;
+        }
+    }
+    
+    CEVBOAttribute *attribPosition = [CEVBOAttribute attributeWithname:CEVBOAttributePosition];
+    CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:group.meshData
+                                                             attributes:@[attribPosition]];
+    CEModel *model = [[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
+    model.showWireframe = YES;
+//    CEMesh *mesh = [[CEMesh alloc] initWithVertexData:group.meshData vertexDataType:CEVertexDataType_V];
+//    mesh.showWireframe = YES;
+//    CEModel *model = [[CEModel alloc] initWithMesh:mesh];
     
     return model;
 }

@@ -6,10 +6,24 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEVertexBuffer.h"
+#import <Foundation/Foundation.h>
 
-@interface CEIndicesBuffer : CEVertexBuffer
+#define kMaxIndicesCount 65535
 
-- (instancetype)initWithIndicesData:(NSData *)indicesData count:(NSInteger)indexCount;
+/**
+ Representing a indices buffer in GPU, a data buffer in CPU.
+ */
+@interface CEIndicesBuffer : NSObject
+
+@property (nonatomic, readonly, getter=isReady) BOOL ready;
+@property (nonatomic, readonly) GLsizei indicesCount;
+@property (nonatomic, readonly) GLuint indicesBufferIndex;
+@property (nonatomic, readonly) GLenum indicesDataType; // GL_UNSIGNED_SHORT or GL_UNSIGNED_BYTE
+
+- (instancetype)initWithData:(NSData *)bufferData indicesCount:(NSInteger)indicesCount;
+
+- (BOOL)setupBufferWithContext:(EAGLContext *)context;
+- (BOOL)prepareForRendering;
+
 
 @end

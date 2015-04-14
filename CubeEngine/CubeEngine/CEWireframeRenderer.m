@@ -7,9 +7,8 @@
 //
 
 #import "CEWireframeRenderer.h"
-#import "CEMesh_Wireframe.h"
-#import "CEMesh_Rendering.h"
 #import "CEProgram.h"
+#import "CEModel_Rendering.h"
 
 NSString *const kWireframeVertexShader = CE_SHADER_STRING
 (
@@ -36,6 +35,27 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
     GLint _attributePosition;
     GLint _uniformProjection;
     GLint _uniformDrawColor;
+    GLKVector4 _lineColorVec4;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _lineWidth = 2.0f;
+        [self setLineColor:[UIColor colorWithWhite:0.2 alpha:1.0f]];
+    }
+    return self;
+}
+
+- (void)setLineColor:(UIColor *)lineColor {
+    if (_lineColor != lineColor) {
+        _lineColor = [lineColor copy];
+        [lineColor getRed:&_lineColorVec4.r
+                    green:&_lineColorVec4.g
+                     blue:&_lineColorVec4.b
+                    alpha:&_lineColorVec4.a];
+    }
 }
 
 - (BOOL)setupRenderer {
@@ -66,18 +86,22 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
 
 
 - (void)renderObject:(CEModel *)model {
-    if (!_program || !model.mesh) return;
-    CEMesh *mesh = model.mesh;
-    BOOL prepared = [mesh prepareWireframeDrawingWithPositionIndex:_attributePosition];
-    if (prepared) {
-        [_program use];
-        // setup camera projection
-        GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);
-        glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
-        glUniform4f(_uniformDrawColor, 0.0, 0.0, 0.0, 1.0);
-        GLenum indicesType = (mesh.wireframeIndicesDataType == CEIndicesDataTypeU8 ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT);
-        glDrawElements(GL_LINES, mesh.wireframeIndicesCount, indicesType, 0);
+    // setup vertex buffer
+    if (!model.wireframeBuffer || ![model.wireframeBuffer setupBufferWithContext:self.context] ||
+        ![model.vertexBuffer setupBufferWithContext:self.context]) {
+        return;
     }
+    // prepare attribute for rendering
+    if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attributePosition] ||
+        ![model.wireframeBuffer prepareForRendering]){
+        return;
+    }
+    [_program use];
+    glLineWidth(_lineWidth);
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);
+    glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
+    glUniform4f(_uniformDrawColor, _lineColorVec4.r, _lineColorVec4.g, _lineColorVec4.b, _lineColorVec4.a);
+    glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);
 }
 
 

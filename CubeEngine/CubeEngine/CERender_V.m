@@ -8,7 +8,8 @@
 
 #import "CERender_V.h"
 #import "CEProgram.h"
-#import "CEMesh_Rendering.h"
+#import "CEModel_Rendering.h"
+
 
 NSString *const kVertexShader = CE_SHADER_STRING
 (
@@ -62,30 +63,54 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
 
 
 - (void)renderObject:(CEModel *)model {
-    if (!_program || !model.mesh) return;
-    CEMesh *mesh = model.mesh;
+    if (!_program || !model.vertexBuffer) return;
     
-    BOOL prepared = [mesh prepareDrawingWithPositionIndex:_attributePosition
-                                        textureCoordIndex:-1
-                                              normalIndex:-1];
-    
-    if (prepared) {
-        [_program use]; // must call before setting uniform?
-        // setup camera projection
-        GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);
-        glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
-        
-        
-        
-//        GLenum indicesType = (mesh.indicesDataType == CEIndicesDataTypeU8 ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT);
-//        glDrawElements(GL_TRIANGLES, mesh.indicesCount, indicesType, 0);
-        
-        GLsizei vertexCount = (GLsizei)mesh.vertexData.length / mesh.vertexStride;
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-        
-//        glLineWidth(2.0);
-//        glDrawElements(GL_LINE_LOOP, mesh.indicesCount, indicesType, 0);
+    // setup vertex buffer
+    if (![model.vertexBuffer setupBufferWithContext:self.context] ||
+        (model.indicesBuffer && [model.indicesBuffer setupBufferWithContext:self.context])) {
+        return;
     }
+    // prepare for rendering
+    if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition
+                            withProgramIndex:_attributePosition]){
+        return;
+    }
+    if (model.indicesBuffer && ![model.indicesBuffer prepareForRendering]) {
+        return;
+    }
+    [_program use];
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);
+    glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
+    
+    if (model.indicesBuffer) { // glDrawElements
+        glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);
+        
+    } else { // glDrawArrays
+        glDrawArrays(GL_TRIANGLES, 0, model.vertexBuffer.vertexCount);
+    }
+//
+//    if (prepared) {
+//        [_program use]; // must call before setting uniform?
+//        // setup camera projection
+//        GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);
+//        glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
+//        
+//        if (model.indicesBuffer) { // glDrawElements
+//            
+//            
+//        } else { // glDrawArrays
+//            glDrawArrays(GL_TRIANGLES, 0, model.vertexBuffer.vertexCount);
+//        }
+//        
+////        GLenum indicesType = (mesh.indicesDataType == CEIndicesDataTypeU8 ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT);
+////        glDrawElements(GL_TRIANGLES, mesh.indicesCount, indicesType, 0);
+//        
+//        GLsizei vertexCount = (GLsizei)mesh.vertexData.length / mesh.vertexStride;
+//        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+//        
+////        glLineWidth(2.0);
+////        glDrawElements(GL_LINE_LOOP, mesh.indicesCount, indicesType, 0);
+//    }
 }
 
 

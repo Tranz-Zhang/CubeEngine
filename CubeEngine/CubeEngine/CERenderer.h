@@ -12,6 +12,7 @@
 
 @interface CERenderer : NSObject
 
+@property (nonatomic, strong) EAGLContext *context;
 @property (nonatomic, assign) GLKMatrix4 cameraProjectionMatrix;
 
 - (BOOL)setupRenderer;

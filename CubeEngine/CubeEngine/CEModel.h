@@ -7,14 +7,12 @@
 //
 
 #import "CEObject.h"
-#import "CEMesh.h"
 
-@interface CEModel : CEObject {
-    CEMesh *_mesh;
-}
+@interface CEModel : CEObject
 
-@property (nonatomic, readonly) CEMesh *mesh;
+@property (nonatomic, readonly) GLKVector3 bounds; // 模型空间大小
+@property (nonatomic, assign) BOOL showWireframe; // 是否显示线框，会有额外的性能消耗，推荐调试时使用
 
-- (instancetype)initWithMesh:(CEMesh *)mesh;
++ (CEModel *)modelWithObjFile:(NSString *)objFileName;
 
 @end

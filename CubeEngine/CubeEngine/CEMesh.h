@@ -23,6 +23,8 @@ typedef NS_ENUM(NSInteger, CEIndicesDataType) {
     CEIndicesDataTypeU32 = 4,   // unsigned int
 };
 
+
+// 负责处理物体的渲染信息
 @interface CEMesh : NSObject
 
 @property (nonatomic, readonly) GLKVector3 bounds;          // 模型空间大小

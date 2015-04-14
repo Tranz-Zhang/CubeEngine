@@ -250,7 +250,6 @@
 
 #pragma mark - Others
 
-
 - (GLsizei)bytesPerVertexForDataType:(CEVertexDataType)dataType {
     switch (dataType) {
         case CEVertexDataType_V:
@@ -268,6 +267,7 @@
     }
 }
 
+
 - (GLsizei)bytesForIndicesDataType:(CEIndicesDataType)dataType {
     switch (dataType) {
         case CEIndicesDataTypeU8:
@@ -278,5 +278,6 @@
             return -1;
     }
 }
+
 
 @end

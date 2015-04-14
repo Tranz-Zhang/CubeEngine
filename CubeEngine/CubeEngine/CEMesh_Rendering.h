@@ -8,10 +8,6 @@
 
 #import "CEMesh.h"
 
-#define kMaxIndicesCount 65535
-
-
-
 @interface CEMesh ()
 
 // vertex buffer info
