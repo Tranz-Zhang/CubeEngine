@@ -51,10 +51,9 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
 - (void)setLineColor:(UIColor *)lineColor {
     if (_lineColor != lineColor) {
         _lineColor = [lineColor copy];
-        [lineColor getRed:&_lineColorVec4.r
-                    green:&_lineColorVec4.g
-                     blue:&_lineColorVec4.b
-                    alpha:&_lineColorVec4.a];
+        double red, green, blue, alpha;
+        [lineColor getRed:&red green:&green blue:&blue alpha:&alpha];
+        _lineColorVec4 = GLKVector4Make(red, green, blue, alpha);
     }
 }
 
@@ -86,6 +85,9 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
 
 
 - (void)renderObject:(CEModel *)model {
+    if (!_program.initialized) {
+        return;
+    }
     // setup vertex buffer
     if (!model.wireframeBuffer || ![model.wireframeBuffer setupBufferWithContext:self.context] ||
         ![model.vertexBuffer setupBufferWithContext:self.context]) {

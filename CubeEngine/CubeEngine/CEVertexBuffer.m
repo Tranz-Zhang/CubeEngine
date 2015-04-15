@@ -41,7 +41,7 @@
         if (_vertexData.length &&
             _vertexStride &&
             _vertexData.length % _vertexStride == 0) {
-            _vertexCount = _vertexData.length / _vertexStride;
+            _vertexCount = (int)_vertexData.length / _vertexStride;
             
         } else {
             _vertexData = nil;
@@ -102,6 +102,7 @@
     }
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
     const GLvoid *offsetPtr = CE_BUFFER_OFFSET([self offsetOfAttribute:attrib.name]);
+    glEnableVertexAttribArray(programIndex);
     glVertexAttribPointer(programIndex, attrib.dataCount, attrib.dataType, GL_FALSE, _vertexStride, offsetPtr);
     return YES;
 }

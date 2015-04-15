@@ -152,7 +152,6 @@ typedef NS_ENUM(NSInteger, CEVertexDataType) {
     CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:group.meshData
                                                              attributes:@[attribPosition]];
     CEModel *model = [[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
-    model.showWireframe = YES;
 //    CEMesh *mesh = [[CEMesh alloc] initWithVertexData:group.meshData vertexDataType:CEVertexDataType_V];
 //    mesh.showWireframe = YES;
 //    CEModel *model = [[CEModel alloc] initWithMesh:mesh];

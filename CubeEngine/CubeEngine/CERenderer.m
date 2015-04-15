@@ -17,7 +17,7 @@
     return NO;
 }
 
-- (void)renderObject:(id)object {
+- (void)renderObject:(CEModel *)model {
     // !!!: MUST IMPLEMENTED BY SUBCLASS
 }
 

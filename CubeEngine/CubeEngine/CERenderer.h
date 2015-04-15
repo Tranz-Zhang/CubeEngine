@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CEModel.h"
 
 // 渲染器父类，定义基本的渲染器接口
 
@@ -16,6 +17,6 @@
 @property (nonatomic, assign) GLKMatrix4 cameraProjectionMatrix;
 
 - (BOOL)setupRenderer;
-- (void)renderObject:(id)object;
+- (void)renderObject:(CEModel *)model;
 
 @end

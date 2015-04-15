@@ -14,6 +14,4 @@
 @property (nonatomic, assign) GLfloat lineWidth;
 @property (nonatomic, copy) UIColor *lineColor;
 
-- (void)renderObject:(CEModel *)model;
-
 @end

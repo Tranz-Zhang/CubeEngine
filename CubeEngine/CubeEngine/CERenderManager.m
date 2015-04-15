@@ -7,14 +7,19 @@
 //
 
 #import "CERenderManager.h"
+#import "CEModel_Rendering.h"
+
+// render
 #import "CERenderer_V.h"
 #import "CERenderer_Wireframe.h"
-#import "CEModel_Rendering.h"
+#import "CERenderer_AccessoryLine.h"
+
 
 @implementation CERenderManager {
     EAGLContext *_context;
     CERenderer *_testRenderer;
     CERenderer *_wireframeRenderer;
+    CERenderer_AccessoryLine *_accessoryLineRenderer;
 }
 
 - (instancetype)initWithContext:(EAGLContext *)context
@@ -27,6 +32,9 @@
         [_testRenderer setupRenderer];
         _wireframeRenderer = [CERenderer_Wireframe new];
         [_wireframeRenderer setupRenderer];
+        _accessoryLineRenderer = [CERenderer_AccessoryLine new];
+        [_accessoryLineRenderer setupRenderer];
+        
     }
     return self;
 }
@@ -44,13 +52,21 @@
     
     for (CEModel *model in models) {
         // TODO: select render base on current model
+        
         _testRenderer.cameraProjectionMatrix = _cameraProjectionMatrix;
         [_testRenderer renderObject:model];
         if (model.showWireframe && model.wireframeBuffer) {
             _wireframeRenderer.cameraProjectionMatrix = _cameraProjectionMatrix;
             [_wireframeRenderer renderObject:model];
         }
+        if (model.showAccessoryLine) {
+            _accessoryLineRenderer.cameraProjectionMatrix = _cameraProjectionMatrix;
+            [_accessoryLineRenderer renderObject:model];
+        }
     }
+#if DEBUG
+    [_accessoryLineRenderer renderWorldOriginCoordinate];
+#endif
 }
 
 @end

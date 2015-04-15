@@ -26,8 +26,42 @@
     if (self) {
         _vertexBuffer = vertexBuffer;
         _indicesBuffer = indicesBuffer;
+        [self setupMeshWithVertexBuffer:vertexBuffer];
     }
     return self;
+}
+
+
+- (void)setupMeshWithVertexBuffer:(CEVertexBuffer *)vertexBuffer {
+    // vertex info
+    CEVBOAttribute *positionInfo = [vertexBuffer attributeWithName:CEVBOAttributePosition];
+    if (!positionInfo) {
+        CEError(@"Fail to parse mess info");
+        return;
+    }
+
+    // calculate model size
+    NSRange readRange = NSMakeRange([vertexBuffer offsetOfAttribute:CEVBOAttributePosition] / sizeof(Byte),
+                                    positionInfo.dataSize * positionInfo.dataCount);
+    GLfloat maxX = FLT_MIN, maxY = FLT_MIN, maxZ = FLT_MIN;
+    GLfloat minX = FLT_MAX, minY = FLT_MAX, minZ = FLT_MAX;
+    for (int i = 0; i < vertexBuffer.vertexCount; i++) {
+        GLfloat vertexLocation[3];
+        [vertexBuffer.vertexData getBytes:vertexLocation range:readRange];
+        maxX = MAX(maxX, vertexLocation[0]);
+        maxY = MAX(maxY, vertexLocation[1]);
+        maxZ = MAX(maxZ, vertexLocation[2]);
+        minX = MIN(minX, vertexLocation[0]);
+        minY = MIN(minY, vertexLocation[1]);
+        minZ = MIN(minZ, vertexLocation[2]);
+        readRange.location += vertexBuffer.vertexStride;
+    }
+    
+    // original offset
+    _offsetFromOrigin = GLKVector3Make((maxX + minX) / 2,
+                                       (maxY + minY) / 2,
+                                       (maxZ + minZ) / 2);
+    _bounds = GLKVector3Make(maxX - minX, maxY - minY, maxZ - minZ);
 }
 
 

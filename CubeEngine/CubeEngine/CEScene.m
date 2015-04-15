@@ -9,17 +9,15 @@
 #import "CEScene.h"
 #import "CECamera_Rendering.h"
 #import "CERenderManager.h"
-#import "CECoordinateRenderer.h"
 
 @interface CEScene () {
-    CECoordinateRenderer *_coordinateRenderer;
-    
     EAGLContext *_context;
     CERenderManager *_renderManager;
     NSMutableArray *_renderObjects;
 }
 
 @end
+
 
 @implementation CEScene
 
@@ -37,9 +35,6 @@
         _camera.nearZ = 0.1;
         _camera.farZ = 100;
         _camera.position = GLKVector3Make(0, 0, 4);
-        
-        _coordinateRenderer = [[CECoordinateRenderer alloc] initWithContext:_context];
-        _coordinateRenderer.showWorldCoordinate = YES;
     }
     return self;
 }
@@ -55,7 +50,6 @@
 - (void)addModel:(CEModel *)model {
     if ([model isKindOfClass:[CEModel class]]) {
         [_renderObjects addObject:model];
-        [_coordinateRenderer addModel:model];
         
     } else {
         CEError(@"Can not add model to scene");
@@ -66,7 +60,6 @@
 - (void)removeModel:(CEModel *)model {
     if (model) {
         [_renderObjects removeObject:model];
-        [_coordinateRenderer removeModel:model];
     }
 }
 
@@ -75,9 +68,6 @@
     [EAGLContext setCurrentContext:_context];
     _renderManager.cameraProjectionMatrix = _camera.projectionMatrix;
     [_renderManager renderModels:_renderObjects];
-
-    _coordinateRenderer.cameraProjectionMatrix = _camera.projectionMatrix;
-    [_coordinateRenderer render];
 }
 
 

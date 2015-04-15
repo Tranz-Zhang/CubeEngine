@@ -23,6 +23,8 @@
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     _testModel = [CEModel modelWithObjFile:@"teapot"];
+    _testModel.showWireframe = YES;
+    _testModel.showAccessoryLine = YES;
     printf("Teapot loading duration: %.4f", CFAbsoluteTimeGetCurrent() - start);
     [self.scene addModel:_testModel];
     
