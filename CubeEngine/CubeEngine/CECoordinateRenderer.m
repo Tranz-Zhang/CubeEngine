@@ -7,7 +7,7 @@
 //
 
 #import "CECoordinateRenderer.h"
-#import "CELinesProgram.h"
+#import "CEProgram.h"
 
 NSString *const kLinesVertexShader = CE_SHADER_STRING
 (

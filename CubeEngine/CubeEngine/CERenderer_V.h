@@ -9,7 +9,7 @@
 #import "CERenderer.h"
 #import "CEModel.h"
 
-@interface CERender_V : CERenderer
+@interface CERenderer_V : CERenderer
 
 - (void)renderObject:(CEModel *)model;
 

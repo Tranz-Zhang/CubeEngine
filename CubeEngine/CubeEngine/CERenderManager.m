@@ -7,8 +7,8 @@
 //
 
 #import "CERenderManager.h"
-#import "CERender_V.h"
-#import "CEWireframeRenderer.h"
+#import "CERenderer_V.h"
+#import "CERenderer_Wireframe.h"
 #import "CEModel_Rendering.h"
 
 @implementation CERenderManager {
@@ -23,9 +23,9 @@
     if (self) {
         _context = context;
         [EAGLContext setCurrentContext:context];
-        _testRenderer = [CERender_V new];
+        _testRenderer = [CERenderer_V new];
         [_testRenderer setupRenderer];
-        _wireframeRenderer = [CEWireframeRenderer new];
+        _wireframeRenderer = [CERenderer_Wireframe new];
         [_wireframeRenderer setupRenderer];
     }
     return self;

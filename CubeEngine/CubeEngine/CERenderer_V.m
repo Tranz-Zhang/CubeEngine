@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CERender_V.h"
+#import "CERenderer_V.h"
 #import "CEProgram.h"
 #import "CEModel_Rendering.h"
 
@@ -29,7 +29,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
 );
 
 
-@implementation CERender_V {
+@implementation CERenderer_V {
     CEProgram *_program;
     GLint _attributePosition;
     GLint _uniformProjection;

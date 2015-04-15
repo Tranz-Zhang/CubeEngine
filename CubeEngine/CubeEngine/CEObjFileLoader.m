@@ -7,8 +7,15 @@
 //
 
 #import "CEObjFileLoader.h"
-#import "CEMesh_Rendering.h"
 #import "CEModel_Rendering.h"
+
+typedef NS_ENUM(NSInteger, CEVertexDataType) {
+    CEVertexDataTypeUnknown = 0,
+    CEVertexDataType_V,        // position[3]
+    CEVertexDataType_V_VT,     // position[3] + textureCoord[2]
+    CEVertexDataType_V_VN,     // position[3] + normal[3]
+    CEVertexDataType_V_VT_VN,  // position[3] + textureCoord[2] + normal[3]
+};
 
 #pragma mark - CEMeshGroup
 @interface CEMeshGroup : NSObject
@@ -33,6 +40,7 @@
     NSMutableArray *_normals;
     NSMutableArray *_indices;
 }
+
 
 - (CEModel *)loadModelWithObjFileName:(NSString *)fileName {
     
@@ -185,11 +193,11 @@
                     break;
                     
                 case 1: // texture coordinate
-                    //                    [elementData appendData:_textureCoordinates[index]];
+//                    [elementData appendData:_textureCoordinates[index]];
                     break;
                     
                 case 2: // normal
-                    //                    [elementData appendData:_normals[index]];
+//                    [elementData appendData:_normals[index]];
                     break;
                     
                 default:
