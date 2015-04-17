@@ -21,8 +21,8 @@ typedef NS_ENUM(NSInteger, CEVertexDataType) {
 @interface CEMeshGroup : NSObject
 
 @property (nonatomic, strong) NSArray *groupNames;
-@property (nonatomic, assign) CEVertexDataType elementType;
 @property (nonatomic, strong) NSMutableData *meshData;
+@property (nonatomic, strong) NSArray *attributes;
 
 @end
 
@@ -110,8 +110,8 @@ typedef NS_ENUM(NSInteger, CEVertexDataType) {
                 [groups addObject:newGroup];
                 currentGroup = newGroup;
             }
-            if (currentGroup.elementType == CEVertexDataTypeUnknown) {
-                currentGroup.elementType = [self elementTypeWithFaceAttributes:attributeIndies[0]];
+            if (!currentGroup.attributes) {
+                currentGroup.attributes = [self vertexAttributesWithFaceAttributes:attributeIndies[0]];
             }
             
             if (attributeIndies.count == 3) {
@@ -142,20 +142,15 @@ typedef NS_ENUM(NSInteger, CEVertexDataType) {
     }
     CEMeshGroup *group = nil;
     for (CEMeshGroup *parsedGroup in groups) {
-        if (parsedGroup.elementType != CEVertexDataTypeUnknown &&
+        if (parsedGroup.attributes.count &&
             parsedGroup.meshData.length) {
             group = parsedGroup;
         }
     }
     
-    CEVBOAttribute *attribPosition = [CEVBOAttribute attributeWithname:CEVBOAttributePosition];
     CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:group.meshData
-                                                             attributes:@[attribPosition]];
+                                                             attributes:group.attributes];
     CEModel *model = [[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
-//    CEMesh *mesh = [[CEMesh alloc] initWithVertexData:group.meshData vertexDataType:CEVertexDataType_V];
-//    mesh.showWireframe = YES;
-//    CEModel *model = [[CEModel alloc] initWithMesh:mesh];
-    
     return model;
 }
 
@@ -192,11 +187,11 @@ typedef NS_ENUM(NSInteger, CEVertexDataType) {
                     break;
                     
                 case 1: // texture coordinate
-//                    [elementData appendData:_textureCoordinates[index]];
+                    [elementData appendData:_textureCoordinates[index]];
                     break;
                     
                 case 2: // normal
-//                    [elementData appendData:_normals[index]];
+                    [elementData appendData:_normals[index]];
                     break;
                     
                 default:
@@ -207,6 +202,26 @@ typedef NS_ENUM(NSInteger, CEVertexDataType) {
     return elementData;
 }
 
+
+- (NSArray *)vertexAttributesWithFaceAttributes:(NSString *)attributeString {
+    NSArray *indices = [attributeString componentsSeparatedByString:@"/"];
+    NSMutableArray *attributes = [NSMutableArray arrayWithCapacity:indices.count];
+    if (indices.count >= 1) { // add position
+        [attributes addObject:[CEVBOAttribute attributeWithname:CEVBOAttributePosition]];
+    }
+    if (indices.count >= 2) {
+        if ([indices[1] length]) {
+            [attributes addObject:[CEVBOAttribute attributeWithname:CEVBOAttributeTextureCoord]];
+        } else {
+            [attributes addObject:[CEVBOAttribute attributeWithname:CEVBOAttributeNormal]];
+        }
+    }
+    if (indices.count >= 3 && [indices[1] length]) {
+       [attributes addObject:[CEVBOAttribute attributeWithname:CEVBOAttributeNormal]];
+    }
+    
+    return [attributes copy];
+}
 
 // "1/2/3 -> VertexElementType_V_VT_VN"
 // "1//3" -> VertexElementType_V_VN

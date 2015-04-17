@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "CEModel.h"
+#import "CECamera.h"
 
 /**
  渲染器管理类，根据当前模型调用不同的渲染器进行渲染
  */
 @interface CERenderManager : NSObject
 
-@property (nonatomic, assign) GLKMatrix4 cameraProjectionMatrix;
+@property (nonatomic, weak) CECamera *camera;
 
 - (instancetype)initWithContext:(EAGLContext *)context;
 

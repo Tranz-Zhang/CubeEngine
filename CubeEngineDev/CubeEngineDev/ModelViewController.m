@@ -7,23 +7,26 @@
 //
 
 #import "ModelViewController.h"
-#import "MeshGroup.h"
 #import "CEObjFileLoader.h"
 
 @implementation ModelViewController {
     CEModel *_testModel;
     __weak IBOutlet UILabel *_infoLabel;
+    __weak IBOutlet UISwitch *_wireframeSwitch;
+    __weak IBOutlet UISwitch *_accessorySwitch;
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.scene.camera.position = GLKVector3Make(20, 20, 20);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
+    self.scene.camera.nearZ = 10;
+    self.scene.camera.farZ = 50;
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    _testModel = [CEModel modelWithObjFile:@"teapot"];
-    _testModel.showWireframe = YES;
+    _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
+    _testModel.showWireframe = NO;
     _testModel.showAccessoryLine = YES;
     printf("Teapot loading duration: %.4f", CFAbsoluteTimeGetCurrent() - start);
     [self.scene addModel:_testModel];
@@ -35,11 +38,19 @@
     [self.view addGestureRecognizer:pinchGesture];
     UIRotationGestureRecognizer *rotationGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(onRotationGesture:)];
     [self.view addGestureRecognizer:rotationGesture];
+    
+    _wireframeSwitch.on = _testModel.showWireframe;
+    _accessorySwitch.on = _testModel.showAccessoryLine;
 }
 
 
 - (IBAction)onWireframeSwitchChanged:(UISwitch *)switcher {
     _testModel.showWireframe = switcher.on;
+}
+
+
+- (IBAction)onAccessorySwitchChanged:(UISwitch *)switcher  {
+    _testModel.showAccessoryLine = switcher.on;
 }
 
 

@@ -27,10 +27,6 @@
 //    [data getBytes:output range:NSMakeRange(0, 2)];
 //    [data getBytes:output + 1 range:NSMakeRange(2, 2)];
 //    [data getBytes:output + 2 range:NSMakeRange(4, 2)];
-    
-    GLfloat test = 12345.4324f;
-    NSString *testStr = [NSString stringWithFormat:@"%X", *(unsigned int*)&test];
-    
     return YES;
 }
 

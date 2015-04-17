@@ -146,7 +146,8 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
     
     // render
     [_program use];
-    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.viewMatrix, model.transformMatrix);
+    projectionMatrix = GLKMatrix4Multiply(self.projectionMatrix, projectionMatrix);
     glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
     glLineWidth(1.0);
     glDrawElements(GL_LINES, 30, GL_UNSIGNED_BYTE, 0);
@@ -181,7 +182,7 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
     glEnableVertexAttribArray(_attributeVertexColor);
     glVertexAttribPointer(_attributeVertexColor, 4, GL_FLOAT, GL_FALSE, 28, CE_BUFFER_OFFSET(3 * sizeof(GLfloat)));
     [_program use];
-    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, GLKMatrix4Identity);
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.projectionMatrix, self.viewMatrix);
     glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
     glLineWidth(2.0);
     glDrawArrays(GL_LINES, 0, 6);

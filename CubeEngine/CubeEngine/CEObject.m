@@ -9,14 +9,6 @@
 #import "CEObject.h"
 #import "CEUtils.h"
 
-@interface CEObject () {
-    
-}
-
-@end
-
-
-
 @implementation CEObject
 
 - (instancetype)init
@@ -27,7 +19,7 @@
         _position = GLKVector3Make(0, 0, 0);
         _rotation = GLKQuaternionIdentity;
         _eulerAngles = GLKVector3Make(0, 0, 0);
-        _localTransformMatrix = GLKMatrix4Identity;
+        _transformMatrix = GLKMatrix4Identity;
         _scale = GLKVector3Make(1.0f, 1.0f, 1.0f);
         _right = GLKVector3Make(1.0f, 0.0f, 0.0f);
         _up = GLKVector3Make(0.0f, 1.0f, 0.0f);
@@ -77,27 +69,15 @@
 
 
 - (void)setEulerAngles:(GLKVector3)eulerAngles {
-    /*
-     roll yaw pitch
-      x    y    z
-      0    1    2
-     */
     if (!GLKVector3AllEqualToVector3(_eulerAngles, eulerAngles)) {
         _eulerAngles = eulerAngles;
         _rotation = CEQuaternionWithEulerAngles(eulerAngles.y, eulerAngles.z, eulerAngles.x);
         _right = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(1, 0, 0));
         _up = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 1, 0));
         _forward = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 0, 1));
-//        GLKQuaternion q = _rotation;
-//        float angleX, angleY, angleZ;
-//        CEGetEulerAngles(q, &angleY, &angleZ, &angleX);
-//        printf("(%.1f, %.1f, %.1f) -> (%.1f, %.1f, %.1f)\n",_eulerAngles.x, _eulerAngles.y, _eulerAngles.z, angleX, angleY, angleZ);
-        
         _hasChanged = YES;
     }
 }
-
-
 
 
 - (void)setScale:(GLKVector3)scale {
@@ -139,40 +119,22 @@
     [self setRotation:rotation];
 }
 
-//- (glk) angleBetween(sfvec3f v1,sfvec3f v2) {
-//    float d = sfvec3f.dot(v1,v2);
-//    sfvec3f axis = v1;
-//    axis.cross(v2);
-//    float qw = (float)Math.sqrt(v1.len_squared()*v2.len_squared()) + d;
-//    if (qw < 0.0001) {
-//        return (new sfquat(0,-v1.z,v1.y,v1.x)).norm;
-//    }
-//    sfquat q= new sfquat(qw,axis.x,axis.y,axis.z);
-//    return q.norm();
-//}
-
 
 - (GLKMatrix4)transformMatrix {
     if (_hasChanged) {
-        // update direction vector
-//        _forward = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 0, 1));
-//        _right = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(1, 0, 0));
-//        _up = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 2, 0));
-        
         // update local transfrom matrix
         GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(_position.x, _position.y, _position.z);
         tranformMatrix = GLKMatrix4Multiply(tranformMatrix, GLKMatrix4MakeWithQuaternion(_rotation));
         tranformMatrix = GLKMatrix4ScaleWithVector3(tranformMatrix, _scale);
-        
-        _localTransformMatrix = tranformMatrix;
+        _transformMatrix = tranformMatrix;
         _hasChanged = NO;
     }
     
     if (_parentObject) {
-        return GLKMatrix4Multiply(_parentObject.transformMatrix, _localTransformMatrix);
+        return GLKMatrix4Multiply(_parentObject.transformMatrix, _transformMatrix);
         
     } else {
-        return _localTransformMatrix;
+        return _transformMatrix;
     }
 }
 

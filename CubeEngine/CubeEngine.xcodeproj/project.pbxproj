@@ -34,6 +34,9 @@
 		266E59C21ADBAA0A00F00C90 /* CEObjFileLoader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26A4E1271ACD734900847553 /* CEObjFileLoader.h */; };
 		267C42B01AB2E9280011CDC0 /* CEObject.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 265ACD571AB2D406000277F2 /* CEObject.h */; };
 		268CBC5B1ADCB72C00795A6D /* CEIndicesBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 268CBC5A1ADCB72C00795A6D /* CEIndicesBuffer.m */; };
+		269762691AE0AF52005E95DA /* CERenderer_Dev.m in Sources */ = {isa = PBXBuildFile; fileRef = 269762681AE0AF52005E95DA /* CERenderer_Dev.m */; };
+		269762741AE0E737005E95DA /* CERenderer_Dev.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 269762671AE0AF52005E95DA /* CERenderer_Dev.h */; };
+		269762751AE0E7D0005E95DA /* CERenderer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2624AB961AD6286E00FC863C /* CERenderer.h */; };
 		26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A4E1281ACD734900847553 /* CEObjFileLoader.m */; };
 		26EBAB711AAECAA100E65022 /* CEScene.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261089641AAD31AF0041E142 /* CEScene.h */; };
 		26EBAB731AAECAA700E65022 /* CECamera.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261089671AAD31C60041E142 /* CECamera.h */; };
@@ -50,6 +53,8 @@
 			dstPath = "$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				269762751AE0E7D0005E95DA /* CERenderer.h in CopyFiles */,
+				269762741AE0E737005E95DA /* CERenderer_Dev.h in CopyFiles */,
 				266E59C21ADBAA0A00F00C90 /* CEObjFileLoader.h in CopyFiles */,
 				2624ABB11AD6B0BB00FC863C /* CEModel.h in CopyFiles */,
 				2624ABB31AD6B0BC00FC863C /* CETexture.h in CopyFiles */,
@@ -105,6 +110,8 @@
 		268CBC591ADCB72C00795A6D /* CEIndicesBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEIndicesBuffer.h; sourceTree = "<group>"; };
 		268CBC5A1ADCB72C00795A6D /* CEIndicesBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEIndicesBuffer.m; sourceTree = "<group>"; };
 		268CBC601ADCC6BD00795A6D /* CEModel_Rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEModel_Rendering.h; sourceTree = "<group>"; };
+		269762671AE0AF52005E95DA /* CERenderer_Dev.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer_Dev.h; sourceTree = "<group>"; };
+		269762681AE0AF52005E95DA /* CERenderer_Dev.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERenderer_Dev.m; sourceTree = "<group>"; };
 		26A4E1271ACD734900847553 /* CEObjFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObjFileLoader.h; sourceTree = "<group>"; };
 		26A4E1281ACD734900847553 /* CEObjFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEObjFileLoader.m; sourceTree = "<group>"; };
 		26F7FF8A1ADE3C3B0086D9D7 /* CERenderer_V_VN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer_V_VN.h; sourceTree = "<group>"; };
@@ -144,6 +151,8 @@
 				2624ABAE1AD6ABC800FC863C /* CERenderer_V.m */,
 				26F7FF8A1ADE3C3B0086D9D7 /* CERenderer_V_VN.h */,
 				26F7FF8B1ADE3C3B0086D9D7 /* CERenderer_V_VN.m */,
+				269762671AE0AF52005E95DA /* CERenderer_Dev.h */,
+				269762681AE0AF52005E95DA /* CERenderer_Dev.m */,
 				265878691AD7C99100BA2137 /* CERenderer_Wireframe.h */,
 				2658786A1AD7C99100BA2137 /* CERenderer_Wireframe.m */,
 				26F7FF8D1ADE45660086D9D7 /* CERenderer_AccessoryLine.h */,
@@ -320,6 +329,7 @@
 				2624AB981AD6286E00FC863C /* CERenderer.m in Sources */,
 				4C43A4331ADC380A00761CA9 /* CEVBOAttribute.m in Sources */,
 				263BBBE11AB91A3600F88F65 /* CEUtils.m in Sources */,
+				269762691AE0AF52005E95DA /* CERenderer_Dev.m in Sources */,
 				26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

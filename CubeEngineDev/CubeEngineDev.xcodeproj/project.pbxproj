@@ -19,7 +19,6 @@
 		261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */ = {isa = PBXBuildFile; fileRef = 261CD4301AD3DE8B00C521CC /* cylinder_group.obj */; };
 		261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 261CD4311AD3DE8B00C521CC /* cylinder.mtl */; };
 		261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 261CD4321AD3DE8B00C521CC /* cylinder.obj */; };
-		262A713F1AD4D77A0095F225 /* MeshGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 262A713E1AD4D77A0095F225 /* MeshGroup.m */; };
 		2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 2648E6AA1AD516DA00E146D8 /* test_obj.mtl */; };
 		2648E6AD1AD516DA00E146D8 /* test_obj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2648E6AB1AD516DA00E146D8 /* test_obj.obj */; };
 		268CBC661ADD412200795A6D /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC651ADD412200795A6D /* cube.obj */; };
@@ -27,6 +26,9 @@
 		268CBC6C1ADD466E00795A6D /* teapot.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC691ADD466E00795A6D /* teapot.mtl */; };
 		268CBC6E1ADD466E00795A6D /* teapot.png in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC6B1ADD466E00795A6D /* teapot.png */; };
 		268CBC721ADD48CB00795A6D /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC711ADD48CB00795A6D /* teapot.obj */; };
+		2697626F1AE0B005005E95DA /* LightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2697626E1AE0B005005E95DA /* LightViewController.m */; };
+		26D4B5701ADF560E00EF34E7 /* teapot_smooth.obj in Resources */ = {isa = PBXBuildFile; fileRef = 26D4B56F1ADF560E00EF34E7 /* teapot_smooth.obj */; };
+		26D4B5731ADF5D0C00EF34E7 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,8 +75,6 @@
 		261CD4301AD3DE8B00C521CC /* cylinder_group.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder_group.obj; sourceTree = "<group>"; };
 		261CD4311AD3DE8B00C521CC /* cylinder.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder.mtl; sourceTree = "<group>"; };
 		261CD4321AD3DE8B00C521CC /* cylinder.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder.obj; sourceTree = "<group>"; };
-		262A713D1AD4D77A0095F225 /* MeshGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshGroup.h; sourceTree = "<group>"; };
-		262A713E1AD4D77A0095F225 /* MeshGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeshGroup.m; sourceTree = "<group>"; };
 		2648E6AA1AD516DA00E146D8 /* test_obj.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_obj.mtl; sourceTree = "<group>"; };
 		2648E6AB1AD516DA00E146D8 /* test_obj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_obj.obj; sourceTree = "<group>"; };
 		268CBC651ADD412200795A6D /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
@@ -82,6 +82,11 @@
 		268CBC691ADD466E00795A6D /* teapot.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.mtl; sourceTree = "<group>"; };
 		268CBC6B1ADD466E00795A6D /* teapot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = teapot.png; sourceTree = "<group>"; };
 		268CBC711ADD48CB00795A6D /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
+		2697626D1AE0B005005E95DA /* LightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightViewController.h; sourceTree = "<group>"; };
+		2697626E1AE0B005005E95DA /* LightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LightViewController.m; sourceTree = "<group>"; };
+		26D4B56F1ADF560E00EF34E7 /* teapot_smooth.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot_smooth.obj; sourceTree = "<group>"; };
+		26D4B5711ADF5D0C00EF34E7 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
+		26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,8 +138,10 @@
 				26193F821AA833BF00787C64 /* ViewController.m */,
 				261CD42B1AD3DE0000C521CC /* ModelViewController.h */,
 				261CD42C1AD3DE0000C521CC /* ModelViewController.m */,
-				262A713D1AD4D77A0095F225 /* MeshGroup.h */,
-				262A713E1AD4D77A0095F225 /* MeshGroup.m */,
+				26D4B5711ADF5D0C00EF34E7 /* CameraViewController.h */,
+				26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */,
+				2697626D1AE0B005005E95DA /* LightViewController.h */,
+				2697626E1AE0B005005E95DA /* LightViewController.m */,
 				26193F841AA833BF00787C64 /* Main.storyboard */,
 				26193F871AA833BF00787C64 /* Images.xcassets */,
 				26193F7A1AA833BF00787C64 /* Supporting Files */,
@@ -186,6 +193,7 @@
 		261CD42E1AD3DE3D00C521CC /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				26D4B56F1ADF560E00EF34E7 /* teapot_smooth.obj */,
 				268CBC711ADD48CB00795A6D /* teapot.obj */,
 				268CBC691ADD466E00795A6D /* teapot.mtl */,
 				268CBC6B1ADD466E00795A6D /* teapot.png */,
@@ -300,6 +308,7 @@
 			files = (
 				261CD4331AD3DE8B00C521CC /* cylinder_group.mtl in Resources */,
 				261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */,
+				26D4B5701ADF560E00EF34E7 /* teapot_smooth.obj in Resources */,
 				268CBC6E1ADD466E00795A6D /* teapot.png in Resources */,
 				261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */,
 				2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */,
@@ -331,8 +340,9 @@
 				261CD42D1AD3DE0000C521CC /* ModelViewController.m in Sources */,
 				26193F831AA833BF00787C64 /* ViewController.m in Sources */,
 				26193F801AA833BF00787C64 /* AppDelegate.m in Sources */,
-				262A713F1AD4D77A0095F225 /* MeshGroup.m in Sources */,
+				26D4B5731ADF5D0C00EF34E7 /* CameraViewController.m in Sources */,
 				26193F7D1AA833BF00787C64 /* main.m in Sources */,
+				2697626F1AE0B005005E95DA /* LightViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

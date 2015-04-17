@@ -51,7 +51,7 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
 - (void)setLineColor:(UIColor *)lineColor {
     if (_lineColor != lineColor) {
         _lineColor = [lineColor copy];
-        double red, green, blue, alpha;
+        CGFloat red, green, blue, alpha;
         [lineColor getRed:&red green:&green blue:&blue alpha:&alpha];
         _lineColorVec4 = GLKVector4Make(red, green, blue, alpha);
     }
@@ -100,7 +100,8 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
     }
     [_program use];
     glLineWidth(_lineWidth);
-    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.viewMatrix, model.transformMatrix);
+    projectionMatrix = GLKMatrix4Multiply(self.projectionMatrix, projectionMatrix);
     glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
     glUniform4f(_uniformDrawColor, _lineColorVec4.r, _lineColorVec4.g, _lineColorVec4.b, _lineColorVec4.a);
     glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);

@@ -10,12 +10,11 @@
 #import "CECamera_Rendering.h"
 
 @implementation CECamera {
-    GLKMatrix4 _projectionMatrix; // final output matrix
-    GLKMatrix4 _perspectiveMatrix;
+    GLKMatrix4 _projectionMatrix;
     BOOL _perspectiveChanged;
     
-    GLKQuaternion _lookAtQuaternion;
-    BOOL _lookAtChanged;
+//    GLKQuaternion _lookAtQuaternion;
+//    BOOL _lookAtChanged;
 }
 
 - (instancetype)init
@@ -23,6 +22,7 @@
     self = [super init];
     if (self) {
         _projectionType = CEProjectionPerpective;
+        _perspectiveChanged = YES;
     }
     return self;
 }
@@ -67,59 +67,61 @@
 
 - (void)lookAt:(GLKVector3)targetLocation {
     GLKMatrix4 lookAtMatrix = GLKMatrix4MakeLookAt(self.position.x, self.position.y, self.position.z, targetLocation.x, targetLocation.y, targetLocation.z, 0, 1, 0);
-    _lookAtQuaternion = GLKQuaternionMakeWithMatrix4(lookAtMatrix);
-    _lookAtChanged = YES;
+    lookAtMatrix = GLKMatrix4Invert(lookAtMatrix, NULL);
+    GLKQuaternion lookAtQuaternion = GLKQuaternionMakeWithMatrix4(lookAtMatrix);
+    self.rotation = lookAtQuaternion;
 }
+
 
 // !!!: Overwrite transformMatrix
 - (GLKMatrix4)transformMatrix {
     if (_hasChanged) {
         // update local transfrom matrix
-        GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(-_position.x, -_position.y, -_position.z);
+        GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(_position.x, _position.y, _position.z);
         tranformMatrix = GLKMatrix4Multiply(tranformMatrix, GLKMatrix4MakeWithQuaternion(_rotation));
         tranformMatrix = GLKMatrix4ScaleWithVector3(tranformMatrix, _scale);
-        _localTransformMatrix = tranformMatrix;
+        _transformMatrix = tranformMatrix;
         _hasChanged = NO;
     }
     
     if (_parentObject) {
-        return GLKMatrix4Multiply(_parentObject.transformMatrix, _localTransformMatrix);
+        return GLKMatrix4Invert(GLKMatrix4Multiply(_parentObject.transformMatrix, _transformMatrix), NULL);
         
     } else {
-        return _localTransformMatrix;
+        return GLKMatrix4Invert(_transformMatrix, NULL);
     }
 }
 
 
 - (GLKMatrix4)projectionMatrix {
-    if (!_lookAtChanged && !_hasChanged && !_perspectiveChanged) {
+    if (!_perspectiveChanged) {
         return _projectionMatrix;
     }
     
-    GLKMatrix4 transformMatrix = GLKMatrix4MakeWithQuaternion(_lookAtQuaternion);
-    transformMatrix = GLKMatrix4Multiply(transformMatrix, [self transformMatrix]);
-    _lookAtChanged = NO;
+//    GLKMatrix4 transformMatrix = GLKMatrix4MakeWithQuaternion(_lookAtQuaternion);
+//    transformMatrix = GLKMatrix4Multiply(transformMatrix, [self transformMatrix]);
+//    _lookAtChanged = NO;
     
     if (_perspectiveChanged) {
         if (_projectionType == CEProjectionPerpective) {
-            _perspectiveMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(_radianDegree), _aspect, _nearZ, _farZ);
+            _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(_radianDegree), _aspect, _nearZ, _farZ);
             
         } else if (_projectionType == CEProjectionOrthographic) {
-            _perspectiveMatrix = GLKMatrix4MakeOrtho(-1, 1, -1 / _aspect, 1 / _aspect, _nearZ, _farZ);
+            _projectionMatrix = GLKMatrix4MakeOrtho(-1, 1, -1 / _aspect, 1 / _aspect, _nearZ, _farZ);
             
         } else {
             CEError(@"Error: Unknown projection type");
-            _perspectiveMatrix = GLKMatrix4Identity;
+            _projectionMatrix = GLKMatrix4Identity;
         }
         _perspectiveChanged = NO;
     }
     
-    
-    _projectionMatrix = GLKMatrix4Multiply(_perspectiveMatrix, transformMatrix);
     return _projectionMatrix;
 }
 
-
+- (GLKMatrix4)viewMatrix {
+    return [self transformMatrix];
+}
 
 
 @end

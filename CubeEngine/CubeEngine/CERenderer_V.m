@@ -11,7 +11,7 @@
 #import "CEModel_Rendering.h"
 
 
-NSString *const kVertexShader = CE_SHADER_STRING
+NSString *const kVertexShader_V = CE_SHADER_STRING
 (
  attribute highp vec4 position;
  uniform mat4 projection;
@@ -21,7 +21,7 @@ NSString *const kVertexShader = CE_SHADER_STRING
  }
  );
 
-NSString *const kFragmentSahder = CE_SHADER_STRING
+NSString *const kFragmentSahder_V = CE_SHADER_STRING
 (
  void main() {
      gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
@@ -39,8 +39,8 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
 - (BOOL)setupRenderer {
     if (_program.initialized) return YES;
     
-    _program = [[CEProgram alloc] initWithVertexShaderString:kVertexShader
-                                        fragmentShaderString:kFragmentSahder];
+    _program = [[CEProgram alloc] initWithVertexShaderString:kVertexShader_V
+                                        fragmentShaderString:kFragmentSahder_V];
     [_program addAttribute:@"position"];
     BOOL isOK = [_program link];
     if (isOK) {
@@ -79,7 +79,8 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
         return;
     }
     [_program use];
-    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.cameraProjectionMatrix, model.transformMatrix);
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.viewMatrix, model.transformMatrix);
+    projectionMatrix = GLKMatrix4Multiply(self.projectionMatrix, projectionMatrix);
     glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
     
     if (model.indicesBuffer) { // glDrawElements

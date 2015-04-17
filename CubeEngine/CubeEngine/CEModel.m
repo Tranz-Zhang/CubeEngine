@@ -139,16 +139,6 @@
         [identifierData appendBytes:p1 length:12];
         [identifierData appendBytes:p0 length:12];
     }
-    
-//    NSMutableData *identifierData = [NSMutableData dataWithCapacity:24];
-//    if (diffSum >= 0) {
-//        [identifierData appendBytes:p0 length:12];
-//        [identifierData appendBytes:p1 length:12];
-//        
-//    } else {
-//        [identifierData appendBytes:p1 length:12];
-//        [identifierData appendBytes:p0 length:12];
-//    }
     return identifierData;
 }
 

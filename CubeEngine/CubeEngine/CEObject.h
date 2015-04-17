@@ -20,7 +20,7 @@
     GLKVector3 _eulerAngles;
     GLKVector3 _scale;
     
-    GLKMatrix4 _localTransformMatrix;
+    GLKMatrix4 _transformMatrix;
     GLKVector3 _right;
     GLKVector3 _up;
     GLKVector3 _forward;
@@ -51,9 +51,8 @@
 /**
  The vector3 contain the euler angles around x, y, z axis, in degrees, relative 
  to the parent transform's rotation.
- !!!IMPORTANT: the rotation is applied in the order of Y(yaw), Z(pitch) and X(roll).
+ !!!IMPORTANT: The euler rotation order is Y(yaw), Z(pitch) and X(roll).
  Only use this variable to read and set the angles to absolute values.
- Use Transform.Rotate instead.
  */
 @property (nonatomic, assign) GLKVector3 eulerAngles;
 
@@ -62,14 +61,19 @@
  */
 @property (nonatomic, assign) GLKVector3 scale;
 
+// local vectors
 @property (nonatomic, readonly) GLKVector3 forward; /** The front side of the object ,default is axis +Z */
 @property (nonatomic, readonly) GLKVector3 right;   /** The right side of the object ,default is axis +X */
 @property (nonatomic, readonly) GLKVector3 up;      /** The up side of the object ,default is axis +Y */
+
+/** A bool value indicates if the transform has changed since last call to transformMatrix. */
+@property (nonatomic, readonly) BOOL hasChanged;
 
 /**
  A matrix representing the transform of the object, including translation, rotation and scale.
  */
 @property (nonatomic, readonly) GLKMatrix4 transformMatrix;
+
 
 - (void)moveTowards:(GLKVector3)directionVector withDistance:(float)direction;
 

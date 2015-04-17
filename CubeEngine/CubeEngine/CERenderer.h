@@ -14,7 +14,9 @@
 @interface CERenderer : NSObject
 
 @property (nonatomic, strong) EAGLContext *context;
-@property (nonatomic, assign) GLKMatrix4 cameraProjectionMatrix;
+@property (nonatomic, assign) GLKMatrix4 viewMatrix;
+@property (nonatomic, assign) GLKMatrix4 projectionMatrix;
+
 
 - (BOOL)setupRenderer;
 - (void)renderObject:(CEModel *)model;

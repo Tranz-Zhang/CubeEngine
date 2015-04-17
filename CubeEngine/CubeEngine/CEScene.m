@@ -26,8 +26,6 @@
     self = [super init];
     if (self) {
         _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-        _renderManager = [[CERenderManager alloc] initWithContext:_context];
-        _renderObjects = [NSMutableArray array];
         
         _camera = [[CECamera alloc] init];
         _camera.radianDegree = 65;
@@ -35,6 +33,10 @@
         _camera.nearZ = 0.1;
         _camera.farZ = 100;
         _camera.position = GLKVector3Make(0, 0, 4);
+        
+        _renderManager = [[CERenderManager alloc] initWithContext:_context];
+        _renderManager.camera = _camera;
+        _renderObjects = [NSMutableArray array];
     }
     return self;
 }
@@ -66,7 +68,6 @@
 
 - (void)update {
     [EAGLContext setCurrentContext:_context];
-    _renderManager.cameraProjectionMatrix = _camera.projectionMatrix;
     [_renderManager renderModels:_renderObjects];
 }
 
