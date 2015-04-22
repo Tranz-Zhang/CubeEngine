@@ -12,9 +12,6 @@
 @implementation CECamera {
     GLKMatrix4 _projectionMatrix;
     BOOL _perspectiveChanged;
-    
-//    GLKQuaternion _lookAtQuaternion;
-//    BOOL _lookAtChanged;
 }
 
 - (instancetype)init
@@ -75,21 +72,29 @@
 
 // !!!: Overwrite transformMatrix
 - (GLKMatrix4)transformMatrix {
+    if (!_hasChanged && !_parentObject.hasChanged) {
+        return _transformMatrix;
+    }
+    
     if (_hasChanged) {
         // update local transfrom matrix
         GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(_position.x, _position.y, _position.z);
         tranformMatrix = GLKMatrix4Multiply(tranformMatrix, GLKMatrix4MakeWithQuaternion(_rotation));
         tranformMatrix = GLKMatrix4ScaleWithVector3(tranformMatrix, _scale);
-        _transformMatrix = tranformMatrix;
+        _localTransfromMatrix = tranformMatrix;
+        if (_parentObject) {
+            _transformMatrix = GLKMatrix4Invert(GLKMatrix4Multiply(_parentObject.transformMatrix, tranformMatrix), NULL);
+        } else {
+            _transformMatrix = GLKMatrix4Invert(tranformMatrix, NULL);
+        }
         _hasChanged = NO;
     }
     
-    if (_parentObject) {
-        return GLKMatrix4Invert(GLKMatrix4Multiply(_parentObject.transformMatrix, _transformMatrix), NULL);
-        
-    } else {
-        return GLKMatrix4Invert(_transformMatrix, NULL);
+    if (_parentObject && _parentObject.hasChanged) {
+        _transformMatrix = GLKMatrix4Invert(GLKMatrix4Multiply(_parentObject.transformMatrix, _localTransfromMatrix), NULL);
     }
+    
+    return _transformMatrix;
 }
 
 
@@ -97,10 +102,6 @@
     if (!_perspectiveChanged) {
         return _projectionMatrix;
     }
-    
-//    GLKMatrix4 transformMatrix = GLKMatrix4MakeWithQuaternion(_lookAtQuaternion);
-//    transformMatrix = GLKMatrix4Multiply(transformMatrix, [self transformMatrix]);
-//    _lookAtChanged = NO;
     
     if (_perspectiveChanged) {
         if (_projectionType == CEProjectionPerpective) {

@@ -9,7 +9,6 @@
 #import <GLKit/GLKit.h>
 #import "ViewController.h"
 #import "CubeEngine.h"
-#import "CEWireframe.h"
 
 
 GLfloat gCubeVertexData[216] =

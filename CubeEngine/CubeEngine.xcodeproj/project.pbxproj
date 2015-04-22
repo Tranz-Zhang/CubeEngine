@@ -29,6 +29,11 @@
 		263BBBE11AB91A3600F88F65 /* CEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 263BBBE01AB91A3600F88F65 /* CEUtils.m */; };
 		263C88EF1AA99151005A2623 /* CEViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 263C88EE1AA99151005A2623 /* CEViewController.m */; };
 		263C88F11AA99B0A005A2623 /* CEViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 263C88ED1AA99151005A2623 /* CEViewController.h */; };
+		263C8E5E1AE5F546004FDFE8 /* CELight.m in Sources */ = {isa = PBXBuildFile; fileRef = 263C8E5D1AE5F546004FDFE8 /* CELight.m */; };
+		263C8E611AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 263C8E601AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.m */; };
+		263C8E671AE62F8E004FDFE8 /* CERenderer_PointLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 263C8E661AE62F8E004FDFE8 /* CERenderer_PointLight.m */; };
+		263C8E681AE63054004FDFE8 /* CERenderer_DirectionalLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 263C8E5F1AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.h */; };
+		263C8E691AE63056004FDFE8 /* CERenderer_PointLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 263C8E651AE62F8E004FDFE8 /* CERenderer_PointLight.h */; };
 		2658786B1AD7C99100BA2137 /* CERenderer_Wireframe.m in Sources */ = {isa = PBXBuildFile; fileRef = 2658786A1AD7C99100BA2137 /* CERenderer_Wireframe.m */; };
 		265ACD591AB2D406000277F2 /* CEObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 265ACD581AB2D406000277F2 /* CEObject.m */; };
 		266E59C21ADBAA0A00F00C90 /* CEObjFileLoader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26A4E1271ACD734900847553 /* CEObjFileLoader.h */; };
@@ -53,6 +58,8 @@
 			dstPath = "$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				263C8E681AE63054004FDFE8 /* CERenderer_DirectionalLight.h in CopyFiles */,
+				263C8E691AE63056004FDFE8 /* CERenderer_PointLight.h in CopyFiles */,
 				269762751AE0E7D0005E95DA /* CERenderer.h in CopyFiles */,
 				269762741AE0E737005E95DA /* CERenderer_Dev.h in CopyFiles */,
 				266E59C21ADBAA0A00F00C90 /* CEObjFileLoader.h in CopyFiles */,
@@ -103,6 +110,12 @@
 		263C88EC1AA98DEB005A2623 /* CEDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CEDefines.h; sourceTree = "<group>"; };
 		263C88ED1AA99151005A2623 /* CEViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEViewController.h; sourceTree = "<group>"; };
 		263C88EE1AA99151005A2623 /* CEViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEViewController.m; sourceTree = "<group>"; };
+		263C8E5C1AE5F546004FDFE8 /* CELight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CELight.h; sourceTree = "<group>"; };
+		263C8E5D1AE5F546004FDFE8 /* CELight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CELight.m; sourceTree = "<group>"; };
+		263C8E5F1AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer_DirectionalLight.h; sourceTree = "<group>"; };
+		263C8E601AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERenderer_DirectionalLight.m; sourceTree = "<group>"; };
+		263C8E651AE62F8E004FDFE8 /* CERenderer_PointLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer_PointLight.h; sourceTree = "<group>"; };
+		263C8E661AE62F8E004FDFE8 /* CERenderer_PointLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERenderer_PointLight.m; sourceTree = "<group>"; };
 		265878691AD7C99100BA2137 /* CERenderer_Wireframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer_Wireframe.h; sourceTree = "<group>"; };
 		2658786A1AD7C99100BA2137 /* CERenderer_Wireframe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERenderer_Wireframe.m; sourceTree = "<group>"; };
 		265ACD571AB2D406000277F2 /* CEObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObject.h; sourceTree = "<group>"; };
@@ -153,6 +166,10 @@
 				26F7FF8B1ADE3C3B0086D9D7 /* CERenderer_V_VN.m */,
 				269762671AE0AF52005E95DA /* CERenderer_Dev.h */,
 				269762681AE0AF52005E95DA /* CERenderer_Dev.m */,
+				263C8E5F1AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.h */,
+				263C8E601AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.m */,
+				263C8E651AE62F8E004FDFE8 /* CERenderer_PointLight.h */,
+				263C8E661AE62F8E004FDFE8 /* CERenderer_PointLight.m */,
 				265878691AD7C99100BA2137 /* CERenderer_Wireframe.h */,
 				2658786A1AD7C99100BA2137 /* CERenderer_Wireframe.m */,
 				26F7FF8D1ADE45660086D9D7 /* CERenderer_AccessoryLine.h */,
@@ -182,6 +199,8 @@
 				2610896E1AAD3D700041E142 /* CECamera_Rendering.h */,
 				26A4E1271ACD734900847553 /* CEObjFileLoader.h */,
 				26A4E1281ACD734900847553 /* CEObjFileLoader.m */,
+				263C8E5C1AE5F546004FDFE8 /* CELight.h */,
+				263C8E5D1AE5F546004FDFE8 /* CELight.m */,
 				268CBC5C1ADCBD6600795A6D /* VertexBuffer */,
 			);
 			name = 3DScene;
@@ -320,6 +339,8 @@
 				2624ABA91AD6A56A00FC863C /* CEModel.m in Sources */,
 				2624AB9E1AD62BAE00FC863C /* CETexture.m in Sources */,
 				26193F4E1AA8324600787C64 /* CubeEngine.m in Sources */,
+				263C8E671AE62F8E004FDFE8 /* CERenderer_PointLight.m in Sources */,
+				263C8E5E1AE5F546004FDFE8 /* CELight.m in Sources */,
 				26193FBF1AA85F3F00787C64 /* CEProgram.m in Sources */,
 				265ACD591AB2D406000277F2 /* CEObject.m in Sources */,
 				2658786B1AD7C99100BA2137 /* CERenderer_Wireframe.m in Sources */,
@@ -327,6 +348,7 @@
 				2624ABAF1AD6ABC800FC863C /* CERenderer_V.m in Sources */,
 				2624ABAC1AD6A85500FC863C /* CERenderManager.m in Sources */,
 				2624AB981AD6286E00FC863C /* CERenderer.m in Sources */,
+				263C8E611AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.m in Sources */,
 				4C43A4331ADC380A00761CA9 /* CEVBOAttribute.m in Sources */,
 				263BBBE11AB91A3600F88F65 /* CEUtils.m in Sources */,
 				269762691AE0AF52005E95DA /* CERenderer_Dev.m in Sources */,

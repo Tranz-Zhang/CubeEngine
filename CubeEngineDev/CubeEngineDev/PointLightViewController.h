@@ -1,0 +1,13 @@
+//
+//  PointLightViewController.h
+//  CubeEngineDev
+//
+//  Created by chance on 4/21/15.
+//  Copyright (c) 2015 ByChance. All rights reserved.
+//
+
+#import "CEViewController.h"
+
+@interface PointLightViewController : CEViewController
+
+@end

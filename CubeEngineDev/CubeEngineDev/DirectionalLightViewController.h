@@ -8,6 +8,6 @@
 
 #import "CEViewController.h"
 
-@interface LightViewController : CEViewController
+@interface DirectionalLightViewController : CEViewController
 
 @end

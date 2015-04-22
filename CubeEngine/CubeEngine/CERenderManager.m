@@ -16,6 +16,8 @@
 #import "CERenderer_Wireframe.h"
 #import "CERenderer_AccessoryLine.h"
 #import "CERenderer_Dev.h"
+#import "CERenderer_DirectionalLight.h"
+#import "CERenderer_PointLight.h"
 
 
 @implementation CERenderManager {
@@ -31,7 +33,8 @@
     if (self) {
         _context = context;
         [EAGLContext setCurrentContext:context];
-        _testRenderer = [CERenderer_Dev shareRenderer];
+        _testRenderer = [CERenderer_PointLight shareRenderer];
+//        _testRenderer = [CERenderer_DirectionalLight shareRenderer];
 //        _testRenderer = [CERenderer_V_VN new];
         [_testRenderer setupRenderer];
         _wireframeRenderer = [CERenderer_Wireframe new];
@@ -59,23 +62,18 @@
     for (CEModel *model in models) {
         // TODO: select render base on current model
         
-        GLKMatrix4 projectionMatrix = _camera.projectionMatrix;
-        GLKMatrix4 viewMatrix = _camera.viewMatrix;
-        _testRenderer.projectionMatrix = projectionMatrix;
-        _testRenderer.viewMatrix = viewMatrix;
+        _testRenderer.camera = _camera;
         [_testRenderer renderObject:model];
         
         // render wire frame
         if (model.showWireframe && model.wireframeBuffer) {
-            _wireframeRenderer.projectionMatrix = projectionMatrix;
-            _wireframeRenderer.viewMatrix = viewMatrix;
+            _wireframeRenderer.camera = _camera;
             [_wireframeRenderer renderObject:model];
         }
         
         // render accessory line
         if (model.showAccessoryLine) {
-            _accessoryLineRenderer.projectionMatrix = projectionMatrix;
-            _accessoryLineRenderer.viewMatrix = viewMatrix;
+            _accessoryLineRenderer.camera = _camera;
             [_accessoryLineRenderer renderObject:model];
         }
     }

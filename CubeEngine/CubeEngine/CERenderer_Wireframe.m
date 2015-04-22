@@ -9,6 +9,7 @@
 #import "CERenderer_Wireframe.h"
 #import "CEProgram.h"
 #import "CEModel_Rendering.h"
+#import "CECamera_Rendering.h"
 
 NSString *const kWireframeVertexShader = CE_SHADER_STRING
 (
@@ -100,8 +101,8 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
     }
     [_program use];
     glLineWidth(_lineWidth);
-    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.viewMatrix, model.transformMatrix);
-    projectionMatrix = GLKMatrix4Multiply(self.projectionMatrix, projectionMatrix);
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
+    projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, projectionMatrix);
     glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
     glUniform4f(_uniformDrawColor, _lineColorVec4.r, _lineColorVec4.g, _lineColorVec4.b, _lineColorVec4.a);
     glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);

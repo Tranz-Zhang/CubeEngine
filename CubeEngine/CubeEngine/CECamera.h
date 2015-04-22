@@ -45,23 +45,6 @@ typedef NS_ENUM(NSInteger, CEProjectionType) {
  */
 @property (nonatomic, assign) float farZ;
 
-
-///**
-// Location of the camera.
-// */
-//@property (atomic) GLKVector3 location;
-//
-///**
-// The angle of the rotation for the camera (a positive angle is counterclockwise).
-// */
-//@property (atomic) GLKVector3 rotationAxis;
-//
-///**
-// The axis to perform the rotation around.
-// */
-//@property (atomic) float rotationRadians;
-
-
 /**
  Make the camera facing to the target location, By default the camera is facing axis +Z
  */

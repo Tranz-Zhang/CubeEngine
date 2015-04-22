@@ -6,32 +6,11 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "LightViewController.h"
-#import "CERenderer_Dev.h"
+#import "DirectionalLightViewController.h"
+#import "CERenderer_DirectionalLight.h"
+#import "Common.h"
 
-
-GLKVector3 Vec3WithColor(UIColor *color) {
-    CGFloat r, g, b;
-    [color getRed:&r green:&g blue:&b alpha:NULL];
-    return GLKVector3Make(r, g, b);
-}
-
-GLKVector4 Vec4WithColor(UIColor *color) {
-    CGFloat r, g, b, a;
-    [color getRed:&r green:&g blue:&b alpha:&a];
-    return GLKVector4Make(r, g, b, a);
-}
-
-UIColor * ColorWithVec3(GLKVector3 vec3) {
-    return [UIColor colorWithRed:vec3.r green:vec3.g blue:vec3.b alpha:1];
-}
-
-UIColor * ColorWithVec4(GLKVector4 vec4) {
-    return [UIColor colorWithRed:vec4.r green:vec4.g blue:vec4.b alpha:vec4.a];
-}
-
-
-@interface LightViewController ()<UIGestureRecognizerDelegate> {
+@interface DirectionalLightViewController ()<UIGestureRecognizerDelegate> {
     CEModel *_testModel;
 }
 
@@ -42,12 +21,11 @@ UIColor * ColorWithVec4(GLKVector4 vec4) {
 @property (weak, nonatomic) IBOutlet UISlider *blueSlider;
 @property (weak, nonatomic) IBOutlet UISlider *floatSlider;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *singleValueSegment;
-
 @property (weak, nonatomic) IBOutlet UISegmentedControl *attributeSegment;
 
 @end
 
-@implementation LightViewController
+@implementation DirectionalLightViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -83,19 +61,19 @@ UIColor * ColorWithVec4(GLKVector4 vec4) {
 - (IBAction)onAttributeSegmentChanged:(UISegmentedControl *)segment {
     switch (_attributeSegment.selectedSegmentIndex) {
         case 0:
-            [self setDefaultColor:ColorWithVec4([CERenderer_Dev shareRenderer].vertexColor)];
+            [self setDefaultColor:ColorWithVec4([CERenderer_DirectionalLight shareRenderer].vertexColor)];
             break;
         case 1:
-            [self setDefaultColor:ColorWithVec3([CERenderer_Dev shareRenderer].ambientColor)];
+            [self setDefaultColor:ColorWithVec3([CERenderer_DirectionalLight shareRenderer].ambientColor)];
             break;
         case 2:
-            [self setDefaultColor:ColorWithVec3([CERenderer_Dev shareRenderer].lightColor)];
+            [self setDefaultColor:ColorWithVec3([CERenderer_DirectionalLight shareRenderer].lightColor)];
             break;
         case 3:
-            [self setDefaultColor:ColorWithVec3([CERenderer_Dev shareRenderer].lightDirection)];
+            [self setDefaultColor:ColorWithVec3([CERenderer_DirectionalLight shareRenderer].lightDirection)];
             break;
         case 4:
-            [self setDefaultColor:ColorWithVec3([CERenderer_Dev shareRenderer].halfVector)];
+            [self setDefaultColor:ColorWithVec3([CERenderer_DirectionalLight shareRenderer].halfVector)];
             break;
             
         case UISegmentedControlNoSegment:
@@ -137,19 +115,21 @@ UIColor * ColorWithVec4(GLKVector4 vec4) {
     
     switch (_attributeSegment.selectedSegmentIndex) {
         case 0:
-            [CERenderer_Dev shareRenderer].vertexColor = Vec4WithColor(color);
+            [CERenderer_DirectionalLight shareRenderer].vertexColor = Vec4WithColor(color);
             break;
         case 1:
-            [CERenderer_Dev shareRenderer].ambientColor = Vec3WithColor(color);
+            [CERenderer_DirectionalLight shareRenderer].ambientColor = Vec3WithColor(color);
             break;
         case 2:
-            [CERenderer_Dev shareRenderer].lightColor = Vec3WithColor(color);
+            [CERenderer_DirectionalLight shareRenderer].lightColor = Vec3WithColor(color);
             break;
         case 3:
-            [CERenderer_Dev shareRenderer].lightDirection = Vec3WithColor(color);
+            [CERenderer_DirectionalLight shareRenderer].lightDirection = GLKVector3Make(_redSlider.value * 2 - 1,
+                                                                                        _greenSlider.value * 2 - 1,
+                                                                                        _blueSlider.value * 2 - 1);
             break;
         case 4:
-            [CERenderer_Dev shareRenderer].halfVector = Vec3WithColor(color);
+            [CERenderer_DirectionalLight shareRenderer].halfVector = Vec3WithColor(color);
             break;
         case UISegmentedControlNoSegment:
         default:
@@ -163,10 +143,10 @@ UIColor * ColorWithVec4(GLKVector4 vec4) {
 - (IBAction)onSingleValueSegmentChanged:(id)segment {
     switch (_singleValueSegment.selectedSegmentIndex) {
         case 0:
-            [_floatSlider setValue:[CERenderer_Dev shareRenderer].shiniess / 30.0f animated:YES];
+            [_floatSlider setValue:[CERenderer_DirectionalLight shareRenderer].shiniess / 30.0f animated:YES];
             break;
         case 1:
-            [_floatSlider setValue:[CERenderer_Dev shareRenderer].strength animated:YES];
+            [_floatSlider setValue:[CERenderer_DirectionalLight shareRenderer].strength animated:YES];
             break;
         default:
             break;
@@ -176,10 +156,10 @@ UIColor * ColorWithVec4(GLKVector4 vec4) {
 - (IBAction)onFloatSliderChanged:(UISlider *)slider {
     switch (_singleValueSegment.selectedSegmentIndex) {
         case 0:
-            [CERenderer_Dev shareRenderer].shiniess = MAX(1, slider.value * 30);
+            [CERenderer_DirectionalLight shareRenderer].shiniess = MAX(1, slider.value * 30);
             break;
         case 1:
-            [CERenderer_Dev shareRenderer].strength = slider.value;
+            [CERenderer_DirectionalLight shareRenderer].strength = slider.value;
             break;
         default:
             break;

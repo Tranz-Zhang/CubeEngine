@@ -121,21 +121,29 @@
 
 
 - (GLKMatrix4)transformMatrix {
+    if (!_hasChanged && !_parentObject.hasChanged) {
+        return _transformMatrix;
+    }
+    
     if (_hasChanged) {
         // update local transfrom matrix
         GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(_position.x, _position.y, _position.z);
         tranformMatrix = GLKMatrix4Multiply(tranformMatrix, GLKMatrix4MakeWithQuaternion(_rotation));
         tranformMatrix = GLKMatrix4ScaleWithVector3(tranformMatrix, _scale);
-        _transformMatrix = tranformMatrix;
+        _localTransfromMatrix = tranformMatrix;
+        if (_parentObject) {
+            _transformMatrix = GLKMatrix4Multiply(_parentObject.transformMatrix, tranformMatrix);
+        } else {
+            _transformMatrix = tranformMatrix;
+        }
         _hasChanged = NO;
     }
     
-    if (_parentObject) {
-        return GLKMatrix4Multiply(_parentObject.transformMatrix, _transformMatrix);
-        
-    } else {
-        return _transformMatrix;
+    if (_parentObject && _parentObject.hasChanged) {
+        _transformMatrix = GLKMatrix4Multiply(_parentObject.transformMatrix, _localTransfromMatrix);
     }
+    
+    return _transformMatrix;
 }
 
 

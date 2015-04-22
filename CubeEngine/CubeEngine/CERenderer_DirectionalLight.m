@@ -1,18 +1,18 @@
 //
-//  CERenderer_Dev.m
+//  CERenderer_DirectionalLight.m
 //  CubeEngine
 //
-//  Created by chance on 4/17/15.
+//  Created by chance on 4/21/15.
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CERenderer_Dev.h"
+#import "CERenderer_DirectionalLight.h"
 #import "CEProgram.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
 
 
-NSString *const kVertexShader_DEV = CE_SHADER_STRING
+NSString *const kVertexShader_DirectionalLight = CE_SHADER_STRING
 (
  attribute highp vec4 VertexPosition;
  attribute highp vec3 VertexNormal;
@@ -31,7 +31,7 @@ NSString *const kVertexShader_DEV = CE_SHADER_STRING
  }
 );
 
-NSString *const kFragmentSahder_DEV = CE_SHADER_STRING
+NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
 (
  precision mediump float;
  
@@ -66,10 +66,10 @@ NSString *const kFragmentSahder_DEV = CE_SHADER_STRING
      vec3 rgb = min(Color.rgb * scatteredLight + reflectedLight, vec3(1.0));
      gl_FragColor = vec4(rgb, Color.a);
  }
-);
+ );
 
 
-@implementation CERenderer_Dev {
+@implementation CERenderer_DirectionalLight {
     CEProgram *_program;
     GLint _attribVec4Position;
     GLint _attribVec3Normal;
@@ -88,7 +88,7 @@ NSString *const kFragmentSahder_DEV = CE_SHADER_STRING
 
 
 + (instancetype)shareRenderer {
-    static CERenderer_Dev *_shareInstance = nil;
+    static CERenderer_DirectionalLight *_shareInstance = nil;
     if (!_shareInstance) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
@@ -98,7 +98,6 @@ NSString *const kFragmentSahder_DEV = CE_SHADER_STRING
     return _shareInstance;
 }
 
-
 - (instancetype)init
 {
     self = [super init];
@@ -107,9 +106,8 @@ NSString *const kFragmentSahder_DEV = CE_SHADER_STRING
         _ambientColor = GLKVector3Make(0.1, 0.1, 0.1);
         _lightColor = GLKVector3Make(1.0, 1.0, 1.0);
         [self setLightDirection:GLKVector3Make(1.0, 1.0, 1.0)];
-        [self setHalfVector:GLKVector3Make(1.0, 1.0, 1.0)];
         _shiniess = 10;
-        _strength = 1.0;
+        _strength = 0.1;
     }
     return self;
 }
@@ -117,8 +115,8 @@ NSString *const kFragmentSahder_DEV = CE_SHADER_STRING
 - (BOOL)setupRenderer {
     if (_program.initialized) return YES;
     
-    _program = [[CEProgram alloc] initWithVertexShaderString:kVertexShader_DEV
-                                        fragmentShaderString:kFragmentSahder_DEV];
+    _program = [[CEProgram alloc] initWithVertexShaderString:kVertexShader_DirectionalLight
+                                        fragmentShaderString:kFragmentSahder_DirectionalLight];
     [_program addAttribute:@"VertexPosition"];
     [_program addAttribute:@"VertexNormal"];
     BOOL isOK = [_program link];
@@ -153,7 +151,7 @@ NSString *const kFragmentSahder_DEV = CE_SHADER_STRING
 
 - (void)setLightDirection:(GLKVector3)lightDirection {
     _lightDirection = GLKVector3Normalize(lightDirection);
-    GLKVector3 eyeDirection = GLKVector3Normalize(_camera.position);
+    GLKVector3 eyeDirection = GLKVector3Normalize(GLKVector3Negate(_camera.position));
     _halfVector = GLKVector3Normalize(GLKVector3Add(lightDirection, eyeDirection));
 }
 

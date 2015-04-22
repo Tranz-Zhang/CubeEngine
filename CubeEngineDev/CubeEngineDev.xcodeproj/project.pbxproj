@@ -19,15 +19,17 @@
 		261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */ = {isa = PBXBuildFile; fileRef = 261CD4301AD3DE8B00C521CC /* cylinder_group.obj */; };
 		261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 261CD4311AD3DE8B00C521CC /* cylinder.mtl */; };
 		261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 261CD4321AD3DE8B00C521CC /* cylinder.obj */; };
+		263C8E641AE62DE4004FDFE8 /* PointLightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 263C8E631AE62DE4004FDFE8 /* PointLightViewController.m */; };
+		263C8E701AE63271004FDFE8 /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 263C8E6F1AE63271004FDFE8 /* Common.m */; };
+		263C8E781AE68738004FDFE8 /* teapot_smooth.obj in Resources */ = {isa = PBXBuildFile; fileRef = 263C8E761AE68738004FDFE8 /* teapot_smooth.obj */; };
+		263C8E791AE68738004FDFE8 /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 263C8E771AE68738004FDFE8 /* teapot.obj */; };
 		2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 2648E6AA1AD516DA00E146D8 /* test_obj.mtl */; };
 		2648E6AD1AD516DA00E146D8 /* test_obj.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2648E6AB1AD516DA00E146D8 /* test_obj.obj */; };
 		268CBC661ADD412200795A6D /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC651ADD412200795A6D /* cube.obj */; };
 		268CBC681ADD42A900795A6D /* cube_triangle.obj in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC671ADD42A900795A6D /* cube_triangle.obj */; };
 		268CBC6C1ADD466E00795A6D /* teapot.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC691ADD466E00795A6D /* teapot.mtl */; };
 		268CBC6E1ADD466E00795A6D /* teapot.png in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC6B1ADD466E00795A6D /* teapot.png */; };
-		268CBC721ADD48CB00795A6D /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC711ADD48CB00795A6D /* teapot.obj */; };
-		2697626F1AE0B005005E95DA /* LightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2697626E1AE0B005005E95DA /* LightViewController.m */; };
-		26D4B5701ADF560E00EF34E7 /* teapot_smooth.obj in Resources */ = {isa = PBXBuildFile; fileRef = 26D4B56F1ADF560E00EF34E7 /* teapot_smooth.obj */; };
+		2697626F1AE0B005005E95DA /* DirectionalLightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2697626E1AE0B005005E95DA /* DirectionalLightViewController.m */; };
 		26D4B5731ADF5D0C00EF34E7 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -75,16 +77,20 @@
 		261CD4301AD3DE8B00C521CC /* cylinder_group.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder_group.obj; sourceTree = "<group>"; };
 		261CD4311AD3DE8B00C521CC /* cylinder.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder.mtl; sourceTree = "<group>"; };
 		261CD4321AD3DE8B00C521CC /* cylinder.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder.obj; sourceTree = "<group>"; };
+		263C8E621AE62DE4004FDFE8 /* PointLightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointLightViewController.h; sourceTree = "<group>"; };
+		263C8E631AE62DE4004FDFE8 /* PointLightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointLightViewController.m; sourceTree = "<group>"; };
+		263C8E6A1AE630ED004FDFE8 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		263C8E6F1AE63271004FDFE8 /* Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Common.m; sourceTree = "<group>"; };
+		263C8E761AE68738004FDFE8 /* teapot_smooth.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot_smooth.obj; sourceTree = "<group>"; };
+		263C8E771AE68738004FDFE8 /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
 		2648E6AA1AD516DA00E146D8 /* test_obj.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_obj.mtl; sourceTree = "<group>"; };
 		2648E6AB1AD516DA00E146D8 /* test_obj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_obj.obj; sourceTree = "<group>"; };
 		268CBC651ADD412200795A6D /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
 		268CBC671ADD42A900795A6D /* cube_triangle.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube_triangle.obj; sourceTree = "<group>"; };
 		268CBC691ADD466E00795A6D /* teapot.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.mtl; sourceTree = "<group>"; };
 		268CBC6B1ADD466E00795A6D /* teapot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = teapot.png; sourceTree = "<group>"; };
-		268CBC711ADD48CB00795A6D /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
-		2697626D1AE0B005005E95DA /* LightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightViewController.h; sourceTree = "<group>"; };
-		2697626E1AE0B005005E95DA /* LightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LightViewController.m; sourceTree = "<group>"; };
-		26D4B56F1ADF560E00EF34E7 /* teapot_smooth.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot_smooth.obj; sourceTree = "<group>"; };
+		2697626D1AE0B005005E95DA /* DirectionalLightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionalLightViewController.h; sourceTree = "<group>"; };
+		2697626E1AE0B005005E95DA /* DirectionalLightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionalLightViewController.m; sourceTree = "<group>"; };
 		26D4B5711ADF5D0C00EF34E7 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -132,6 +138,8 @@
 			isa = PBXGroup;
 			children = (
 				261CD42E1AD3DE3D00C521CC /* Models */,
+				263C8E6A1AE630ED004FDFE8 /* Common.h */,
+				263C8E6F1AE63271004FDFE8 /* Common.m */,
 				26193F7E1AA833BF00787C64 /* AppDelegate.h */,
 				26193F7F1AA833BF00787C64 /* AppDelegate.m */,
 				26193F811AA833BF00787C64 /* ViewController.h */,
@@ -140,8 +148,10 @@
 				261CD42C1AD3DE0000C521CC /* ModelViewController.m */,
 				26D4B5711ADF5D0C00EF34E7 /* CameraViewController.h */,
 				26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */,
-				2697626D1AE0B005005E95DA /* LightViewController.h */,
-				2697626E1AE0B005005E95DA /* LightViewController.m */,
+				2697626D1AE0B005005E95DA /* DirectionalLightViewController.h */,
+				2697626E1AE0B005005E95DA /* DirectionalLightViewController.m */,
+				263C8E621AE62DE4004FDFE8 /* PointLightViewController.h */,
+				263C8E631AE62DE4004FDFE8 /* PointLightViewController.m */,
 				26193F841AA833BF00787C64 /* Main.storyboard */,
 				26193F871AA833BF00787C64 /* Images.xcassets */,
 				26193F7A1AA833BF00787C64 /* Supporting Files */,
@@ -193,8 +203,8 @@
 		261CD42E1AD3DE3D00C521CC /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				26D4B56F1ADF560E00EF34E7 /* teapot_smooth.obj */,
-				268CBC711ADD48CB00795A6D /* teapot.obj */,
+				263C8E761AE68738004FDFE8 /* teapot_smooth.obj */,
+				263C8E771AE68738004FDFE8 /* teapot.obj */,
 				268CBC691ADD466E00795A6D /* teapot.mtl */,
 				268CBC6B1ADD466E00795A6D /* teapot.png */,
 				268CBC671ADD42A900795A6D /* cube_triangle.obj */,
@@ -308,14 +318,14 @@
 			files = (
 				261CD4331AD3DE8B00C521CC /* cylinder_group.mtl in Resources */,
 				261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */,
-				26D4B5701ADF560E00EF34E7 /* teapot_smooth.obj in Resources */,
 				268CBC6E1ADD466E00795A6D /* teapot.png in Resources */,
 				261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */,
+				263C8E791AE68738004FDFE8 /* teapot.obj in Resources */,
 				2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */,
 				268CBC661ADD412200795A6D /* cube.obj in Resources */,
 				261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */,
-				268CBC721ADD48CB00795A6D /* teapot.obj in Resources */,
 				26193F861AA833BF00787C64 /* Main.storyboard in Resources */,
+				263C8E781AE68738004FDFE8 /* teapot_smooth.obj in Resources */,
 				26193F881AA833BF00787C64 /* Images.xcassets in Resources */,
 				268CBC6C1ADD466E00795A6D /* teapot.mtl in Resources */,
 				2648E6AD1AD516DA00E146D8 /* test_obj.obj in Resources */,
@@ -337,12 +347,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				263C8E641AE62DE4004FDFE8 /* PointLightViewController.m in Sources */,
 				261CD42D1AD3DE0000C521CC /* ModelViewController.m in Sources */,
 				26193F831AA833BF00787C64 /* ViewController.m in Sources */,
 				26193F801AA833BF00787C64 /* AppDelegate.m in Sources */,
+				263C8E701AE63271004FDFE8 /* Common.m in Sources */,
 				26D4B5731ADF5D0C00EF34E7 /* CameraViewController.m in Sources */,
 				26193F7D1AA833BF00787C64 /* main.m in Sources */,
-				2697626F1AE0B005005E95DA /* LightViewController.m in Sources */,
+				2697626F1AE0B005005E95DA /* DirectionalLightViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

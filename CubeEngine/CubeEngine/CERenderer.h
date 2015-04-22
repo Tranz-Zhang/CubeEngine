@@ -8,14 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "CEModel.h"
+#import "CECamera.h"
 
 // 渲染器父类，定义基本的渲染器接口
 
-@interface CERenderer : NSObject
+@interface CERenderer : NSObject {
+    EAGLContext *_context;
+    __weak CECamera *_camera;
+}
 
 @property (nonatomic, strong) EAGLContext *context;
-@property (nonatomic, assign) GLKMatrix4 viewMatrix;
-@property (nonatomic, assign) GLKMatrix4 projectionMatrix;
+@property (nonatomic, weak) CECamera *camera;
 
 
 - (BOOL)setupRenderer;

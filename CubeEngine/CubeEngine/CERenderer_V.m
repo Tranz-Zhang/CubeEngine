@@ -9,6 +9,7 @@
 #import "CERenderer_V.h"
 #import "CEProgram.h"
 #import "CEModel_Rendering.h"
+#import "CECamera_Rendering.h"
 
 
 NSString *const kVertexShader_V = CE_SHADER_STRING
@@ -63,7 +64,10 @@ NSString *const kFragmentSahder_V = CE_SHADER_STRING
 
 
 - (void)renderObject:(CEModel *)model {
-    if (!_program || !model.vertexBuffer) return;
+    if (!_program || !model.vertexBuffer || !_camera) {
+        CEError(@"Invalid paramater for rendering");
+        return;
+    }
     
     // setup vertex buffer
     if (![model.vertexBuffer setupBufferWithContext:self.context] ||
@@ -79,8 +83,8 @@ NSString *const kFragmentSahder_V = CE_SHADER_STRING
         return;
     }
     [_program use];
-    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(self.viewMatrix, model.transformMatrix);
-    projectionMatrix = GLKMatrix4Multiply(self.projectionMatrix, projectionMatrix);
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
+    projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, projectionMatrix);
     glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
     
     if (model.indicesBuffer) { // glDrawElements

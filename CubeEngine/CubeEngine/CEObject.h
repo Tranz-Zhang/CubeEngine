@@ -21,6 +21,8 @@
     GLKVector3 _scale;
     
     GLKMatrix4 _transformMatrix;
+    GLKMatrix4 _localTransfromMatrix;
+    
     GLKVector3 _right;
     GLKVector3 _up;
     GLKVector3 _forward;
