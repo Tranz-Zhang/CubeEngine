@@ -11,10 +11,9 @@
 #import "CECamera_Rendering.h"
 
 // render
+#import "CEBaseRenderer.h"
 #import "CERenderer_V.h"
 #import "CERenderer_V_VN.h"
-#import "CERenderer_Wireframe.h"
-#import "CERenderer_AccessoryLine.h"
 #import "CERenderer_Dev.h"
 #import "CERenderer_DirectionalLight.h"
 #import "CERenderer_PointLight.h"
@@ -22,9 +21,11 @@
 
 @implementation CERenderManager {
     EAGLContext *_context;
-    CERenderer *_testRenderer;
-    CERenderer_Wireframe *_wireframeRenderer;
-    CERenderer_AccessoryLine *_accessoryLineRenderer;
+    CEBaseRenderer *_testRenderer;
+    
+    GLfloat _backgroundRed;
+    GLfloat _backgroundGreen;
+    GLfloat _backgroundBlue;
 }
 
 - (instancetype)initWithContext:(EAGLContext *)context
@@ -33,25 +34,34 @@
     if (self) {
         _context = context;
         [EAGLContext setCurrentContext:context];
-        _testRenderer = [CERenderer_PointLight shareRenderer];
+        _testRenderer = [CEBaseRenderer new];
 //        _testRenderer = [CERenderer_DirectionalLight shareRenderer];
 //        _testRenderer = [CERenderer_V_VN new];
         [_testRenderer setupRenderer];
-        _wireframeRenderer = [CERenderer_Wireframe new];
-        _wireframeRenderer.lineWidth = 1.0f;
-        [_wireframeRenderer setupRenderer];
-        _accessoryLineRenderer = [CERenderer_AccessoryLine new];
-        [_accessoryLineRenderer setupRenderer];
-        
     }
     return self;
 }
 
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
+    if (_backgroundColor != backgroundColor) {
+        _backgroundColor = [backgroundColor copy];
+        CGFloat red, green, blue;
+        [backgroundColor getRed:&red green:&green blue:&blue alpha:NULL];
+        _backgroundRed = red;
+        _backgroundGreen = green;
+        _backgroundBlue = blue;
+    }
+}
+
+- (void)setLights:(NSArray *)lights {
+    if (_lights != lights) {
+        _lights = [lights copy];
+        _testRenderer.lights = lights;
+    }
+}
 
 - (void)renderModels:(NSArray *)models {
-    if (!models.count) return;
-    
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearColor(_backgroundRed, _backgroundGreen, _backgroundBlue, 1.0);
 //    glClearDepthf(0.9978f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     
@@ -61,25 +71,9 @@
         
     for (CEModel *model in models) {
         // TODO: select render base on current model
-        
         _testRenderer.camera = _camera;
         [_testRenderer renderObject:model];
-        
-        // render wire frame
-        if (model.showWireframe && model.wireframeBuffer) {
-            _wireframeRenderer.camera = _camera;
-            [_wireframeRenderer renderObject:model];
-        }
-        
-        // render accessory line
-        if (model.showAccessoryLine) {
-            _accessoryLineRenderer.camera = _camera;
-            [_accessoryLineRenderer renderObject:model];
-        }
     }
-#if DEBUG
-    [_accessoryLineRenderer renderWorldOriginCoordinate];
-#endif
 }
 
 @end

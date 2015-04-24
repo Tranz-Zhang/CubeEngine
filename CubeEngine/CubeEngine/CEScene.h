@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CEModel.h"
 #import "CECamera.h"
+#import "CELight.h"
 
 /**
  representing a 3D scene, manage these things:
@@ -21,12 +22,18 @@
 @property (atomic, readonly) NSArray *allRenderObjects;
 @property (nonatomic, readonly) CECamera *camera;
 @property (nonatomic, readonly) EAGLContext *context;
+@property (nonatomic, copy) UIColor *backgroundColor;
+@property (nonatomic, assign) NSInteger maxLightCount;
 
 @property (nonatomic, assign) BOOL displayOriginalPivot;
 
-
+// Model
 - (void)addModel:(CEModel *)model;
 - (void)removeModel:(CEModel *)model;
+
+// Light
+- (void)addLight:(CELight *)light;
+- (void)removeLight:(CELight *)light;
 
 - (void)update;
 

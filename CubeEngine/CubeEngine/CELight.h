@@ -8,14 +8,16 @@
 
 #import "CEObject.h"
 
-typedef NS_ENUM(NSInteger, CELightType) {
-    CEDirectionLight = 1,
-    CEDotLight,
-    CESpotLight,
-};
+@interface CELight : CEObject {
+    GLKVector3 _vec3LightColor;
+    GLKVector3 _vec3AmbientColor;
+}
 
-@interface CELight : CEObject
++ (NSUInteger)maxLightCount;
++ (void)setMaxLightCount:(NSInteger)maxLightCount;
 
-+ (instancetype)lightWithType:(int)lightType;
+@property (nonatomic, copy) UIColor *lightColor; // default is withte
+@property (nonatomic, copy) UIColor *ambientColor; // default is 0.2*White
+
 
 @end

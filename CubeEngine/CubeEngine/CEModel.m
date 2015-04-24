@@ -9,6 +9,7 @@
 #import "CEModel.h"
 #import "CEModel_Rendering.h"
 #import "CEObjFileLoader.h"
+#import "CEUtils.h"
 
 @implementation CEModel {
     
@@ -27,6 +28,7 @@
         _vertexBuffer = vertexBuffer;
         _indicesBuffer = indicesBuffer;
         [self setupMeshWithVertexBuffer:vertexBuffer];
+        [self setBaseColor:[UIColor whiteColor]];
     }
     return self;
 }
@@ -64,6 +66,13 @@
     _bounds = GLKVector3Make(maxX - minX, maxY - minY, maxZ - minZ);
 }
 
+
+- (void)setBaseColor:(UIColor *)baseColor {
+    if (_baseColor != baseColor) {
+        _baseColor = [baseColor copy];
+        _vec3BaseColor = Vec4WithColor(baseColor);
+    }
+}
 
 #pragma mark - Wireframe
 - (void)setShowWireframe:(BOOL)showWireframe {

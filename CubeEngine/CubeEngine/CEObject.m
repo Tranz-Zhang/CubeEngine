@@ -76,6 +76,7 @@
         _up = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 1, 0));
         _forward = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 0, 1));
         _hasChanged = YES;
+        CEPrintf("EulerAngles: (%.1f, %.1f, %.1f)\n", _eulerAngles.x, _eulerAngles.y, _eulerAngles.z);
     }
 }
 

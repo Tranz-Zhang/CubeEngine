@@ -23,9 +23,11 @@ NSString *const kVertexShader_DirectionalLight = CE_SHADER_STRING
  
  varying vec4 Color;
  varying vec3 Normal;
+ varying vec4 Position;
  
  void main () {
      Color = VertexColor;
+     Position = normalize(VertexPosition);
      Normal = normalize(NormalMatrix * VertexNormal);
      gl_Position = MVPMatrix * VertexPosition;
  }
@@ -34,6 +36,12 @@ NSString *const kVertexShader_DirectionalLight = CE_SHADER_STRING
 NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
 (
  precision mediump float;
+ 
+ struct TestInfo {
+     vec3 RenderColor;
+     float Range;
+ };
+ uniform TestInfo test[2];
  
  uniform vec3 Ambient;
  uniform vec3 LightColor;
@@ -44,8 +52,16 @@ NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
  
  varying vec4 Color;
  varying vec3 Normal;
+ varying vec4 Position;
  
  void main() {
+     vec4 finalColor;
+     if (Position.y > test[0].Range) {
+         finalColor = vec4(test[0].RenderColor, 1.0);
+     } else {
+         finalColor = vec4(test[1].RenderColor, 0.0);
+     }
+     
      float diffuse = max(0.0, dot(Normal, LightDirection));
      float specular = max(0.0, dot(Normal, HalfVector));
      
@@ -63,8 +79,8 @@ NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
      // 这里的反射光，即高光，最终是直接叠加在Color上面的
      vec3 reflectedLight = LightColor * specular * Strength;
      
-     vec3 rgb = min(Color.rgb * scatteredLight + reflectedLight, vec3(1.0));
-     gl_FragColor = vec4(rgb, Color.a);
+     vec3 rgb = min(finalColor.rgb * scatteredLight + reflectedLight, vec3(1.0));
+     gl_FragColor = vec4(rgb, finalColor.a);
  }
  );
 
@@ -84,6 +100,11 @@ NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
     
     GLint _uniMtx4MVPMatrix;
     GLint _uniMtx3NormalMatrix;
+    
+    GLint _test0_RenderColor;
+    GLint _test0_Range;
+    GLint _test1_RenderColor;
+    GLint _test1_Range;
 }
 
 
@@ -135,6 +156,11 @@ NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
         _uniMtx4MVPMatrix       = [_program uniformIndex:@"MVPMatrix"];
         _uniMtx3NormalMatrix    = [_program uniformIndex:@"NormalMatrix"];
         
+        _test0_RenderColor = [_program uniformIndex:@"test[0].RenderColor"];
+        _test0_Range = [_program uniformIndex:@"test[0].Range"];
+        _test1_RenderColor = [_program uniformIndex:@"test[1].RenderColor"];
+        _test1_Range = [_program uniformIndex:@"test[1].Range"];
+        
     } else {
         // print error info
         NSString *progLog = [_program programLog];
@@ -164,7 +190,7 @@ NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
     
     // setup vertex buffer
     if (![model.vertexBuffer setupBufferWithContext:self.context] ||
-        (model.indicesBuffer && [model.indicesBuffer setupBufferWithContext:self.context])) {
+        (model.indicesBuffer && ![model.indicesBuffer setupBufferWithContext:self.context])) {
         return;
     }
     // prepare for rendering
@@ -185,6 +211,12 @@ NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
     glUniform3f(_uniVec3HalfVector, _halfVector.x, _halfVector.y, _halfVector.z);
     glUniform1f(_uniFloatShiness, _shiniess);
     glUniform1f(_uniFloatStrength, _strength);
+    
+    // test uniform
+    glUniform3f(_test0_RenderColor, 1.0, 0.0, 0.0);
+    glUniform1f(_test0_Range, 0.2);
+    glUniform3f(_test1_RenderColor, 0.0, 0.0, 1.0);
+    glUniform1f(_test1_Range, 0.0);
     
     // setup MVP matrix
     GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);

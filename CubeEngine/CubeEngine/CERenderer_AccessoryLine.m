@@ -9,6 +9,8 @@
 #import "CERenderer_AccessoryLine.h"
 #import "CEProgram.h"
 #import "CECamera_Rendering.h"
+#import "CELight_Rendering.h"
+#import "CEModel.h"
 
 NSString *const kAccessoryVertexShader = CE_SHADER_STRING
 (
@@ -157,6 +159,37 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
     if (_vertexBufferIndex) {
         glDeleteBuffers(1, &_vertexBufferIndex);
         _vertexBufferIndex = 0;
+    }
+}
+
+#pragma mark - Light
+- (void)renderLight:(CELight *)light {
+    if (!_program.initialized || !light) {
+        return;
+    }
+    
+    // setup vertex buffer
+    if (![light.vertexBuffer setupBufferWithContext:self.context] ||
+        (light.indicesBuffer && ![light.indicesBuffer setupBufferWithContext:self.context])) {
+        return;
+    }
+    if (![light.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attributePosition] ||
+        ![light.vertexBuffer prepareAttribute:CEVBOAttributeColor withProgramIndex:_attributeVertexColor]) {
+        return;
+    }
+    if (light.indicesBuffer && ![light.indicesBuffer prepareForRendering]) {
+        return;
+    }
+    [_program use];
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.viewMatrix, light.transformMatrix);
+    projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, projectionMatrix);
+    glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
+    glLineWidth(1.0);
+    
+    if (light.indicesBuffer) {
+        glDrawElements(GL_LINES, light.indicesBuffer.indicesCount, light.indicesBuffer.indicesDataType, 0);
+    } else {
+        glDrawArrays(GL_LINES, 0, light.vertexBuffer.vertexCount);
     }
 }
 

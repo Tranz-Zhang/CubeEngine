@@ -29,3 +29,11 @@ void CEGetEulerAngles(GLKQuaternion q, float *y, float *z, float *x);
     原始数据的元数据大小，数据类型在压缩过程中可能会变更。
  */
 void CompressIndicesData(NSData *originalData, NSData **compressedData, GLsizei *elementSize);
+
+
+#pragma mark - Color To Vector
+
+GLKVector3 Vec3WithColor(UIColor *color);
+
+GLKVector4 Vec4WithColor(UIColor *color);
+

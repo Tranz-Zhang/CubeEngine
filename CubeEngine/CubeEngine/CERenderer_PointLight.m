@@ -11,7 +11,6 @@
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
 
-
 NSString *const kVertexShader_PointLight = CE_SHADER_STRING
 (
  attribute highp vec4 VertexPosition;
@@ -196,7 +195,7 @@ NSString *const kFragmentSahder_PointLight = CE_SHADER_STRING
     
     // setup vertex buffer
     if (![model.vertexBuffer setupBufferWithContext:self.context] ||
-        (model.indicesBuffer && [model.indicesBuffer setupBufferWithContext:self.context])) {
+        (model.indicesBuffer && ![model.indicesBuffer setupBufferWithContext:self.context])) {
         return;
     }
     // prepare for rendering

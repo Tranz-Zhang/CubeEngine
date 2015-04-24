@@ -156,7 +156,18 @@ void CompressUnsignedShortIndicesData(NSData *originalData, NSData **outputData,
 //*/
 
 
+#pragma mark - Color To Vector
+GLKVector3 Vec3WithColor(UIColor *color) {
+    CGFloat r, g, b;
+    [color getRed:&r green:&g blue:&b alpha:NULL];
+    return GLKVector3Make(r, g, b);
+}
 
+GLKVector4 Vec4WithColor(UIColor *color) {
+    CGFloat r, g, b, a;
+    [color getRed:&r green:&g blue:&b alpha:&a];
+    return GLKVector4Make(r, g, b, a);
+}
 
 
 

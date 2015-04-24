@@ -166,7 +166,7 @@ NSString *const kFragmentSahder_DEV = CE_SHADER_STRING
     
     // setup vertex buffer
     if (![model.vertexBuffer setupBufferWithContext:self.context] ||
-        (model.indicesBuffer && [model.indicesBuffer setupBufferWithContext:self.context])) {
+        (model.indicesBuffer && ![model.indicesBuffer setupBufferWithContext:self.context])) {
         return;
     }
     // prepare for rendering

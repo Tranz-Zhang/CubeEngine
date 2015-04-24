@@ -16,6 +16,8 @@
 @interface CERenderManager : NSObject
 
 @property (nonatomic, weak) CECamera *camera;
+@property (nonatomic, strong) NSArray *lights;
+@property (nonatomic, copy) UIColor *backgroundColor;
 
 - (instancetype)initWithContext:(EAGLContext *)context;
 

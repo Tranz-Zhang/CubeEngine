@@ -9,11 +9,14 @@
 #import "CEScene.h"
 #import "CECamera_Rendering.h"
 #import "CERenderManager.h"
+#import "CEDebugRenderManager.h"
 
 @interface CEScene () {
     EAGLContext *_context;
     CERenderManager *_renderManager;
+    CEDebugRenderManager *_debugRenderManager;
     NSMutableArray *_renderObjects;
+    NSMutableArray *_lights;
 }
 
 @end
@@ -26,6 +29,8 @@
     self = [super init];
     if (self) {
         _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+        _renderObjects = [NSMutableArray array];
+        _lights = [NSMutableArray array];
         
         _camera = [[CECamera alloc] init];
         _camera.radianDegree = 65;
@@ -36,7 +41,8 @@
         
         _renderManager = [[CERenderManager alloc] initWithContext:_context];
         _renderManager.camera = _camera;
-        _renderObjects = [NSMutableArray array];
+        _debugRenderManager = [[CEDebugRenderManager alloc] initWithContext:_context];
+        _debugRenderManager.camera = _camera;
     }
     return self;
 }
@@ -47,8 +53,14 @@
     return _context;
 }
 
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
+    if (_backgroundColor != backgroundColor) {
+        _backgroundColor = [backgroundColor copy];
+        _renderManager.backgroundColor = backgroundColor;
+    }
+}
 
-#pragma mark -
+#pragma mark - Model
 - (void)addModel:(CEModel *)model {
     if ([model isKindOfClass:[CEModel class]]) {
         [_renderObjects addObject:model];
@@ -60,8 +72,23 @@
 
 
 - (void)removeModel:(CEModel *)model {
-    if (model) {
-        [_renderObjects removeObject:model];
+    [_renderObjects removeObject:model];
+}
+
+
+#pragma mark - Light
+- (void)addLight:(CELight *)light {
+    if ([light isKindOfClass:[CELight class]] &&
+        _lights.count < [CELight maxLightCount]) {
+        [_lights addObject:light];
+        _renderManager.lights = _lights;
+    }
+}
+
+- (void)removeLight:(CELight *)light {
+    if ([light isKindOfClass:[CELight class]]) {
+        [_lights removeObject:light];
+        _renderManager.lights = _lights;
     }
 }
 
@@ -69,6 +96,10 @@
 - (void)update {
     [EAGLContext setCurrentContext:_context];
     [_renderManager renderModels:_renderObjects];
+    
+    [_debugRenderManager renderWireframeForModels:_renderObjects];
+    [_debugRenderManager renderLights:_lights];
+//    [_debugRenderManager renderWorldSpaceCoordinates];
 }
 
 

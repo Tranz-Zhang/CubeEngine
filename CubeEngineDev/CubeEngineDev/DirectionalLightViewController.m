@@ -7,11 +7,15 @@
 //
 
 #import "DirectionalLightViewController.h"
-#import "CERenderer_DirectionalLight.h"
 #import "Common.h"
+#import "CEDirectionalLight.h"
+#import "CEPointLight.h"
 
 @interface DirectionalLightViewController ()<UIGestureRecognizerDelegate> {
+    CEObject *_operationObject;
     CEModel *_testModel;
+    CEDirectionalLight *_diractionalLight;
+    CEPointLight *_pointLight;
 }
 
 @property (nonatomic, copy) UIColor *defaultColor;
@@ -22,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *floatSlider;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *singleValueSegment;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *attributeSegment;
+@property (weak, nonatomic) IBOutlet UISwitch *lightOpereationSwitch;
 
 @end
 
@@ -29,12 +34,27 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.scene.backgroundColor = [UIColor whiteColor];
     self.scene.camera.position = GLKVector3Make(0, 30, 30);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
     _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
     _testModel.showAccessoryLine = YES;
+    _testModel.baseColor = [UIColor orangeColor];
     [self.scene addModel:_testModel];
+    _operationObject = _testModel;
+    _lightOpereationSwitch.on = NO;
+    
+    _diractionalLight = [[CEDirectionalLight alloc] init];
+    _diractionalLight.position = GLKVector3Make(8, 15, 0);
+    _diractionalLight.scale = GLKVector3MultiplyScalar(_diractionalLight.scale, 5);
+    [self.scene addLight:_diractionalLight];
+    
+    _pointLight = [CEPointLight new];
+    _pointLight.scale = GLKVector3MultiplyScalar(_pointLight.scale, 5);
+    _pointLight.position = GLKVector3Make(-8, 15, 0);
+    _pointLight.specularItensity = 0.5;
+    [self.scene addLight:_pointLight];
     
     // add gesture
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGesture:)];
@@ -52,8 +72,19 @@
 - (IBAction)onReset:(id)sender {
     _testModel.eulerAngles = GLKVector3Make(0, 0, 0);
     _testModel.scale = GLKVector3Make(1, 1, 1);
+    _diractionalLight.eulerAngles = GLKVector3Make(0, 0, 0);
     _attributeSegment.selectedSegmentIndex = UISegmentedControlNoSegment;
     _singleValueSegment.selectedSegmentIndex = UISegmentedControlNoSegment;
+}
+
+
+- (IBAction)onLightOperationSwitch:(UISwitch *)sender {
+    if (sender.on) {
+        _operationObject = _diractionalLight;
+        
+    } else {
+        _operationObject = _testModel;
+    }
 }
 
 
@@ -61,19 +92,13 @@
 - (IBAction)onAttributeSegmentChanged:(UISegmentedControl *)segment {
     switch (_attributeSegment.selectedSegmentIndex) {
         case 0:
-            [self setDefaultColor:ColorWithVec4([CERenderer_DirectionalLight shareRenderer].vertexColor)];
+            [self setDefaultColor:_testModel.baseColor];
             break;
         case 1:
-            [self setDefaultColor:ColorWithVec3([CERenderer_DirectionalLight shareRenderer].ambientColor)];
+            [self setDefaultColor:_diractionalLight.ambientColor];
             break;
         case 2:
-            [self setDefaultColor:ColorWithVec3([CERenderer_DirectionalLight shareRenderer].lightColor)];
-            break;
-        case 3:
-            [self setDefaultColor:ColorWithVec3([CERenderer_DirectionalLight shareRenderer].lightDirection)];
-            break;
-        case 4:
-            [self setDefaultColor:ColorWithVec3([CERenderer_DirectionalLight shareRenderer].halfVector)];
+            [self setDefaultColor:_diractionalLight.lightColor];
             break;
             
         case UISegmentedControlNoSegment:
@@ -115,21 +140,13 @@
     
     switch (_attributeSegment.selectedSegmentIndex) {
         case 0:
-            [CERenderer_DirectionalLight shareRenderer].vertexColor = Vec4WithColor(color);
+            _testModel.baseColor = color;
             break;
         case 1:
-            [CERenderer_DirectionalLight shareRenderer].ambientColor = Vec3WithColor(color);
+            _diractionalLight.ambientColor = color;
             break;
         case 2:
-            [CERenderer_DirectionalLight shareRenderer].lightColor = Vec3WithColor(color);
-            break;
-        case 3:
-            [CERenderer_DirectionalLight shareRenderer].lightDirection = GLKVector3Make(_redSlider.value * 2 - 1,
-                                                                                        _greenSlider.value * 2 - 1,
-                                                                                        _blueSlider.value * 2 - 1);
-            break;
-        case 4:
-            [CERenderer_DirectionalLight shareRenderer].halfVector = Vec3WithColor(color);
+            _diractionalLight.lightColor = color;
             break;
         case UISegmentedControlNoSegment:
         default:
@@ -143,10 +160,10 @@
 - (IBAction)onSingleValueSegmentChanged:(id)segment {
     switch (_singleValueSegment.selectedSegmentIndex) {
         case 0:
-            [_floatSlider setValue:[CERenderer_DirectionalLight shareRenderer].shiniess / 30.0f animated:YES];
+            [_floatSlider setValue:_diractionalLight.shiniess / 30.0f animated:YES];
             break;
         case 1:
-            [_floatSlider setValue:[CERenderer_DirectionalLight shareRenderer].strength animated:YES];
+            [_floatSlider setValue:_diractionalLight.specularItensity animated:YES];
             break;
         default:
             break;
@@ -156,10 +173,10 @@
 - (IBAction)onFloatSliderChanged:(UISlider *)slider {
     switch (_singleValueSegment.selectedSegmentIndex) {
         case 0:
-            [CERenderer_DirectionalLight shareRenderer].shiniess = MAX(1, slider.value * 30);
+            _diractionalLight.shiniess = MAX(1, slider.value * 30);
             break;
         case 1:
-            [CERenderer_DirectionalLight shareRenderer].strength = slider.value;
+            _diractionalLight.specularItensity = slider.value;
             break;
         default:
             break;
@@ -176,14 +193,15 @@ static bool isHorizontalPan;
     } else if (panGesture.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [panGesture translationInView:self.view];
         [panGesture setTranslation:CGPointZero inView:self.view];
-        GLKVector3 eulerAngles = _testModel.eulerAngles;
+        GLKVector3 eulerAngles = _operationObject.eulerAngles;
         if (isHorizontalPan) {
             eulerAngles.y += translation.x;
             
         } else {
             eulerAngles.z -= translation.y;
         }
-        _testModel.eulerAngles = eulerAngles;
+        _operationObject.eulerAngles = eulerAngles;
+        NSLog(@"%@", [NSString stringWithFormat:@"Y: %.2f° Z: %.2f°", eulerAngles.y, eulerAngles.z]);
         
     } else if (panGesture.state == UIGestureRecognizerStateEnded ||
                panGesture.state == UIGestureRecognizerStateCancelled) {
@@ -196,7 +214,7 @@ static bool isHorizontalPan;
     if (pinchGesture.state == UIGestureRecognizerStateBegan) {
         
     } else if (pinchGesture.state == UIGestureRecognizerStateChanged) {
-        _testModel.scale = GLKVector3MultiplyScalar(_testModel.scale, pinchGesture.scale);;
+        _operationObject.scale = GLKVector3MultiplyScalar(_operationObject.scale, pinchGesture.scale);;
         pinchGesture.scale = 1;
         
     } else if (pinchGesture.state == UIGestureRecognizerStateEnded ||
@@ -210,9 +228,9 @@ static bool isHorizontalPan;
     if (rotationGesture.state == UIGestureRecognizerStateBegan) {
         
     } else if (rotationGesture.state == UIGestureRecognizerStateChanged) {
-        GLKVector3 eulerAngles = _testModel.eulerAngles;
+        GLKVector3 eulerAngles = _operationObject.eulerAngles;
         eulerAngles.x -= rotationGesture.rotation * 90;
-        _testModel.eulerAngles = eulerAngles;
+        _operationObject.eulerAngles = eulerAngles;
         rotationGesture.rotation = 0;
         
     } else if (rotationGesture.state == UIGestureRecognizerStateEnded ||

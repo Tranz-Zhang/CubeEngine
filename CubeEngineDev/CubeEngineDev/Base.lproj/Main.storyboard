@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="CtP-NC-lRH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="EeN-hv-xmw">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
@@ -339,23 +339,9 @@
                                     <action selector="onBlueSliderChanged:" destination="EeN-hv-xmw" eventType="valueChanged" id="LLW-sR-DWS"/>
                                 </connections>
                             </slider>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="vnp-So-huU">
-                                <rect key="frame" x="16" y="416" width="288" height="29"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <segments>
-                                    <segment title="Vertex"/>
-                                    <segment title="Ambient"/>
-                                    <segment title="Light"/>
-                                    <segment title="Direct"/>
-                                    <segment title="Half"/>
-                                </segments>
-                                <connections>
-                                    <action selector="onAttributeSegmentChanged:" destination="EeN-hv-xmw" eventType="valueChanged" id="g7s-uQ-UcO"/>
-                                </connections>
-                            </segmentedControl>
                             <view contentMode="scaleToFill" id="pi8-43-cv2">
                                 <rect key="frame" x="274" y="342" width="30" height="28"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="CGV-bc-5aL">
@@ -386,6 +372,32 @@
                                     <action selector="onFloatSliderChanged:" destination="EeN-hv-xmw" eventType="valueChanged" id="FYS-3I-Bav"/>
                                 </connections>
                             </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Light" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Qp1-ky-dkJ">
+                                <rect key="frame" x="265" y="9" width="33" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="o3s-nb-IPr">
+                                <rect key="frame" x="255" y="28" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="onLightOperationSwitch:" destination="EeN-hv-xmw" eventType="valueChanged" id="gcb-eO-8zd"/>
+                                </connections>
+                            </switch>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="vnp-So-huU">
+                                <rect key="frame" x="16" y="416" width="288" height="29"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <segments>
+                                    <segment title="Base"/>
+                                    <segment title="Ambient"/>
+                                    <segment title="Light"/>
+                                </segments>
+                                <connections>
+                                    <action selector="onAttributeSegmentChanged:" destination="EeN-hv-xmw" eventType="valueChanged" id="g7s-uQ-UcO"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -395,6 +407,7 @@
                         <outlet property="colorView" destination="pi8-43-cv2" id="buB-Bz-nGF"/>
                         <outlet property="floatSlider" destination="VwT-0c-2ve" id="ubE-lB-GOu"/>
                         <outlet property="greenSlider" destination="nwN-mF-A5h" id="9Rd-zp-0c8"/>
+                        <outlet property="lightOpereationSwitch" destination="o3s-nb-IPr" id="E5j-36-iei"/>
                         <outlet property="redSlider" destination="gQu-cV-jjs" id="4BG-MY-0bA"/>
                         <outlet property="singleValueSegment" destination="0dP-iq-T4f" id="l7Y-Je-hGv"/>
                     </connections>
