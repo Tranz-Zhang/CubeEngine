@@ -7,14 +7,22 @@
 //
 
 #import "DirectionalLightViewController.h"
+#import "SegmentViewControl.h"
+#import "DirectionalLightControl.h"
 #import "Common.h"
 #import "CEDirectionalLight.h"
 #import "CEPointLight.h"
 
-@interface DirectionalLightViewController ()<UIGestureRecognizerDelegate> {
+#define kLocalWidth self.view.bounds.size.width
+#define kLocalHeight self.view.bounds.size.height
+
+@interface DirectionalLightViewController ()<UIGestureRecognizerDelegate, SegmentViewControlDelegate> {
+    SegmentViewControl *_segmentViewControl;
+    NSMutableArray *_segmentViews;
+    
     CEObject *_operationObject;
     CEModel *_testModel;
-    CEDirectionalLight *_diractionalLight;
+    CEDirectionalLight *_directionalLight;
     CEPointLight *_pointLight;
 }
 
@@ -34,9 +42,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // setup view
+    NSArray *segmentNames = @[@"D-Light", @"P-Light", @"S-Light"];
+    _segmentViews = [NSMutableArray arrayWithCapacity:segmentNames.count];
+    for (int i = 0; i < segmentNames.count; i++) {
+        [_segmentViews addObject:[NSNull null]];
+    }
+    _segmentViewControl = [[SegmentViewControl alloc] initWithBaseView:self.view segmentNames:segmentNames];
+    _segmentViewControl.delegate = self;
+    _segmentViewControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:_segmentViewControl];
+    
     self.scene.backgroundColor = [UIColor whiteColor];
     self.scene.camera.position = GLKVector3Make(0, 30, 30);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
+    self.scene.camera.position = GLKVector3Make(0, 20, 30);
     
     _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
     _testModel.showAccessoryLine = YES;
@@ -45,16 +66,21 @@
     _operationObject = _testModel;
     _lightOpereationSwitch.on = NO;
     
-    _diractionalLight = [[CEDirectionalLight alloc] init];
-    _diractionalLight.position = GLKVector3Make(8, 15, 0);
-    _diractionalLight.scale = GLKVector3MultiplyScalar(_diractionalLight.scale, 5);
-    [self.scene addLight:_diractionalLight];
+    _directionalLight = [[CEDirectionalLight alloc] init];
+    _directionalLight.position = GLKVector3Make(8, 15, 0);
+    _directionalLight.scale = GLKVector3MultiplyScalar(_directionalLight.scale, 5);
+    [self.scene addLight:_directionalLight];
     
     _pointLight = [CEPointLight new];
     _pointLight.scale = GLKVector3MultiplyScalar(_pointLight.scale, 5);
     _pointLight.position = GLKVector3Make(-8, 15, 0);
     _pointLight.specularItensity = 0.5;
     [self.scene addLight:_pointLight];
+    
+    // add directional light control
+//    _directionalLightControl = [DirectionalLightControl loadViewFromNib];
+//    _directionalLightControl.operationLight = _directionalLight;
+//    [self.view addSubview:_directionalLightControl];
     
     // add gesture
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGesture:)];
@@ -72,7 +98,7 @@
 - (IBAction)onReset:(id)sender {
     _testModel.eulerAngles = GLKVector3Make(0, 0, 0);
     _testModel.scale = GLKVector3Make(1, 1, 1);
-    _diractionalLight.eulerAngles = GLKVector3Make(0, 0, 0);
+    _directionalLight.eulerAngles = GLKVector3Make(0, 0, 0);
     _attributeSegment.selectedSegmentIndex = UISegmentedControlNoSegment;
     _singleValueSegment.selectedSegmentIndex = UISegmentedControlNoSegment;
 }
@@ -80,11 +106,52 @@
 
 - (IBAction)onLightOperationSwitch:(UISwitch *)sender {
     if (sender.on) {
-        _operationObject = _diractionalLight;
+        _operationObject = _directionalLight;
         
     } else {
         _operationObject = _testModel;
     }
+}
+
+#pragma mark - SegmentViewControlDelegate
+- (UIView *)viewWithSegmentIndex:(NSUInteger)segmentIndex {
+    UIView *nextView = _segmentViews[segmentIndex];
+    if ([nextView isKindOfClass:[UIView class]]) {
+        return nextView;
+    }
+    
+    // create new views
+    nextView = nil;
+    switch (segmentIndex) {
+        case 0: {
+            DirectionalLightControl *control = [DirectionalLightControl loadViewFromNib];
+            control.operationLight = _directionalLight;
+            nextView = control;
+            break;
+        }
+        case 1: {
+            UILabel *view = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kLocalWidth, 200)];
+            view.textColor = [UIColor grayColor];
+            view.textAlignment = NSTextAlignmentCenter;
+            view.text = @"Point Light Control";
+            nextView = view;
+            break;
+        }
+        case 2: {
+            UILabel *view = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kLocalWidth, 200)];
+            view.textColor = [UIColor grayColor];
+            view.textAlignment = NSTextAlignmentCenter;
+            view.text = @"Spot Light Control";
+            nextView = view;
+            break;
+        }
+        default:
+            break;
+    }
+    if (nextView) {
+        [_segmentViews replaceObjectAtIndex:segmentIndex withObject:nextView];
+    }
+    return nextView;
 }
 
 
@@ -95,10 +162,10 @@
             [self setDefaultColor:_testModel.baseColor];
             break;
         case 1:
-            [self setDefaultColor:_diractionalLight.ambientColor];
+            [self setDefaultColor:_directionalLight.ambientColor];
             break;
         case 2:
-            [self setDefaultColor:_diractionalLight.lightColor];
+            [self setDefaultColor:_directionalLight.lightColor];
             break;
             
         case UISegmentedControlNoSegment:
@@ -143,10 +210,10 @@
             _testModel.baseColor = color;
             break;
         case 1:
-            _diractionalLight.ambientColor = color;
+            _directionalLight.ambientColor = color;
             break;
         case 2:
-            _diractionalLight.lightColor = color;
+            _directionalLight.lightColor = color;
             break;
         case UISegmentedControlNoSegment:
         default:
@@ -160,10 +227,10 @@
 - (IBAction)onSingleValueSegmentChanged:(id)segment {
     switch (_singleValueSegment.selectedSegmentIndex) {
         case 0:
-            [_floatSlider setValue:_diractionalLight.shiniess / 30.0f animated:YES];
+            [_floatSlider setValue:_directionalLight.shiniess / 30.0f animated:YES];
             break;
         case 1:
-            [_floatSlider setValue:_diractionalLight.specularItensity animated:YES];
+            [_floatSlider setValue:_directionalLight.specularItensity animated:YES];
             break;
         default:
             break;
@@ -173,10 +240,10 @@
 - (IBAction)onFloatSliderChanged:(UISlider *)slider {
     switch (_singleValueSegment.selectedSegmentIndex) {
         case 0:
-            _diractionalLight.shiniess = MAX(1, slider.value * 30);
+            _directionalLight.shiniess = MAX(1, slider.value * 30);
             break;
         case 1:
-            _diractionalLight.specularItensity = slider.value;
+            _directionalLight.specularItensity = slider.value;
             break;
         default:
             break;
@@ -201,7 +268,7 @@ static bool isHorizontalPan;
             eulerAngles.z -= translation.y;
         }
         _operationObject.eulerAngles = eulerAngles;
-        NSLog(@"%@", [NSString stringWithFormat:@"Y: %.2f° Z: %.2f°", eulerAngles.y, eulerAngles.z]);
+//        NSLog(@"%@", [NSString stringWithFormat:@"Y: %.2f° Z: %.2f°", eulerAngles.y, eulerAngles.z]);
         
     } else if (panGesture.state == UIGestureRecognizerStateEnded ||
                panGesture.state == UIGestureRecognizerStateCancelled) {

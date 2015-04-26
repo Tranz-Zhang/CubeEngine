@@ -44,7 +44,7 @@ static NSInteger kMaxLightCount = 8;
 - (void)setLightColor:(UIColor *)lightColor {
     if (_lightColor != lightColor) {
         _lightColor = [lightColor copy];
-        _vec3LightColor = Vec3WithColor(lightColor);
+        _vec3LightColor = CEVec3WithColor(lightColor);
         _hasLightChanged = YES;
     }
 }
@@ -52,7 +52,7 @@ static NSInteger kMaxLightCount = 8;
 - (void)setAmbientColor:(UIColor *)ambientColor {
     if (_ambientColor != ambientColor) {
         _ambientColor = [ambientColor copy];
-        _vec3AmbientColor = Vec3WithColor(ambientColor);
+        _vec3AmbientColor = CEVec3WithColor(ambientColor);
         _hasLightChanged = YES;
     }
 }

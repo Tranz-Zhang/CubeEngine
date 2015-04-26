@@ -33,7 +33,7 @@ void CompressIndicesData(NSData *originalData, NSData **compressedData, GLsizei 
 
 #pragma mark - Color To Vector
 
-GLKVector3 Vec3WithColor(UIColor *color);
+GLKVector3 CEVec3WithColor(UIColor *color);
 
-GLKVector4 Vec4WithColor(UIColor *color);
+GLKVector4 CEVec4WithColor(UIColor *color);
 

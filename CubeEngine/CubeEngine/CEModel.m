@@ -70,7 +70,7 @@
 - (void)setBaseColor:(UIColor *)baseColor {
     if (_baseColor != baseColor) {
         _baseColor = [baseColor copy];
-        _vec3BaseColor = Vec4WithColor(baseColor);
+        _vec3BaseColor = CEVec4WithColor(baseColor);
     }
 }
 
