@@ -24,17 +24,17 @@
     self = [super initWithFrame:frame];
     if (self) {
         _baseView = baseView;
-        [self setBackgroundColor:[UIColor whiteColor]];
+        [self setBackgroundColor:[UIColor colorWithWhite:0.96 alpha:1]];
         
         CGFloat margin = (kTopBarHeight - 29) / 2;
         UIView *barBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kLocalWidth, kTopBarHeight)];
-        barBackgroundView.backgroundColor = [UIColor lightGrayColor];
+        barBackgroundView.backgroundColor = [UIColor grayColor];
         barBackgroundView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleWidth;
         [self addSubview:barBackgroundView];
         
         UISegmentedControl *segment = [[UISegmentedControl alloc] initWithItems:segmentNames];
         segment.selectedSegmentIndex = UISegmentedControlNoSegment;
-        segment.tintColor = [UIColor whiteColor];
+        segment.tintColor = [UIColor colorWithWhite:0.9 alpha:1];
         segment.frame = CGRectMake(margin, margin, kLocalWidth - margin - kHideButtonWidth, 29);
         segment.autoresizingMask = barBackgroundView.autoresizingMask;
         [segment addTarget:self action:@selector(onSegmentControlChanged:) forControlEvents:UIControlEventValueChanged];

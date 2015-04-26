@@ -13,8 +13,13 @@ GLKVector3 Vec3WithColor(UIColor *color);
 
 GLKVector4 Vec4WithColor(UIColor *color);
 
-UIColor * ColorWithVec3(GLKVector3 vec3);
+UIColor *ColorWithVec3(GLKVector3 vec3);
 
-UIColor * ColorWithVec4(GLKVector4 vec4);
+UIColor *ColorWithVec4(GLKVector4 vec4);
+
+// Axis Color
+UIColor *ColorOfAxisX();
+UIColor *ColosOfAxisY();
+UIColor *ColosOfAxisZ();
 
 #endif

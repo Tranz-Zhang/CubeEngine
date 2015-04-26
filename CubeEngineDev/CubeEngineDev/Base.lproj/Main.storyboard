@@ -515,8 +515,37 @@
                     <view key="view" contentMode="scaleToFill" id="dUx-SF-Dqs" customClass="GLKView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="B5L-o3-SQd">
+                                <rect key="frame" x="16" y="18" width="288" height="29"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Model"/>
+                                    <segment title="D-Light"/>
+                                    <segment title="P-Light"/>
+                                    <segment title="S-Light"/>
+                                </segments>
+                                <color key="tintColor" red="0.50196081399917603" green="0.50196081399917603" blue="0.50196081399917603" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="onObjectSegmentChanged:" destination="R24-Ww-GUK" eventType="valueChanged" id="0EW-Oi-zpu"/>
+                                </connections>
+                            </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Fej-4d-eba">
+                                <rect key="frame" x="0.0" y="75" width="64" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Reset">
+                                    <color key="titleColor" red="0.50196081399917603" green="0.50196081399917603" blue="0.50196081399917603" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onReset:" destination="R24-Ww-GUK" eventType="touchUpInside" id="aSB-bb-TyI"/>
+                                    <action selector="onReset:" destination="EeN-hv-xmw" eventType="touchUpInside" id="slS-XI-qQW"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vwt-yx-hf4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

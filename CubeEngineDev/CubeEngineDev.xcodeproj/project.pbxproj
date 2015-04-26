@@ -31,6 +31,9 @@
 		268CBC6E1ADD466E00795A6D /* teapot.png in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC6B1ADD466E00795A6D /* teapot.png */; };
 		2697626F1AE0B005005E95DA /* DirectionalLightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2697626E1AE0B005005E95DA /* DirectionalLightViewController.m */; };
 		26D4B5731ADF5D0C00EF34E7 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */; };
+		44D0CCE51AECA3E7000C137C /* ObjectOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D0CCE41AECA3E7000C137C /* ObjectOperator.m */; };
+		44D0CCE81AECA677000C137C /* transition_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D0CCE61AECA677000C137C /* transition_icon@2x.png */; };
+		44D0CCE91AECA677000C137C /* rotation_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D0CCE71AECA677000C137C /* rotation_icon@2x.png */; };
 		4C595AF51AEC7C60006900EF /* DirectionalLightControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C595AF41AEC7C60006900EF /* DirectionalLightControl.m */; };
 		4C595AF71AEC7CCD006900EF /* DirectionalLightControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C595AF61AEC7CCD006900EF /* DirectionalLightControl.xib */; };
 		4C595AFB1AEC835D006900EF /* UINibView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C595AFA1AEC835D006900EF /* UINibView.m */; };
@@ -99,6 +102,10 @@
 		2697626E1AE0B005005E95DA /* DirectionalLightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionalLightViewController.m; sourceTree = "<group>"; };
 		26D4B5711ADF5D0C00EF34E7 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		44D0CCE31AECA3E7000C137C /* ObjectOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectOperator.h; sourceTree = "<group>"; };
+		44D0CCE41AECA3E7000C137C /* ObjectOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectOperator.m; sourceTree = "<group>"; };
+		44D0CCE61AECA677000C137C /* transition_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "transition_icon@2x.png"; sourceTree = "<group>"; };
+		44D0CCE71AECA677000C137C /* rotation_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rotation_icon@2x.png"; sourceTree = "<group>"; };
 		4C595AF31AEC7C60006900EF /* DirectionalLightControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionalLightControl.h; sourceTree = "<group>"; };
 		4C595AF41AEC7C60006900EF /* DirectionalLightControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionalLightControl.m; sourceTree = "<group>"; };
 		4C595AF61AEC7CCD006900EF /* DirectionalLightControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DirectionalLightControl.xib; sourceTree = "<group>"; };
@@ -153,7 +160,7 @@
 		26193F791AA833BF00787C64 /* CubeEngineDev */ = {
 			isa = PBXGroup;
 			children = (
-				4C595AF21AEC7C25006900EF /* AccessoryView */,
+				4C595AF21AEC7C25006900EF /* Accessory */,
 				261CD42E1AD3DE3D00C521CC /* Models */,
 				263C8E6A1AE630ED004FDFE8 /* Common.h */,
 				263C8E6F1AE63271004FDFE8 /* Common.m */,
@@ -238,19 +245,23 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		4C595AF21AEC7C25006900EF /* AccessoryView */ = {
+		4C595AF21AEC7C25006900EF /* Accessory */ = {
 			isa = PBXGroup;
 			children = (
+				44D0CCE31AECA3E7000C137C /* ObjectOperator.h */,
+				44D0CCE41AECA3E7000C137C /* ObjectOperator.m */,
+				4C595AFC1AEC8572006900EF /* SegmentViewControl.h */,
+				4C595AFD1AEC8572006900EF /* SegmentViewControl.m */,
 				4C595AF91AEC835D006900EF /* UINibView.h */,
 				4C595AFA1AEC835D006900EF /* UINibView.m */,
 				4C595AF31AEC7C60006900EF /* DirectionalLightControl.h */,
 				4C595AF41AEC7C60006900EF /* DirectionalLightControl.m */,
 				4C595AF61AEC7CCD006900EF /* DirectionalLightControl.xib */,
-				4C595AFC1AEC8572006900EF /* SegmentViewControl.h */,
-				4C595AFD1AEC8572006900EF /* SegmentViewControl.m */,
 				4C595AFF1AEC90CC006900EF /* hide_icon@2x.png */,
+				44D0CCE61AECA677000C137C /* transition_icon@2x.png */,
+				44D0CCE71AECA677000C137C /* rotation_icon@2x.png */,
 			);
-			name = AccessoryView;
+			name = Accessory;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -355,10 +366,12 @@
 				268CBC6E1ADD466E00795A6D /* teapot.png in Resources */,
 				261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */,
 				263C8E791AE68738004FDFE8 /* teapot.obj in Resources */,
+				44D0CCE91AECA677000C137C /* rotation_icon@2x.png in Resources */,
 				2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */,
 				268CBC661ADD412200795A6D /* cube.obj in Resources */,
 				261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */,
 				26193F861AA833BF00787C64 /* Main.storyboard in Resources */,
+				44D0CCE81AECA677000C137C /* transition_icon@2x.png in Resources */,
 				4C595AF71AEC7CCD006900EF /* DirectionalLightControl.xib in Resources */,
 				263C8E781AE68738004FDFE8 /* teapot_smooth.obj in Resources */,
 				26193F881AA833BF00787C64 /* Images.xcassets in Resources */,
@@ -395,6 +408,7 @@
 				26193F7D1AA833BF00787C64 /* main.m in Sources */,
 				2697626F1AE0B005005E95DA /* DirectionalLightViewController.m in Sources */,
 				4C595B031AEC9480006900EF /* LightViewController.m in Sources */,
+				44D0CCE51AECA3E7000C137C /* ObjectOperator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,7 +7,7 @@
 //
 
 #import "LightViewController.h"
-
+#import "ObjectOperator.h"
 #import "SegmentViewControl.h"
 #import "DirectionalLightControl.h"
 #import "Common.h"
@@ -20,6 +20,7 @@
 @interface LightViewController () <SegmentViewControlDelegate> {
     SegmentViewControl *_segmentViewControl;
     NSMutableArray *_segmentViews;
+    ObjectOperator *_objectOperator;
     
     CEModel *_testModel;
     CEDirectionalLight *_directionalLight;
@@ -33,6 +34,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _objectOperator = [[ObjectOperator alloc] initWithBaseView:self.view];
     
     // setup view
     NSArray *segmentNames = @[@"D-Light", @"P-Light", @"S-Light"];
@@ -48,7 +50,7 @@
     self.scene.backgroundColor = [UIColor whiteColor];
     self.scene.camera.position = GLKVector3Make(0, 30, 30);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
-    self.scene.camera.position = GLKVector3Make(0, 20, 30);
+    self.scene.camera.position = GLKVector3Make(0, 35, 50);
     
     _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
     _testModel.showAccessoryLine = YES;
@@ -57,14 +59,50 @@
     
     _directionalLight = [[CEDirectionalLight alloc] init];
     _directionalLight.position = GLKVector3Make(8, 15, 0);
-    _directionalLight.scale = GLKVector3MultiplyScalar(_directionalLight.scale, 5);
+    _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [self.scene addLight:_directionalLight];
     
     _pointLight = [CEPointLight new];
-    _pointLight.scale = GLKVector3MultiplyScalar(_pointLight.scale, 5);
+    _pointLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     _pointLight.position = GLKVector3Make(-8, 15, 0);
     _pointLight.specularItensity = 0.5;
     [self.scene addLight:_pointLight];
+
+    _objectOperator.operationObject = _testModel;
+}
+
+
+- (IBAction)onReset:(id)sender {
+    _testModel.position = GLKVector3Make(0, 0, 0);
+    _testModel.eulerAngles = GLKVector3Make(0, 0, 0);
+    _testModel.scale = GLKVector3Make(1, 1, 1);
+    
+    _directionalLight.position = GLKVector3Make(8, 15, 0);
+    _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
+    _directionalLight.eulerAngles = GLKVector3Make(0, 0, 0);
+    
+    _pointLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
+    _pointLight.position = GLKVector3Make(-8, 15, 0);
+}
+
+- (IBAction)onObjectSegmentChanged:(UISegmentedControl *)segment {
+    switch (segment.selectedSegmentIndex) {
+        case 0:
+            _objectOperator.operationObject = _testModel;
+            break;
+        case 1:
+            _objectOperator.operationObject = _directionalLight;
+            break;
+        case 2:
+            _objectOperator.operationObject = _pointLight;
+            break;
+        case 3:
+            _objectOperator.operationObject = nil;
+            break;
+            
+        default:
+            break;
+    }
 }
 
 
