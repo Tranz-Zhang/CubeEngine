@@ -34,6 +34,8 @@
 		44D0CCE51AECA3E7000C137C /* ObjectOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D0CCE41AECA3E7000C137C /* ObjectOperator.m */; };
 		44D0CCE81AECA677000C137C /* transition_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D0CCE61AECA677000C137C /* transition_icon@2x.png */; };
 		44D0CCE91AECA677000C137C /* rotation_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D0CCE71AECA677000C137C /* rotation_icon@2x.png */; };
+		44D0CCEC1AECFEBC000C137C /* PointLightControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D0CCEB1AECFEBC000C137C /* PointLightControl.m */; };
+		44D0CCEE1AED26E8000C137C /* PointLightControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44D0CCED1AED26E8000C137C /* PointLightControl.xib */; };
 		4C595AF51AEC7C60006900EF /* DirectionalLightControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C595AF41AEC7C60006900EF /* DirectionalLightControl.m */; };
 		4C595AF71AEC7CCD006900EF /* DirectionalLightControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C595AF61AEC7CCD006900EF /* DirectionalLightControl.xib */; };
 		4C595AFB1AEC835D006900EF /* UINibView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C595AFA1AEC835D006900EF /* UINibView.m */; };
@@ -106,6 +108,9 @@
 		44D0CCE41AECA3E7000C137C /* ObjectOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectOperator.m; sourceTree = "<group>"; };
 		44D0CCE61AECA677000C137C /* transition_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "transition_icon@2x.png"; sourceTree = "<group>"; };
 		44D0CCE71AECA677000C137C /* rotation_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rotation_icon@2x.png"; sourceTree = "<group>"; };
+		44D0CCEA1AECFEBC000C137C /* PointLightControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointLightControl.h; sourceTree = "<group>"; };
+		44D0CCEB1AECFEBC000C137C /* PointLightControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointLightControl.m; sourceTree = "<group>"; };
+		44D0CCED1AED26E8000C137C /* PointLightControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PointLightControl.xib; sourceTree = "<group>"; };
 		4C595AF31AEC7C60006900EF /* DirectionalLightControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionalLightControl.h; sourceTree = "<group>"; };
 		4C595AF41AEC7C60006900EF /* DirectionalLightControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionalLightControl.m; sourceTree = "<group>"; };
 		4C595AF61AEC7CCD006900EF /* DirectionalLightControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DirectionalLightControl.xib; sourceTree = "<group>"; };
@@ -257,6 +262,9 @@
 				4C595AF31AEC7C60006900EF /* DirectionalLightControl.h */,
 				4C595AF41AEC7C60006900EF /* DirectionalLightControl.m */,
 				4C595AF61AEC7CCD006900EF /* DirectionalLightControl.xib */,
+				44D0CCEA1AECFEBC000C137C /* PointLightControl.h */,
+				44D0CCEB1AECFEBC000C137C /* PointLightControl.m */,
+				44D0CCED1AED26E8000C137C /* PointLightControl.xib */,
 				4C595AFF1AEC90CC006900EF /* hide_icon@2x.png */,
 				44D0CCE61AECA677000C137C /* transition_icon@2x.png */,
 				44D0CCE71AECA677000C137C /* rotation_icon@2x.png */,
@@ -365,6 +373,7 @@
 				261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */,
 				268CBC6E1ADD466E00795A6D /* teapot.png in Resources */,
 				261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */,
+				44D0CCEE1AED26E8000C137C /* PointLightControl.xib in Resources */,
 				263C8E791AE68738004FDFE8 /* teapot.obj in Resources */,
 				44D0CCE91AECA677000C137C /* rotation_icon@2x.png in Resources */,
 				2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */,
@@ -399,6 +408,7 @@
 				263C8E641AE62DE4004FDFE8 /* PointLightViewController.m in Sources */,
 				261CD42D1AD3DE0000C521CC /* ModelViewController.m in Sources */,
 				26193F831AA833BF00787C64 /* ViewController.m in Sources */,
+				44D0CCEC1AECFEBC000C137C /* PointLightControl.m in Sources */,
 				26193F801AA833BF00787C64 /* AppDelegate.m in Sources */,
 				263C8E701AE63271004FDFE8 /* Common.m in Sources */,
 				4C595AF51AEC7C60006900EF /* DirectionalLightControl.m in Sources */,

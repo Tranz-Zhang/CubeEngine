@@ -530,8 +530,29 @@
                                     <action selector="onObjectSegmentChanged:" destination="R24-Ww-GUK" eventType="valueChanged" id="0EW-Oi-zpu"/>
                                 </connections>
                             </segmentedControl>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="3po-Tk-tsg">
+                                <rect key="frame" x="101" y="54" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="onDirectionalLightSwitch:" destination="R24-Ww-GUK" eventType="valueChanged" id="WMl-Wg-iz7"/>
+                                </connections>
+                            </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="LAq-a8-eG8">
+                                <rect key="frame" x="173" y="54" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="onPointLightSwitch:" destination="R24-Ww-GUK" eventType="valueChanged" id="41X-mj-6lU"/>
+                                </connections>
+                            </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="KxX-mS-GtB">
+                                <rect key="frame" x="245" y="54" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="onSpotLightSwitch:" destination="R24-Ww-GUK" eventType="valueChanged" id="txq-4n-gzp"/>
+                                </connections>
+                            </switch>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Fej-4d-eba">
-                                <rect key="frame" x="0.0" y="75" width="64" height="30"/>
+                                <rect key="frame" x="16" y="55" width="64" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Reset">
                                     <color key="titleColor" red="0.50196081399917603" green="0.50196081399917603" blue="0.50196081399917603" alpha="1" colorSpace="calibratedRGB"/>
@@ -546,6 +567,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="_directionalLightSwitch" destination="3po-Tk-tsg" id="mfr-d6-xl2"/>
+                        <outlet property="_pointLightSwitch" destination="LAq-a8-eG8" id="RBl-F3-ZbX"/>
+                        <outlet property="_spotLightSwitch" destination="KxX-mS-GtB" id="bKA-Fb-C5c"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vwt-yx-hf4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

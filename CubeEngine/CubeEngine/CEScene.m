@@ -60,6 +60,14 @@
     }
 }
 
+- (NSArray *)allRenderObjects {
+    return [_renderObjects copy];
+}
+
+- (NSArray *)allLights {
+    return _lights.copy;
+}
+
 #pragma mark - Model
 - (void)addModel:(CEModel *)model {
     if ([model isKindOfClass:[CEModel class]]) {
@@ -78,8 +86,9 @@
 
 #pragma mark - Light
 - (void)addLight:(CELight *)light {
-    if ([light isKindOfClass:[CELight class]] &&
-        _lights.count < [CELight maxLightCount]) {
+    if (_lights.count < [CELight maxLightCount] &&
+        [light isKindOfClass:[CELight class]] &&
+        ![_lights containsObject:light]) {
         [_lights addObject:light];
         _renderManager.lights = _lights;
     }

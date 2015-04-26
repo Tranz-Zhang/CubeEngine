@@ -27,8 +27,8 @@
         infoLabel.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
         infoLabel.font = [UIFont systemFontOfSize:13];
         infoLabel.textAlignment = NSTextAlignmentCenter;
-        infoLabel.center = CGPointMake(baseView.bounds.size.width / 2, 60);
-        infoLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+        infoLabel.center = CGPointMake(baseView.bounds.size.width / 2, baseView.bounds.size.height / 2);
+        infoLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
         infoLabel.hidden = YES;
         [_baseView addSubview:infoLabel];
         _infoLabel = infoLabel;

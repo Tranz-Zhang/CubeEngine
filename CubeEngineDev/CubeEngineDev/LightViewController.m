@@ -7,12 +7,12 @@
 //
 
 #import "LightViewController.h"
+#import "Common.h"
 #import "ObjectOperator.h"
 #import "SegmentViewControl.h"
 #import "DirectionalLightControl.h"
-#import "Common.h"
-#import "CEDirectionalLight.h"
-#import "CEPointLight.h"
+#import "PointLightControl.h"
+
 
 #define kLocalWidth self.view.bounds.size.width
 #define kLocalHeight self.view.bounds.size.height
@@ -25,6 +25,10 @@
     CEModel *_testModel;
     CEDirectionalLight *_directionalLight;
     CEPointLight *_pointLight;
+    
+    __weak IBOutlet UISwitch *_directionalLightSwitch;
+    __weak IBOutlet UISwitch *_pointLightSwitch;
+    __weak IBOutlet UISwitch *_spotLightSwitch;
 }
 
 
@@ -60,7 +64,7 @@
     _directionalLight = [[CEDirectionalLight alloc] init];
     _directionalLight.position = GLKVector3Make(8, 15, 0);
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
-    [self.scene addLight:_directionalLight];
+//    [self.scene addLight:_directionalLight];
     
     _pointLight = [CEPointLight new];
     _pointLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
@@ -69,6 +73,12 @@
     [self.scene addLight:_pointLight];
 
     _objectOperator.operationObject = _testModel;
+    
+    // update light switches
+    NSArray *lights = self.scene.allLights;
+    _directionalLightSwitch.on = [lights containsObject:_directionalLight];
+    _pointLightSwitch.on = [lights containsObject:_pointLight];
+    _spotLightSwitch.on = NO;
 }
 
 
@@ -105,6 +115,29 @@
     }
 }
 
+- (IBAction)onDirectionalLightSwitch:(UISwitch *)switcher {
+    if (switcher.on) {
+        [self.scene addLight:_directionalLight];
+    } else {
+        [self.scene removeLight:_directionalLight];
+    }
+}
+
+- (IBAction)onPointLightSwitch:(UISwitch *)switcher {
+    if (switcher.on) {
+        [self.scene addLight:_pointLight];
+    } else {
+        [self.scene removeLight:_pointLight];
+    }
+}
+
+- (IBAction)onSpotLightSwitch:(UISwitch *)switcher {
+    if (switcher.on) {
+        [self.scene addLight:nil];
+    } else {
+        [self.scene removeLight:nil];
+    }
+}
 
 #pragma mark - SegmentViewControlDelegate
 - (UIView *)viewWithSegmentIndex:(NSUInteger)segmentIndex {
@@ -123,11 +156,9 @@
             break;
         }
         case 1: {
-            UILabel *view = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kLocalWidth, 200)];
-            view.textColor = [UIColor grayColor];
-            view.textAlignment = NSTextAlignmentCenter;
-            view.text = @"Point Light Control";
-            nextView = view;
+            PointLightControl *control = [PointLightControl loadViewFromNib];
+            control.operationLight = _pointLight;
+            nextView = control;
             break;
         }
         case 2: {

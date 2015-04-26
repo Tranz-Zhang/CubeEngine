@@ -19,7 +19,8 @@
  */
 @interface CEScene : NSObject
 
-@property (atomic, readonly) NSArray *allRenderObjects;
+@property (nonatomic, readonly) NSArray *allRenderObjects;
+@property (nonatomic, readonly) NSArray *allLights;
 @property (nonatomic, readonly) CECamera *camera;
 @property (nonatomic, readonly) EAGLContext *context;
 @property (nonatomic, copy) UIColor *backgroundColor;
