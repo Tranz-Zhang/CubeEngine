@@ -24,6 +24,18 @@ static NSInteger kMaxLightCount = 8;
     return self;
 }
 
++ (NSArray *)defaultVertexBufferAttributes {
+    static NSArray *_sDefaultVertexBufferAttributes = nil;
+    if (!_sDefaultVertexBufferAttributes) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            _sDefaultVertexBufferAttributes = @[[CEVBOAttribute attributeWithname:CEVBOAttributePosition],
+                                                [CEVBOAttribute attributeWithname:CEVBOAttributeColor]];
+        });
+    }
+    return _sDefaultVertexBufferAttributes;
+}
+
 + (NSUInteger)maxLightCount {
     return kMaxLightCount;
 }
@@ -62,7 +74,7 @@ static NSInteger kMaxLightCount = 8;
     [super setPosition:position];
 }
 
-- (void)updateUniforms {
+- (void)updateUniformsWithCamera:(CECamera *)camera {
     // MUST IMPLEMENT BY SUBCLASS
 }
 

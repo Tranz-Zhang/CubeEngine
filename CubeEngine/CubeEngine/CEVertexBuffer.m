@@ -19,47 +19,54 @@
 {
     self = [super init];
     if (self) {
-        _vertexData = [vertexBufferData copy];
-        _vertexStride = 0;
-        if (attributes.count) {
-            NSMutableDictionary *attributeDirt = [NSMutableDictionary dictionary];
-            NSMutableDictionary *offsetDirt = [NSMutableDictionary dictionary];
-            GLsizei offset = 0;
-            for (CEVBOAttribute *attrib in attributes) {
-                GLsizei attributeSize = attrib.dataSize * attrib.dataCount;
-                if (attributeSize) {
-                    attributeDirt[@(attrib.name)] = attrib;
-                    offsetDirt[@(attrib.name)] = @(offset);
-                    offset += attributeSize;
-                }
-            }
-            _attributeDict = [attributeDirt copy];
-            _offsetDict = [offsetDirt copy];
-            _vertexStride = offset;
-        }
-        // get vertex count
-        if (_vertexData.length &&
-            _vertexStride &&
-            _vertexData.length % _vertexStride == 0) {
-            _vertexCount = (int)_vertexData.length / _vertexStride;
-            
-        } else {
-            _vertexData = nil;
-            _attributeDict = nil;
-            _vertexStride = 0;
-            CEError(@"Fail to initialize vertex buffer");
-        }
-        
-        _ready = NO;
+        [self updateVertexData:vertexBufferData attributes:attributes];
     }
     return self;
 }
+
 
 - (void)dealloc {
     if (_vertexBufferIndex) {
         glDeleteBuffers(1, &_vertexBufferIndex);
         _vertexBufferIndex = 0;
     }
+}
+
+- (BOOL)updateVertexData:(NSData *)vertexData attributes:(NSArray *)attributes {
+    _vertexData = [vertexData copy];
+    _vertexStride = 0;
+    if (attributes.count) {
+        NSMutableDictionary *attributeDirt = [NSMutableDictionary dictionary];
+        NSMutableDictionary *offsetDirt = [NSMutableDictionary dictionary];
+        GLsizei offset = 0;
+        for (CEVBOAttribute *attrib in attributes) {
+            GLsizei attributeSize = attrib.dataSize * attrib.dataCount;
+            if (attributeSize) {
+                attributeDirt[@(attrib.name)] = attrib;
+                offsetDirt[@(attrib.name)] = @(offset);
+                offset += attributeSize;
+            }
+        }
+        _attributeDict = [attributeDirt copy];
+        _offsetDict = [offsetDirt copy];
+        _vertexStride = offset;
+    }
+    // get vertex count
+    if (_vertexData.length &&
+        _vertexStride &&
+        _vertexData.length % _vertexStride == 0) {
+        _vertexCount = (int)_vertexData.length / _vertexStride;
+        _ready = NO;
+        
+    } else {
+        _vertexData = nil;
+        _attributeDict = nil;
+        _vertexStride = 0;
+        CEError(@"Fail to initialize vertex buffer");
+        return NO;
+    }
+    
+    return YES;
 }
 
 // return attribute info with the given name, nil if attribute no found
@@ -81,7 +88,9 @@
         return NO;
     }
     // setup vertex buffer
-    glGenBuffers(1, &_vertexBufferIndex);
+    if (!_vertexBufferIndex) {
+        glGenBuffers(1, &_vertexBufferIndex);
+    }
     if (_vertexBufferIndex) {
         glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
         glBufferData(GL_ARRAY_BUFFER, _vertexData.length, _vertexData.bytes, GL_STATIC_DRAW);

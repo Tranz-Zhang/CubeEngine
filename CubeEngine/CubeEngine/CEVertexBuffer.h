@@ -31,6 +31,12 @@
  */
 - (instancetype)initWithData:(NSData *)vertexData attributes:(NSArray *)attributes;
 
+/** refresh vertex buffer data
+ IMPORTANT: This method will force to the GPU to refresh vertex buffer data, which may have a performance hit.
+ */
+- (BOOL)updateVertexData:(NSData *)vertexData attributes:(NSArray *)attributes;
+
+
 // return attribute info
 - (CEVBOAttribute *)attributeWithName:(CEVBOAttributeName)name;
 

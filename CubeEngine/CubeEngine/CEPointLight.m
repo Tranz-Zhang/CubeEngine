@@ -44,8 +44,7 @@
             -0.15, -0.15, 0.15, 0.0, 0.0, 1.0, 1.0,
         };
         NSData *vertexData = [NSData dataWithBytes:&vertices length:sizeof(vertices)];
-        NSArray *attributes = @[[CEVBOAttribute attributeWithname:CEVBOAttributePosition],
-                                [CEVBOAttribute attributeWithname:CEVBOAttributeColor]];
+        NSArray *attributes = [CELight defaultVertexBufferAttributes];
         _sharedVertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:attributes];
     }
     

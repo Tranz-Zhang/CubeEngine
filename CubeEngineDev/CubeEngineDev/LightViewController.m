@@ -12,7 +12,7 @@
 #import "SegmentViewControl.h"
 #import "DirectionalLightControl.h"
 #import "PointLightControl.h"
-#import "CESpotLight.h"
+#import "SpotLightControl.h"
 
 
 #define kLocalWidth self.view.bounds.size.width
@@ -75,6 +75,7 @@
 //    [self.scene addLight:_pointLight];
     
     _spotLight = [CESpotLight new];
+    _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
     [self.scene addLight:_spotLight];
     
 
@@ -170,11 +171,9 @@
             break;
         }
         case 2: {
-            UILabel *view = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kLocalWidth, 200)];
-            view.textColor = [UIColor grayColor];
-            view.textAlignment = NSTextAlignmentCenter;
-            view.text = @"Spot Light Control";
-            nextView = view;
+            SpotLightControl *control = [SpotLightControl loadViewFromNib];
+            control.operationLight = _spotLight;
+            nextView = control;
             break;
         }
         default:

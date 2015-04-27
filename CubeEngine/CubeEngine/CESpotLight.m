@@ -9,67 +9,67 @@
 #import "CESpotLight.h"
 #import "CELight_Rendering.h"
 
+#define kCirclePointCount 16
 @implementation CESpotLight {
     GLfloat _coneAngleCosine;
+    GLfloat _vertices[(kCirclePointCount + 8) * 7];
 }
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
+        [self setConeAngle:30];
         [self setupSharedVertexBuffer];
         _hasChanged = YES;
         _specularItensity = 1.0;
         _shiniess = 20;
         _attenuation = 0.001;
-        [self setConeAngle:30];
         _spotExponent = 10;
     }
     return self;
 }
 
-#define kCirclePointCount 16
+
+// We share the indicesBuffer, but not the vertexBuffer, because it may change accroding to the coneAngle.
 - (void)setupSharedVertexBuffer {
-    static CEVertexBuffer *_sharedVertexBuffer;
-    static CEIndicesBuffer *_sharedIndicesBuffer;
-    if (!_sharedVertexBuffer) {
-        GLfloat red = 200.0 / 255.0, green = 150.0 / 255.0, blue = 0.0, alpha = 1.0;
-        GLfloat vertices[(kCirclePointCount + 7) * 7] = {0};
-        // create circle points
-        GLfloat radius = 2 * tanf(GLKMathDegreesToRadians(_coneAngle));
-        for (int i = 0; i < kCirclePointCount; i++) {
-            GLfloat angle = i * 2 * M_PI / kCirclePointCount;
-            vertices[i * 7] = 0.5;                        // X
-            vertices[i * 7 + 1] = sin(angle) * radius;  // Y
-            vertices[i * 7 + 2] = cos(angle) * radius;  // Z
-            vertices[i * 7 + 3] = red;                  // red
-            vertices[i * 7 + 4] = green;                // green
-            vertices[i * 7 + 5] = blue;                 // blue
-            vertices[i * 7 + 6] = alpha;                // angle
-        }
-        // add other points
-        GLfloat otherVertices[7 * 7] = {
-            0.0, 0.0, 0.0, red, green, blue, alpha,
-            -0.15, -0.15, -0.15, 1.0, 0.0, 0.0, 1.0,
-            0.15, -0.15, -0.15, 1.0, 0.0, 0.0, 1.0,
-            -0.15, -0.15, -0.15, 0.0, 1.0, 0.0, 1.0,
-            -0.15, 0.15, -0.15, 0.0, 1.0, 0.0, 1.0,
-            -0.15, -0.15, -0.15, 0.0, 0.0, 1.0, 1.0,
-            -0.15, -0.15, 0.15, 0.0, 0.0, 1.0, 1.0,
-        };
-        for (int i = 0; i < 49; i++) {
-            vertices[i + kCirclePointCount * 7] = otherVertices[i];
-        }
-        
-        NSData *vertexData = [NSData dataWithBytes:&vertices length:sizeof(vertices)];
-        NSArray *attributes = @[[CEVBOAttribute attributeWithname:CEVBOAttributePosition],
-                                [CEVBOAttribute attributeWithname:CEVBOAttributeColor]];
-        _sharedVertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:attributes];
+    GLfloat red = 200.0 / 255.0, green = 150.0 / 255.0, blue = 0.0, alpha = 1.0;
+    // create circle points
+    for (int i = 0; i < kCirclePointCount; i++) {
+        _vertices[i * 7] = 0.5;          // X
+        _vertices[i * 7 + 1] = 0;        // Y, calculated later.
+        _vertices[i * 7 + 2] = 0;        // Z, calculated later.
+        _vertices[i * 7 + 3] = red;      // red
+        _vertices[i * 7 + 4] = green;    // green
+        _vertices[i * 7 + 5] = blue;     // blue
+        _vertices[i * 7 + 6] = alpha;    // angle
+    }
+    [self updateVerticesWithConeAngle:_coneAngle];
+    
+    // add other points
+    GLfloat otherVertices[8 * 7] = {
+        0.0, 0.0, 0.0, red - 0.2, green - 0.2, blue - 0.2, alpha,
+        0.75, 0.0, 0.0, red, green, blue, alpha,
+        0.0, -0.15, -0.15, 1.0, 0.0, 0.0, 1.0,
+        0.3, -0.15, -0.15, 1.0, 0.0, 0.0, 1.0,
+        0.0, -0.15, -0.15, 0.0, 1.0, 0.0, 1.0,
+        0.0, 0.15, -0.15, 0.0, 1.0, 0.0, 1.0,
+        0.0, -0.15, -0.15, 0.0, 0.0, 1.0, 1.0,
+        0.0, -0.15, 0.15, 0.0, 0.0, 1.0, 1.0,
+    };
+    int otherVerticesCount = sizeof(otherVertices) / sizeof(GLfloat);
+    for (int i = 0; i < otherVerticesCount; i++) {
+        _vertices[i + kCirclePointCount * 7] = otherVertices[i];
     }
     
+    NSData *vertexData = [NSData dataWithBytes:&_vertices length:sizeof(_vertices)];
+    NSArray *attributes = [CELight defaultVertexBufferAttributes];
+    _vertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:attributes];
+    
+    static CEIndicesBuffer *_sharedIndicesBuffer;
     if (!_sharedIndicesBuffer) {
         int indexCount = 0;
-        GLubyte indices[kCirclePointCount * 2 + 14] = {0};
+        GLubyte indices[kCirclePointCount * 2 + 16] = {0};
         for (int i = 0; i < kCirclePointCount; i++) {
             indices[indexCount] = i;
             indices[indexCount + 1] = (i + 1) % kCirclePointCount;
@@ -80,22 +80,25 @@
                 indexCount += 2;
             }
         }
-        for (int i = 0; i < 6; i++) {
-            indices[indexCount] = kCirclePointCount + 1 + i;
+        for (int i = 0; i < 8; i++) {
+            indices[indexCount] = kCirclePointCount + i;
             indexCount++;
         }
-        
-        for (int i = 0; i < sizeof(indices); i++) {
-            printf("indices[%d] = %d\n", i, indices[i]);
-        }
-        
         NSData *indicesData = [NSData dataWithBytes:&indices length:sizeof(indices)];
         _sharedIndicesBuffer = [[CEIndicesBuffer alloc] initWithData:indicesData indicesCount:sizeof(indices)];
     }
-    
-    _vertexBuffer = _sharedVertexBuffer;
     _indicesBuffer = _sharedIndicesBuffer;
 }
+
+- (void)updateVerticesWithConeAngle:(GLfloat)coneAngle {
+    GLfloat radius = 0.5 * tanf(GLKMathDegreesToRadians(_coneAngle));
+    for (int i = 0; i < kCirclePointCount; i++) {
+        GLfloat angle = i * 2 * M_PI / kCirclePointCount;
+        _vertices[i * 7 + 1] = sin(angle) * radius;  // Y
+        _vertices[i * 7 + 2] = cos(angle) * radius;  // Z
+    }
+}
+
 
 - (void)setShiniess:(GLint)shiniess {
     if (_shiniess != shiniess) {
@@ -123,6 +126,10 @@
     if (_coneAngle != coneAngle) {
         _coneAngle = coneAngle;
         // change model data
+        [self updateVerticesWithConeAngle:coneAngle];
+        NSData *vertexData = [NSData dataWithBytes:&_vertices length:sizeof(_vertices)];
+        NSArray *attributes = [CELight defaultVertexBufferAttributes];
+        [_vertexBuffer updateVertexData:vertexData attributes:attributes];
         _hasLightChanged = YES;
     }
 }

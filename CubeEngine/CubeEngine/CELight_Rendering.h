@@ -21,6 +21,7 @@
 }
 
 // light visual model
++ (NSArray *)defaultVertexBufferAttributes;
 @property (nonatomic, readonly) CEVertexBuffer *vertexBuffer;
 @property (nonatomic, readonly) CEIndicesBuffer *indicesBuffer;
 
