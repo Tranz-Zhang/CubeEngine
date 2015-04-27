@@ -12,6 +12,7 @@
 #import "SegmentViewControl.h"
 #import "DirectionalLightControl.h"
 #import "PointLightControl.h"
+#import "CESpotLight.h"
 
 
 #define kLocalWidth self.view.bounds.size.width
@@ -25,6 +26,7 @@
     CEModel *_testModel;
     CEDirectionalLight *_directionalLight;
     CEPointLight *_pointLight;
+    CESpotLight *_spotLight;
     
     __weak IBOutlet UISwitch *_directionalLightSwitch;
     __weak IBOutlet UISwitch *_pointLightSwitch;
@@ -58,7 +60,7 @@
     _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
     _testModel.showAccessoryLine = YES;
     _testModel.baseColor = [UIColor orangeColor];
-    [self.scene addModel:_testModel];
+//    [self.scene addModel:_testModel];
     
     _directionalLight = [[CEDirectionalLight alloc] init];
     [_directionalLight lookAt:GLKVector3Make(0, -1, -1)];
@@ -70,9 +72,13 @@
     _pointLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     _pointLight.position = GLKVector3Make(-8, 15, 0);
     _pointLight.specularItensity = 0.5;
-    [self.scene addLight:_pointLight];
+//    [self.scene addLight:_pointLight];
+    
+    _spotLight = [CESpotLight new];
+    [self.scene addLight:_spotLight];
+    
 
-    _objectOperator.operationObject = _testModel;
+    _objectOperator.operationObject = _spotLight;
     
     // update light switches
     NSArray *lights = self.scene.allLights;

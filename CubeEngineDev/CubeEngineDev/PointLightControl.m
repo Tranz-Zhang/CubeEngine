@@ -8,7 +8,7 @@
 
 #import "PointLightControl.h"
 
-#define kAttenuationScale 10000
+#define kAttenuationScale 50
 
 @interface PointLightControl ()
 
