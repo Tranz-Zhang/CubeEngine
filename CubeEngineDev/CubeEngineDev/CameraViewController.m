@@ -18,8 +18,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.scene.camera.position = GLKVector3Make(0, 30, 30);
-    [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
+    self.scene.camera.position = GLKVector3Make(0, 0, 30);
+//    [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
     CEModel *testModel = [CEModel modelWithObjFile:@"teapot"];
     testModel.showAccessoryLine = YES;
@@ -107,9 +107,9 @@ static bool isHorizontalPan;
         [panGesture setTranslation:CGPointZero inView:self.view];
         GLKVector3 eulerAngles = self.scene.camera.eulerAngles;
         eulerAngles.y -= translation.x / 5.0f;
-        eulerAngles.x -= translation.y / 5.0f;
+        eulerAngles.z -= translation.y / 5.0f;
         self.scene.camera.eulerAngles = eulerAngles;
-        _infoLabel.text = [NSString stringWithFormat:@"Y: %.2f° X: %.2f°", eulerAngles.y, eulerAngles.x];
+        _infoLabel.text = [NSString stringWithFormat:@"Y: %.2f° Z: %.2f°", eulerAngles.y, eulerAngles.z];
         
     } else if (panGesture.state == UIGestureRecognizerStateEnded ||
                panGesture.state == UIGestureRecognizerStateCancelled) {
@@ -122,10 +122,10 @@ static bool isHorizontalPan;
         
     } else if (rotationGesture.state == UIGestureRecognizerStateChanged) {
         GLKVector3 eulerAngles = self.scene.camera.eulerAngles;
-        eulerAngles.z -= rotationGesture.rotation * 90;
+        eulerAngles.x -= rotationGesture.rotation * 90;
         self.scene.camera.eulerAngles = eulerAngles;
         rotationGesture.rotation = 0;
-        _infoLabel.text = [NSString stringWithFormat:@"Z: %.2f°", eulerAngles.z];
+        _infoLabel.text = [NSString stringWithFormat:@"X: %.2f°", eulerAngles.x];
         
     } else if (rotationGesture.state == UIGestureRecognizerStateEnded ||
                rotationGesture.state == UIGestureRecognizerStateCancelled) {

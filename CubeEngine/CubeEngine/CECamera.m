@@ -72,7 +72,7 @@
 
 // !!!: Overwrite transformMatrix
 - (GLKMatrix4)transformMatrix {
-    if (!_hasChanged && !_parentObject.hasChanged) {
+    if (!self.hasChanged) {
         return _transformMatrix;
     }
     

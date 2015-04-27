@@ -9,8 +9,8 @@
 #import "CEObject.h"
 
 @interface CELight : CEObject {
-    GLKVector3 _vec3LightColor;
-    GLKVector3 _vec3AmbientColor;
+    GLKVector3 _lightColorV3;
+    GLKVector3 _ambientColorV3;
 }
 
 + (NSUInteger)maxLightCount;

@@ -37,7 +37,7 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
  
  struct LightInfo {
      int LightType; // 0:none 1:directional 2:point 3:spot
-     vec3 LightPosition;
+     vec4 LightPosition;
      vec3 LightDirection;
      vec3 LightColor;
      vec3 AmbientColor;
@@ -76,7 +76,7 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
  // Apply Point Light Effect to baseColor
  void ApplyPointLight(LightInfo light) {
      // calcualte attenuation
-     vec3 lightDirection = light.LightPosition - vec3(Position);
+     vec3 lightDirection = vec3(light.LightPosition) - vec3(Position);
      float lightDistance = length(lightDirection);
      lightDirection = lightDirection / lightDistance; // normalize light direction
      
@@ -159,22 +159,22 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
         NSMutableArray *uniformInfos = [NSMutableArray arrayWithCapacity:[CELight maxLightCount]];
         for (int i = 0; i < [CELight maxLightCount]; i++) {
             CELightUniformInfo *info = [CELightUniformInfo new];
-            info.iLightType = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightType", i]];
-            if (info.iLightType < 0) continue;
-            info.vec3LightPosition = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightPosition", i]];
-            if (info.vec3LightPosition < 0) continue;
-            info.vec3LightDirection = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightDirection", i]];
-            if (info.vec3LightDirection < 0) continue;
-            info.vec3LightColor = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightColor", i]];
-            if (info.vec3LightColor < 0) continue;
-            info.vec3AmbientColor = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].AmbientColor", i]];
-            if (info.vec3AmbientColor < 0) continue;
-            info.fSpecularIntensity = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].SpecularIntensity", i]];
-            if (info.fSpecularIntensity < 0) continue;
-            info.fShiniess = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].Shiniess", i]];
-            if (info.fShiniess < 0) continue;
-            info.fAttenuation = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].Attenuation", i]];
-            if (info.fAttenuation < 0) continue;
+            info.lightType_i = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightType", i]];
+            if (info.lightType_i < 0) continue;
+            info.lightPosition_vec4 = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightPosition", i]];
+            if (info.lightPosition_vec4 < 0) continue;
+            info.lightDirection_vec3 = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightDirection", i]];
+            if (info.lightDirection_vec3 < 0) continue;
+            info.lightColor_vec3 = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightColor", i]];
+            if (info.lightColor_vec3 < 0) continue;
+            info.ambientColor_vec3 = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].AmbientColor", i]];
+            if (info.ambientColor_vec3 < 0) continue;
+            info.specularIntensity_f = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].SpecularIntensity", i]];
+            if (info.specularIntensity_f < 0) continue;
+            info.shiniess_f = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].Shiniess", i]];
+            if (info.shiniess_f < 0) continue;
+            info.attenuation_f = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].Attenuation", i]];
+            if (info.attenuation_f < 0) continue;
             
             [uniformInfos addObject:info];
         }
@@ -226,10 +226,10 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
     }
     [_program use];
     
-    // setup lighting uniforms
+    // setup lighting uniforms !!!: must setup light before mvp matrix;
     glUniform1i(_uniIntLightCount, (GLint)_lights.count);
     for (CELight *light in _lights) {
-        [light updateUniforms];
+        [light updateUniformsWithCamera:_camera];
     }
     
     // setup other uniforms

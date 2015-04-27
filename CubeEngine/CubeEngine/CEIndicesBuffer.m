@@ -21,14 +21,14 @@
         if (bufferData.length &&
             indicesCount > 0 &&
             bufferData.length % indicesCount == 0) {
-            _dataSize = bufferData.length / indicesCount;
+            _dataSize = (GLsizei)bufferData.length / indicesCount;
         }
         if (_dataSize == 1 || _dataSize == 2 || _dataSize == 4) {
             NSData *compressData = nil;
             CompressIndicesData(bufferData, &compressData, &_dataSize);
             if (compressData) {
                 _indicesBufferData = [compressData copy];
-                _indicesCount = indicesCount;
+                _indicesCount = (GLsizei)indicesCount;
                 _indicesDataType = (_dataSize == 1 ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT);
             }
         }

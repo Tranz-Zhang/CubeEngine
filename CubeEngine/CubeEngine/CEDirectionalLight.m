@@ -63,12 +63,9 @@
 }
 
 - (GLKVector3)lightDirection {
-    return _forward;
+    return _right;
 }
 
-- (BOOL)needCalculateHalfVector {
-    return YES;
-}
 
 //- (void)setLightDirection:(GLKVector3)lightDirection {
 //    if (!GLKVector3AllEqualToVector3(_lightDirection, lightDirection)) {
@@ -91,15 +88,20 @@
     }
 }
 
-- (void)updateUniforms {
-    if (!_uniformInfo || (!_hasLightChanged && !_hasChanged)) return;
+- (void)updateUniformsWithCamera:(CECamera *)camera {
+    if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
     
-    glUniform1i(_uniformInfo.iLightType, CEDirectionalLightType);
-    glUniform3f(_uniformInfo.vec3LightColor, _vec3LightColor.r, _vec3LightColor.g, _vec3LightColor.b);
-    glUniform3f(_uniformInfo.vec3AmbientColor, _vec3AmbientColor.r, _vec3AmbientColor.g, _vec3AmbientColor.b);
-    glUniform3f(_uniformInfo.vec3LightDirection, -_right.x, -_right.y, -_right.z);
-    glUniform1f(_uniformInfo.fShiniess, (GLfloat)_shiniess);
-    glUniform1f(_uniformInfo.fSpecularIntensity, _specularItensity);
+    glUniform1i(_uniformInfo.lightType_i, CEDirectionalLightType);
+    glUniform3fv(_uniformInfo.lightColor_vec3, 1, _lightColorV3.v);
+    glUniform3fv(_uniformInfo.ambientColor_vec3, 1, _ambientColorV3.v);
+    glUniform1f(_uniformInfo.shiniess_f, (GLfloat)_shiniess);
+    glUniform1f(_uniformInfo.specularIntensity_f, _specularItensity);
+    
+    // !!!: transfer light direction in view space
+    GLKVector3 lightDirection = GLKVector3Make(-_right.x, -_right.y, -_right.z);
+    lightDirection = GLKMatrix4MultiplyVector3(camera.viewMatrix, lightDirection);
+    glUniform3fv(_uniformInfo.lightDirection_vec3, 1, lightDirection.v);
+    
     _hasLightChanged = NO;
     CEPrintf("Update Direational Light Uniform\n");
 }

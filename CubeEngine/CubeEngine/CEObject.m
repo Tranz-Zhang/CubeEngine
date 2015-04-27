@@ -89,6 +89,18 @@
 }
 
 
+- (BOOL)hasChanged {
+    if (_hasChanged) {
+        return YES;
+        
+    } else if (_parentObject) {
+        return [_parentObject hasChanged];
+        
+    } else {
+        return NO;
+    }
+}
+
 #pragma mark - Transform
 - (void)moveTowards:(GLKVector3)directionVector withDistance:(float)direction {
     GLKVector3 normalizedVector = GLKVector3Normalize(directionVector);
@@ -122,7 +134,7 @@
 
 
 - (GLKMatrix4)transformMatrix {
-    if (!_hasChanged && !_parentObject.hasChanged) {
+    if (!self.hasChanged) {
         return _transformMatrix;
     }
     

@@ -54,7 +54,6 @@
     self.scene.backgroundColor = [UIColor whiteColor];
     self.scene.camera.position = GLKVector3Make(0, 30, 30);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
-    self.scene.camera.position = GLKVector3Make(0, 35, 50);
     
     _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
     _testModel.showAccessoryLine = YES;
@@ -62,6 +61,7 @@
     [self.scene addModel:_testModel];
     
     _directionalLight = [[CEDirectionalLight alloc] init];
+    [_directionalLight lookAt:GLKVector3Make(0, -1, -1)];
     _directionalLight.position = GLKVector3Make(8, 15, 0);
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
 //    [self.scene addLight:_directionalLight];
@@ -109,6 +109,8 @@
         case 3:
             _objectOperator.operationObject = nil;
             break;
+        case 4:
+            _objectOperator.operationObject = self.scene.camera;
             
         default:
             break;

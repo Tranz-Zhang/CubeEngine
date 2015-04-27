@@ -7,6 +7,7 @@
 //
 
 #import "CELight.h"
+#import "CECamera_Rendering.h"
 #import "CEVertexBuffer.h"
 #import "CEIndicesBuffer.h"
 #import "CELightUniformInfo.h"
@@ -26,19 +27,11 @@
 // Light info
 @property (nonatomic, strong) CELightUniformInfo *uniformInfo;
 
-/** 
- indicates if the render should calculate the half vector bewteen eye direction
- and light direction
- Default is NO.
- */
-@property (nonatomic, readonly) BOOL needCalculateHalfVector;
-
-
 // Indicates if light attributes have changed since last time
 @property (nonatomic, assign) BOOL hasLightChanged;
 
 // must overwrite by subclass
-- (void)updateUniforms;
+- (void)updateUniformsWithCamera:(CECamera *)camera;
 
 @end
 

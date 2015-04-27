@@ -17,13 +17,13 @@ typedef NS_ENUM(NSInteger, CELightType) {
 // Save the uniform index of LightInfo struct in the program
 @interface CELightUniformInfo : CERenderer
 
-@property (nonatomic, assign) GLint iLightType; // 0:none 1:directional 2:point 3:spot
-@property (nonatomic, assign) GLint vec3LightPosition;
-@property (nonatomic, assign) GLint vec3LightDirection;
-@property (nonatomic, assign) GLint vec3LightColor;
-@property (nonatomic, assign) GLint vec3AmbientColor;
-@property (nonatomic, assign) GLint fSpecularIntensity;
-@property (nonatomic, assign) GLint fShiniess;
-@property (nonatomic, assign) GLint fAttenuation;
+@property (nonatomic, assign) GLint lightType_i; // 0:none 1:directional 2:point 3:spot
+@property (nonatomic, assign) GLint lightPosition_vec4;
+@property (nonatomic, assign) GLint lightDirection_vec3;
+@property (nonatomic, assign) GLint lightColor_vec3;
+@property (nonatomic, assign) GLint ambientColor_vec3;
+@property (nonatomic, assign) GLint specularIntensity_f;
+@property (nonatomic, assign) GLint shiniess_f;
+@property (nonatomic, assign) GLint attenuation_f;
 
 @end

@@ -16,6 +16,12 @@ typedef NS_ENUM(NSInteger, CEProjectionType) {
 
 /**
  Representing a camera in 3d world.
+ IMPORTANT!!!: The camera's direction is -z after creation. So the rotation is kind of 
+ different with normal CEObject in the scene. 
+ 
+ Here's the difference:
+ eulerAngles.X is used for up-down rotation,
+ eulerAngles.Z rotate along the camera's direction, so it will rotate the entire screen.
  */
 @interface CECamera : CEObject
 
