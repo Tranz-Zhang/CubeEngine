@@ -12,7 +12,7 @@
 /**
  Use to render accessory info of the model, like bounds, local coordinate indicator
  */
-@interface CERenderer_AccessoryLine : CERenderer
+@interface CEAssistRenderer : CERenderer
 
 - (void)renderLight:(CELight *)light;
 

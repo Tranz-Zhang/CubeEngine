@@ -20,6 +20,7 @@ static NSInteger kMaxLightCount = 8;
     if (self) {
         [self setLightColor:[UIColor whiteColor]];
         [self setAmbientColor:[UIColor colorWithWhite:0.1 alpha:1]];
+        _enabled = YES;
     }
     return self;
 }
@@ -43,6 +44,13 @@ static NSInteger kMaxLightCount = 8;
 + (void)setMaxLightCount:(NSInteger)maxLightCount {
     if (maxLightCount > 0) {
         kMaxLightCount = maxLightCount;
+    }
+}
+
+- (void)setEnabled:(BOOL)enabled {
+    if (_enabled != enabled) {
+        _enabled = enabled;
+        _hasLightChanged = YES;
     }
 }
 

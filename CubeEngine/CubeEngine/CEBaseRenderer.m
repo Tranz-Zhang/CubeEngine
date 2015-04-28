@@ -36,6 +36,7 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
  precision mediump float;
  
  struct LightInfo {
+     bool IsEnabled;
      int LightType; // 0:none 1:directional 2:point 3:spot
      vec4 LightPosition;
      vec3 LightDirection;
@@ -53,106 +54,58 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
  uniform vec3 EyeDirection;
  uniform int LightCount;
  
- vec3 TotalDiffuse;
- vec3 TotalSpecular;
- 
  varying vec3 Normal;
  varying vec4 Position;
  
- // Directional Light
- void ApplyDirectionalLight(LightInfo light) {
-     // half vector
-     vec3 halfVector = normalize(light.LightDirection + EyeDirection);
-     
-     // diffuse and specular factor
-     float diffuse = max(0.0, dot(Normal, light.LightDirection));
-     float specular = max(0.0, dot(Normal, halfVector));
-     
-     specular = (diffuse == 0.0) ? 0.0 : pow(specular, light.Shiniess);
-     vec3 scatteredLight = light.AmbientColor + light.LightColor * diffuse;
-     vec3 reflectedLight = light.LightColor * specular * light.SpecularIntensity;
-     TotalDiffuse += scatteredLight;
-     TotalSpecular += reflectedLight;
- }
- 
- // Point Light
- void ApplyPointLight(LightInfo light) {
-     // calcualte attenuation
-     vec3 lightDirection = vec3(light.LightPosition) - vec3(Position);
-     float lightDistance = length(lightDirection);
-     lightDirection = lightDirection / lightDistance; // normalize light direction
-     
-     float attenuation = 1.0 / (1.0 + light.Attenuation * lightDistance + light.Attenuation * lightDistance * lightDistance);
-     
-     // calculate diffuse and specular factor
-     vec3 halfVector = normalize(lightDirection + EyeDirection);
-     float diffuse = max(0.0, dot(Normal, lightDirection));
-     float specular = max(0.0, dot(Normal, halfVector));
-     
-     specular = (diffuse == 0.0) ? 0.0 : pow(specular, light.Shiniess);
-     vec3 scatteredLight = light.AmbientColor + light.LightColor * diffuse * attenuation;
-     vec3 reflectedLight = light.LightColor * specular * light.SpecularIntensity * attenuation;
-     
-     TotalDiffuse += scatteredLight;
-     TotalSpecular += reflectedLight;
- }
- 
- 
- void ApplySpotLight(LightInfo light) {
-     // calcualte attenuation
-     vec3 lightDirection = vec3(light.LightPosition) - vec3(Position);
-     float lightDistance = length(lightDirection);
-     lightDirection = lightDirection / lightDistance; // normalize light direction
-     
-     float attenuation = 1.0 / (1.0 + light.Attenuation * lightDistance + light.Attenuation * lightDistance * lightDistance);
-     
-     // spot cos
-     // lightDirection: current position to light position Direction
-     // light.LightDirection: source light direction, ref as ConeDirection
-     float spotCos = dot(lightDirection, light.LightDirection);
-     if (spotCos < light.SpotConsCutoff) {
-         attenuation = 0.0;
-     } else {
-         attenuation *= pow(spotCos, light.SpotExponent);
-     }
-     
-     // calculate diffuse and specular factor
-     vec3 halfVector = normalize(lightDirection + EyeDirection);
-     float diffuse = max(0.0, dot(Normal, lightDirection));
-     float specular = max(0.0, dot(Normal, halfVector));
-     
-     specular = (diffuse == 0.0) ? 0.0 : pow(specular, light.Shiniess);
-     vec3 scatteredLight = light.AmbientColor + light.LightColor * diffuse * attenuation;
-     vec3 reflectedLight = light.LightColor * specular * light.SpecularIntensity * attenuation;
-     
-     TotalDiffuse += scatteredLight;
-     TotalSpecular += reflectedLight;
- }
- 
- 
  void main() {
-     vec3 processColor = BaseColor.rgb;
-     if (LightCount > 0) {
-         TotalDiffuse = vec3(0.0);
-         TotalSpecular = vec3(0.0);
-         for (int i = 0; i < LightCount; i++) {
-             LightInfo light  = Lights[i];
-             if (light.LightType == 1) { // apply directional light
-                 ApplyDirectionalLight(light);
-                 
-             } else if (light.LightType == 2) { // apply point light
-                 ApplyPointLight(light);
-                 
-             } else if (light.LightType == 3) { // apply spot light
-                 ApplySpotLight(light);
-             }
+     vec3 scatteredLight = vec3(0.0);
+     vec3 reflectedLight = vec3(0.0);
+     
+     // loop over all light and calculate light effect
+     for (int i = 0; i < LightCount; i++) {
+         if (!Lights[i].IsEnabled) {
+             continue;
          }
-         processColor = processColor * TotalDiffuse + TotalSpecular;
+         vec3 halfVector;
+         vec3 lightDirection = Lights[i].LightDirection;
+         float attenuation = 1.0;
+         
+         // for locol lights, compute per-fragment direction, halfVector and attenuation
+         if (Lights[i].LightType > 1) {
+             lightDirection = vec3(Lights[i].LightPosition) - vec3(Position);
+             float lightDistance = length(lightDirection);
+             lightDirection = lightDirection / lightDistance; // normalize light direction
+             
+             attenuation = 1.0 / (1.0 + Lights[i].Attenuation * lightDistance + Lights[i].Attenuation * lightDistance * lightDistance);
+             if (Lights[i].LightType == 3) { // spot light
+                 // lightDirection: current position to light position Direction
+                 // Lights[i].LightDirection: source light direction, ref as ConeDirection
+                 float spotCos = dot(lightDirection, Lights[i].LightDirection);
+                 if (spotCos < Lights[i].SpotConsCutoff) {
+                     attenuation = 0.0;
+                 } else {
+                     attenuation *= pow(spotCos, Lights[i].SpotExponent);
+                 }
+             }
+             halfVector = normalize(lightDirection + EyeDirection);
+             
+         } else {
+             halfVector = normalize(Lights[i].LightDirection + EyeDirection);
+         }
+         
+         // calculate diffuse and specular
+         float diffuse = max(0.0, dot(Normal, lightDirection));
+         float specular = max(0.0, dot(Normal, halfVector));
+         
+         specular = (diffuse == 0.0) ? 0.0 : pow(specular, Lights[i].Shiniess);
+         scatteredLight += Lights[i].AmbientColor * attenuation + Lights[i].LightColor * diffuse * attenuation;
+         reflectedLight += Lights[i].LightColor * specular * attenuation;
      }
      
-     gl_FragColor = vec4(min(processColor, vec3(1.0)), BaseColor.a);
+     vec3 rgb = min(BaseColor.rgb * scatteredLight + reflectedLight, vec3(1.0));
+     gl_FragColor = vec4(rgb, BaseColor.a);
  }
-);
+ );
 
 
 @implementation CEBaseRenderer {
@@ -195,6 +148,8 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
             CELightUniformInfo *info = [CELightUniformInfo new];
             info.lightType_i = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightType", i]];
             if (info.lightType_i < 0) continue;
+            info.isEnabled_b = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].IsEnabled", i]];
+            if (info.isEnabled_b < 0) continue;
             info.lightPosition_vec4 = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightPosition", i]];
             if (info.lightPosition_vec4 < 0) continue;
             info.lightDirection_vec3 = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightDirection", i]];

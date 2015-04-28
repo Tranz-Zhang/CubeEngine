@@ -59,7 +59,7 @@
 
 #pragma mark - Color Selection
 - (IBAction)onColorSegmentChanged:(UISegmentedControl *)segment {
-    switch (_attributeSegment.selectedSegmentIndex) {
+    switch (_colorSegment.selectedSegmentIndex) {
         case 0:
             [self updateColorSegmentWithColor:_operationLight.ambientColor];
             break;
@@ -78,9 +78,9 @@
     CGFloat green;
     CGFloat blue;
     [color getRed:&red green:&green blue:&blue alpha:NULL];
-    [_redSlider setValue:red animated:YES];
-    [_greenSlider setValue:green animated:YES];
-    [_blueSlider setValue:blue animated:YES];
+    _redSlider.value = red;
+    _greenSlider.value = green;
+    _blueSlider.value = blue;
 }
 
 
@@ -99,7 +99,7 @@
 
 - (void)updateDefaultColor {
     UIColor *color = [UIColor colorWithRed:_redSlider.value green:_greenSlider.value blue:_blueSlider.value alpha:1];
-    switch (_attributeSegment.selectedSegmentIndex) {
+    switch (_colorSegment.selectedSegmentIndex) {
         case 0:
             _operationLight.ambientColor = color;
             break;
@@ -111,6 +111,7 @@
             break;
     }
 }
+
 
 
 

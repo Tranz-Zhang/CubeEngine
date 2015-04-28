@@ -91,6 +91,7 @@
     if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
     
     glUniform1i(_uniformInfo.lightType_i, CEDirectionalLightType);
+    glUniform1f(_uniformInfo.isEnabled_b, _enabled ? 1.0 : 0.0);
     glUniform3fv(_uniformInfo.lightColor_vec3, 1, _lightColorV3.v);
     glUniform3fv(_uniformInfo.ambientColor_vec3, 1, _ambientColorV3.v);
     glUniform1f(_uniformInfo.shiniess_f, (GLfloat)_shiniess);

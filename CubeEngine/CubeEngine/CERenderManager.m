@@ -14,10 +14,6 @@
 #import "CEBaseRenderer.h"
 #import "CERenderer_V.h"
 #import "CERenderer_V_VN.h"
-#import "CERenderer_Dev.h"
-#import "CERenderer_DirectionalLight.h"
-#import "CERenderer_PointLight.h"
-
 
 @implementation CERenderManager {
     EAGLContext *_context;

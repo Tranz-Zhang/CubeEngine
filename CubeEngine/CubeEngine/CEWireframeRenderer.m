@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CERenderer_Wireframe.h"
+#import "CEWireframeRenderer.h"
 #import "CEProgram.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
@@ -31,7 +31,7 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
 
 
 
-@implementation CERenderer_Wireframe {
+@implementation CEWireframeRenderer {
     CEProgram *_program;
     GLint _attributePosition;
     GLint _uniformProjection;

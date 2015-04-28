@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CERenderer_AccessoryLine.h"
+#import "CEAssistRenderer.h"
 #import "CEProgram.h"
 #import "CECamera_Rendering.h"
 #import "CELight_Rendering.h"
@@ -36,7 +36,7 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
 );
 
 
-@implementation CERenderer_AccessoryLine {
+@implementation CEAssistRenderer {
     CEProgram *_program;
     GLint _attributePosition;
     GLint _attributeVertexColor;

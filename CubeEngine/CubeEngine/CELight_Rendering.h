@@ -17,6 +17,7 @@
     CEVertexBuffer *_vertexBuffer;
     CEIndicesBuffer *_indicesBuffer;
     CELightUniformInfo *_uniformInfo;
+    BOOL _enabled;
     BOOL _hasLightChanged;
 }
 

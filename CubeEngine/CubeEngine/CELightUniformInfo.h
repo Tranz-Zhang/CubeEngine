@@ -18,6 +18,7 @@ typedef NS_ENUM(NSInteger, CELightType) {
 @interface CELightUniformInfo : CERenderer
 
 @property (nonatomic, assign) GLint lightType_i; // 0:none 1:directional 2:point 3:spot
+@property (nonatomic, assign) GLint isEnabled_b;  
 @property (nonatomic, assign) GLint lightPosition_vec4;
 @property (nonatomic, assign) GLint lightDirection_vec3;
 @property (nonatomic, assign) GLint lightColor_vec3;

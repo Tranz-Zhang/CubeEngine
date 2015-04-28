@@ -8,13 +8,13 @@
 
 #import "CEDebugRenderManager.h"
 #import "CEModel_Rendering.h"
-#import "CERenderer_Wireframe.h"
-#import "CERenderer_AccessoryLine.h"
+#import "CEWireframeRenderer.h"
+#import "CEAssistRenderer.h"
 
 @implementation CEDebugRenderManager {
     EAGLContext *_context;
-    CERenderer_Wireframe *_wireframeRenderer;
-    CERenderer_AccessoryLine *_accessoryRenderer;
+    CEWireframeRenderer *_wireframeRenderer;
+    CEAssistRenderer *_accessoryRenderer;
 }
 
 - (instancetype)initWithContext:(EAGLContext *)context
@@ -23,10 +23,10 @@
     if (self) {
         _context = context;
         [EAGLContext setCurrentContext:context];
-        _wireframeRenderer = [CERenderer_Wireframe new];
+        _wireframeRenderer = [CEWireframeRenderer new];
         _wireframeRenderer.lineWidth = 1.0f;
         [_wireframeRenderer setupRenderer];
-        _accessoryRenderer = [CERenderer_AccessoryLine new];
+        _accessoryRenderer = [CEAssistRenderer new];
         [_accessoryRenderer setupRenderer];
     }
     return self;

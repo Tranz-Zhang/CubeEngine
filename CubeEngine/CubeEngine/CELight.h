@@ -16,6 +16,7 @@
 + (NSUInteger)maxLightCount;
 + (void)setMaxLightCount:(NSInteger)maxLightCount;
 
+@property (nonatomic, assign, getter=isEnabled) BOOL enabled;
 @property (nonatomic, copy) UIColor *lightColor; // default is withte
 @property (nonatomic, copy) UIColor *ambientColor; // default is 0.2*White
 

@@ -59,33 +59,36 @@
     
     _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
     _testModel.showAccessoryLine = YES;
-    _testModel.baseColor = [UIColor orangeColor];
+//    _testModel.baseColor = [UIColor orangeColor];
     [self.scene addModel:_testModel];
     
     _directionalLight = [[CEDirectionalLight alloc] init];
     [_directionalLight lookAt:GLKVector3Make(0, -1, -1)];
     _directionalLight.position = GLKVector3Make(8, 15, 0);
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
-//    [self.scene addLight:_directionalLight];
+    [self.scene addLight:_directionalLight];
     
     _pointLight = [CEPointLight new];
     _pointLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     _pointLight.position = GLKVector3Make(-8, 15, 0);
     _pointLight.specularItensity = 0.5;
-//    [self.scene addLight:_pointLight];
+    [self.scene addLight:_pointLight];
     
     _spotLight = [CESpotLight new];
     _spotLight.position = GLKVector3Make(-8, 15, 0);
     _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
+    [_spotLight lookAt:_testModel.position];
     [self.scene addLight:_spotLight];
     
     _objectOperator.operationObject = _testModel;
     
     // update light switches
-    NSArray *lights = self.scene.allLights;
-    _directionalLightSwitch.on = [lights containsObject:_directionalLight];
-    _pointLightSwitch.on = [lights containsObject:_pointLight];
-    _spotLightSwitch.on = [lights containsObject:_spotLight];
+    _directionalLight.enabled = NO;
+    _pointLight.enabled = NO;
+    _spotLight.enabled = NO;
+    _directionalLightSwitch.on = _directionalLight.isEnabled;
+    _pointLightSwitch.on = _pointLight.isEnabled;
+    _spotLightSwitch.on = _spotLight.isEnabled;
 }
 
 
@@ -125,28 +128,17 @@
 }
 
 - (IBAction)onDirectionalLightSwitch:(UISwitch *)switcher {
-    if (switcher.on) {
-        [self.scene addLight:_directionalLight];
-    } else {
-        [self.scene removeLight:_directionalLight];
-    }
+    _directionalLight.enabled = switcher.on;
 }
 
 - (IBAction)onPointLightSwitch:(UISwitch *)switcher {
-    if (switcher.on) {
-        [self.scene addLight:_pointLight];
-    } else {
-        [self.scene removeLight:_pointLight];
-    }
+    _pointLight.enabled = switcher.on;
 }
 
 - (IBAction)onSpotLightSwitch:(UISwitch *)switcher {
-    if (switcher.on) {
-        [self.scene addLight:_spotLight];
-    } else {
-        [self.scene removeLight:_spotLight];
-    }
+    _spotLight.enabled = switcher.on;
 }
+
 
 #pragma mark - SegmentViewControlDelegate
 - (UIView *)viewWithSegmentIndex:(NSUInteger)segmentIndex {

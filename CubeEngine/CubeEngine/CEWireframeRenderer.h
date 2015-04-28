@@ -9,7 +9,7 @@
 #import "CERenderer.h"
 #import "CEModel.h"
 
-@interface CERenderer_Wireframe : CERenderer
+@interface CEWireframeRenderer : CERenderer
 
 @property (nonatomic, assign) GLfloat lineWidth;
 @property (nonatomic, copy) UIColor *lineColor;
