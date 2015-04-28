@@ -71,7 +71,6 @@
     _pointLight = [CEPointLight new];
     _pointLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     _pointLight.position = GLKVector3Make(-8, 15, 0);
-    _pointLight.specularItensity = 0.5;
     [self.scene addLight:_pointLight];
     
     _spotLight = [CESpotLight new];

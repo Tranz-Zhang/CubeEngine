@@ -12,6 +12,5 @@
 
 @property (nonatomic, readonly) GLKVector3 lightDirection; // == CEObject.right
 @property (nonatomic, assign) GLint shiniess;
-@property (nonatomic, assign) GLfloat specularItensity;
 
 @end

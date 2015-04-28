@@ -22,7 +22,6 @@
         [self setConeAngle:30];
         [self setupSharedVertexBuffer];
         _hasChanged = YES;
-        _specularItensity = 1.0;
         _shiniess = 20;
         _attenuation = 0.001;
         _spotExponent = 10;
@@ -107,12 +106,6 @@
     }
 }
 
-- (void)setSpecularItensity:(GLfloat)specularItensity {
-    if (_specularItensity != specularItensity) {
-        _specularItensity = specularItensity;
-        _hasLightChanged = YES;
-    }
-}
 
 - (void)setAttenuation:(GLfloat)attenuation {
     if (_attenuation != attenuation) {
@@ -151,7 +144,6 @@
     glUniform3fv(_uniformInfo.lightColor_vec3, 1, _lightColorV3.v);
     glUniform3fv(_uniformInfo.ambientColor_vec3, 1, _ambientColorV3.v);
     glUniform1f(_uniformInfo.shiniess_f, (GLfloat)_shiniess);
-    glUniform1f(_uniformInfo.specularIntensity_f, _specularItensity);
     glUniform1f(_uniformInfo.attenuation_f, _attenuation);
     GLfloat spotCosCutoff = cosf(GLKMathDegreesToRadians(_coneAngle));
     glUniform1f(_uniformInfo.spotCosCutoff_f, spotCosCutoff);

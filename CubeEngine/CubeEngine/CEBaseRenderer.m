@@ -228,8 +228,8 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
     // setup other uniforms
     glUniform4f(_uniVec4BaseColor, object.vec3BaseColor.r, object.vec3BaseColor.g,
                 object.vec3BaseColor.b, object.vec3BaseColor.a);
-    GLKVector3 eyeDirection = GLKVector3Normalize(_camera.position);
-    glUniform3f(_uniVec3EyeDirection, eyeDirection.x, eyeDirection.y, eyeDirection.z);
+    // we use eye space to do the calculation, so the eye direction is always (0, 0, 1)
+    glUniform3f(_uniVec3EyeDirection, 0.0, 0.0, 1.0);
     
     // setup MVP matrix
     GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, object.transformMatrix);

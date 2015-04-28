@@ -17,7 +17,6 @@
     if (self) {
         [self setupSharedVertexBuffer];
         _hasChanged = YES;
-        _specularItensity = 1.0;
         _shiniess = 20;
     }
     return self;
@@ -80,12 +79,6 @@
     }
 }
 
-- (void)setSpecularItensity:(GLfloat)specularItensity {
-    if (_specularItensity != specularItensity) {
-        _specularItensity = specularItensity;
-        _hasLightChanged = YES;
-    }
-}
 
 - (void)updateUniformsWithCamera:(CECamera *)camera {
     if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
@@ -95,7 +88,6 @@
     glUniform3fv(_uniformInfo.lightColor_vec3, 1, _lightColorV3.v);
     glUniform3fv(_uniformInfo.ambientColor_vec3, 1, _ambientColorV3.v);
     glUniform1f(_uniformInfo.shiniess_f, (GLfloat)_shiniess);
-    glUniform1f(_uniformInfo.specularIntensity_f, _specularItensity);
     
     // !!!: transfer light direction in view space
     GLKVector3 lightDirection = GLKVector3Make(-_right.x, -_right.y, -_right.z);

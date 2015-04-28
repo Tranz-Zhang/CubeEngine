@@ -12,6 +12,5 @@
 
 @property (nonatomic, assign) GLfloat attenuation;
 @property (nonatomic, assign) GLint shiniess;
-@property (nonatomic, assign) GLfloat specularItensity;
 
 @end

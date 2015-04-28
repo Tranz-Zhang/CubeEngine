@@ -74,7 +74,6 @@
     _pointLight = [CEPointLight new];
     _pointLight.scale = GLKVector3MultiplyScalar(_pointLight.scale, 5);
     _pointLight.position = GLKVector3Make(-8, 15, 0);
-    _pointLight.specularItensity = 0.5;
     [self.scene addLight:_pointLight];
     
     // add directional light control
@@ -230,7 +229,7 @@
             [_floatSlider setValue:_directionalLight.shiniess / 30.0f animated:YES];
             break;
         case 1:
-            [_floatSlider setValue:_directionalLight.specularItensity animated:YES];
+//            [_floatSlider setValue:_directionalLight.specularItensity animated:YES];
             break;
         default:
             break;
@@ -243,7 +242,7 @@
             _directionalLight.shiniess = MAX(1, slider.value * 30);
             break;
         case 1:
-            _directionalLight.specularItensity = slider.value;
+//            _directionalLight.specularItensity = slider.value;
             break;
         default:
             break;

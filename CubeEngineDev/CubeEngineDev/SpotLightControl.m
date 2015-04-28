@@ -36,7 +36,7 @@
             [_attributeSlider setValue:_operationLight.shiniess / kShiniessScale animated:YES];
             break;
         case 1:
-            [_attributeSlider setValue:_operationLight.specularItensity animated:YES];
+//            [_attributeSlider setValue:_operationLight.specularItensity animated:YES];
             break;
         case 2:
             [_attributeSlider setValue:_operationLight.attenuation * kAttenuationScale animated:YES];
@@ -59,7 +59,7 @@
             _operationLight.shiniess = MAX(1, slider.value * 30);
             break;
         case 1:
-            _operationLight.specularItensity = slider.value;
+//            _operationLight.specularItensity = slider.value;
             break;
         case 2:
             _operationLight.attenuation = slider.value / kAttenuationScale;

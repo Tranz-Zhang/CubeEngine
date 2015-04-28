@@ -10,4 +10,11 @@
 
 @interface CEMeterial : NSObject
 
+@property (nonatomic, assign) GLKVector3 emission;  // light produced by the meterial
+@property (nonatomic, assign) GLKVector3 ambient;   //
+@property (nonatomic, assign) GLKVector3 diffuse;
+@property (nonatomic, assign) GLKVector3 specular;
+@property (nonatomic, assign) float shiniess;
+
+
 @end
