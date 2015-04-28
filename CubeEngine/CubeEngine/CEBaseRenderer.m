@@ -44,6 +44,8 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
      float SpecularIntensity;
      float Shiniess;
      float Attenuation;
+     float SpotConsCutoff;
+     float SpotExponent;
  };
  uniform LightInfo Lights[LIGHT_COUNT];
  
@@ -57,7 +59,7 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
  varying vec3 Normal;
  varying vec4 Position;
  
- // Apply Directional Light to BaseColor
+ // Directional Light
  void ApplyDirectionalLight(LightInfo light) {
      // half vector
      vec3 halfVector = normalize(light.LightDirection + EyeDirection);
@@ -73,7 +75,7 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
      TotalSpecular += reflectedLight;
  }
  
- // Apply Point Light Effect to baseColor
+ // Point Light
  void ApplyPointLight(LightInfo light) {
      // calcualte attenuation
      vec3 lightDirection = vec3(light.LightPosition) - vec3(Position);
@@ -95,6 +97,39 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
      TotalSpecular += reflectedLight;
  }
  
+ 
+ void ApplySpotLight(LightInfo light) {
+     // calcualte attenuation
+     vec3 lightDirection = vec3(light.LightPosition) - vec3(Position);
+     float lightDistance = length(lightDirection);
+     lightDirection = lightDirection / lightDistance; // normalize light direction
+     
+     float attenuation = 1.0 / (1.0 + light.Attenuation * lightDistance + light.Attenuation * lightDistance * lightDistance);
+     
+     // spot cos
+     // lightDirection: current position to light position Direction
+     // light.LightDirection: source light direction, ref as ConeDirection
+     float spotCos = dot(lightDirection, light.LightDirection);
+     if (spotCos < light.SpotConsCutoff) {
+         attenuation = 0.0;
+     } else {
+         attenuation *= pow(spotCos, light.SpotExponent);
+     }
+     
+     // calculate diffuse and specular factor
+     vec3 halfVector = normalize(lightDirection + EyeDirection);
+     float diffuse = max(0.0, dot(Normal, lightDirection));
+     float specular = max(0.0, dot(Normal, halfVector));
+     
+     specular = (diffuse == 0.0) ? 0.0 : pow(specular, light.Shiniess);
+     vec3 scatteredLight = light.AmbientColor + light.LightColor * diffuse * attenuation;
+     vec3 reflectedLight = light.LightColor * specular * light.SpecularIntensity * attenuation;
+     
+     TotalDiffuse += scatteredLight;
+     TotalSpecular += reflectedLight;
+ }
+ 
+ 
  void main() {
      vec3 processColor = BaseColor.rgb;
      if (LightCount > 0) {
@@ -109,7 +144,7 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
                  ApplyPointLight(light);
                  
              } else if (light.LightType == 3) { // apply spot light
-                 
+                 ApplySpotLight(light);
              }
          }
          processColor = processColor * TotalDiffuse + TotalSpecular;
@@ -117,7 +152,6 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
      
      gl_FragColor = vec4(min(processColor, vec3(1.0)), BaseColor.a);
  }
- 
 );
 
 
@@ -175,6 +209,10 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
             if (info.shiniess_f < 0) continue;
             info.attenuation_f = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].Attenuation", i]];
             if (info.attenuation_f < 0) continue;
+            info.spotCosCutoff_f = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].SpotConsCutoff", i]];
+            if (info.spotCosCutoff_f < 0) continue;
+            info.spotExponent_f = [_program uniformIndex:[NSString stringWithFormat:@"Lights[%d].SpotExponent", i]];
+            if (info.spotExponent_f < 0) continue;
             
             [uniformInfos addObject:info];
         }

@@ -60,7 +60,7 @@
     _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
     _testModel.showAccessoryLine = YES;
     _testModel.baseColor = [UIColor orangeColor];
-//    [self.scene addModel:_testModel];
+    [self.scene addModel:_testModel];
     
     _directionalLight = [[CEDirectionalLight alloc] init];
     [_directionalLight lookAt:GLKVector3Make(0, -1, -1)];
@@ -75,17 +75,17 @@
 //    [self.scene addLight:_pointLight];
     
     _spotLight = [CESpotLight new];
+    _spotLight.position = GLKVector3Make(-8, 15, 0);
     _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
     [self.scene addLight:_spotLight];
     
-
-    _objectOperator.operationObject = _spotLight;
+    _objectOperator.operationObject = _testModel;
     
     // update light switches
     NSArray *lights = self.scene.allLights;
     _directionalLightSwitch.on = [lights containsObject:_directionalLight];
     _pointLightSwitch.on = [lights containsObject:_pointLight];
-    _spotLightSwitch.on = NO;
+    _spotLightSwitch.on = [lights containsObject:_spotLight];
 }
 
 
@@ -114,7 +114,7 @@
             _objectOperator.operationObject = _pointLight;
             break;
         case 3:
-            _objectOperator.operationObject = nil;
+            _objectOperator.operationObject = _spotLight;
             break;
         case 4:
             _objectOperator.operationObject = self.scene.camera;
@@ -142,9 +142,9 @@
 
 - (IBAction)onSpotLightSwitch:(UISwitch *)switcher {
     if (switcher.on) {
-        [self.scene addLight:nil];
+        [self.scene addLight:_spotLight];
     } else {
-        [self.scene removeLight:nil];
+        [self.scene removeLight:_spotLight];
     }
 }
 

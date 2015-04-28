@@ -146,17 +146,24 @@
 - (void)updateUniformsWithCamera:(CECamera *)camera {
     if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
     
-    glUniform1i(_uniformInfo.lightType_i, CEPointLightType);
+    glUniform1i(_uniformInfo.lightType_i, CESpotLightType);
     glUniform3fv(_uniformInfo.lightColor_vec3, 1, _lightColorV3.v);
     glUniform3fv(_uniformInfo.ambientColor_vec3, 1, _ambientColorV3.v);
     glUniform1f(_uniformInfo.shiniess_f, (GLfloat)_shiniess);
     glUniform1f(_uniformInfo.specularIntensity_f, _specularItensity);
     glUniform1f(_uniformInfo.attenuation_f, _attenuation);
+    GLfloat spotCosCutoff = cosf(GLKMathDegreesToRadians(_coneAngle));
+    glUniform1f(_uniformInfo.spotCosCutoff_f, spotCosCutoff);
+    glUniform1f(_uniformInfo.spotExponent_f, _spotExponent);
     
     // !!!: transfer light position in view space
     GLKVector4 lightPosition = GLKMatrix4MultiplyVector4([self transformMatrix], GLKVector4Make(0, 0, 0, 1));
     lightPosition = GLKMatrix4MultiplyVector4(camera.viewMatrix, lightPosition);
     glUniform4fv(_uniformInfo.lightPosition_vec4, 1, lightPosition.v);
+    // !!!: transfer light direction in view space
+    GLKVector3 lightDirection = GLKVector3Make(-_right.x, -_right.y, -_right.z);
+    lightDirection = GLKMatrix4MultiplyVector3(camera.viewMatrix, lightDirection);
+    glUniform3fv(_uniformInfo.lightDirection_vec3, 1, lightDirection.v);
     
     _hasLightChanged = NO;
     CEPrintf("Update Point Light Uniform\n");

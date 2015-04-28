@@ -25,5 +25,7 @@ typedef NS_ENUM(NSInteger, CELightType) {
 @property (nonatomic, assign) GLint specularIntensity_f;
 @property (nonatomic, assign) GLint shiniess_f;
 @property (nonatomic, assign) GLint attenuation_f;
+@property (nonatomic, assign) GLint spotCosCutoff_f;
+@property (nonatomic, assign) GLint spotExponent_f;
 
 @end
