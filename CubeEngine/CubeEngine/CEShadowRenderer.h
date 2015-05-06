@@ -1,8 +1,8 @@
 //
-//  CEBaseRenderer.h
+//  CEShadowRenderer.h
 //  CubeEngine
 //
-//  Created by chance on 4/23/15.
+//  Created by chance on 4/30/15.
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
@@ -10,11 +10,11 @@
 #import "CEModel.h"
 #import "CELight.h"
 
-// render model without lighting
-@interface CEBaseRenderer : CERenderer
+
+@interface CEShadowRenderer : CERenderer
 
 @property (nonatomic, assign) NSInteger maxLightCount;
-@property (nonatomic, strong) NSSet *lights;
+@property (nonatomic, strong) NSArray *lights;
 
 - (void)renderObject:(CEModel *)object;
 

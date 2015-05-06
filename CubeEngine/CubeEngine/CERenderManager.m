@@ -7,69 +7,118 @@
 //
 
 #import "CERenderManager.h"
+#import "CEScene_Rendering.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
 
-// render
+// renderer
 #import "CEBaseRenderer.h"
 #import "CERenderer_V.h"
 #import "CERenderer_V_VN.h"
+
+// debug renderer
+#import "CEWireframeRenderer.h"
+#import "CEAssistRenderer.h"
 
 @implementation CERenderManager {
     EAGLContext *_context;
     CEBaseRenderer *_testRenderer;
     
-    GLfloat _backgroundRed;
-    GLfloat _backgroundGreen;
-    GLfloat _backgroundBlue;
+    // debug renderer
+    CEWireframeRenderer *_wireframeRenderer;
+    CEAssistRenderer *_assistRenderer;
 }
 
-- (instancetype)initWithContext:(EAGLContext *)context
-{
+- (instancetype)initWithContext:(EAGLContext *)context {
     self = [super init];
     if (self) {
         _context = context;
-        [EAGLContext setCurrentContext:context];
-        _testRenderer = [CEBaseRenderer new];
-//        _testRenderer = [CERenderer_DirectionalLight shareRenderer];
-//        _testRenderer = [CERenderer_V_VN new];
-        [_testRenderer setupRenderer];
     }
     return self;
 }
 
-- (void)setBackgroundColor:(UIColor *)backgroundColor {
-    if (_backgroundColor != backgroundColor) {
-        _backgroundColor = [backgroundColor copy];
-        CGFloat red, green, blue;
-        [backgroundColor getRed:&red green:&green blue:&blue alpha:NULL];
-        _backgroundRed = red;
-        _backgroundGreen = green;
-        _backgroundBlue = blue;
-    }
-}
 
-- (void)setLights:(NSArray *)lights {
-    if (_lights != lights) {
-        _lights = [lights copy];
-        _testRenderer.lights = lights;
-    }
-}
-
-- (void)renderModels:(NSArray *)models {
-    glClearColor(_backgroundRed, _backgroundGreen, _backgroundBlue, 1.0);
-//    glClearDepthf(0.9978f);
+- (void)renderCurrentScene {
+    CEScene *scene = [CEScene currentScene];
+    [EAGLContext setCurrentContext:scene.context];
+    glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    
-    // enable depth test
-    glEnable(GL_DEPTH_TEST);
-//    glDepthFunc(GL_NEVER);
         
-    for (CEModel *model in models) {
-        // TODO: select render base on current model
-        _testRenderer.camera = _camera;
-        [_testRenderer renderObject:model];
+    for (CEModel *model in scene.allModels) {
+        CERenderer *renderer = [self getRendererWithModel:model];
+        [renderer renderObject:model];
+    }
+    if (scene.enableDebug) {
+        [self renderDebugScene];
     }
 }
+
+
+- (CERenderer *)getRendererWithModel:(CEModel *)model {
+    CEScene *scene = [CEScene currentScene];
+    if (!_testRenderer) {
+        [EAGLContext setCurrentContext:_context];
+        _testRenderer = [CEBaseRenderer new];
+        _testRenderer.maxLightCount = scene.maxLightCount;
+        [_testRenderer setupRenderer];
+    }
+    _testRenderer.camera = scene.camera;
+    _testRenderer.lights = scene.allLights;
+    
+    return _testRenderer;
+}
+
+#pragma mark - Debug renderer
+- (void)renderDebugScene {
+    CEScene *scene = [CEScene currentScene];
+    // render wireframe add assist info
+    for (CEModel *model in scene.allModels) {
+        if (model.showWireframe && model.wireframeBuffer) {
+            [[self wireframeRenderer] renderObject:model];
+        }
+        if (model.showAccessoryLine) {
+            [[self assistRender] renderObject:model];
+        }
+    }
+    
+    // render light object
+    for (CELight *light in scene.allLights) {
+        [[self assistRender] renderLight:light];
+    }
+    
+    // render world coordinate
+    [[self assistRender] renderWorldOriginCoordinate];
+}
+
+
+- (CEWireframeRenderer *)wireframeRenderer {
+    if (!_wireframeRenderer) {
+        _wireframeRenderer = [CEWireframeRenderer new];
+        _wireframeRenderer.lineWidth = 1.0f;
+        [_wireframeRenderer setupRenderer];
+    }
+    _wireframeRenderer.camera = [CEScene currentScene].camera;
+    return _wireframeRenderer;
+}
+
+
+- (CEAssistRenderer *)assistRender {
+    if (!_assistRenderer) {
+        _assistRenderer = [CEAssistRenderer new];
+        [_assistRenderer setupRenderer];
+    }
+    _assistRenderer.camera = [CEScene currentScene].camera;
+    return _assistRenderer;
+}
+
 
 @end
+
+
+
+
+
+
+
+
+

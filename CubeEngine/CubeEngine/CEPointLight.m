@@ -92,7 +92,10 @@
     glUniform4fv(_uniformInfo.lightPosition_vec4, 1, lightPosition.v);
     
     _hasLightChanged = NO;
-    CEPrintf("Update Point Light Uniform\n");
+    if (self.hasChanged) {
+        [self transformMatrix]; // call to set the hasChanged property to NO
+    }
+//    CEPrintf("Update Point Light Uniform\n");
 }
 
 @end

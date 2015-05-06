@@ -7,16 +7,17 @@
 //
 
 #import "CEScene.h"
+#import "CEScene_Rendering.h"
 #import "CECamera_Rendering.h"
 #import "CERenderManager.h"
 #import "CEDebugRenderManager.h"
 
+
+
 @interface CEScene () {
-    EAGLContext *_context;
-    CERenderManager *_renderManager;
-    CEDebugRenderManager *_debugRenderManager;
-    NSMutableArray *_renderObjects;
-    NSMutableArray *_lights;
+    
+    NSSet *_models;
+    NSSet *_lights;
 }
 
 @end
@@ -24,54 +25,62 @@
 
 @implementation CEScene
 
-- (instancetype)init
-{
+static CEScene *sCurrentScene;
+
++ (instancetype)currentScene {
+    return sCurrentScene;
+}
+
++ (void)setCurrentScene:(CEScene *)scene {
+    if (sCurrentScene != scene) {
+        sCurrentScene = scene;
+    }
+}
+
+
+- (instancetype)initWithContext:(EAGLContext *)context {
     self = [super init];
     if (self) {
-        _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-        _renderObjects = [NSMutableArray array];
-        _lights = [NSMutableArray array];
+        _context = context;
+        _renderCore = [[CERenderCore alloc] initWithContext:context];
         
         _camera = [[CECamera alloc] init];
         _camera.radianDegree = 65;
         _camera.aspect = 320.0 / 568.0;
-        _camera.nearZ = 0.1;
-        _camera.farZ = 100;
-        _camera.position = GLKVector3Make(0, 0, 4);
-        
-        _renderManager = [[CERenderManager alloc] initWithContext:_context];
-        _renderManager.camera = _camera;
-        _debugRenderManager = [[CEDebugRenderManager alloc] initWithContext:_context];
-        _debugRenderManager.camera = _camera;
+        _camera.nearZ = 0.1f;
+        _camera.farZ = 100.0f;
+        _camera.position = GLKVector3Make(0, 0, 4);        
     }
     return self;
 }
 
 
 #pragma mark - Setters & Getters
-- (EAGLContext *)context {
-    return _context;
-}
-
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
     if (_backgroundColor != backgroundColor) {
         _backgroundColor = [backgroundColor copy];
-        _renderManager.backgroundColor = backgroundColor;
+        CGFloat red, green, blue, alpha;
+        [backgroundColor getRed:&red green:&green blue:&blue alpha:&alpha];
+        _vec4BackgroundColor = GLKVector4Make(red, green, blue, alpha);
     }
 }
 
-- (NSArray *)allRenderObjects {
-    return [_renderObjects copy];
+
+- (NSSet *)allModels {
+    return _models;
 }
 
-- (NSArray *)allLights {
-    return _lights.copy;
+- (NSSet *)allLights {
+    return _lights;
 }
 
 #pragma mark - Model
 - (void)addModel:(CEModel *)model {
-    if ([model isKindOfClass:[CEModel class]]) {
-        [_renderObjects addObject:model];
+    if ([model isKindOfClass:[CEModel class]] &&
+        ![_models containsObject:model]) {
+        NSMutableSet *tmpList = [NSMutableSet setWithSet:_models];
+        [tmpList addObject:model];
+        _models = tmpList.copy;
         
     } else {
         CEError(@"Can not add model to scene");
@@ -80,35 +89,57 @@
 
 
 - (void)removeModel:(CEModel *)model {
-    [_renderObjects removeObject:model];
+    if ([_models containsObject:model]) {
+        NSMutableSet *tmpList = [NSMutableSet setWithSet:_models];
+        [tmpList removeObject:model];
+        _models = tmpList.copy;
+    }
 }
 
+
+- (void)addModels:(NSArray *)models {
+    if (!models.count) return;
+    NSMutableSet *tmpList = [NSMutableSet setWithSet:_models];
+    for (CEModel *model in models) {
+        if ([model isKindOfClass:[CEModel class]] &&
+            ![tmpList containsObject:model]) {
+            [tmpList addObject:model];
+        }
+    }
+    _models = tmpList.copy;
+}
+
+
+- (void)removeModels:(NSArray *)models {
+    if (!models.count) return;
+    NSMutableSet *tmpList = [NSMutableSet setWithSet:_models];
+    for (CEModel *model in models) {
+        if ([tmpList containsObject:model]) {
+            [tmpList removeObject:model];
+        }
+    }
+    _models = tmpList.copy;
+}
 
 #pragma mark - Light
 - (void)addLight:(CELight *)light {
-    if (_lights.count < [CELight maxLightCount] &&
+    if (_lights.count < _maxLightCount &&
         [light isKindOfClass:[CELight class]] &&
         ![_lights containsObject:light]) {
-        [_lights addObject:light];
-        _renderManager.lights = _lights;
+        
+        NSMutableSet *tmpList = [NSMutableSet setWithSet:_lights];
+        [tmpList addObject:light];
+        _lights = tmpList.copy;
     }
 }
+
 
 - (void)removeLight:(CELight *)light {
-    if ([light isKindOfClass:[CELight class]]) {
-        [_lights removeObject:light];
-        _renderManager.lights = _lights;
+    if ([_lights containsObject:light]) {
+        NSMutableSet *tmpList = [NSMutableSet setWithSet:_lights];
+        [tmpList removeObject:light];
+        _lights = tmpList.copy;
     }
-}
-
-
-- (void)update {
-    [EAGLContext setCurrentContext:_context];
-    [_renderManager renderModels:_renderObjects];
-    
-    [_debugRenderManager renderWireframeForModels:_renderObjects];
-    [_debugRenderManager renderLights:_lights];
-//    [_debugRenderManager renderWorldSpaceCoordinates];
 }
 
 

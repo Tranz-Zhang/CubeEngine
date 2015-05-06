@@ -10,7 +10,7 @@
 #import "CEUtils.h"
 #import "CELight_Rendering.h"
 
-static NSInteger kMaxLightCount = 8;
+//static NSInteger kMaxLightCount = 8;
 
 @implementation CELight
 
@@ -37,15 +37,6 @@ static NSInteger kMaxLightCount = 8;
     return _sDefaultVertexBufferAttributes;
 }
 
-+ (NSUInteger)maxLightCount {
-    return kMaxLightCount;
-}
-
-+ (void)setMaxLightCount:(NSInteger)maxLightCount {
-    if (maxLightCount > 0) {
-        kMaxLightCount = maxLightCount;
-    }
-}
 
 - (void)setEnabled:(BOOL)enabled {
     if (_enabled != enabled) {

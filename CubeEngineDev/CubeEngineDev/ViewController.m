@@ -10,7 +10,6 @@
 #import "ViewController.h"
 #import "CubeEngine.h"
 
-
 GLfloat gCubeVertexData[216] =
 {
     // Data layout for each line below is:

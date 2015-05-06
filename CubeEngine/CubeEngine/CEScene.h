@@ -12,31 +12,32 @@
 #import "CELight.h"
 
 /**
- representing a 3D scene, manage these things:
+ CEScene is like a container for rendering metarials, including:
  - 3D Objects
  - Camera
  - Light
+ 
+ Note: It is designed to be thread safe.
  */
 @interface CEScene : NSObject
 
-@property (nonatomic, readonly) NSArray *allRenderObjects;
-@property (nonatomic, readonly) NSArray *allLights;
+@property (nonatomic, readonly) NSSet *allModels;
+@property (nonatomic, readonly) NSSet *allLights;
+@property (nonatomic, readonly) NSInteger maxLightCount;
 @property (nonatomic, readonly) CECamera *camera;
-@property (nonatomic, readonly) EAGLContext *context;
 @property (nonatomic, copy) UIColor *backgroundColor;
-@property (nonatomic, assign) NSInteger maxLightCount;
-
-@property (nonatomic, assign) BOOL displayOriginalPivot;
 
 // Model
 - (void)addModel:(CEModel *)model;
 - (void)removeModel:(CEModel *)model;
+- (void)addModels:(NSArray *)models;
+- (void)removeModels:(NSArray *)models;
+
 
 // Light
 - (void)addLight:(CELight *)light;
 - (void)removeLight:(CELight *)light;
 
-- (void)update;
 
 @end
 

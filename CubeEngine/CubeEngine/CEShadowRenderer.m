@@ -1,19 +1,19 @@
 //
-//  CEBaseRenderer.m
+//  CEShadowRenderer.m
 //  CubeEngine
 //
-//  Created by chance on 4/23/15.
+//  Created by chance on 4/30/15.
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEBaseRenderer.h"
-#import "CEProgram.h"
+#import "CEShadowRenderer.h"
 #import "CEScene_Rendering.h"
+#import "CEProgram.h"
 #import "CELight_Rendering.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
 
-NSString *const kBaseVertexShader = CE_SHADER_STRING
+NSString *const kShadowVertexShader = CE_SHADER_STRING
 (
  attribute highp vec4 VertexPosition;
  attribute highp vec3 VertexNormal;
@@ -32,7 +32,7 @@ NSString *const kBaseVertexShader = CE_SHADER_STRING
  }
  );
 
-NSString *const kBaseFragmentSahder = CE_SHADER_STRING
+NSString *const kShadowFragmentSahder = CE_SHADER_STRING
 (
  precision mediump float;
  
@@ -109,7 +109,7 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
  );
 
 
-@implementation CEBaseRenderer {
+@implementation CEShadowRenderer {
     CEProgram *_program;
     NSArray *_lightUniformInfos;
     
@@ -128,8 +128,8 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
 - (BOOL)setupRenderer {
     if (_program.initialized) return YES;
     int maxLightCount = [CEScene currentScene].maxLightCount;
-    NSString *fragmentShader = [kBaseFragmentSahder stringByReplacingOccurrencesOfString:@"LIGHT_COUNT" withString:[NSString stringWithFormat:@"%d", maxLightCount]];
-    _program = [[CEProgram alloc] initWithVertexShaderString:kBaseVertexShader
+    NSString *fragmentShader = [kShadowFragmentSahder stringByReplacingOccurrencesOfString:@"LIGHT_COUNT" withString:[NSString stringWithFormat:@"%d", maxLightCount]];
+    _program = [[CEProgram alloc] initWithVertexShaderString:kShadowVertexShader
                                         fragmentShaderString:fragmentShader];
     [_program addAttribute:@"VertexPosition"];
     [_program addAttribute:@"VertexNormal"];
@@ -189,16 +189,14 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
     return isOK;
 }
 
-- (void)setLights:(NSSet *)lights {
+- (void)setLights:(NSArray *)lights {
     if (_lights != lights) {
         _lights = [lights copy];
-        int idx = 0;
-        for (CELight *light in _lights) {
+        [_lights enumerateObjectsUsingBlock:^(CELight *light, NSUInteger idx, BOOL *stop) {
             if (idx < _lightUniformInfos.count) {
                 light.uniformInfo = _lightUniformInfos[idx];
             }
-            idx++;
-        }
+        }];
     }
 }
 
@@ -253,4 +251,18 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
     }
 }
 
+#pragma mark - Shadow Mapping
+- (void)setupShadowMappping {
+    
+}
+
+- (void)prepareShadowMapping {
+    
+}
+
+- (void)renderShadowMapping {
+    
+}
+
 @end
+

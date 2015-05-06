@@ -159,7 +159,10 @@
     glUniform3fv(_uniformInfo.lightDirection_vec3, 1, lightDirection.v);
     
     _hasLightChanged = NO;
-    CEPrintf("Update Spot Light Uniform\n");
+    if (self.hasChanged) {
+        [self transformMatrix]; // call to set the hasChanged property to NO
+    }
+//    CEPrintf("Update Spot Light Uniform\n");
 }
 
 

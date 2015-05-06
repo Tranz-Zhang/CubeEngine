@@ -88,6 +88,7 @@
     _directionalLightSwitch.on = _directionalLight.isEnabled;
     _pointLightSwitch.on = _pointLight.isEnabled;
     _spotLightSwitch.on = _spotLight.isEnabled;
+
 }
 
 

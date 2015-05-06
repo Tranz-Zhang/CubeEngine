@@ -32,13 +32,6 @@
     return self;
 }
 
-- (void)setCamera:(CECamera *)camera {
-    if (_camera != camera) {
-        _camera = camera;
-        _accessoryRenderer.camera = camera;
-        _wireframeRenderer.camera = camera;
-    }
-}
 
 - (void)renderWireframeForModels:(NSArray *)models {
     for (CEModel *model in models) {

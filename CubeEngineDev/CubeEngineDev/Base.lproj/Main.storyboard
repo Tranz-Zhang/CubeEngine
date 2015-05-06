@@ -9,7 +9,7 @@
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="ViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS" customClass="GLKView">
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS" customClass="CEView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -122,7 +122,7 @@
         <scene sceneID="fpX-uj-gqv">
             <objects>
                 <viewController id="LLu-Zq-wEI" customClass="ModelViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="2By-A5-exp" customClass="GLKView">
+                    <view key="view" contentMode="scaleToFill" id="2By-A5-exp" customClass="CEView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -189,7 +189,7 @@
         <scene sceneID="7aH-7E-Uj7">
             <objects>
                 <viewController id="czA-IP-vH5" customClass="CameraViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="FTx-4Z-zjK" customClass="GLKView">
+                    <view key="view" contentMode="scaleToFill" id="FTx-4Z-zjK" customClass="CEView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -312,7 +312,7 @@
         <scene sceneID="O7K-Hm-Rdg">
             <objects>
                 <viewController id="EeN-hv-xmw" customClass="DirectionalLightViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="EtF-zj-Jr9" customClass="GLKView">
+                    <view key="view" contentMode="scaleToFill" id="EtF-zj-Jr9" customClass="CEView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -421,7 +421,7 @@
         <scene sceneID="4mS-qd-1fR">
             <objects>
                 <viewController id="CtP-NC-lRH" customClass="PointLightViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="uXn-Go-Q0c" customClass="GLKView">
+                    <view key="view" contentMode="scaleToFill" id="uXn-Go-Q0c" customClass="CEView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -512,7 +512,7 @@
         <scene sceneID="7c4-Xj-jwd">
             <objects>
                 <viewController id="R24-Ww-GUK" customClass="LightViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="dUx-SF-Dqs" customClass="GLKView">
+                    <view key="view" contentMode="scaleToFill" id="dUx-SF-Dqs" customClass="CEView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -565,7 +565,6 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>

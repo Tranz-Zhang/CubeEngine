@@ -2,89 +2,102 @@
 //  CEViewController.m
 //  CubeEngine
 //
-//  Created by chance on 15/3/6.
-//  Copyright (c) 2015年 ByChance. All rights reserved.
+//  Created by chance on 5/5/15.
+//  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
 #import "CEViewController.h"
+#import "CEView_Rendering.h"
+#import "CEScene_Rendering.h"
+#import "CERenderManager.h"
 
-@implementation CEViewController {
-    CEScene *_scene;
+#define kDefaultFramesPerSecond 30
+#define kDefaultMaxLightCount 4
+
+@interface CEViewController () {
+    EAGLContext *_context;
+    CADisplayLink *_displayLink;
+    CERenderManager *_renderManager;
 }
 
+@end
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        _scene = [CEScene new];
+
+@implementation CEViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        [self initializeViewController];
     }
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        _scene = [CEScene new];
+
+- (id)initWithCoder:(NSCoder*)coder {
+    if (self = [super initWithCoder:coder]) {
+        [self initializeViewController];
     }
     return self;
+}
+
+
+- (void)initializeViewController {
+    _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    [EAGLContext setCurrentContext:_context];
+    _scene = [[CEScene alloc] initWithContext:_context];
+    _scene.maxLightCount = [self maxLightCount];
+    _scene.enableDebug = [self enableDebugMode];
+    _renderManager = [[CERenderManager alloc] initWithContext:_context];
+    
+    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawView:)];
+    _displayLink.frameInterval = MAX(1, (60 / [self preferredFramesPerSecond]));
+    [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    self.paused = NO;
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _scene.camera.aspect = self.view.bounds.size.width / self.view.bounds.size.height;
-    GLKView *view = (GLKView *)self.view;
-    view.context = _scene.context;
-    view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+    CEView *view = (CEView *)self.view;
+    if (![view isKindOfClass:[CEView class]]) { //auto changed to CEView
+        CEView *view = [[CEView alloc] initWithFrame:self.view.frame];
+        view.autoresizingMask = self.view.autoresizingMask;
+        view.backgroundColor = self.view.backgroundColor;
+        for (UIView *subview in self.view.subviews) {
+            [view addSubview:subview];
+        }
+        self.view = view;
+        CEError("Auto Load CEView");
+    }
     
-/*
- GLKMatrix4 rotationMatrix = GLKMatrix4Identity;
-//    rotationMatrix = GLKMatrix4Multiply(GLKMatrix4MakeRotation(GLKMathDegreesToRadians(45), 1, 0, 0), rotationMatrix);
-//    rotationMatrix = GLKMatrix4Multiply(GLKMatrix4MakeRotation(GLKMathDegreesToRadians(45), 0, 1, 0), rotationMatrix);
-//    rotationMatrix = GLKMatrix4Multiply(GLKMatrix4MakeRotation(GLKMathDegreesToRadians(45), 0, 0, 1), rotationMatrix);
-    
-    GLKQuaternion rotationQuaternion = GLKQuaternionIdentity;
-    rotationQuaternion = GLKQuaternionMultiply(GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(88), 1, 0, 0), rotationQuaternion);
-    rotationQuaternion = GLKQuaternionMultiply(GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(15), 0, 1, 0), rotationQuaternion);
-    rotationQuaternion = GLKQuaternionMultiply(GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(23), 0, 0, 1), rotationQuaternion);
-    
-    rotationMatrix = GLKMatrix4MakeWithQuaternion(rotationQuaternion);
-    float angleX = atan2(rotationMatrix.m12, rotationMatrix.m22);
-    float angleY = atan2(-rotationMatrix.m02, sqrt(pow(rotationMatrix.m12, 2) + pow(rotationMatrix.m22, 2)));
-    float angleZ = atan2(rotationMatrix.m10, rotationMatrix.m00);
-    
-    angleX = GLKMathRadiansToDegrees(angleX);
-    angleY = GLKMathRadiansToDegrees(angleY);
-    angleZ = GLKMathRadiansToDegrees(angleZ);
-    printf("(%.1f, %.1f, %.1f)\n", angleX, angleY, angleZ);
-    
-    GLKQuaternion quaternion = rotationQuaternion;
-    angleX = atan2(2 * (quaternion.w * quaternion.x + quaternion.z * quaternion.y),
-                   1 - 2 * (pow(quaternion.x, 2) + pow(quaternion.y, 2)));
-    angleY = asin(2 * (quaternion.w * quaternion.y - quaternion.x * quaternion.z));
-    angleZ = atan2(2 * (quaternion.w * quaternion.z + quaternion.x * quaternion.y),
-                   1- 2 * (pow(quaternion.y, 2) + pow(quaternion.z, 2)));
-    
-    angleX = GLKMathRadiansToDegrees(angleX);
-    angleY = GLKMathRadiansToDegrees(angleY);
-    angleZ = GLKMathRadiansToDegrees(angleZ);
-    printf("(%.1f, %.1f, %.1f)\n", angleX, angleY, angleZ);
-    
-    
-    printf("onTestRotation\n\n");
-    CEObject *testObject = [CEObject new];
-    testObject.eulerAngles = GLKVector3Make(30, 40, 50);
-    testObject.eulerAngles = GLKVector3Make(12.4, 56.7, 89.6);
-    testObject.eulerAngles = GLKVector3Make(-30, 40, 50);
-    testObject.eulerAngles = GLKVector3Make(30, -40, -50);
-    testObject.eulerAngles = GLKVector3Make(230, 190, 260);
-    testObject.eulerAngles = GLKVector3Make(25, 90, 45);
-    testObject.eulerAngles = GLKVector3Make(-135, 135, 135);
-    testObject.eulerAngles = GLKVector3Make(-135, -197, 270);
-    testObject.eulerAngles = GLKVector3Make(20, -180, -160);
-//*/
+    _scene.camera.aspect = self.view.frame.size.width / self.view.frame.size.height;
+    view.opaque = YES;
+    view.renderCore = _scene.renderCore;
+    [view display];
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self drawView:nil];
+    self.paused = NO;
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    self.paused = YES;
+}
+
+
+#pragma mark - Setter & Getter
+
+- (BOOL)isPaused {
+    return _displayLink.paused;
+}
+
+- (void)setPaused:(BOOL)paused {
+    _displayLink.paused = paused;
+}
+
 
 #pragma mark - rotation
 
@@ -106,20 +119,40 @@
 }
 
 
-#pragma mark - rendering
-
-static float rotation = 0;
-- (void)update {
-    rotation += self.timeSinceLastUpdate * 50;
-//    [_testObject setRotation:rotation onPivot:CERotationPivotX|CERotationPivotY|CERotationPivotZ];
-}
-
-- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
-    [_scene update];
+#pragma mark - Update
+- (void)drawView:(id)sender {
+    [self onUpdate];
+    // render current scene
+    [CEScene setCurrentScene:self.scene];
+    [_renderManager renderCurrentScene];
+    [(CEView *)self.view display];
 }
 
 
+- (void)onUpdate {
+    // Do nothing
+}
 
 
+#pragma mark - Settings
+- (NSInteger)preferredFramesPerSecond {
+    return kDefaultFramesPerSecond;
+}
+
+- (NSInteger)maxLightCount {
+    return kDefaultMaxLightCount;
+}
+
+
+- (BOOL)enableDebugMode {
+#ifdef DEBUG
+    return YES;
+#else
+    return NO;
+#endif
+}
 
 @end
+
+
+
