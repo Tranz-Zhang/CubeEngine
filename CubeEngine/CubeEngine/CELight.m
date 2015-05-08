@@ -78,4 +78,30 @@
 }
 
 
+- (GLKMatrix4)viewMatrix {
+    if (!self.hasChanged) {
+        return _lightViewMatrix;
+    }
+    
+    GLKMatrix4 tranformMatrix;
+    if (_hasChanged) {
+        // update local transfrom matrix
+        tranformMatrix = GLKMatrix4MakeTranslation(_position.x, _position.y, _position.z);
+        tranformMatrix = GLKMatrix4Multiply(tranformMatrix, GLKMatrix4MakeWithQuaternion(GLKQuaternionInvert(_rotation)));
+        tranformMatrix = GLKMatrix4ScaleWithVector3(tranformMatrix, GLKVector3Make(1, -1, 1));
+        if (_parentObject) {
+            _lightViewMatrix = GLKMatrix4Invert(GLKMatrix4Multiply(_parentObject.transformMatrix, tranformMatrix), NULL);
+        } else {
+            _lightViewMatrix = GLKMatrix4Invert(tranformMatrix, NULL);
+        }
+    }
+    
+    if (_parentObject && _parentObject.hasChanged) {
+        _lightViewMatrix = GLKMatrix4Invert(GLKMatrix4Multiply(_parentObject.transformMatrix, tranformMatrix), NULL);
+    }
+    
+    return _lightViewMatrix;
+}
+
+
 @end

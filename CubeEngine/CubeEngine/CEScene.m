@@ -8,11 +8,6 @@
 
 #import "CEScene.h"
 #import "CEScene_Rendering.h"
-#import "CECamera_Rendering.h"
-#import "CERenderManager.h"
-#import "CEDebugRenderManager.h"
-
-
 
 @interface CEScene () {
     

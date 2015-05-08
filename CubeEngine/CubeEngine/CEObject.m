@@ -126,10 +126,12 @@
         
     } else {
         deltaRotation = GLKQuaternionMake(deltaVector.x, deltaVector.y, deltaVector.z, w);
-        
     }
     GLKQuaternion rotation = GLKQuaternionMultiply(GLKQuaternionNormalize(deltaRotation), _rotation);
-    [self setRotation:rotation];
+    float angleX, angleY, angleZ;
+    CEGetEulerAngles(rotation, &angleY, &angleZ, &angleX);
+    // NOTE: the roll rotation is eliminated.
+    [self setEulerAngles:GLKVector3Make(0, angleY, angleZ)];
 }
 
 

@@ -564,6 +564,17 @@
                                     <action selector="onReset:" destination="EeN-hv-xmw" eventType="touchUpInside" id="slS-XI-qQW"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="NGF-eU-eH3">
+                                <rect key="frame" x="251" y="45" width="64" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="LookAT">
+                                    <color key="titleColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onLookAt:" destination="R24-Ww-GUK" eventType="touchUpInside" id="Gxd-1p-8t9"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>

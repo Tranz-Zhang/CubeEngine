@@ -19,6 +19,10 @@
     self = [super init];
     if (self) {
         _projectionType = CEProjectionPerpective;
+        _radianDegree = 65;
+        _orthoBoxWidth = 10;
+        _nearZ = 0.1;
+        _farZ = 100;
         _perspectiveChanged = YES;
     }
     return self;
@@ -35,6 +39,13 @@
 - (void)setRadianDegree:(float)radianDegree {
     if (_radianDegree != radianDegree) {
         _radianDegree = radianDegree;
+        _perspectiveChanged = YES;
+    }
+}
+
+- (void)setOrthoBoxWidth:(float)orthoBoxWidth {
+    if (!_orthoBoxWidth != orthoBoxWidth) {
+        _orthoBoxWidth = orthoBoxWidth;
         _perspectiveChanged = YES;
     }
 }
@@ -62,8 +73,8 @@
 
 #pragma mark - Rotation
 
-- (void)lookAt:(GLKVector3)targetLocation {
-    GLKMatrix4 lookAtMatrix = GLKMatrix4MakeLookAt(self.position.x, self.position.y, self.position.z, targetLocation.x, targetLocation.y, targetLocation.z, 0, 1, 0);
+- (void)lookAt:(GLKVector3)targetPosition {
+    GLKMatrix4 lookAtMatrix = GLKMatrix4MakeLookAt(self.position.x, self.position.y, self.position.z, targetPosition.x, targetPosition.y, targetPosition.z, 0, 1, 0);
     lookAtMatrix = GLKMatrix4Invert(lookAtMatrix, NULL);
     GLKQuaternion lookAtQuaternion = GLKQuaternionMakeWithMatrix4(lookAtMatrix);
     self.rotation = lookAtQuaternion;
@@ -108,7 +119,7 @@
             _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(_radianDegree), _aspect, _nearZ, _farZ);
             
         } else if (_projectionType == CEProjectionOrthographic) {
-            _projectionMatrix = GLKMatrix4MakeOrtho(-1, 1, -1 / _aspect, 1 / _aspect, _nearZ, _farZ);
+            _projectionMatrix = GLKMatrix4MakeOrtho(-_orthoBoxWidth, _orthoBoxWidth, -_orthoBoxWidth / _aspect, _orthoBoxWidth / _aspect, _nearZ, _farZ);
             
         } else {
             CEError(@"Error: Unknown projection type");

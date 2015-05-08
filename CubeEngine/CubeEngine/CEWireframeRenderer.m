@@ -79,6 +79,7 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
         NSString *vertLog = [_program vertexShaderLog];
         CEError(@"Vertex shader compile log: %@", vertLog);
         _program = nil;
+        NSAssert(0, @"Fail to Compile Program");
     }
     
     return isOK;
@@ -90,13 +91,13 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
         return;
     }
     // setup vertex buffer
-    if (!model.wireframeBuffer || ![model.wireframeBuffer setupBufferWithContext:self.context] ||
-        ![model.vertexBuffer setupBufferWithContext:self.context]) {
+    if (![model.wireframeBuffer setupBuffer] ||
+        ![model.vertexBuffer setupBuffer]) {
         return;
     }
     // prepare attribute for rendering
     if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attributePosition] ||
-        ![model.wireframeBuffer prepareForRendering]){
+        ![model.wireframeBuffer bindBuffer]){
         return;
     }
     [_program use];

@@ -53,7 +53,7 @@
 
 
 // ceate vertex buffer and pass the vertex data to the buffer.
-- (BOOL)setupBufferWithContext:(EAGLContext *)context;
+- (BOOL)setupBuffer;
 
 // bind current vertex buffer and setup attribute infos of the vertex buffer by call glVertexAttribPointer()
 - (BOOL)prepareAttribute:(CEVBOAttributeName)attribute withProgramIndex:(GLint)programIndex;

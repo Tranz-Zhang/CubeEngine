@@ -35,6 +35,27 @@
     return self;
 }
 
+- (void)dealloc {
+    if (_defaultFramebuffer) {
+        glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
+        if (_colorRenderbuffer) {
+            glDeleteRenderbuffers(1, &_colorRenderbuffer);
+            _colorRenderbuffer = 0;
+        }
+        if (_depthRenderbuffer) {
+            glDeleteRenderbuffers(1, &_depthRenderbuffer);
+            _depthRenderbuffer = 0;
+        }
+        if (_stencilRenderBuffer) {
+            glDeleteRenderbuffers(1, &_stencilRenderBuffer);
+            _stencilRenderBuffer = 0;
+        }
+        
+        glDeleteFramebuffers(1, &_defaultFramebuffer);
+        _defaultFramebuffer = 0;
+    }
+}
+
 #pragma mark - Setters & Getters
 
 - (void)setEnableDepthBuffer:(BOOL)enableDepthBuffer {
@@ -65,6 +86,7 @@
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer {
     // Allocate color buffer backing based on the current layer size
+    glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
     if( ! [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer] )  {
         CEError(@"failed to call context");

@@ -30,6 +30,7 @@
 		268CBC6C1ADD466E00795A6D /* teapot.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC691ADD466E00795A6D /* teapot.mtl */; };
 		268CBC6E1ADD466E00795A6D /* teapot.png in Resources */ = {isa = PBXBuildFile; fileRef = 268CBC6B1ADD466E00795A6D /* teapot.png */; };
 		2697626F1AE0B005005E95DA /* DirectionalLightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2697626E1AE0B005005E95DA /* DirectionalLightViewController.m */; };
+		26A00DB61AFB014C00E12B24 /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 26A00DB51AFB014C00E12B24 /* floor.obj */; };
 		26D4B5731ADF5D0C00EF34E7 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */; };
 		4461FD071AEE9A2700A59229 /* SpotLightControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4461FD061AEE9A2700A59229 /* SpotLightControl.m */; };
 		4461FD091AEE9A3700A59229 /* SpotLightControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4461FD081AEE9A3700A59229 /* SpotLightControl.xib */; };
@@ -104,6 +105,7 @@
 		268CBC6B1ADD466E00795A6D /* teapot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = teapot.png; sourceTree = "<group>"; };
 		2697626D1AE0B005005E95DA /* DirectionalLightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionalLightViewController.h; sourceTree = "<group>"; };
 		2697626E1AE0B005005E95DA /* DirectionalLightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionalLightViewController.m; sourceTree = "<group>"; };
+		26A00DB51AFB014C00E12B24 /* floor.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor.obj; sourceTree = "<group>"; };
 		26D4B5711ADF5D0C00EF34E7 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		4461FD051AEE9A2700A59229 /* SpotLightControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpotLightControl.h; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 		261CD42E1AD3DE3D00C521CC /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				26A00DB51AFB014C00E12B24 /* floor.obj */,
 				263C8E761AE68738004FDFE8 /* teapot_smooth.obj */,
 				263C8E771AE68738004FDFE8 /* teapot.obj */,
 				268CBC691ADD466E00795A6D /* teapot.mtl */,
@@ -389,6 +392,7 @@
 				261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */,
 				26193F861AA833BF00787C64 /* Main.storyboard in Resources */,
 				44D0CCE81AECA677000C137C /* transition_icon@2x.png in Resources */,
+				26A00DB61AFB014C00E12B24 /* floor.obj in Resources */,
 				4C595AF71AEC7CCD006900EF /* DirectionalLightControl.xib in Resources */,
 				263C8E781AE68738004FDFE8 /* teapot_smooth.obj in Resources */,
 				4461FD091AEE9A3700A59229 /* SpotLightControl.xib in Resources */,

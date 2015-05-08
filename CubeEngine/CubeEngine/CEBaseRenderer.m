@@ -63,10 +63,13 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
      vec3 reflectedLight = vec3(0.0);
      
      // loop over all light and calculate light effect
+     bool hasLightEnabled = false;
      for (int i = 0; i < LightCount; i++) {
          if (!Lights[i].IsEnabled) {
              continue;
          }
+         hasLightEnabled = true;
+         
          vec3 halfVector;
          vec3 lightDirection = Lights[i].LightDirection;
          float attenuation = 1.0;
@@ -103,8 +106,12 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
          reflectedLight += Lights[i].LightColor * specular * attenuation;
      }
      
-     vec3 rgb = min(BaseColor.rgb * scatteredLight + reflectedLight, vec3(1.0));
-     gl_FragColor = vec4(rgb, BaseColor.a);
+     if (hasLightEnabled) {
+         vec3 rgb = min(BaseColor.rgb * scatteredLight + reflectedLight, vec3(1.0));
+         gl_FragColor = vec4(rgb, BaseColor.a);
+     } else {
+         gl_FragColor = BaseColor;
+     }
  }
  );
 
@@ -184,6 +191,7 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
         NSString *vertLog = [_program vertexShaderLog];
         CEError(@"Vertex shader compile log: %@", vertLog);
         _program = nil;
+        NSAssert(0, @"Fail to Compile Program");
     }
     
     return isOK;
@@ -209,8 +217,8 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
     }
     
     // setup vertex buffer
-    if (![object.vertexBuffer setupBufferWithContext:self.context] ||
-        (object.indicesBuffer && ![object.indicesBuffer setupBufferWithContext:self.context])) {
+    if (![object.vertexBuffer setupBuffer] ||
+        (object.indicesBuffer && ![object.indicesBuffer setupBuffer])) {
         return;
     }
     // prepare for rendering
@@ -218,7 +226,7 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
         ![object.vertexBuffer prepareAttribute:CEVBOAttributeNormal withProgramIndex:_attribVec3Normal]){
         return;
     }
-    if (object.indicesBuffer && ![object.indicesBuffer prepareForRendering]) {
+    if (object.indicesBuffer && ![object.indicesBuffer bindBuffer]) {
         return;
     }
     [_program use];

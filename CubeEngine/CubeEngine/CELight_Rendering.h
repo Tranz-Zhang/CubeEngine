@@ -26,6 +26,9 @@
 @property (nonatomic, readonly) CEVertexBuffer *vertexBuffer;
 @property (nonatomic, readonly) CEIndicesBuffer *indicesBuffer;
 
+// light view matrix, mainly used for shadow mapping
+@property (nonatomic, readonly) GLKMatrix4 viewMatrix;
+
 // Light info
 @property (nonatomic, strong) CELightUniformInfo *uniformInfo;
 
@@ -34,6 +37,7 @@
 
 // must overwrite by subclass
 - (void)updateUniformsWithCamera:(CECamera *)camera;
+
 
 @end
 

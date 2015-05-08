@@ -23,7 +23,8 @@
     NSMutableArray *_segmentViews;
     ObjectOperator *_objectOperator;
     
-    CEModel *_testModel;
+    CEModel *_teapotModel;
+    CEModel *_floorModel;
     CEDirectionalLight *_directionalLight;
     CEPointLight *_pointLight;
     CESpotLight *_spotLight;
@@ -54,18 +55,24 @@
     [self.view addSubview:_segmentViewControl];
     
     self.scene.backgroundColor = [UIColor whiteColor];
+//    self.scene.camera.projectionType = CEProjectionOrthographic;
     self.scene.camera.position = GLKVector3Make(0, 30, 30);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
-    _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
-    _testModel.showAccessoryLine = YES;
-//    _testModel.baseColor = [UIColor orangeColor];
-    [self.scene addModel:_testModel];
+    _teapotModel = [CEModel modelWithObjFile:@"teapot_smooth"];
+    _teapotModel.showAccessoryLine = YES;
+    _teapotModel.baseColor = [UIColor orangeColor];
+    [self.scene addModel:_teapotModel];
+    
+    _floorModel = [CEModel modelWithObjFile:@"floor"];
+    _floorModel.baseColor = [UIColor lightGrayColor];
+    [self.scene addModel:_floorModel];
     
     _directionalLight = [[CEDirectionalLight alloc] init];
-    [_directionalLight lookAt:GLKVector3Make(0, -1, -1)];
-    _directionalLight.position = GLKVector3Make(8, 15, 0);
+    _directionalLight.position = GLKVector3Make(8, 8, 8);
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
+    [_directionalLight lookAt:GLKVector3Make(0, 0, 0)];
+    _directionalLight.enableShadow = YES;
     [self.scene addLight:_directionalLight];
     
     _pointLight = [CEPointLight new];
@@ -76,10 +83,10 @@
     _spotLight = [CESpotLight new];
     _spotLight.position = GLKVector3Make(-8, 15, 0);
     _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
-    [_spotLight lookAt:_testModel.position];
+    [_spotLight lookAt:_teapotModel.position];
     [self.scene addLight:_spotLight];
     
-    _objectOperator.operationObject = _testModel;
+    _objectOperator.operationObject = _teapotModel;
     
     // update light switches
     _directionalLight.enabled = NO;
@@ -93,11 +100,11 @@
 
 
 - (IBAction)onReset:(id)sender {
-    _testModel.position = GLKVector3Make(0, 0, 0);
-    _testModel.eulerAngles = GLKVector3Make(0, 0, 0);
-    _testModel.scale = GLKVector3Make(1, 1, 1);
+    _teapotModel.position = GLKVector3Make(0, 0, 0);
+    _teapotModel.eulerAngles = GLKVector3Make(0, 0, 0);
+    _teapotModel.scale = GLKVector3Make(1, 1, 1);
     
-    _directionalLight.position = GLKVector3Make(8, 15, 0);
+    _directionalLight.position = GLKVector3Make(8, 0, 15);
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     _directionalLight.eulerAngles = GLKVector3Make(0, 0, 0);
     
@@ -108,7 +115,7 @@
 - (IBAction)onObjectSegmentChanged:(UISegmentedControl *)segment {
     switch (segment.selectedSegmentIndex) {
         case 0:
-            _objectOperator.operationObject = _testModel;
+            _objectOperator.operationObject = _teapotModel;
             break;
         case 1:
             _objectOperator.operationObject = _directionalLight;
@@ -137,6 +144,11 @@
 
 - (IBAction)onSpotLightSwitch:(UISwitch *)switcher {
     _spotLight.enabled = switcher.on;
+}
+
+
+- (IBAction)onLookAt:(id)sender {
+    [_directionalLight lookAt:_teapotModel.position];
 }
 
 

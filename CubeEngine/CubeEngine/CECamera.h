@@ -31,9 +31,14 @@ typedef NS_ENUM(NSInteger, CEProjectionType) {
 @property (nonatomic, assign) CEProjectionType projectionType;
 
 /**
- The angle of the vertical viewing area. Default is 65
+ The angle of the vertical viewing area for Perspective View. Default is 65
  */
 @property (nonatomic, assign) float radianDegree;
+
+/**
+ The width of the orthographic box. default is 10;
+ */
+@property (nonatomic, assign) float orthoBoxWidth;
 
 /**
  The ratio between the horizontal and the vertical viewing area.
@@ -54,7 +59,7 @@ typedef NS_ENUM(NSInteger, CEProjectionType) {
 /**
  Make the camera facing to the target location, By default the camera is facing axis +Z
  */
-- (void)lookAt:(GLKVector3)targetLocation;
+- (void)lookAt:(GLKVector3)targetPosition;
 
 
 @end

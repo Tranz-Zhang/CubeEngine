@@ -44,7 +44,7 @@
 }
 
 
-- (BOOL)setupBufferWithContext:(EAGLContext *)context {
+- (BOOL)setupBuffer {
     if (_ready) {
         return YES;
     }
@@ -63,7 +63,7 @@
 }
 
 
-- (BOOL)prepareForRendering {
+- (BOOL)bindBuffer {
     if (_ready) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indicesBufferIndex);
     }

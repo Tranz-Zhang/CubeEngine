@@ -22,8 +22,8 @@
 
 - (instancetype)initWithData:(NSData *)bufferData indicesCount:(NSInteger)indicesCount;
 
-- (BOOL)setupBufferWithContext:(EAGLContext *)context;
-- (BOOL)prepareForRendering;
+- (BOOL)setupBuffer;
+- (BOOL)bindBuffer;
 
 
 @end

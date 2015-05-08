@@ -79,7 +79,7 @@
 }
 
 
-- (BOOL)setupBufferWithContext:(EAGLContext *)context {
+- (BOOL)setupBuffer {
     if (_ready) {
         return YES;
     }

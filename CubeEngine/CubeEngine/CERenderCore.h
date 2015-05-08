@@ -10,7 +10,8 @@
 #import <GLKit/GLKit.h>
 
 /**
- Response for creating and managing default framebuffer
+ CERenderCore creates and manages the default framebuffer and renderbuffer.
+ Also providing some basic rendering infos
  */
 @interface CERenderCore : NSObject
 

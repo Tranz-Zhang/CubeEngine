@@ -13,6 +13,7 @@
 
 // renderer
 #import "CEBaseRenderer.h"
+#import "CEShadowRenderer.h"
 #import "CERenderer_V.h"
 #import "CERenderer_V_VN.h"
 
@@ -23,6 +24,7 @@
 @implementation CERenderManager {
     EAGLContext *_context;
     CEBaseRenderer *_testRenderer;
+    CEShadowRenderer *_testShadowMapRenderer;
     
     // debug renderer
     CEWireframeRenderer *_wireframeRenderer;
@@ -41,16 +43,20 @@
 - (void)renderCurrentScene {
     CEScene *scene = [CEScene currentScene];
     [EAGLContext setCurrentContext:scene.context];
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, scene.renderCore.defaultFramebuffer);
     glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-        
+    
     for (CEModel *model in scene.allModels) {
-        CERenderer *renderer = [self getRendererWithModel:model];
+        CERenderer *renderer = [self getTestShadowMapRenderer];//[self getRendererWithModel:model];
         [renderer renderObject:model];
     }
     if (scene.enableDebug) {
         [self renderDebugScene];
     }
+    
+    
 }
 
 
@@ -60,12 +66,30 @@
         [EAGLContext setCurrentContext:_context];
         _testRenderer = [CEBaseRenderer new];
         _testRenderer.maxLightCount = scene.maxLightCount;
+        _testRenderer.context = scene.context;
         [_testRenderer setupRenderer];
     }
     _testRenderer.camera = scene.camera;
     _testRenderer.lights = scene.allLights;
     
     return _testRenderer;
+}
+
+
+- (CEShadowRenderer *)getTestShadowMapRenderer {
+    CEScene *scene = [CEScene currentScene];
+    if (!_testShadowMapRenderer) {
+        [EAGLContext setCurrentContext:_context];
+        _testShadowMapRenderer = [[CEShadowRenderer alloc] init];
+        _testShadowMapRenderer.maxLightCount = scene.maxLightCount;
+        _testShadowMapRenderer.context = scene.context;
+        [_testShadowMapRenderer setupRenderer];
+    }
+    
+    _testShadowMapRenderer.lights = scene.allLights;
+    _testShadowMapRenderer.camera = scene.camera;
+    
+    return _testShadowMapRenderer;
 }
 
 #pragma mark - Debug renderer
@@ -95,7 +119,9 @@
     if (!_wireframeRenderer) {
         _wireframeRenderer = [CEWireframeRenderer new];
         _wireframeRenderer.lineWidth = 1.0f;
+        _wireframeRenderer.context = [CEScene currentScene].context;
         [_wireframeRenderer setupRenderer];
+        
     }
     _wireframeRenderer.camera = [CEScene currentScene].camera;
     return _wireframeRenderer;
@@ -105,6 +131,7 @@
 - (CEAssistRenderer *)assistRender {
     if (!_assistRenderer) {
         _assistRenderer = [CEAssistRenderer new];
+        _assistRenderer.context = [CEScene currentScene].context;
         [_assistRenderer setupRenderer];
     }
     _assistRenderer.camera = [CEScene currentScene].camera;

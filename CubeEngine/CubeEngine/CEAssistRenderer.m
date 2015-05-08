@@ -81,6 +81,8 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
         CEError(@"Fragment shader compile log: %@", fragLog);
         NSString *vertLog = [_program vertexShaderLog];
         CEError(@"Vertex shader compile log: %@", vertLog);
+        _program = nil;
+        NSAssert(0, @"Fail to Compile Program");
     }
     
     return isOK;
@@ -169,15 +171,15 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
     }
     
     // setup vertex buffer
-    if (![light.vertexBuffer setupBufferWithContext:self.context] ||
-        (light.indicesBuffer && ![light.indicesBuffer setupBufferWithContext:self.context])) {
+    if (![light.vertexBuffer setupBuffer] ||
+        (light.indicesBuffer && ![light.indicesBuffer setupBuffer])) {
         return;
     }
     if (![light.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attributePosition] ||
         ![light.vertexBuffer prepareAttribute:CEVBOAttributeColor withProgramIndex:_attributeVertexColor]) {
         return;
     }
-    if (light.indicesBuffer && ![light.indicesBuffer prepareForRendering]) {
+    if (light.indicesBuffer && ![light.indicesBuffer bindBuffer]) {
         return;
     }
     [_program use];

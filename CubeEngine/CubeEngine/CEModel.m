@@ -76,6 +76,7 @@
 
 #pragma mark - Wireframe
 - (void)setShowWireframe:(BOOL)showWireframe {
+#warning Some Bug when the model is a 4-point plant
     if (showWireframe != _showWireframe) {
         _showWireframe = showWireframe;
         if (showWireframe && !_wireframeBuffer) {

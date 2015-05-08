@@ -14,6 +14,12 @@
 #define kDefaultFramesPerSecond 30
 #define kDefaultMaxLightCount 4
 
+/**
+ Discussion:
+ Every CEViewController has its own EAGLContex, CEScene and CERenderManager.
+ No sharing resrouces between CEViewContollers.
+ */
+
 @interface CEViewController () {
     EAGLContext *_context;
     CADisplayLink *_displayLink;

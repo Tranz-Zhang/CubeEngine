@@ -170,6 +170,7 @@ NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
         NSString *vertLog = [_program vertexShaderLog];
         CEError(@"Vertex shader compile log: %@", vertLog);
         _program = nil;
+        NSAssert(0, @"Fail to Compile Program");
     }
     
     return isOK;
@@ -189,8 +190,8 @@ NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
     }
     
     // setup vertex buffer
-    if (![model.vertexBuffer setupBufferWithContext:self.context] ||
-        (model.indicesBuffer && ![model.indicesBuffer setupBufferWithContext:self.context])) {
+    if (![model.vertexBuffer setupBuffer] ||
+        (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
         return;
     }
     // prepare for rendering
@@ -198,7 +199,7 @@ NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
         ![model.vertexBuffer prepareAttribute:CEVBOAttributeNormal withProgramIndex:_attribVec3Normal]){
         return;
     }
-    if (model.indicesBuffer && ![model.indicesBuffer prepareForRendering]) {
+    if (model.indicesBuffer && ![model.indicesBuffer bindBuffer]) {
         return;
     }
     [_program use];

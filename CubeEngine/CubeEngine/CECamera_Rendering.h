@@ -10,8 +10,8 @@
 
 @interface CECamera ()
 
-@property (atomic, readonly) GLKMatrix4 viewMatrix;
-@property (atomic, readonly) GLKMatrix4 projectionMatrix;
+@property (nonatomic, readonly) GLKMatrix4 viewMatrix;
+@property (nonatomic, readonly) GLKMatrix4 projectionMatrix;
 
 
 @end

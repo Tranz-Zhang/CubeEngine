@@ -57,6 +57,7 @@ NSString *const kFragmentSahder_V = CE_SHADER_STRING
         NSString *vertLog = [_program vertexShaderLog];
         CEError(@"Vertex shader compile log: %@", vertLog);
         _program = nil;
+        NSAssert(0, @"Fail to Compile Program");
     }
     
     return isOK;
@@ -70,8 +71,8 @@ NSString *const kFragmentSahder_V = CE_SHADER_STRING
     }
     
     // setup vertex buffer
-    if (![model.vertexBuffer setupBufferWithContext:self.context] ||
-        (model.indicesBuffer && ![model.indicesBuffer setupBufferWithContext:self.context])) {
+    if (![model.vertexBuffer setupBuffer] ||
+        (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
         return;
     }
     // prepare for rendering
@@ -79,7 +80,7 @@ NSString *const kFragmentSahder_V = CE_SHADER_STRING
                             withProgramIndex:_attributePosition]){
         return;
     }
-    if (model.indicesBuffer && ![model.indicesBuffer prepareForRendering]) {
+    if (model.indicesBuffer && ![model.indicesBuffer bindBuffer]) {
         return;
     }
     [_program use];
