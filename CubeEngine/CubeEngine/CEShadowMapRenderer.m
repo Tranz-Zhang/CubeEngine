@@ -1,20 +1,21 @@
 //
-//  CERender_V.m
+//  CEShadowMapRenderer.m
 //  CubeEngine
 //
-//  Created by chance on 4/9/15.
+//  Created by chance on 5/11/15.
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CERenderer_V.h"
+#import "CEShadowMapRenderer.h"
 #import "CEProgram.h"
 #import "CEModel_Rendering.h"
-#import "CECamera_Rendering.h"
 
+#import "CELight_Rendering.h"
+#import "CEScene_Rendering.h"
 
-NSString *const kVertexShader_V = CE_SHADER_STRING
+NSString *const kShaderMapVertexShader = CE_SHADER_STRING
 (
- attribute highp vec4 position;
+ attribute vec4 position;
  uniform mat4 projection;
  
  void main () {
@@ -22,17 +23,18 @@ NSString *const kVertexShader_V = CE_SHADER_STRING
  }
  );
 
-NSString *const kFragmentSahder_V = CE_SHADER_STRING
+NSString *const kShaderMapFragmentSahder = CE_SHADER_STRING
 (
  void main() {
-     gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
+     gl_FragColor = vec4(1.0);
  }
 );
 
 
-@implementation CERenderer_V {
+@implementation CEShadowMapRenderer {
     CEProgram *_program;
     GLint _attributePosition;
+    GLint _attributeNormal;
     GLint _uniformProjection;
 }
 
@@ -40,8 +42,8 @@ NSString *const kFragmentSahder_V = CE_SHADER_STRING
 - (BOOL)setupRenderer {
     if (_program.initialized) return YES;
     
-    _program = [[CEProgram alloc] initWithVertexShaderString:kVertexShader_V
-                                        fragmentShaderString:kFragmentSahder_V];
+    _program = [[CEProgram alloc] initWithVertexShaderString:kShaderMapVertexShader
+                                        fragmentShaderString:kShaderMapFragmentSahder];
     [_program addAttribute:@"position"];
     BOOL isOK = [_program link];
     if (isOK) {
@@ -65,29 +67,28 @@ NSString *const kFragmentSahder_V = CE_SHADER_STRING
 
 
 - (void)renderObjects:(NSSet *)objects {
+    if (!_program || !objects.count) {
+        return;
+    }
+    
+    [_program use];
     for (CEModel *model in objects) {
-        if (!_program || !model.vertexBuffer || !_camera) {
-            CEError(@"Invalid paramater for rendering");
-            return;
-        }
-        
         // setup vertex buffer
         if (![model.vertexBuffer setupBuffer] ||
             (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
-            return;
+            continue;
         }
         // prepare for rendering
         if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition
                                  withProgramIndex:_attributePosition]){
-            return;
+            continue;
         }
         if (model.indicesBuffer && ![model.indicesBuffer bindBuffer]) {
-            return;
+            continue;
         }
-        [_program use];
-        GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
-        projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, projectionMatrix);
-        glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
+        
+        GLKMatrix4 MVPMatrix = GLKMatrix4Multiply(_lightVPMatrix, model.transformMatrix);
+        glUniformMatrix4fv(_uniformProjection, 1, 0, MVPMatrix.m);
         
         if (model.indicesBuffer) { // glDrawElements
             glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);

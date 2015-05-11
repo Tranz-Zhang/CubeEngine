@@ -98,4 +98,15 @@
 //    CEPrintf("Update Point Light Uniform\n");
 }
 
+
+#pragma mark - Shadow Mapping
+- (void)updateLightVPMatrixWithModels:(NSSet *)models {
+    
+}
+
+
+
 @end
+
+
+

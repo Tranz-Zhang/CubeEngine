@@ -12,6 +12,7 @@
     GLKVector3 _lightColorV3;
     GLKVector3 _ambientColorV3;
     GLKMatrix4 _lightViewMatrix;
+    GLKMatrix4 _lightProjectionMatrix;
 }
 
 @property (nonatomic, assign, getter=isEnabled) BOOL enabled;

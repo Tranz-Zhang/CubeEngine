@@ -134,7 +134,7 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
 
 - (BOOL)setupRenderer {
     if (_program.initialized) return YES;
-    int maxLightCount = [CEScene currentScene].maxLightCount;
+    int maxLightCount = (int)[CEScene currentScene].maxLightCount;
     NSString *fragmentShader = [kBaseFragmentSahder stringByReplacingOccurrencesOfString:@"LIGHT_COUNT" withString:[NSString stringWithFormat:@"%d", maxLightCount]];
     _program = [[CEProgram alloc] initWithVertexShaderString:kBaseVertexShader
                                         fragmentShaderString:fragmentShader];
@@ -210,41 +210,52 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
     }
 }
 
-- (void)renderObject:(CEModel *)object {
-    if (!_program || !object.vertexBuffer || !_camera) {
-        CEError(@"Invalid paramater for rendering");
+- (void)renderObjects:(NSSet *)objects {
+    if (!_program || !_camera) {
+        CEError(@"Invalid renderer environment");
         return;
     }
     
-    // setup vertex buffer
-    if (![object.vertexBuffer setupBuffer] ||
-        (object.indicesBuffer && ![object.indicesBuffer setupBuffer])) {
-        return;
-    }
-    // prepare for rendering
-    if (![object.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attribVec4Position] ||
-        ![object.vertexBuffer prepareAttribute:CEVBOAttributeNormal withProgramIndex:_attribVec3Normal]){
-        return;
-    }
-    if (object.indicesBuffer && ![object.indicesBuffer bindBuffer]) {
-        return;
-    }
     [_program use];
-    
     // setup lighting uniforms !!!: must setup light before mvp matrix;
     glUniform1i(_uniIntLightCount, (GLint)_lights.count);
     for (CELight *light in _lights) {
         [light updateUniformsWithCamera:_camera];
     }
-    
-    // setup other uniforms
-    glUniform4f(_uniVec4BaseColor, object.vec3BaseColor.r, object.vec3BaseColor.g,
-                object.vec3BaseColor.b, object.vec3BaseColor.a);
     // we use eye space to do the calculation, so the eye direction is always (0, 0, 1)
     glUniform3f(_uniVec3EyeDirection, 0.0, 0.0, 1.0);
     
+    for (CEModel *model in objects) {
+        [self renderModel:model];
+    }
+}
+
+
+- (void)renderModel:(CEModel *)model {
+    if (!model.vertexBuffer) {
+        CEError(@"Empty vertexBuffer");
+        return;
+    }
+    
+    // setup vertex buffer
+    if (![model.vertexBuffer setupBuffer] ||
+        (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
+        return;
+    }
+    // prepare for rendering
+    if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attribVec4Position] ||
+        ![model.vertexBuffer prepareAttribute:CEVBOAttributeNormal withProgramIndex:_attribVec3Normal]){
+        return;
+    }
+    if (model.indicesBuffer && ![model.indicesBuffer bindBuffer]) {
+        return;
+    }
+    
+    // setup other uniforms
+    glUniform4f(_uniVec4BaseColor, model.vec3BaseColor.r, model.vec3BaseColor.g,
+                model.vec3BaseColor.b, model.vec3BaseColor.a);
     // setup MVP matrix
-    GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, object.transformMatrix);
+    GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
     GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
     glUniformMatrix4fv(_uniMtx4MVPMatrix, 1, GL_FALSE, projectionMatrix.m);
     glUniformMatrix4fv(_uniMtx4MVMatrix, 1, GL_FALSE, modelViewMatrix.m);
@@ -253,11 +264,11 @@ NSString *const kBaseFragmentSahder = CE_SHADER_STRING
     normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
     glUniformMatrix3fv(_uniMtx3NormalMatrix, 1, GL_FALSE, normalMatrix.m);
     
-    if (object.indicesBuffer) { // glDrawElements
-        glDrawElements(GL_TRIANGLES, object.indicesBuffer.indicesCount, object.indicesBuffer.indicesDataType, 0);
+    if (model.indicesBuffer) { // glDrawElements
+        glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);
         
     } else { // glDrawArrays
-        glDrawArrays(GL_TRIANGLES, 0, object.vertexBuffer.vertexCount);
+        glDrawArrays(GL_TRIANGLES, 0, model.vertexBuffer.vertexCount);
     }
 }
 

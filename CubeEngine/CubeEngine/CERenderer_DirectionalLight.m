@@ -183,58 +183,61 @@ NSString *const kFragmentSahder_DirectionalLight = CE_SHADER_STRING
 }
 
 
-- (void)renderObject:(CEModel *)model {
-    if (!_program || !model.vertexBuffer || !_camera) {
-        CEError(@"Invalid paramater for rendering");
-        return;
-    }
-    
-    // setup vertex buffer
-    if (![model.vertexBuffer setupBuffer] ||
-        (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
-        return;
-    }
-    // prepare for rendering
-    if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attribVec4Position] ||
-        ![model.vertexBuffer prepareAttribute:CEVBOAttributeNormal withProgramIndex:_attribVec3Normal]){
-        return;
-    }
-    if (model.indicesBuffer && ![model.indicesBuffer bindBuffer]) {
-        return;
-    }
-    [_program use];
-    
-    // setup lighting uniforms
-    glUniform4f(_uniVec4VertexColor, _vertexColor.r, _vertexColor.g, _vertexColor.b, _vertexColor.a);
-    glUniform3f(_uniVec3Ambient, _ambientColor.r, _ambientColor.g, _ambientColor.b);
-    glUniform3f(_uniVec3LightColor, _lightColor.r, _lightColor.g, _lightColor.b);
-    glUniform3f(_uniVec3LightDirection, _lightDirection.x, _lightDirection.y, _lightDirection.z);
-    glUniform3f(_uniVec3HalfVector, _halfVector.x, _halfVector.y, _halfVector.z);
-    glUniform1f(_uniFloatShiness, _shiniess);
-    glUniform1f(_uniFloatStrength, _strength);
-    
-    // test uniform
-    glUniform3f(_test0_RenderColor, 1.0, 0.0, 0.0);
-    glUniform1f(_test0_Range, 0.2);
-    glUniform3f(_test1_RenderColor, 0.0, 0.0, 1.0);
-    glUniform1f(_test1_Range, 0.0);
-    
-    // setup MVP matrix
-    GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
-    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
-    glUniformMatrix4fv(_uniMtx4MVPMatrix, 1, GL_FALSE, projectionMatrix.m);
-    // setup normal matrix
-    GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(modelViewMatrix);
-    normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
-    glUniformMatrix3fv(_uniMtx3NormalMatrix, 1, GL_FALSE, normalMatrix.m);
-    
-    
-    if (model.indicesBuffer) { // glDrawElements
-        glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);
+- (void)renderObjects:(NSSet *)objects {
+    for (CEModel *model in objects) {
+        if (!_program || !model.vertexBuffer || !_camera) {
+            CEError(@"Invalid paramater for rendering");
+            return;
+        }
         
-    } else { // glDrawArrays
-        glDrawArrays(GL_TRIANGLES, 0, model.vertexBuffer.vertexCount);
+        // setup vertex buffer
+        if (![model.vertexBuffer setupBuffer] ||
+            (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
+            return;
+        }
+        // prepare for rendering
+        if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attribVec4Position] ||
+            ![model.vertexBuffer prepareAttribute:CEVBOAttributeNormal withProgramIndex:_attribVec3Normal]){
+            return;
+        }
+        if (model.indicesBuffer && ![model.indicesBuffer bindBuffer]) {
+            return;
+        }
+        [_program use];
+        
+        // setup lighting uniforms
+        glUniform4f(_uniVec4VertexColor, _vertexColor.r, _vertexColor.g, _vertexColor.b, _vertexColor.a);
+        glUniform3f(_uniVec3Ambient, _ambientColor.r, _ambientColor.g, _ambientColor.b);
+        glUniform3f(_uniVec3LightColor, _lightColor.r, _lightColor.g, _lightColor.b);
+        glUniform3f(_uniVec3LightDirection, _lightDirection.x, _lightDirection.y, _lightDirection.z);
+        glUniform3f(_uniVec3HalfVector, _halfVector.x, _halfVector.y, _halfVector.z);
+        glUniform1f(_uniFloatShiness, _shiniess);
+        glUniform1f(_uniFloatStrength, _strength);
+        
+        // test uniform
+        glUniform3f(_test0_RenderColor, 1.0, 0.0, 0.0);
+        glUniform1f(_test0_Range, 0.2);
+        glUniform3f(_test1_RenderColor, 0.0, 0.0, 1.0);
+        glUniform1f(_test1_Range, 0.0);
+        
+        // setup MVP matrix
+        GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
+        GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
+        glUniformMatrix4fv(_uniMtx4MVPMatrix, 1, GL_FALSE, projectionMatrix.m);
+        // setup normal matrix
+        GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(modelViewMatrix);
+        normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
+        glUniformMatrix3fv(_uniMtx3NormalMatrix, 1, GL_FALSE, normalMatrix.m);
+        
+        
+        if (model.indicesBuffer) { // glDrawElements
+            glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);
+            
+        } else { // glDrawArrays
+            glDrawArrays(GL_TRIANGLES, 0, model.vertexBuffer.vertexCount);
+        }
     }
+    
 }
 
 

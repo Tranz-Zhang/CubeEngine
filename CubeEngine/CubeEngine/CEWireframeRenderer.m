@@ -86,27 +86,33 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
 }
 
 
-- (void)renderObject:(CEModel *)model {
+- (void)renderObjects:(NSSet *)objects {
     if (!_program.initialized) {
         return;
     }
-    // setup vertex buffer
-    if (![model.wireframeBuffer setupBuffer] ||
-        ![model.vertexBuffer setupBuffer]) {
-        return;
+    
+    for (CEModel *model in objects) {
+        if (!model.showWireframe || !model.wireframeBuffer) {
+            continue;
+        }
+        // setup vertex buffer
+        if (![model.wireframeBuffer setupBuffer] ||
+            ![model.vertexBuffer setupBuffer]) {
+            return;
+        }
+        // prepare attribute for rendering
+        if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attributePosition] ||
+            ![model.wireframeBuffer bindBuffer]){
+            return;
+        }
+        [_program use];
+        glLineWidth(_lineWidth);
+        GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
+        projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, projectionMatrix);
+        glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
+        glUniform4f(_uniformDrawColor, _lineColorVec4.r, _lineColorVec4.g, _lineColorVec4.b, _lineColorVec4.a);
+        glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);
     }
-    // prepare attribute for rendering
-    if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attributePosition] ||
-        ![model.wireframeBuffer bindBuffer]){
-        return;
-    }
-    [_program use];
-    glLineWidth(_lineWidth);
-    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
-    projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, projectionMatrix);
-    glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
-    glUniform4f(_uniformDrawColor, _lineColorVec4.r, _lineColorVec4.g, _lineColorVec4.b, _lineColorVec4.a);
-    glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);
 }
 
 

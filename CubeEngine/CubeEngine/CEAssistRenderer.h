@@ -14,7 +14,7 @@
  */
 @interface CEAssistRenderer : CERenderer
 
-- (void)renderLight:(CELight *)light;
+- (void)renderLights:(NSSet *)lights;
 
 - (void)renderWorldOriginCoordinate;
 

@@ -17,7 +17,7 @@
     return NO;
 }
 
-- (void)renderObject:(id)object {
+- (void)renderObjects:(NSSet *)objects {
     // !!!: MUST IMPLEMENTED BY SUBCLASS
 }
 

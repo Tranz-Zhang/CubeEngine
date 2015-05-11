@@ -22,7 +22,6 @@
         // Create default framebuffer object. The backing will be allocated for the current layer in -resizeFromLayer
         glGenFramebuffers(1, &_defaultFramebuffer);
         NSAssert( _defaultFramebuffer, @"Can't create default frame buffer");
-        
         glGenRenderbuffers(1, &_colorRenderbuffer);
         NSAssert( _colorRenderbuffer, @"Can't create default render buffer");
         

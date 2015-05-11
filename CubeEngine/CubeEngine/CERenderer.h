@@ -21,6 +21,12 @@
 
 
 - (BOOL)setupRenderer;
-- (void)renderObject:(id)object;
+
+/**
+ Note: we set the parameters to NSArray to give more flexible to CERenderer subclasses.
+ Also, the CERenderManager can use this api to render different meterial once to avoid
+ program switch, which will improve performance.
+ */
+- (void)renderObjects:(NSSet *)objects;
 
 @end

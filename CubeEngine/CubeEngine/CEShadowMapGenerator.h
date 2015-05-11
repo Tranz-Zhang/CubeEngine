@@ -20,7 +20,6 @@
 - (instancetype)initWithLight:(CELight *)light textureSize:(CGSize)size inContext:(EAGLContext *)context;
 
 - (BOOL)generateShadowMapWithModels:(NSSet *)models
-                             camera:(CECamera *)camera
-                          inContext:(EAGLContext *)context;
+                             camera:(CECamera *)camera;
 
 @end

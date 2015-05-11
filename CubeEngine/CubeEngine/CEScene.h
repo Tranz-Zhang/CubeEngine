@@ -18,6 +18,8 @@
  - Light
  
  Note: It is designed to be thread safe.
+ Note: If a model or a light is added to a scene, it can not be added to another
+ scene.
  */
 @interface CEScene : NSObject
 

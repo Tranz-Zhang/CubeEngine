@@ -10,10 +10,12 @@
 #import "CEScene_Rendering.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
+#import "CELight_Rendering.h"
 
 // renderer
 #import "CEBaseRenderer.h"
 #import "CEShadowRenderer.h"
+#import "CEShadowMapRenderer.h"
 #import "CERenderer_V.h"
 #import "CERenderer_V_VN.h"
 
@@ -21,15 +23,18 @@
 #import "CEWireframeRenderer.h"
 #import "CEAssistRenderer.h"
 
+
 @implementation CERenderManager {
     EAGLContext *_context;
     CEBaseRenderer *_testRenderer;
     CEShadowRenderer *_testShadowMapRenderer;
+    CEShadowMapRenderer *_shadowMapRenderer;
     
     // debug renderer
     CEWireframeRenderer *_wireframeRenderer;
     CEAssistRenderer *_assistRenderer;
 }
+
 
 - (instancetype)initWithContext:(EAGLContext *)context {
     self = [super init];
@@ -44,19 +49,21 @@
     CEScene *scene = [CEScene currentScene];
     [EAGLContext setCurrentContext:scene.context];
     
+    // try render shadow mapp if needed
+    [self renderShadowMapsForScene:scene];
+    
     glBindFramebuffer(GL_FRAMEBUFFER, scene.renderCore.defaultFramebuffer);
     glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
+    // TODO: sort model with materials
+    CERenderer *renderer = [self getTestShadowMapRenderer];
+    [renderer renderObjects:scene.allModels];
     
-    for (CEModel *model in scene.allModels) {
-        CERenderer *renderer = [self getTestShadowMapRenderer];//[self getRendererWithModel:model];
-        [renderer renderObject:model];
-    }
+    // render debug info
     if (scene.enableDebug) {
         [self renderDebugScene];
     }
-    
-    
 }
 
 
@@ -81,7 +88,6 @@
     if (!_testShadowMapRenderer) {
         [EAGLContext setCurrentContext:_context];
         _testShadowMapRenderer = [[CEShadowRenderer alloc] init];
-        _testShadowMapRenderer.maxLightCount = scene.maxLightCount;
         _testShadowMapRenderer.context = scene.context;
         [_testShadowMapRenderer setupRenderer];
     }
@@ -92,25 +98,54 @@
     return _testShadowMapRenderer;
 }
 
+
+#pragma mark - Shadow Mapping
+- (void)renderShadowMapsForScene:(CEScene *)scene {
+    // check if need render shadow map
+    NSMutableSet *shadowLights = [NSMutableSet set];
+    NSMutableSet *shadowModels = [NSMutableSet set];
+    for (CELight *light in scene.allLights) {
+        if (light.enabled && light.enableShadow) {
+            [shadowLights addObject:light];
+        }
+    }
+    for (CEModel *model in scene.allModels) {
+        if (model.castShadows) {
+            [shadowModels addObject:model];
+        }
+    }
+    if (!shadowLights.count || !shadowModels.count) {
+        // no need to render shadow maps
+        return;
+    }
+    
+    // check shadow map renderer
+    if (!_shadowMapRenderer) {
+        _shadowMapRenderer = [[CEShadowMapRenderer alloc] init];
+        _shadowMapRenderer.context = scene.context;
+        [_shadowMapRenderer setupRenderer];
+    }
+    _shadowMapRenderer.camera = scene.camera;
+    
+    // render shadow maps
+    for (CELight *light in shadowLights) {
+        [light.shadowMapBuffer setupBuffer];
+        [light.shadowMapBuffer prepareBuffer];
+        [light updateLightVPMatrixWithModels:shadowModels];
+        _shadowMapRenderer.lightVPMatrix = GLKMatrix4Multiply(light.lightProjectionMatrix, light.lightViewMatrix);
+        [_shadowMapRenderer renderObjects:shadowModels];
+    }
+}
+
+
 #pragma mark - Debug renderer
 - (void)renderDebugScene {
     CEScene *scene = [CEScene currentScene];
     // render wireframe add assist info
-    for (CEModel *model in scene.allModels) {
-        if (model.showWireframe && model.wireframeBuffer) {
-            [[self wireframeRenderer] renderObject:model];
-        }
-        if (model.showAccessoryLine) {
-            [[self assistRender] renderObject:model];
-        }
-    }
     
-    // render light object
-    for (CELight *light in scene.allLights) {
-        [[self assistRender] renderLight:light];
-    }
-    
-    // render world coordinate
+    [[self wireframeRenderer] renderObjects:scene.allModels];
+    [[self assistRender] renderObjects:scene.allModels];
+    [[self assistRender] renderLights:scene.allLights];
     [[self assistRender] renderWorldOriginCoordinate];
 }
 
@@ -121,7 +156,6 @@
         _wireframeRenderer.lineWidth = 1.0f;
         _wireframeRenderer.context = [CEScene currentScene].context;
         [_wireframeRenderer setupRenderer];
-        
     }
     _wireframeRenderer.camera = [CEScene currentScene].camera;
     return _wireframeRenderer;
@@ -139,9 +173,9 @@
 }
 
 
+
+
 @end
-
-
 
 
 

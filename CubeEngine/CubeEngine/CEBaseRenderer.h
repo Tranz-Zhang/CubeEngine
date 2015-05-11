@@ -16,6 +16,4 @@
 @property (nonatomic, assign) NSInteger maxLightCount;
 @property (nonatomic, strong) NSSet *lights;
 
-- (void)renderObject:(CEModel *)object;
-
 @end

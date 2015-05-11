@@ -95,11 +95,50 @@
 }
 
 
-- (GLKMatrix4)viewMatrix {
-#warning normally [CEObject transfromMatrix] will set the _hasChanged to NO, but here we don't change to _hasChanged
-    if (!self.hasChanged && !_parentObject.hasChanged) {
-        return _lightViewMatrix;
+//- (GLKMatrix4)lightViewMatrix {
+//#warning normally [CEObject transfromMatrix] will set the _hasChanged to NO, but here we don't change to _hasChanged
+//    if (!self.hasChanged && !_parentObject.hasChanged) {
+//        return _lightViewMatrix;
+//    }
+//    
+//    GLKVector3 lightDirection;
+//    if (_parentObject) {
+//        lightDirection = GLKQuaternionRotateVector3(_parentObject.rotation, _right);
+//    } else {
+//        lightDirection = _right;
+//    }
+//    
+//#warning If the shadow map doesn't look right, check this "distance" argument
+//    GLfloat distance = GLKVector3Distance(GLKVector3Make(0, 0, 30), GLKVector3Make(0, 0, 0));
+//    _lightViewMatrix = GLKMatrix4MakeLookAt(-lightDirection.x * distance, -lightDirection.y * distance, -lightDirection.z * distance, 0, 0, 0, 0, 1, 0);
+//    return _lightViewMatrix;
+//}
+
+
+#pragma mark - Shadow Mapping
+- (void)updateLightVPMatrixWithModels:(NSSet *)models {
+    if (!models.count) return;
+    
+    // update light projection matrix
+    GLfloat maxX = 0, maxY = 0, maxZ = 0, minX = MAXFLOAT, minY = MAXFLOAT, minZ = MAXFLOAT;
+    for (CEModel *model in models) {
+        GLfloat modelMaxX = model.position.x + model.offsetFromOrigin.x + model.bounds.x / 2;
+        GLfloat modelMaxY = model.position.y + model.offsetFromOrigin.y + model.bounds.y / 2;
+        GLfloat modelMaxZ = model.position.z + model.offsetFromOrigin.z + model.bounds.z / 2;
+        GLfloat modelMinX = model.position.x + model.offsetFromOrigin.x - model.bounds.x / 2;
+        GLfloat modelMinY = model.position.y + model.offsetFromOrigin.y - model.bounds.y / 2;
+        GLfloat modelMinZ = model.position.z + model.offsetFromOrigin.z - model.bounds.z / 2;
+        if (maxX < modelMaxX) maxX = modelMaxX;
+        if (maxY < modelMaxY) maxY = modelMaxY;
+        if (maxZ < modelMaxZ) maxZ = modelMaxZ;
+        if (minX > modelMinX) minX = modelMinX;
+        if (minY > modelMinY) minY = modelMinY;
+        if (minZ > modelMinZ) minZ = modelMinZ;
     }
+    GLKVector3 center = GLKVector3Make((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
+    GLfloat radius = GLKVector3Distance(center, GLKVector3Make(maxX, maxY, maxZ));
+    GLfloat aspect = self.shadowMapBuffer.textureSize.width / self.shadowMapBuffer.textureSize.height;
+    _lightProjectionMatrix = GLKMatrix4MakeOrtho(-radius, radius, -radius / aspect, radius / aspect, 0.1, radius * 2);
     
     GLKVector3 lightDirection;
     if (_parentObject) {
@@ -107,12 +146,16 @@
     } else {
         lightDirection = _right;
     }
-    
-#warning If the shadow map doesn't look right, check this "distance" argument
-    GLfloat distance = GLKVector3Distance(GLKVector3Make(0, 0, 30), GLKVector3Make(0, 0, 0));
-    _lightViewMatrix = GLKMatrix4MakeLookAt(-lightDirection.x * distance, -lightDirection.y * distance, -lightDirection.z * distance, 0, 0, 0, 0, 1, 0);
-    return _lightViewMatrix;
+    GLKVector3 normalizedVector = GLKVector3Normalize(lightDirection);
+    GLKVector3 transition = GLKVector3Make(center.x + radius * normalizedVector.x,
+                                           center.y + radius * normalizedVector.y,
+                                           center.z + radius * normalizedVector.z);
+    _lightViewMatrix = GLKMatrix4MakeLookAt(-lightDirection.x, -lightDirection.y , -lightDirection.z, 0, 0, 0, 0, 1, 0);
+    _lightViewMatrix = GLKMatrix4Translate(_lightViewMatrix, transition.x, transition.y, transition.z);
 }
+
+
+
 
 @end
 

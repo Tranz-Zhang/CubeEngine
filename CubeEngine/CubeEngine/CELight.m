@@ -10,6 +10,8 @@
 #import "CEUtils.h"
 #import "CELight_Rendering.h"
 
+#define kDefaultTextureSize 512
+
 //static NSInteger kMaxLightCount = 8;
 
 @implementation CELight
@@ -73,34 +75,57 @@
     [super setPosition:position];
 }
 
+
+
+
+
 - (void)updateUniformsWithCamera:(CECamera *)camera {
     // MUST IMPLEMENT BY SUBCLASS
 }
 
 
-- (GLKMatrix4)viewMatrix {
-    if (!self.hasChanged) {
-        return _lightViewMatrix;
-    }
-    
-    GLKMatrix4 tranformMatrix;
-    if (_hasChanged) {
-        // update local transfrom matrix
-        tranformMatrix = GLKMatrix4MakeTranslation(_position.x, _position.y, _position.z);
-        tranformMatrix = GLKMatrix4Multiply(tranformMatrix, GLKMatrix4MakeWithQuaternion(GLKQuaternionInvert(_rotation)));
-        tranformMatrix = GLKMatrix4ScaleWithVector3(tranformMatrix, GLKVector3Make(1, -1, 1));
-        if (_parentObject) {
-            _lightViewMatrix = GLKMatrix4Invert(GLKMatrix4Multiply(_parentObject.transformMatrix, tranformMatrix), NULL);
-        } else {
-            _lightViewMatrix = GLKMatrix4Invert(tranformMatrix, NULL);
+#pragma mark - Shadow Mapping
+
+- (void)setEnableShadow:(BOOL)enableShadow {
+    if (_enableShadow != enableShadow) {
+        _enableShadow = enableShadow;
+        if (enableShadow && !_shadowMapBuffer) {
+            _shadowMapBuffer = [[CEShadowMapBuffer alloc] initWithTextureSize:CGSizeMake(640, 640)];
+            
+        } else if (!enableShadow && _shadowMapBuffer) {
+            _shadowMapBuffer = nil;
         }
     }
-    
-    if (_parentObject && _parentObject.hasChanged) {
-        _lightViewMatrix = GLKMatrix4Invert(GLKMatrix4Multiply(_parentObject.transformMatrix, tranformMatrix), NULL);
-    }
-    
-    return _lightViewMatrix;
+}
+
+//- (GLKMatrix4)lightViewMatrix {
+//    if (!self.hasChanged) {
+//        return _lightViewMatrix;
+//    }
+//    
+//    GLKMatrix4 tranformMatrix;
+//    if (_hasChanged) {
+//        // update local transfrom matrix
+//        tranformMatrix = GLKMatrix4MakeTranslation(_position.x, _position.y, _position.z);
+//        tranformMatrix = GLKMatrix4Multiply(tranformMatrix, GLKMatrix4MakeWithQuaternion(GLKQuaternionInvert(_rotation)));
+//        tranformMatrix = GLKMatrix4ScaleWithVector3(tranformMatrix, GLKVector3Make(1, -1, 1));
+//        if (_parentObject) {
+//            _lightViewMatrix = GLKMatrix4Invert(GLKMatrix4Multiply(_parentObject.transformMatrix, tranformMatrix), NULL);
+//        } else {
+//            _lightViewMatrix = GLKMatrix4Invert(tranformMatrix, NULL);
+//        }
+//    }
+//    
+//    if (_parentObject && _parentObject.hasChanged) {
+//        _lightViewMatrix = GLKMatrix4Invert(GLKMatrix4Multiply(_parentObject.transformMatrix, tranformMatrix), NULL);
+//    }
+//    
+//    return _lightViewMatrix;
+//}
+
+
+- (void)updateLightVPMatrixWithModels:(NSSet *)models {
+    // should be overwited by subclass
 }
 
 

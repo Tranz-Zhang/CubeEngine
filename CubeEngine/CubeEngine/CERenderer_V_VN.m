@@ -106,47 +106,49 @@ NSString *const kFragmentSahder_V_VN = CE_SHADER_STRING
 }
 
 
-- (void)renderObject:(CEModel *)model {
-    if (!_program || !model.vertexBuffer || !_camera) {
-        CEError(@"Invalid paramater for rendering");
-        return;
-    }
-    
-    // setup vertex buffer
-    if (![model.vertexBuffer setupBuffer] ||
-        (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
-        return;
-    }
-    // prepare for rendering
-    if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attributePosition] ||
-        ![model.vertexBuffer prepareAttribute:CEVBOAttributeNormal withProgramIndex:_attributeNormal]){
-        return;
-    }
-    if (model.indicesBuffer && ![model.indicesBuffer bindBuffer]) {
-        return;
-    }
-    [_program use];
-    
-    // setup uniform values
-    glUniform3f(_uniformLightPosition, 50.0f, 50.0f, 0.0f);
-    glUniform3f(_uniformDiffuseMaterial, 0.8f, 0.8f, 0.8f);
-    glUniform3f(_uniformAmbientMaterial, 0.04f, 0.04f, 0.04f);
-    glUniform3f(_uniformSpecularMaterial, 1.0f, 1.0f, 1.0f);
-    glUniform1f(_uniformShininess, 20);
-    // projection matrix
-    GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
-    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
-    glUniformMatrix4fv(_uniformProjection, 1, GL_FALSE, projectionMatrix.m);
-    // normal matrix
-    GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(model.transformMatrix);
-    normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
-    glUniformMatrix3fv(_uniformNormalMatrix, 1, GL_FALSE, normalMatrix.m);
-    
-    if (model.indicesBuffer) { // glDrawElements
-        glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);
+- (void)renderObjects:(NSSet *)objects {
+    for (CEModel *model in objects) {
+        if (!_program || !model.vertexBuffer || !_camera) {
+            CEError(@"Invalid paramater for rendering");
+            return;
+        }
         
-    } else { // glDrawArrays
-        glDrawArrays(GL_TRIANGLES, 0, model.vertexBuffer.vertexCount);
+        // setup vertex buffer
+        if (![model.vertexBuffer setupBuffer] ||
+            (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
+            return;
+        }
+        // prepare for rendering
+        if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attributePosition] ||
+            ![model.vertexBuffer prepareAttribute:CEVBOAttributeNormal withProgramIndex:_attributeNormal]){
+            return;
+        }
+        if (model.indicesBuffer && ![model.indicesBuffer bindBuffer]) {
+            return;
+        }
+        [_program use];
+        
+        // setup uniform values
+        glUniform3f(_uniformLightPosition, 50.0f, 50.0f, 0.0f);
+        glUniform3f(_uniformDiffuseMaterial, 0.8f, 0.8f, 0.8f);
+        glUniform3f(_uniformAmbientMaterial, 0.04f, 0.04f, 0.04f);
+        glUniform3f(_uniformSpecularMaterial, 1.0f, 1.0f, 1.0f);
+        glUniform1f(_uniformShininess, 20);
+        // projection matrix
+        GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
+        GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
+        glUniformMatrix4fv(_uniformProjection, 1, GL_FALSE, projectionMatrix.m);
+        // normal matrix
+        GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(model.transformMatrix);
+        normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
+        glUniformMatrix3fv(_uniformNormalMatrix, 1, GL_FALSE, normalMatrix.m);
+        
+        if (model.indicesBuffer) { // glDrawElements
+            glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);
+            
+        } else { // glDrawArrays
+            glDrawArrays(GL_TRIANGLES, 0, model.vertexBuffer.vertexCount);
+        }
     }
 }
 

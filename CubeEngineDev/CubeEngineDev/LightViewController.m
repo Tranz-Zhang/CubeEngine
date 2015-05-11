@@ -61,11 +61,13 @@
     
     _teapotModel = [CEModel modelWithObjFile:@"teapot_smooth"];
     _teapotModel.showAccessoryLine = YES;
+    _teapotModel.castShadows = YES;
     _teapotModel.baseColor = [UIColor orangeColor];
     [self.scene addModel:_teapotModel];
     
     _floorModel = [CEModel modelWithObjFile:@"floor"];
     _floorModel.baseColor = [UIColor lightGrayColor];
+    _floorModel.castShadows = YES;
     [self.scene addModel:_floorModel];
     
     _directionalLight = [[CEDirectionalLight alloc] init];

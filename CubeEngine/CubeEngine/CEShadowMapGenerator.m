@@ -119,8 +119,8 @@ NSString *const kShaderMapFragmentSahder = CE_SHADER_STRING
 }
 
 
-- (BOOL)generateShadowMapWithModels:(NSSet *)models camera:(CECamera *)camera inContext:(EAGLContext *)context  {
-    if (!_context || !_frameBuffer || !_depthTexture || !_program ||  _context != context) {
+- (BOOL)generateShadowMapWithModels:(NSSet *)models camera:(CECamera *)camera  {
+    if (!_context || !_frameBuffer || !_depthTexture || !_program) {
         return NO;
     }
     
@@ -146,7 +146,7 @@ NSString *const kShaderMapFragmentSahder = CE_SHADER_STRING
         #warning If the shadow map doesn't look right, check this projectionMatrix
         GLfloat value = camera.orthoBoxWidth;
         GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(-value, value, -value / camera.aspect, value / camera.aspect, 0.1, 60);
-        GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_light.viewMatrix, model.transformMatrix);
+        GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_light.lightViewMatrix, model.transformMatrix);
         _depthMVP = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
         glUniformMatrix4fv(_uniformProjection, 1, 0, _depthMVP.m);
         
