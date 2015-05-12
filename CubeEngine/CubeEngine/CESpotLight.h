@@ -10,6 +10,7 @@
 
 @interface CESpotLight : CELight
 
+@property (nonatomic, readonly) GLKVector3 lightDirection;
 @property (nonatomic, assign) GLfloat attenuation;
 @property (nonatomic, assign) GLint shiniess;
 @property (nonatomic, assign) GLfloat coneAngle; // in degree

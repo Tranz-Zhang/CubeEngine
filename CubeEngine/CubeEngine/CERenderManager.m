@@ -28,6 +28,7 @@
     EAGLContext *_context;
     CEBaseRenderer *_testRenderer;
     CEShadowRenderer *_testShadowMapRenderer;
+    CEBaseRenderer *_testBaseRenderer;
     CEShadowMapRenderer *_shadowMapRenderer;
     
     // debug renderer
@@ -96,6 +97,20 @@
     _testShadowMapRenderer.camera = scene.camera;
     
     return _testShadowMapRenderer;
+}
+
+- (CEBaseRenderer *)getTestBaseRenderer {
+    CEScene *scene = [CEScene currentScene];
+    if (!_testBaseRenderer) {
+        [EAGLContext setCurrentContext:_context];
+        _testBaseRenderer = [[CEBaseRenderer alloc] init];
+        _testBaseRenderer.context = scene.context;
+        [_testBaseRenderer setupRenderer];
+    }
+    _testBaseRenderer.lights = scene.allLights;
+    _testBaseRenderer.camera = scene.camera;
+    
+    return _testBaseRenderer;
 }
 
 

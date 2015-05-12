@@ -135,6 +135,10 @@
     }
 }
 
+- (GLKVector3)lightDirection {
+    return _right;
+}
+
 
 - (void)updateUniformsWithCamera:(CECamera *)camera {
     if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
@@ -167,10 +171,83 @@
 
 
 #pragma mark - Shadow Mapping
+/**
 - (void)updateLightVPMatrixWithModels:(NSSet *)models {
+    if (!models.count) return;
     
+    // update light projection matrix
+    GLfloat maxX = 0, maxY = 0, maxZ = 0, minX = MAXFLOAT, minY = MAXFLOAT, minZ = MAXFLOAT;
+    for (CEModel *model in models) {
+        GLfloat modelMaxX = model.position.x + model.offsetFromOrigin.x + model.bounds.x / 2;
+        GLfloat modelMaxY = model.position.y + model.offsetFromOrigin.y + model.bounds.y / 2;
+        GLfloat modelMaxZ = model.position.z + model.offsetFromOrigin.z + model.bounds.z / 2;
+        GLfloat modelMinX = model.position.x + model.offsetFromOrigin.x - model.bounds.x / 2;
+        GLfloat modelMinY = model.position.y + model.offsetFromOrigin.y - model.bounds.y / 2;
+        GLfloat modelMinZ = model.position.z + model.offsetFromOrigin.z - model.bounds.z / 2;
+        if (maxX < modelMaxX) maxX = modelMaxX;
+        if (maxY < modelMaxY) maxY = modelMaxY;
+        if (maxZ < modelMaxZ) maxZ = modelMaxZ;
+        if (minX > modelMinX) minX = modelMinX;
+        if (minY > modelMinY) minY = modelMinY;
+        if (minZ > modelMinZ) minZ = modelMinZ;
+    }
+    GLKVector3 center = GLKVector3Make((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
+    GLfloat radius = GLKVector3Distance(center, GLKVector3Make(maxX, maxY, maxZ));
+    GLfloat aspect = self.shadowMapBuffer.textureSize.width / self.shadowMapBuffer.textureSize.height;
+    _lightProjectionMatrix = GLKMatrix4MakeOrtho(-radius, radius, -radius / aspect, radius / aspect, 0.1, radius * 2);
+    
+    GLKVector3 lightDirection;
+    if (_parentObject) {
+        lightDirection = GLKQuaternionRotateVector3(_parentObject.rotation, _right);
+    } else {
+        lightDirection = _right;
+    }
+    GLKVector3 position = GLKVector3Make(center.x - radius * lightDirection.x,
+                                         center.y - radius * lightDirection.y,
+                                         center.z - radius * lightDirection.z);
+    _lightViewMatrix = GLKMatrix4MakeLookAt(position.x, position.y , position.z, center.x, center.y , center.z, 0, 1, 0);
 }
+//*/
 
+//*
+- (void)updateLightVPMatrixWithModels:(NSSet *)models {
+    if (!models.count) return;
+    
+    // update light projection matrix
+    GLfloat maxX = 0, maxY = 0, maxZ = 0, minX = MAXFLOAT, minY = MAXFLOAT, minZ = MAXFLOAT;
+    for (CEModel *model in models) {
+        GLfloat modelMaxX = model.position.x + model.offsetFromOrigin.x + model.bounds.x / 2;
+        GLfloat modelMaxY = model.position.y + model.offsetFromOrigin.y + model.bounds.y / 2;
+        GLfloat modelMaxZ = model.position.z + model.offsetFromOrigin.z + model.bounds.z / 2;
+        GLfloat modelMinX = model.position.x + model.offsetFromOrigin.x - model.bounds.x / 2;
+        GLfloat modelMinY = model.position.y + model.offsetFromOrigin.y - model.bounds.y / 2;
+        GLfloat modelMinZ = model.position.z + model.offsetFromOrigin.z - model.bounds.z / 2;
+        if (maxX < modelMaxX) maxX = modelMaxX;
+        if (maxY < modelMaxY) maxY = modelMaxY;
+        if (maxZ < modelMaxZ) maxZ = modelMaxZ;
+        if (minX > modelMinX) minX = modelMinX;
+        if (minY > modelMinY) minY = modelMinY;
+        if (minZ > modelMinZ) minZ = modelMinZ;
+    }
+    GLKVector3 center = GLKVector3Make((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
+    GLfloat radius = GLKVector3Distance(center, GLKVector3Make(maxX, maxY, maxZ));
+    GLfloat aspect = self.shadowMapBuffer.textureSize.width / self.shadowMapBuffer.textureSize.height;
+    GLfloat positionToCenter = GLKVector3Distance(_position, center);
+    _lightProjectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65), aspect, MAX(0.1, positionToCenter - radius), positionToCenter + radius);
+//    _lightProjectionMatrix = GLKMatrix4MakeOrtho(-radius, radius, -radius / aspect, radius / aspect, 0.1, radius * 2);
+    
+    GLKVector3 lightDirection;
+    if (_parentObject) {
+        lightDirection = GLKQuaternionRotateVector3(_parentObject.rotation, _right);
+    } else {
+        lightDirection = _right;
+    }
+    GLKVector3 target = GLKVector3Make(_position.x + positionToCenter * lightDirection.x,
+                                       _position.y + positionToCenter * lightDirection.y,
+                                       _position.z + positionToCenter * lightDirection.z);
+    _lightViewMatrix = GLKMatrix4MakeLookAt(_position.x, _position.y , _position.z, target.x, target.y , target.z, 0, 1, 0);
+}
+//*/
 
 
 @end

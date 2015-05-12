@@ -90,7 +90,7 @@
     if (_enableShadow != enableShadow) {
         _enableShadow = enableShadow;
         if (enableShadow && !_shadowMapBuffer) {
-            _shadowMapBuffer = [[CEShadowMapBuffer alloc] initWithTextureSize:CGSizeMake(640, 640)];
+            _shadowMapBuffer = [[CEShadowMapBuffer alloc] initWithTextureSize:CGSizeMake(kDefaultTextureSize, kDefaultTextureSize)];
             
         } else if (!enableShadow && _shadowMapBuffer) {
             _shadowMapBuffer = nil;

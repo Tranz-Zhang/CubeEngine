@@ -146,12 +146,11 @@
     } else {
         lightDirection = _right;
     }
-    GLKVector3 normalizedVector = GLKVector3Normalize(lightDirection);
-    GLKVector3 transition = GLKVector3Make(center.x + radius * normalizedVector.x,
-                                           center.y + radius * normalizedVector.y,
-                                           center.z + radius * normalizedVector.z);
-    _lightViewMatrix = GLKMatrix4MakeLookAt(-lightDirection.x, -lightDirection.y , -lightDirection.z, 0, 0, 0, 0, 1, 0);
-    _lightViewMatrix = GLKMatrix4Translate(_lightViewMatrix, transition.x, transition.y, transition.z);
+    GLKVector3 position = GLKVector3Make(center.x - radius * lightDirection.x,
+                                         center.y - radius * lightDirection.y,
+                                         center.z - radius * lightDirection.z);
+    _lightViewMatrix = GLKMatrix4MakeLookAt(position.x, position.y , position.z, center.x, center.y , center.z, 0, 1, 0);
+//    _lightViewMatrix = GLKMatrix4Translate(_lightViewMatrix, transition.x, transition.y, transition.z);
 }
 
 

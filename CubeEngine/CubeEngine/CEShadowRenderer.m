@@ -114,9 +114,8 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
      
      if (hasLightEnabled) {
          // test shadow mapping
-         float bias = 0.005;
-         if (ShadowCoord.x < 1.0 && ShadowCoord.y < 1.0 && ShadowCoord.x > 0.0 && ShadowCoord.y > 0.0 &&
-             texture2D(ShadowMapTexture, ShadowCoord.xy).z < ShadowCoord.z - bias) {
+         float depthValue = texture2D(ShadowMapTexture, vec2(ShadowCoord.x/ShadowCoord.w, ShadowCoord.y/ShadowCoord.w)).z;
+         if (depthValue != 1.0 && depthValue < (ShadowCoord.z / ShadowCoord.w) - 0.005) {
              scatteredLight *= 0.5;
              reflectedLight *= 0.5;
          }
@@ -291,17 +290,17 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
     glUniform1i(_uniIntLightCount, (GLint)_lights.count);
     for (CELight *light in _lights) {
         [light updateUniformsWithCamera:_camera];
-        if (light.enableShadow && light.shadowMapBuffer) {
+        if (light.enabled && light.enableShadow && light.shadowMapBuffer) {
             glBindTexture(GL_TEXTURE_2D, light.shadowMapBuffer.textureId);
             glUniform1i(_uniTexShadowMapTexture, 0);
             GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
                                                    0.0, 0.5, 0.0, 0.0,
                                                    0.0, 0.0, 0.5, 0.0,
                                                    0.5, 0.5, 0.5, 1.0);
-            GLKMatrix4 biasDepthMVP = GLKMatrix4Multiply(light.lightViewMatrix, model.transformMatrix);
-            biasDepthMVP = GLKMatrix4Multiply(light.lightProjectionMatrix, biasDepthMVP);
-            biasDepthMVP = GLKMatrix4Multiply(biasMatrix, biasDepthMVP);
-            glUniformMatrix4fv(_uniMtx4DepthBiasMVP, 1, GL_FALSE, biasDepthMVP.m);
+            GLKMatrix4 depthMVP = GLKMatrix4Multiply(light.lightViewMatrix, model.transformMatrix);
+            depthMVP = GLKMatrix4Multiply(light.lightProjectionMatrix, depthMVP);
+            depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
+            glUniformMatrix4fv(_uniMtx4DepthBiasMVP, 1, GL_FALSE, depthMVP.m);
         }
     }
     
@@ -316,6 +315,7 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
     GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
     glUniformMatrix4fv(_uniMtx4MVPMatrix, 1, GL_FALSE, projectionMatrix.m);
     glUniformMatrix4fv(_uniMtx4MVMatrix, 1, GL_FALSE, modelViewMatrix.m);
+    
     // setup normal matrix
     GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(modelViewMatrix);
     normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
