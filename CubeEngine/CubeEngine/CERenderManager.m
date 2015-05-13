@@ -22,14 +22,17 @@
 // debug renderer
 #import "CEWireframeRenderer.h"
 #import "CEAssistRenderer.h"
+#import "CETextureRenderer.h"
 
 
 @implementation CERenderManager {
     EAGLContext *_context;
-    CEBaseRenderer *_testRenderer;
+    CEBaseRenderer *_defaultRenderer;
+    CEShadowMapRenderer *_shadowMapRenderer;
+    
     CEShadowRenderer *_testShadowMapRenderer;
     CEBaseRenderer *_testBaseRenderer;
-    CEShadowMapRenderer *_shadowMapRenderer;
+    CETextureRenderer *_testTextureRenderer;
     
     // debug renderer
     CEWireframeRenderer *_wireframeRenderer;
@@ -58,7 +61,7 @@
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
     // TODO: sort model with materials
-    CERenderer *renderer = [self getTestShadowMapRenderer];
+    CERenderer *renderer = [self getTestTextureRenderer];
     [renderer renderObjects:scene.allModels];
     
     // render debug info
@@ -70,34 +73,21 @@
 
 - (CERenderer *)getRendererWithModel:(CEModel *)model {
     CEScene *scene = [CEScene currentScene];
-    if (!_testRenderer) {
+    if (!_defaultRenderer) {
         [EAGLContext setCurrentContext:_context];
-        _testRenderer = [CEBaseRenderer new];
-        _testRenderer.maxLightCount = scene.maxLightCount;
-        _testRenderer.context = scene.context;
-        [_testRenderer setupRenderer];
+        _defaultRenderer = [CEBaseRenderer new];
+        _defaultRenderer.maxLightCount = scene.maxLightCount;
+        _defaultRenderer.context = scene.context;
+        [_defaultRenderer setupRenderer];
     }
-    _testRenderer.camera = scene.camera;
-    _testRenderer.lights = scene.allLights;
+    _defaultRenderer.camera = scene.camera;
+    _defaultRenderer.lights = scene.allLights;
     
-    return _testRenderer;
+    return _defaultRenderer;
 }
 
+#pragma mark - Test Renderer
 
-- (CEShadowRenderer *)getTestShadowMapRenderer {
-    CEScene *scene = [CEScene currentScene];
-    if (!_testShadowMapRenderer) {
-        [EAGLContext setCurrentContext:_context];
-        _testShadowMapRenderer = [[CEShadowRenderer alloc] init];
-        _testShadowMapRenderer.context = scene.context;
-        [_testShadowMapRenderer setupRenderer];
-    }
-    
-    _testShadowMapRenderer.lights = scene.allLights;
-    _testShadowMapRenderer.camera = scene.camera;
-    
-    return _testShadowMapRenderer;
-}
 
 - (CEBaseRenderer *)getTestBaseRenderer {
     CEScene *scene = [CEScene currentScene];
@@ -113,6 +103,37 @@
     return _testBaseRenderer;
 }
 
+
+- (CEShadowRenderer *)getTestShadowRenderer {
+    CEScene *scene = [CEScene currentScene];
+    if (!_testShadowMapRenderer) {
+        [EAGLContext setCurrentContext:_context];
+        _testShadowMapRenderer = [[CEShadowRenderer alloc] init];
+        _testShadowMapRenderer.context = scene.context;
+        [_testShadowMapRenderer setupRenderer];
+    }
+    
+    _testShadowMapRenderer.lights = scene.allLights;
+    _testShadowMapRenderer.camera = scene.camera;
+    
+    return _testShadowMapRenderer;
+}
+
+
+- (CETextureRenderer *)getTestTextureRenderer {
+    CEScene *scene = [CEScene currentScene];
+    if (!_testTextureRenderer) {
+        [EAGLContext setCurrentContext:_context];
+        _testTextureRenderer = [[CETextureRenderer alloc] init];
+        _testTextureRenderer.context = scene.context;
+        [_testTextureRenderer setupRenderer];
+    }
+    
+    _testTextureRenderer.lights = scene.allLights;
+    _testTextureRenderer.camera = scene.camera;
+    
+    return _testTextureRenderer;
+}
 
 #pragma mark - Shadow Mapping
 - (void)renderShadowMapsForScene:(CEScene *)scene {

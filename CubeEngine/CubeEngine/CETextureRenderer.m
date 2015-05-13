@@ -1,21 +1,22 @@
 //
-//  CEShadowRenderer.m
+//  CETextureRenderer.m
 //  CubeEngine
 //
-//  Created by chance on 4/30/15.
+//  Created by chance on 5/13/15.
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShadowRenderer.h"
+#import "CETextureRenderer.h"
 #import "CEScene_Rendering.h"
 #import "CEProgram.h"
 #import "CELight_Rendering.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
 
-NSString *const kShadowVertexShader = CE_SHADER_STRING
+NSString *const kTextureVertexShader = CE_SHADER_STRING
 (
  attribute highp vec4 VertexPosition;
+ attribute highp vec2 TextureCoord;
  attribute highp vec3 VertexNormal;
  
  uniform mat4 MVPMatrix;
@@ -25,20 +26,23 @@ NSString *const kShadowVertexShader = CE_SHADER_STRING
  
  varying vec3 Normal;
  varying vec4 Position;
+ varying vec2 TextureCoordOut;
  varying vec4 ShadowCoord;
  
  void main () {
      Normal = normalize(NormalMatrix * VertexNormal);
      Position = MVMatrix * VertexPosition;
+     TextureCoordOut = TextureCoord;
      ShadowCoord = DepthBiasMVP * VertexPosition;
      gl_Position = MVPMatrix * VertexPosition;
  }
  );
 
-NSString *const kShadowFragmentSahder = CE_SHADER_STRING
+NSString *const kTextureFragmentSahder = CE_SHADER_STRING
 (
  precision mediump float;
  
+ // lighting
  struct LightInfo {
      bool IsEnabled;
      int LightType; // 0:none 1:directional 2:point 3:spot
@@ -54,17 +58,24 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
  };
  uniform LightInfo Lights[LIGHT_COUNT];
  
+ // base info
  uniform vec4 BaseColor;
  uniform vec3 EyeDirection;
  uniform int LightCount;
  
  uniform sampler2D ShadowMapTexture;
+ uniform sampler2D TestTexture;
  
+ // varyings
  varying vec3 Normal;
  varying vec4 Position;
+ varying vec2 TextureCoordOut;
  varying vec4 ShadowCoord;
  
- void main() {
+ /**
+  if has lighting enable, return adjusted inputColor, else return inputColor
+  */
+ vec4 applyLightingEffect(vec4 inputColor) {
      vec3 scatteredLight = vec3(0.0);
      vec3 reflectedLight = vec3(0.0);
      
@@ -120,21 +131,31 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
              reflectedLight *= 0.5;
          }
          
-         vec3 rgb = min(BaseColor.rgb * scatteredLight + reflectedLight, vec3(1.0));
-         gl_FragColor = vec4(rgb, BaseColor.a);
+         vec3 rgb = min(inputColor.rgb * scatteredLight + reflectedLight, vec3(1.0));
+         return vec4(rgb, inputColor.a);
      } else {
-         gl_FragColor = BaseColor;
+         return inputColor;
      }
  }
- );
 
 
-@implementation CEShadowRenderer {
+ void main() {
+     vec4 textureColor = texture2D(TestTexture, TextureCoordOut);
+     gl_FragColor = applyLightingEffect(textureColor);
+ }
+
+);
+
+
+@implementation CETextureRenderer {
     CEProgram *_program;
     NSArray *_lightUniformInfos;
     NSMutableDictionary *_shadowMapGeneratorDict;
     
+    GLKTextureInfo *_textureInfo;
+    
     GLint _attribVec4Position;
+    GLint _attribVec2TextureCoord;
     GLint _attribVec3Normal;
     
     GLint _uniMtx4MVPMatrix;
@@ -144,6 +165,9 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
     GLint _uniVec4BaseColor;
     GLint _uniVec3EyeDirection;
     GLint _uniIntLightCount;
+    
+    // texture
+    GLint _uniTexTestTexture;
     
     // shadow map
     GLint _uniMtx4DepthBiasMVP;
@@ -156,6 +180,9 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
     self = [super init];
     if (self) {
         _shadowMapGeneratorDict = [NSMutableDictionary dictionaryWithCapacity:[CEScene currentScene].maxLightCount];
+        NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"default" ofType:@"png"];
+        _textureInfo = [GLKTextureLoader textureWithContentsOfFile:imagePath options:nil error:nil];
+        
     }
     return self;
 }
@@ -164,21 +191,26 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
 - (BOOL)setupRenderer {
     if (_program.initialized) return YES;
     int maxLightCount = [CEScene currentScene].maxLightCount;
-    NSString *fragmentShader = [kShadowFragmentSahder stringByReplacingOccurrencesOfString:@"LIGHT_COUNT" withString:[NSString stringWithFormat:@"%d", maxLightCount]];
-    _program = [[CEProgram alloc] initWithVertexShaderString:kShadowVertexShader
+    NSString *fragmentShader = [kTextureFragmentSahder stringByReplacingOccurrencesOfString:@"LIGHT_COUNT" withString:[NSString stringWithFormat:@"%d", maxLightCount]];
+    _program = [[CEProgram alloc] initWithVertexShaderString:kTextureVertexShader
                                         fragmentShaderString:fragmentShader];
     [_program addAttribute:@"VertexPosition"];
     [_program addAttribute:@"VertexNormal"];
+    [_program addAttribute:@"TextureCoord"];
     BOOL isOK = [_program link];
     if (isOK) {
         _attribVec4Position     = [_program attributeIndex:@"VertexPosition"];
         _attribVec3Normal       = [_program attributeIndex:@"VertexNormal"];
+        _attribVec2TextureCoord = [_program attributeIndex:@"TextureCoord"];
+        
         _uniMtx4MVPMatrix       = [_program uniformIndex:@"MVPMatrix"];
         _uniMtx3NormalMatrix    = [_program uniformIndex:@"NormalMatrix"];
         _uniIntLightCount       = [_program uniformIndex:@"LightCount"];
         _uniVec4BaseColor       = [_program uniformIndex:@"BaseColor"];
         _uniMtx4MVMatrix        = [_program uniformIndex:@"MVMatrix"];
         _uniVec3EyeDirection    = [_program uniformIndex:@"EyeDirection"];
+        
+        _uniTexTestTexture      = [_program uniformIndex:@"TestTexture"];
         
         _uniMtx4DepthBiasMVP    = [_program uniformIndex:@"DepthBiasMVP"];
         _uniTexShadowMapTexture = [_program uniformIndex:@"ShadowMapTexture"];
@@ -278,6 +310,7 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
     }
     // prepare for rendering
     if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attribVec4Position] ||
+        ![model.vertexBuffer prepareAttribute:CEVBOAttributeTextureCoord withProgramIndex:_attribVec2TextureCoord] ||
         ![model.vertexBuffer prepareAttribute:CEVBOAttributeNormal withProgramIndex:_attribVec3Normal]){
         return;
     }
@@ -321,6 +354,11 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
     normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
     glUniformMatrix3fv(_uniMtx3NormalMatrix, 1, GL_FALSE, normalMatrix.m);
     
+    // Test Texture
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(_textureInfo.target, _textureInfo.name);
+    glUniform1i(_uniTexTestTexture, 2);
+    
     glBindFramebuffer(GL_FRAMEBUFFER, [CEScene currentScene].renderCore.defaultFramebuffer);
     if (model.indicesBuffer) { // glDrawElements
         glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);
@@ -332,7 +370,6 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
 
 
 @end
-
 
 
 

@@ -40,6 +40,7 @@
 		2690E8511AEA23C6000BDD8F /* CERenderer_PointLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 263C8E651AE62F8E004FDFE8 /* CERenderer_PointLight.h */; };
 		2690E8541AEA2F8E000BDD8F /* CEPointLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 2690E8531AEA2F8E000BDD8F /* CEPointLight.m */; };
 		2690E8551AEA3AC9000BDD8F /* CEPointLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2690E8521AEA2F8E000BDD8F /* CEPointLight.h */; };
+		2692498C1B02E7F70069892D /* CETextureRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2692498B1B02E7F70069892D /* CETextureRenderer.m */; };
 		269608ED1AF85E750045FB03 /* CEView.m in Sources */ = {isa = PBXBuildFile; fileRef = 269608EC1AF85E750045FB03 /* CEView.m */; };
 		269608F01AF85E9C0045FB03 /* CEViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 269608EF1AF85E9C0045FB03 /* CEViewController.m */; };
 		269608F11AF86C7E0045FB03 /* CEViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 269608EE1AF85E9C0045FB03 /* CEViewController.h */; };
@@ -147,6 +148,8 @@
 		268CBC601ADCC6BD00795A6D /* CEModel_Rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEModel_Rendering.h; sourceTree = "<group>"; };
 		2690E8521AEA2F8E000BDD8F /* CEPointLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEPointLight.h; sourceTree = "<group>"; };
 		2690E8531AEA2F8E000BDD8F /* CEPointLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEPointLight.m; sourceTree = "<group>"; };
+		2692498A1B02E7F70069892D /* CETextureRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CETextureRenderer.h; sourceTree = "<group>"; };
+		2692498B1B02E7F70069892D /* CETextureRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CETextureRenderer.m; sourceTree = "<group>"; };
 		269608EB1AF85E750045FB03 /* CEView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEView.h; sourceTree = "<group>"; };
 		269608EC1AF85E750045FB03 /* CEView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEView.m; sourceTree = "<group>"; };
 		269608EE1AF85E9C0045FB03 /* CEViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEViewController.h; sourceTree = "<group>"; };
@@ -210,6 +213,8 @@
 				26C3B72E1AE8CE090061BEFC /* CEBaseRenderer.m */,
 				26036FB01AF1CEA900A1B84D /* CEShadowRenderer.h */,
 				26036FB11AF1CEA900A1B84D /* CEShadowRenderer.m */,
+				2692498A1B02E7F70069892D /* CETextureRenderer.h */,
+				2692498B1B02E7F70069892D /* CETextureRenderer.m */,
 				269F476B1B00893D0030CD55 /* CEShadowMapRenderer.h */,
 				269F476C1B00893D0030CD55 /* CEShadowMapRenderer.m */,
 				26A2468F1AFA06A800FB9B82 /* CEShadowMapGenerator.h */,
@@ -416,6 +421,7 @@
 			files = (
 				4C43A4301ADC37C600761CA9 /* CEVertexBuffer.m in Sources */,
 				26F7FF8F1ADE45660086D9D7 /* CEAssistRenderer.m in Sources */,
+				2692498C1B02E7F70069892D /* CETextureRenderer.m in Sources */,
 				268CBC5B1ADCB72C00795A6D /* CEIndicesBuffer.m in Sources */,
 				26036FB21AF1CEA900A1B84D /* CEShadowRenderer.m in Sources */,
 				2690E8541AEA2F8E000BDD8F /* CEPointLight.m in Sources */,

@@ -15,7 +15,7 @@
 #import "SpotLightControl.h"
 
 
-#define kLocalWidth self.view.bounds.size.width
+#define kLocalWidth self.view.bounds.size.width1
 #define kLocalHeight self.view.bounds.size.height
 
 @interface LightViewController () <SegmentViewControlDelegate> {
@@ -59,7 +59,7 @@
     self.scene.camera.position = GLKVector3Make(0, 30, 30);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
-    _teapotModel = [CEModel modelWithObjFile:@"teapot_smooth"];
+    _teapotModel = [CEModel modelWithObjFile:@"teapot_texture"];
     _teapotModel.showAccessoryLine = YES;
     _teapotModel.castShadows = YES;
     _teapotModel.baseColor = [UIColor orangeColor];
@@ -74,7 +74,7 @@
     _directionalLight.position = GLKVector3Make(8, 8, 8);
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [_directionalLight lookAt:GLKVector3Make(0, 0, 0)];
-//    _directionalLight.enableShadow = YES;
+    _directionalLight.enableShadow = YES;
     [self.scene addLight:_directionalLight];
     
     _pointLight = [CEPointLight new];
@@ -86,12 +86,12 @@
     _spotLight.position = GLKVector3Make(-8, 15, 0);
     _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
     [_spotLight lookAt:_teapotModel.position];
-    _spotLight.enableShadow = YES;
+//    _spotLight.enableShadow = YES;
     [self.scene addLight:_spotLight];
     _objectOperator.operationObject = _teapotModel;
     
     // update light switches
-    _directionalLight.enabled = NO;
+    _directionalLight.enabled = YES;
     _pointLight.enabled = NO;
     _spotLight.enabled = NO;
     _directionalLightSwitch.on = _directionalLight.isEnabled;

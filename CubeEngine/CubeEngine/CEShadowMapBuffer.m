@@ -80,7 +80,7 @@
     if (_ready) {
         glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
         glClear(GL_DEPTH_BUFFER_BIT);
-        glViewport(0, 0, _textureSize.width, _textureSize.height);
+        glViewport(1, 1, _textureSize.width - 2, _textureSize.height - 2);
     }
 }
 
