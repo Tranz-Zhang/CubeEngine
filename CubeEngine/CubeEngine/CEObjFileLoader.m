@@ -7,34 +7,17 @@
 //
 
 #import "CEObjFileLoader.h"
+#import "CEObjParser.h"
+#import "CEMtlParser.h"
 #import "CEModel_Rendering.h"
-
-typedef NS_ENUM(NSInteger, CEVertexDataType) {
-    CEVertexDataTypeUnknown = 0,
-    CEVertexDataType_V,        // position[3]
-    CEVertexDataType_V_VT,     // position[3] + textureCoord[2]
-    CEVertexDataType_V_VN,     // position[3] + normal[3]
-    CEVertexDataType_V_VT_VN,  // position[3] + textureCoord[2] + normal[3]
-};
-
-#pragma mark - CEMeshGroup
-@interface CEMeshGroup : NSObject
-
-@property (nonatomic, strong) NSArray *groupNames;
-@property (nonatomic, strong) NSMutableData *meshData;
-@property (nonatomic, strong) NSArray *attributes;
-
-@end
-
-@implementation CEMeshGroup
-
-@end
-
 
 
 #pragma mark - CEObjFileLoader
 
 @implementation CEObjFileLoader  {
+    CEObjParser *_objParser;
+    CEMtlParser *_mtlParser;
+    
     NSMutableArray *_vertices;
     NSMutableArray *_textureCoordinates;
     NSMutableArray *_normals;
@@ -43,115 +26,139 @@ typedef NS_ENUM(NSInteger, CEVertexDataType) {
 
 
 - (CEModel *)loadModelWithObjFileName:(NSString *)fileName {
-    
     NSString *filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"obj"];
-    NSError *error;
-    NSString *objContent = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
-    if (error) {
-        NSLog(@"Error: %@", error);
+    if (!filePath) {
+        return nil;
+    }
+    if (![filePath isEqualToString:_objParser.filePath]) {
+        _objParser = [CEObjParser parserWithFilePath:filePath];
+    }
+    NSArray *groups = [_objParser parse];
+    
+    // sort groups
+    // [A B], [A C] -> @{A : [B C]}, @{B : [A]}, @{C : [A]}
+    NSMutableDictionary *groupDict = [NSMutableDictionary dictionary];
+    for (CEObjMeshGroup *group in groups) {
+        for (NSString *groupName in group.groupNames) {
+            NSMutableSet *relativeNames = groupDict[groupName];
+            if (!relativeNames) {
+                relativeNames = [NSMutableSet set];
+                groupDict[groupName] = relativeNames;
+            }
+            NSMutableArray *otherNames = group.groupNames.mutableCopy;
+            [otherNames removeObject:groupName];
+            [relativeNames addObjectsFromArray:otherNames];
+        }
     }
     
-    /*
-     NOTE: I use [... componentsSeparatedByString:@" "] to seperate because it's short writing,
-     if something wrong, use [... componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet] instead.
-     */
-    _vertices = [NSMutableArray array];
-    _textureCoordinates = [NSMutableArray array];
-    _normals = [NSMutableArray array];
-    NSMutableArray *groups = [NSMutableArray array];
-    CEMeshGroup *currentGroup = nil;
-    NSArray *lines = [objContent componentsSeparatedByString:@"\n"];
-    int vertextCount = 0;
-    for (NSString *lineContent in lines) {
-        // parse vertex "v 2.963007 0.335381 -0.052237"
-        if ([lineContent hasPrefix:@"v "]) {
-            NSString *valueString = [lineContent substringFromIndex:2];
-            NSArray *vertexValues = [valueString componentsSeparatedByString:@" "];
-            [_vertices addObject:[self dataWithFloatStringList:vertexValues]];
-            continue;
-        }
-        
-        // parse texture coordinate "vt 0.000000 1.000000"
-        if ([lineContent hasPrefix:@"vt "]) {
-            NSString *valueString = [lineContent substringFromIndex:3];
-            NSArray *vertexValues = [valueString componentsSeparatedByString:@" "];
-            [_textureCoordinates addObject:[self dataWithFloatStringList:vertexValues]];
-            continue;
-        }
-        
-        // parse normal "vn -0.951057 0.000000 0.309017"
-        if ([lineContent hasPrefix:@"vn "]) {
-            NSString *valueString = [lineContent substringFromIndex:3];
-            NSArray *vertexValues = [valueString componentsSeparatedByString:@" "];
-            [_normals addObject:[self dataWithFloatStringList:vertexValues]];
-            continue;
-        }
-        
-        // parse group "g group1 pPipe1 group2"
-        if ([lineContent hasPrefix:@"g "]) {
-            NSString *valueString = [lineContent substringFromIndex:2];
-            NSArray *groupNames = [valueString componentsSeparatedByString:@" "];
-            CEMeshGroup *newGroup = [CEMeshGroup new];
-            newGroup.groupNames = groupNames;
-            newGroup.meshData = [NSMutableData data];
-            [groups addObject:newGroup];
-            currentGroup = newGroup;
-            continue;
-        }
-        
-        // parse faces "f 10/16/25 9/15/26 29/36/27 30/37/28"
-        if ([lineContent hasPrefix:@"f "]) {
-            NSString *content = [lineContent substringFromIndex:2];
-            NSArray *attributeIndies = [content componentsSeparatedByString:@" "];
-            if (!currentGroup) {
-                CEMeshGroup *newGroup = [CEMeshGroup new];
-                newGroup.groupNames = nil;
-                newGroup.meshData = [NSMutableData data];
-                [groups addObject:newGroup];
-                currentGroup = newGroup;
-            }
-            if (!currentGroup.attributes) {
-                currentGroup.attributes = [self vertexAttributesWithFaceAttributes:attributeIndies[0]];
-            }
-            
-            if (attributeIndies.count == 3) {
-                for (NSString *indexString in attributeIndies) {
-                    NSData *elementData = [self vertexElementDataWithIndies:indexString];
-                    [currentGroup.meshData appendData:elementData];
-                    vertextCount++;
+    // transfer to models
+    NSMutableSet *topMostModels = [NSMutableSet set];
+    NSMutableDictionary *modelDict = [NSMutableDictionary dictionaryWithCapacity:groupDict.count];
+    [groupDict enumerateKeysAndObjectsUsingBlock:^(NSString *groupName, NSArray *relativeNames, BOOL *stop) {
+        CEModel *model = modelDict[groupName];
+        if (!model) { // create new model
+            if (relativeNames.count == 1) {
+                // leaf model(child model). created with vertexData
+                CEObjMeshGroup *refGroup = nil;
+                for (CEObjMeshGroup *group in groups) {
+                    if ([group.groupNames containsObject:groupName]) {
+                        refGroup = group;
+                        break;
+                    }
+                }
+                if (refGroup) {
+                    CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:refGroup.meshData
+                                                                             attributes:refGroup.attributes];
+                    model = [[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
+                    model.name = groupName;
                 }
                 
-            } else if (attributeIndies.count == 4) {
-                // quadrilateral to triangle
-                NSData *vertex0 = [self vertexElementDataWithIndies:attributeIndies[0]];
-                NSData *vertex1 = [self vertexElementDataWithIndies:attributeIndies[1]];
-                NSData *vertex2 = [self vertexElementDataWithIndies:attributeIndies[2]];
-                NSData *vertex3 = [self vertexElementDataWithIndies:attributeIndies[3]];
-                [currentGroup.meshData appendData:vertex0];
-                [currentGroup.meshData appendData:vertex1];
-                [currentGroup.meshData appendData:vertex3];
-                [currentGroup.meshData appendData:vertex3];
-                [currentGroup.meshData appendData:vertex1];
-                [currentGroup.meshData appendData:vertex2];
+            } else {
+                // create empty model
+                model = [CEModel new];
+                model.name = groupName;
             }
-            continue;
         }
         
-        // parse meterial file
-        // parse meterial ref
-    }
-    CEMeshGroup *group = nil;
-    for (CEMeshGroup *parsedGroup in groups) {
-        if (parsedGroup.attributes.count &&
-            parsedGroup.meshData.length) {
-            group = parsedGroup;
+        if (model) {
+            for (NSString *otherModelName in relativeNames) {
+                CEModel *otherModel = modelDict[otherModelName];
+                if (!otherModel) continue;
+                if (relativeNames.count < [groupDict[otherModelName] count]) { // as child
+                    [otherModel addChildObject:model];
+                    
+                } else if (relativeNames.count > [groupDict[otherModelName] count]) { // as parent
+                    [model addChildObject:otherModel];
+                }
+            }
+            modelDict[groupName] = model;
+            
+            // check top most model
+            CEModel *topMostModel = [topMostModels anyObject];
+            if (topMostModel.childObjects.count < model.childObjects.count) {
+                [topMostModels removeAllObjects];
+                [topMostModels addObject:model];
+                
+            } else if (topMostModel.childObjects.count == model.childObjects.count) {
+                [topMostModels addObject:model];
+            }
+        }
+    }];
+
+    groupDict = [NSMutableDictionary dictionary];
+    for (CEObjMeshGroup *group in groups) {
+        for (NSString *groupName in group.groupNames) {
+            NSMutableSet *relativeNames = groupDict[groupName];
+            if (!relativeNames) {
+                relativeNames = [NSMutableSet set];
+                groupDict[groupName] = relativeNames;
+            }
+            [relativeNames addObject:group];
         }
     }
+    NSArray *sortedGroupNames = [groupDict keysSortedByValueUsingComparator:^NSComparisonResult(NSSet *set1, NSSet *set2) {
+        return set1.count - set2.count;
+    }];
+
+    NSMutableArray *models = [NSMutableArray array];
+    modelDict = [NSMutableDictionary dictionary];
+    for (NSString *groupName in sortedGroupNames) {
+        NSSet *refGroups = groupDict[groupName];
+        if (refGroups.count == 1 && !modelDict[[[refGroups anyObject] description]]) { // create model object
+            CEObjMeshGroup *refGroup = [refGroups anyObject];
+            CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:refGroup.meshData
+                                                                     attributes:refGroup.attributes];
+            CEModel *model = [[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
+            model.name = groupName;
+            modelDict[[refGroup description]] = model;
+            [models addObject:model];
+            
+        } else if (refGroups.count > 1) { // create model group
+            CEModel *emptyModel = [CEModel new];
+            emptyModel.name = groupName;
+            for (CEObjMeshGroup *group in refGroups) {
+                CEModel *model = modelDict[[group description]];
+                
+                if (!model) continue;
+                if (model.parentObject) {
+                    NSSet *parentRefGroups = groupDict[[(CEModel *)model.parentObject name]];
+                    if ([parentRefGroups isSubsetOfSet:refGroups]) {
+                        [emptyModel addChildObject:model.parentObject];
+                        
+                    } else {
+                        
+                    }
+                    
+                } else {
+                    [emptyModel addChildObject:model];
+                }
+            }
+            [models addObject:emptyModel];
+        }
+        
+    }
     
-    CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:group.meshData
-                                                             attributes:group.attributes];
-    CEModel *model = [[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
-    return model;
+    return [topMostModels anyObject];
 }
 
 
@@ -221,26 +228,6 @@ typedef NS_ENUM(NSInteger, CEVertexDataType) {
     }
     
     return [attributes copy];
-}
-
-// "1/2/3 -> VertexElementType_V_VT_VN"
-// "1//3" -> VertexElementType_V_VN
-- (CEVertexDataType)elementTypeWithFaceAttributes:(NSString *)attributeString {
-    NSArray *attributes = [attributeString componentsSeparatedByString:@"/"];
-    switch (attributes.count) {
-        case 1:
-            return CEVertexDataType_V;
-        case 2:
-            return CEVertexDataType_V_VT;
-        case 3:
-            if ([attributes[1] length]) {
-                return CEVertexDataType_V_VT_VN;
-            } else {
-                return CEVertexDataType_V_VN;
-            }
-        default:
-            return CEVertexDataTypeUnknown;
-    }
 }
 
 

@@ -59,11 +59,22 @@
     self.scene.camera.position = GLKVector3Make(0, 30, 30);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
-    _teapotModel = [CEModel modelWithObjFile:@"teapot_texture"];
+    CEModel *templateModel = [CEModel modelWithObjFile:@"cube_triangle"];
+    templateModel.scale = GLKVector3Make(0.1, 0.1, 0.1);
+    templateModel.castShadows = YES;
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j ++) {
+            CEModel *cube = [templateModel duplicate];
+            cube.position = GLKVector3Make(- 10 + i * 2, -3, - 10 + j * 2);
+            [self.scene addModel:cube];
+        }
+    }
+    
+    _teapotModel = [CEModel modelWithObjFile:@"cube_triangle"];
     _teapotModel.showAccessoryLine = YES;
     _teapotModel.castShadows = YES;
     _teapotModel.baseColor = [UIColor orangeColor];
-    [self.scene addModel:_teapotModel];
+//    [self.scene addModel:_teapotModel];
     
     _floorModel = [CEModel modelWithObjFile:@"floor"];
     _floorModel.baseColor = [UIColor lightGrayColor];

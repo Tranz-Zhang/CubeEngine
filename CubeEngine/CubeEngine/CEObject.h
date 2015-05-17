@@ -14,7 +14,7 @@
  */
 @interface CEObject : NSObject {
     __weak CEObject *_parentObject;
-    NSMutableArray *_childObjects;
+    NSMutableSet *_childObjects;
     
     GLKVector3 _position;
     GLKQuaternion _rotation;
@@ -33,7 +33,7 @@
 
 @property (nonatomic, assign) NSInteger tag;
 @property (nonatomic, readonly) CEObject *parentObject;
-@property (nonatomic, readonly) NSArray *childObjects;
+@property (nonatomic, readonly) NSSet *childObjects;
 
 
 #pragma mark - Transfrom

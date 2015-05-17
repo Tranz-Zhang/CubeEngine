@@ -10,10 +10,12 @@
 
 @interface CEModel : CEObject
 
+@property (nonatomic, strong) NSString *name;
+
 // the bounds in 3D space
 @property (nonatomic, readonly) GLKVector3 bounds;
 
-
+// the model's center's offset from original point in Model Space.
 @property (nonatomic, readonly) GLKVector3 offsetFromOrigin;
 
 // default is white
@@ -30,6 +32,11 @@
 
 
 + (CEModel *)modelWithObjFile:(NSString *)objFileName;
+
+// return child model with the indicated name
+- (CEModel *)childWithName:(NSString *)modelName;
+
+- (CEModel *)duplicate;
 
 @end
 

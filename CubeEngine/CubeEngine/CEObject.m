@@ -15,7 +15,6 @@
 {
     self = [super init];
     if (self) {
-        _childObjects = [NSMutableArray array];
         _position = GLKVector3Make(0, 0, 0);
         _rotation = GLKQuaternionIdentity;
         _eulerAngles = GLKVector3Make(0, 0, 0);
@@ -163,11 +162,14 @@
 
 
 #pragma mark - Child Objects
-- (NSArray *)childObjects {
+- (NSSet *)childObjects {
     return _childObjects.copy;
 }
 
 - (void)addChildObject:(CEObject *)child {
+    if (!_childObjects) {
+        _childObjects = [NSMutableSet set];
+    }
     if ([child isKindOfClass:[CEObject class]]) {
         [_childObjects addObject:child];
         [child setParentObject:self];

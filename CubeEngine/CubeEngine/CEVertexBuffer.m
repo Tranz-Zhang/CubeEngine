@@ -7,6 +7,8 @@
 //
 
 #import "CEVertexBuffer.h"
+#import <OpenGLES/ES1/gl.h>
+#import <OpenGLES/ES1/glext.h>
 
 @implementation CEVertexBuffer {
     GLuint _vertexBufferIndex;
@@ -64,6 +66,7 @@
         _vertexStride = 0;
         CEError(@"Fail to initialize vertex buffer");
         return NO;
+        
     }
     
     return YES;

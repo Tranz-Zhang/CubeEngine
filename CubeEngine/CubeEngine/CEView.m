@@ -49,6 +49,7 @@
         [EAGLContext setCurrentContext:_renderCore.context];
         [_renderCore resizeFromLayer:(CAEAGLLayer *)self.layer];
         glViewport(0, 0, _renderCore.width, _renderCore.height);
+        
     }
 }
 
@@ -63,5 +64,8 @@
     [_renderCore resizeFromLayer:(CAEAGLLayer *)self.layer];
     glViewport(0, 0, _renderCore.width, _renderCore.height);
 }
+
+
+
 
 @end

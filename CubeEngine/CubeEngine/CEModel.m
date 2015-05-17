@@ -67,12 +67,60 @@
 }
 
 
+
+#pragma mark - Setters & Getters
+
 - (void)setBaseColor:(UIColor *)baseColor {
     if (_baseColor != baseColor) {
         _baseColor = [baseColor copy];
         _vec3BaseColor = CEVec4WithColor(baseColor);
     }
 }
+
+#pragma mark - API
+
+- (CEModel *)childWithName:(NSString *)modelName {
+    for (CEModel *child in _childObjects) {
+        if ([child.name isEqualToString:modelName]) {
+            return child;
+        }
+    }
+    return nil;
+}
+
+
+- (CEModel *)duplicate {
+    CEModel *duplicatedModel = [CEModel new];
+    [duplicatedModel setupDuplicatedModelWithVertexBuffer:_vertexBuffer
+                                            indicesBuffer:_indicesBuffer
+                                          wireframeBuffer:_wireframeBuffer
+                                                   bounds:_bounds
+                                         offsetFromOrigin:_offsetFromOrigin];
+    duplicatedModel.name = _name;
+    duplicatedModel.position = _position;
+    duplicatedModel.rotation = _rotation;
+    duplicatedModel.scale = _scale;
+    duplicatedModel.castShadows = _castShadows;
+    duplicatedModel.showAccessoryLine = _showAccessoryLine;
+    duplicatedModel.showWireframe = _showWireframe;
+    
+    return duplicatedModel;
+}
+
+
+// duplicated ivars which can't accessed outside.
+- (void)setupDuplicatedModelWithVertexBuffer:(CEVertexBuffer *)vertexBuffer
+                               indicesBuffer:(CEIndicesBuffer *)indicesBuffer
+                             wireframeBuffer:(CEIndicesBuffer *)wireframeBuffer
+                                      bounds:(GLKVector3)bounds
+                            offsetFromOrigin:(GLKVector3)offsetFromOrigin {
+    _vertexBuffer = vertexBuffer;
+    _indicesBuffer = indicesBuffer;
+    _wireframeBuffer = wireframeBuffer;
+    _bounds = bounds;
+    _offsetFromOrigin = offsetFromOrigin;
+}
+
 
 #pragma mark - Wireframe
 - (void)setShowWireframe:(BOOL)showWireframe {

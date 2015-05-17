@@ -33,7 +33,7 @@ NSString *const kShadowVertexShader = CE_SHADER_STRING
      ShadowCoord = DepthBiasMVP * VertexPosition;
      gl_Position = MVPMatrix * VertexPosition;
  }
- );
+);
 
 NSString *const kShadowFragmentSahder = CE_SHADER_STRING
 (
@@ -126,7 +126,7 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
          gl_FragColor = BaseColor;
      }
  }
- );
+);
 
 
 @implementation CEShadowRenderer {
@@ -260,7 +260,17 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
     }
     
     for (CEModel *model in objects) {
+        [self recursiveRenderModel:model];
+    }
+}
+
+
+- (void)recursiveRenderModel:(CEModel *)model {
+    if (model.vertexBuffer) {
         [self renderModel:model];
+    }
+    for (CEModel *child in model.childObjects) {
+        [self recursiveRenderModel:child];
     }
 }
 

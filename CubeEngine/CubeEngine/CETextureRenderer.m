@@ -40,7 +40,7 @@ NSString *const kTextureVertexShader = CE_SHADER_STRING
 
 NSString *const kTextureFragmentSahder = CE_SHADER_STRING
 (
- precision mediump float;
+ precision highp float;
  
  // lighting
  struct LightInfo {
@@ -59,12 +59,12 @@ NSString *const kTextureFragmentSahder = CE_SHADER_STRING
  uniform LightInfo Lights[LIGHT_COUNT];
  
  // base info
- uniform vec4 BaseColor;
+ uniform lowp vec4 BaseColor;
  uniform vec3 EyeDirection;
  uniform int LightCount;
  
- uniform sampler2D ShadowMapTexture;
- uniform sampler2D TestTexture;
+ uniform lowp sampler2D ShadowMapTexture;
+ uniform lowp sampler2D TestTexture;
  
  // varyings
  varying vec3 Normal;

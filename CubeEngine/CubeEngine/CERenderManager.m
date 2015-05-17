@@ -61,7 +61,7 @@
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
     // TODO: sort model with materials
-    CERenderer *renderer = [self getTestTextureRenderer];
+    CERenderer *renderer = [self getTestShadowRenderer];
     [renderer renderObjects:scene.allModels];
     
     // render debug info

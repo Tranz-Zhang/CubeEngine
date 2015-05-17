@@ -8,14 +8,16 @@
 
 #import "ModelViewController.h"
 #import "CEObjFileLoader.h"
+#import "ObjectOperator.h"
+
 
 @implementation ModelViewController {
     CEModel *_testModel;
-    __weak IBOutlet UILabel *_infoLabel;
+    ObjectOperator *_operator;
     __weak IBOutlet UISwitch *_wireframeSwitch;
     __weak IBOutlet UISwitch *_accessorySwitch;
-    
 }
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -25,22 +27,19 @@
     self.scene.camera.farZ = 50;
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
+    _testModel = [CEModel modelWithObjFile:@"test"];
     _testModel.showWireframe = NO;
     _testModel.showAccessoryLine = YES;
+    [self recursiveSetColorForModel:_testModel];
+    
     printf("Teapot loading duration: %.4f", CFAbsoluteTimeGetCurrent() - start);
     [self.scene addModel:_testModel];
     
-    // add gesture
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGesture:)];
-    [self.view addGestureRecognizer:panGesture];
-    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(onPinchGesture:)];
-    [self.view addGestureRecognizer:pinchGesture];
-    UIRotationGestureRecognizer *rotationGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(onRotationGesture:)];
-    [self.view addGestureRecognizer:rotationGesture];
-    
     _wireframeSwitch.on = _testModel.showWireframe;
     _accessorySwitch.on = _testModel.showAccessoryLine;
+    
+    _operator = [[ObjectOperator alloc] initWithBaseView:self.view];
+    _operator.operationObject = _testModel;
 }
 
 
@@ -60,71 +59,26 @@
 }
 
 
-#pragma mark - Gesture
-static bool isHorizontalPan;
-- (void)onPanGesture:(UIPanGestureRecognizer *)panGesture {
-    if (panGesture.state == UIGestureRecognizerStateBegan) {
-        CGPoint translation = [panGesture translationInView:self.view];
-        isHorizontalPan = ABS(translation.x) > ABS(translation.y);
-        _infoLabel.hidden = NO;
-        _infoLabel.textColor = isHorizontalPan ? [UIColor colorWithRed:60/255.0 green:175/255.0 blue:0 alpha:1] : [UIColor blueColor];
-        
-    } else if (panGesture.state == UIGestureRecognizerStateChanged) {
-        CGPoint translation = [panGesture translationInView:self.view];
-        [panGesture setTranslation:CGPointZero inView:self.view];
-        GLKVector3 eulerAngles = _testModel.eulerAngles;
-        if (isHorizontalPan) {
-            eulerAngles.y += translation.x;
-            _infoLabel.text = [NSString stringWithFormat:@"Rotation Yaw: %.2f°", eulerAngles.y];
-            
-        } else {
-            eulerAngles.z -= translation.y;
-            _infoLabel.text = [NSString stringWithFormat:@"Rotation Pitch: %.2f°", eulerAngles.z];
-        }
-        _testModel.eulerAngles = eulerAngles;
-        
-    } else if (panGesture.state == UIGestureRecognizerStateEnded ||
-               panGesture.state == UIGestureRecognizerStateCancelled) {
-        _infoLabel.hidden = YES;
-    }
+- (IBAction)onParse:(id)sender {
+    CEObjFileLoader *loader = [CEObjFileLoader new];
+    [loader loadModelWithObjFileName:@"test_scene"];
 }
 
 
-- (void)onPinchGesture:(UIPinchGestureRecognizer *)pinchGesture {
-    if (pinchGesture.state == UIGestureRecognizerStateBegan) {
-        _infoLabel.hidden = NO;
-        _infoLabel.textColor = [UIColor orangeColor];
-        
-    } else if (pinchGesture.state == UIGestureRecognizerStateChanged) {
-        _testModel.scale = GLKVector3MultiplyScalar(_testModel.scale, pinchGesture.scale);;
-        _infoLabel.text = [NSString stringWithFormat:@"Scale: %.2f", _testModel.scale.x];
-        pinchGesture.scale = 1;
-        
-    } else if (pinchGesture.state == UIGestureRecognizerStateEnded ||
-               pinchGesture.state == UIGestureRecognizerStateCancelled) {
-        _infoLabel.hidden = YES;
+#pragma mark - Others
+- (void)recursiveSetColorForModel:(CEModel *)model {
+    model.baseColor = [self randomColor];
+    for (CEModel *child in model.childObjects) {
+        child.baseColor = [self randomColor];
     }
 }
 
-
-- (void)onRotationGesture:(UIRotationGestureRecognizer *)rotationGesture {
-    if (rotationGesture.state == UIGestureRecognizerStateBegan) {
-        _infoLabel.hidden = NO;
-        _infoLabel.textColor = [UIColor redColor];
-        
-    } else if (rotationGesture.state == UIGestureRecognizerStateChanged) {
-        GLKVector3 eulerAngles = _testModel.eulerAngles;
-        eulerAngles.x -= rotationGesture.rotation * 90;
-        _testModel.eulerAngles = eulerAngles;
-        rotationGesture.rotation = 0;
-        _infoLabel.text = [NSString stringWithFormat:@"Rotation Roll: %.2f°", eulerAngles.x];
-        
-    } else if (rotationGesture.state == UIGestureRecognizerStateEnded ||
-               rotationGesture.state == UIGestureRecognizerStateCancelled) {
-        _infoLabel.hidden = YES;
-    }
+- (UIColor *)randomColor {
+    return [UIColor colorWithRed:arc4random() % 255 / 255.0
+                           green:arc4random() % 255 / 255.0
+                            blue:arc4random() % 255 / 255.0
+                           alpha:1.0];
 }
-
 
 @end
 
