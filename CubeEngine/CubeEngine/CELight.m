@@ -22,6 +22,7 @@
     if (self) {
         [self setLightColor:[UIColor whiteColor]];
         [self setAmbientColor:[UIColor colorWithWhite:0.1 alpha:1]];
+        _hasLightChanged = YES;
         _enabled = YES;
     }
     return self;
@@ -70,10 +71,10 @@
     }
 }
 
-- (void)setPosition:(GLKVector3)position {
-    _hasChanged = !GLKVector3AllEqualToVector3(_position, position);
-    [super setPosition:position];
-}
+//- (void)setPosition:(GLKVector3)position {
+//    _hasChanged = !GLKVector3AllEqualToVector3(_position, position);
+//    [super setPosition:position];
+//}
 
 
 

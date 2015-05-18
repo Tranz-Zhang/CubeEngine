@@ -27,7 +27,7 @@
     self.scene.camera.farZ = 50;
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    _testModel = [CEModel modelWithObjFile:@"test"];
+    _testModel = [CEModel modelWithObjFile:@"test_scene"];
     _testModel.showWireframe = NO;
     _testModel.showAccessoryLine = YES;
     [self recursiveSetColorForModel:_testModel];
@@ -60,8 +60,9 @@
 
 
 - (IBAction)onParse:(id)sender {
-    CEObjFileLoader *loader = [CEObjFileLoader new];
-    [loader loadModelWithObjFileName:@"test_scene"];
+    [_testModel recursivePrint];
+//    CEModel *cube = [_testModel childWithName:@"MyPlande"];
+//    cube.baseColor = [self randomColor];
 }
 
 
@@ -69,9 +70,10 @@
 - (void)recursiveSetColorForModel:(CEModel *)model {
     model.baseColor = [self randomColor];
     for (CEModel *child in model.childObjects) {
-        child.baseColor = [self randomColor];
+        [self recursiveSetColorForModel:child];
     }
 }
+
 
 - (UIColor *)randomColor {
     return [UIColor colorWithRed:arc4random() % 255 / 255.0

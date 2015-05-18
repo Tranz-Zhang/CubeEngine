@@ -16,7 +16,6 @@
     self = [super init];
     if (self) {
         [self setupSharedVertexBuffer];
-        _hasChanged = YES;
         _shiniess = 20;
     }
     return self;
@@ -95,26 +94,6 @@
 }
 
 
-//- (GLKMatrix4)lightViewMatrix {
-//#warning normally [CEObject transfromMatrix] will set the _hasChanged to NO, but here we don't change to _hasChanged
-//    if (!self.hasChanged && !_parentObject.hasChanged) {
-//        return _lightViewMatrix;
-//    }
-//    
-//    GLKVector3 lightDirection;
-//    if (_parentObject) {
-//        lightDirection = GLKQuaternionRotateVector3(_parentObject.rotation, _right);
-//    } else {
-//        lightDirection = _right;
-//    }
-//    
-//#warning If the shadow map doesn't look right, check this "distance" argument
-//    GLfloat distance = GLKVector3Distance(GLKVector3Make(0, 0, 30), GLKVector3Make(0, 0, 0));
-//    _lightViewMatrix = GLKMatrix4MakeLookAt(-lightDirection.x * distance, -lightDirection.y * distance, -lightDirection.z * distance, 0, 0, 0, 0, 1, 0);
-//    return _lightViewMatrix;
-//}
-
-
 #pragma mark - Shadow Mapping
 - (void)updateLightVPMatrixWithModels:(NSSet *)models {
     if (!models.count) return;
@@ -150,7 +129,6 @@
                                          center.y - radius * lightDirection.y,
                                          center.z - radius * lightDirection.z);
     _lightViewMatrix = GLKMatrix4MakeLookAt(position.x, position.y , position.z, center.x, center.y , center.z, 0, 1, 0);
-//    _lightViewMatrix = GLKMatrix4Translate(_lightViewMatrix, transition.x, transition.y, transition.z);
 }
 
 

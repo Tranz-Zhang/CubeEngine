@@ -21,7 +21,6 @@
     if (self) {
         [self setConeAngle:30];
         [self setupSharedVertexBuffer];
-        _hasChanged = YES;
         _shiniess = 20;
         _attenuation = 0.001;
         _spotExponent = 10;

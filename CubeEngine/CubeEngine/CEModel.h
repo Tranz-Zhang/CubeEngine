@@ -33,7 +33,7 @@
 
 + (CEModel *)modelWithObjFile:(NSString *)objFileName;
 
-// return child model with the indicated name
+// recursive search child model with the indicated name
 - (CEModel *)childWithName:(NSString *)modelName;
 
 - (CEModel *)duplicate;

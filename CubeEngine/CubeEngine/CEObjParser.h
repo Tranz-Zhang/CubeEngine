@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CEObjMeshGroup.h"
+#import "CEObjMeshInfo.h"
 
 @interface CEObjParser : NSObject
 

@@ -16,7 +16,6 @@
     self = [super init];
     if (self) {
         [self setupSharedVertexBuffer];
-        _hasChanged = YES;
         _shiniess = 20;
         _attenuation = 0.001;
     }

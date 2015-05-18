@@ -86,6 +86,6 @@
 #pragma mark - Object Hierarchy
 - (void)addChildObject:(CEObject *)child;
 - (void)removeFromParent;
-- (CEObject *)childWithTag:(NSInteger)tag;
+- (void)recursivePrint;
 
 @end

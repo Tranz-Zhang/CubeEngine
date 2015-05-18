@@ -51,7 +51,7 @@
     _vertices = [NSMutableArray array];
     _textureCoordinates = [NSMutableArray array];
     _normals = [NSMutableArray array];
-    CEObjMeshGroup *currentGroup = nil;
+    CEObjMeshInfo *currentGroup = nil;
     NSArray *lines = [objContent componentsSeparatedByString:@"\n"];
     int vertextCount = 0;
     for (NSString *lineContent in lines) {
@@ -83,7 +83,7 @@
         if ([lineContent hasPrefix:@"g "]) {
             NSString *valueString = [lineContent substringFromIndex:2];
             NSArray *groupNames = [valueString componentsSeparatedByString:@" "];
-            CEObjMeshGroup *newGroup = [CEObjMeshGroup new];
+            CEObjMeshInfo *newGroup = [CEObjMeshInfo new];
             newGroup.groupNames = groupNames;
             newGroup.meshData = [NSMutableData data];
             [_groups addObject:newGroup];
@@ -96,7 +96,7 @@
             NSString *content = [lineContent substringFromIndex:2];
             NSArray *attributeIndies = [content componentsSeparatedByString:@" "];
             if (!currentGroup) {
-                CEObjMeshGroup *newGroup = [CEObjMeshGroup new];
+                CEObjMeshInfo *newGroup = [CEObjMeshInfo new];
                 newGroup.groupNames = nil;
                 newGroup.meshData = [NSMutableData data];
                 [_groups addObject:newGroup];
@@ -148,7 +148,7 @@
     
     // remove useless groups
     NSMutableArray *filteredGroups = [NSMutableArray array];
-    for (CEObjMeshGroup *group in _groups) {
+    for (CEObjMeshInfo *group in _groups) {
         if (group.groupNames.count && group.attributes.count && group.meshData.length) {
             [filteredGroups addObject:group];
         }

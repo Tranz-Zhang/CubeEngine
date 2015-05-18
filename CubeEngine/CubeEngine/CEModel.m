@@ -17,7 +17,7 @@
 
 + (CEModel *)modelWithObjFile:(NSString *)objFileName {
     CEObjFileLoader *fileLoader =  [CEObjFileLoader new];
-    return [fileLoader loadModelWithObjFileName:objFileName];
+    return [[fileLoader loadModelWithObjFileName:objFileName] anyObject];
 }
 
 - (instancetype)initWithVertexBuffer:(CEVertexBuffer *)vertexBuffer
@@ -67,6 +67,9 @@
 }
 
 
+- (NSString *)debugDescription {
+    return _name;
+}
 
 #pragma mark - Setters & Getters
 
@@ -83,6 +86,13 @@
     for (CEModel *child in _childObjects) {
         if ([child.name isEqualToString:modelName]) {
             return child;
+        }
+    }
+    // search child's child
+    for (CEModel *child in _childObjects) {
+        CEModel *childChild = [child childWithName:modelName];
+        if (childChild) {
+            return childChild;
         }
     }
     return nil;
@@ -123,16 +133,27 @@
 
 
 #pragma mark - Wireframe
+- (void)setShowAccessoryLine:(BOOL)showAccessoryLine {
+    _showAccessoryLine = showAccessoryLine;
+    for (CEModel *child in _childObjects) {
+        child.showAccessoryLine = showAccessoryLine;
+    }
+}
+
+
 - (void)setShowWireframe:(BOOL)showWireframe {
 #warning Some Bug when the model is a 4-point plant
     if (showWireframe != _showWireframe) {
         _showWireframe = showWireframe;
         if (showWireframe && !_wireframeBuffer) {
             // 性能上考虑，这里即使取消显示线框，线框的索引数据依然会保存直到mesh销毁
-            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+//            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
             [self parseWireframeIndices];
-            CEPrintf("parseWireframeIndices duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+//            CEPrintf("parseWireframeIndices duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
         }
+    }
+    for (CEModel *child in _childObjects) {
+        child.showWireframe = showWireframe;
     }
 }
 

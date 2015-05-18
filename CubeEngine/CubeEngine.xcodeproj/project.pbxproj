@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		26036FB21AF1CEA900A1B84D /* CEShadowRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 26036FB11AF1CEA900A1B84D /* CEShadowRenderer.m */; };
-		260949131B05981600F7465B /* CEObjMeshGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 260949121B05981600F7465B /* CEObjMeshGroup.m */; };
+		260949131B05981600F7465B /* CEObjMeshInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 260949121B05981600F7465B /* CEObjMeshInfo.m */; };
 		260949161B0598E000F7465B /* CEMtlParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 260949151B0598E000F7465B /* CEMtlParser.m */; };
 		260949191B0598EE00F7465B /* CEObjParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 260949181B0598EE00F7465B /* CEObjParser.m */; };
 		261089661AAD31AF0041E142 /* CEScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 261089651AAD31AF0041E142 /* CEScene.m */; };
@@ -103,8 +103,8 @@
 /* Begin PBXFileReference section */
 		26036FB01AF1CEA900A1B84D /* CEShadowRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowRenderer.h; sourceTree = "<group>"; };
 		26036FB11AF1CEA900A1B84D /* CEShadowRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShadowRenderer.m; sourceTree = "<group>"; };
-		260949111B05981600F7465B /* CEObjMeshGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObjMeshGroup.h; sourceTree = "<group>"; };
-		260949121B05981600F7465B /* CEObjMeshGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEObjMeshGroup.m; sourceTree = "<group>"; };
+		260949111B05981600F7465B /* CEObjMeshInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObjMeshInfo.h; sourceTree = "<group>"; };
+		260949121B05981600F7465B /* CEObjMeshInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEObjMeshInfo.m; sourceTree = "<group>"; };
 		260949141B0598E000F7465B /* CEMtlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEMtlParser.h; sourceTree = "<group>"; };
 		260949151B0598E000F7465B /* CEMtlParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEMtlParser.m; sourceTree = "<group>"; };
 		260949171B0598EE00F7465B /* CEObjParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObjParser.h; sourceTree = "<group>"; };
@@ -221,8 +221,8 @@
 				260949181B0598EE00F7465B /* CEObjParser.m */,
 				260949141B0598E000F7465B /* CEMtlParser.h */,
 				260949151B0598E000F7465B /* CEMtlParser.m */,
-				260949111B05981600F7465B /* CEObjMeshGroup.h */,
-				260949121B05981600F7465B /* CEObjMeshGroup.m */,
+				260949111B05981600F7465B /* CEObjMeshInfo.h */,
+				260949121B05981600F7465B /* CEObjMeshInfo.m */,
 			);
 			name = ObjFileLoader;
 			sourceTree = "<group>";
@@ -485,7 +485,7 @@
 				269762691AE0AF52005E95DA /* CERenderer_Dev.m in Sources */,
 				26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */,
 				26C3B72F1AE8CE090061BEFC /* CEBaseRenderer.m in Sources */,
-				260949131B05981600F7465B /* CEObjMeshGroup.m in Sources */,
+				260949131B05981600F7465B /* CEObjMeshInfo.m in Sources */,
 				269608ED1AF85E750045FB03 /* CEView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

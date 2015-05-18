@@ -98,9 +98,17 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
     [_program use];
     glLineWidth(1.0);
     for (CEModel *model in objects) {
-        [self renderBoundsWithModel:model];
+        [self recursiveRenderModel:model];
     }
 }
+
+- (void)recursiveRenderModel:(CEModel *)model {
+    [self renderBoundsWithModel:model];
+    for (CEModel *child in model.childObjects) {
+        [self recursiveRenderModel:child];
+    }
+}
+
 
 - (void)renderBoundsWithModel:(CEModel *)model {
     if (!model.showAccessoryLine || model.bounds.x <= 0 || model.bounds.y <= 0 || model.bounds.z <= 0) {

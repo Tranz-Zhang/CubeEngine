@@ -11,6 +11,10 @@
 
 @interface CEObjFileLoader : NSObject
 
-- (CEModel *)loadModelWithObjFileName:(NSString *)fileName;
+/**
+ Parse the .obj file in the main bundle, return all models in it.
+ @note If the file contain any mesh group structure, the top most model will be returned
+ */
+- (NSSet *)loadModelWithObjFileName:(NSString *)fileName;
 
 @end

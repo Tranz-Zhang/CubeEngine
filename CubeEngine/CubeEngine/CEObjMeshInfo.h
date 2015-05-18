@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CEObjMeshGroup : NSObject
+@interface CEObjMeshInfo : NSObject
 
 @property (nonatomic, strong) NSArray *groupNames;
 @property (nonatomic, strong) NSString *materialName;

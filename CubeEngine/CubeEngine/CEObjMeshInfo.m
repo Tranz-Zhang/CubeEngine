@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEObjMeshGroup.h"
+#import "CEObjMeshInfo.h"
 
-@implementation CEObjMeshGroup
+@implementation CEObjMeshInfo
 
 @end

@@ -46,7 +46,7 @@
 - (void)setPosition:(GLKVector3)position {
     if (!GLKVector3AllEqualToVector3(_position, position)) {
         _position = position;
-        _hasChanged = YES;
+        [self recursiveSetHasChanged:YES];
     }
 }
 
@@ -62,7 +62,7 @@
         float angleX, angleY, angleZ;
         CEGetEulerAngles(rotation, &angleY, &angleZ, &angleX);
         _eulerAngles = GLKVector3Make(angleX, angleY, angleZ);
-        _hasChanged = YES;
+        [self recursiveSetHasChanged:YES];
     }
 }
 
@@ -74,7 +74,7 @@
         _right = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(1, 0, 0));
         _up = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 1, 0));
         _forward = GLKQuaternionRotateVector3(_rotation, GLKVector3Make(0, 0, 1));
-        _hasChanged = YES;
+        [self recursiveSetHasChanged:YES];
 //        CEPrintf("EulerAngles: (%.1f, %.1f, %.1f)\n", _eulerAngles.x, _eulerAngles.y, _eulerAngles.z);
     }
 }
@@ -83,7 +83,7 @@
 - (void)setScale:(GLKVector3)scale {
     if (!GLKVector3AllEqualToVector3(_scale, scale)) {
         _scale = scale;
-        _hasChanged = YES;
+        [self recursiveSetHasChanged:YES];
     }
 }
 
@@ -100,6 +100,15 @@
     }
 }
 
+
+- (void)recursiveSetHasChanged:(BOOL)hasChanged {
+    _hasChanged = hasChanged;
+    for (CEObject *child in _childObjects) {
+        [child recursiveSetHasChanged:hasChanged];
+    }
+}
+
+
 #pragma mark - Transform
 - (void)moveTowards:(GLKVector3)directionVector withDistance:(float)direction {
     GLKVector3 normalizedVector = GLKVector3Normalize(directionVector);
@@ -107,7 +116,7 @@
                                             _position.y + direction * normalizedVector.y,
                                             _position.z + direction * normalizedVector.z);
     _position = newPosition;
-    _hasChanged = YES;
+    [self recursiveSetHasChanged:YES];
 }
 
 
@@ -166,6 +175,7 @@
     return _childObjects.copy;
 }
 
+
 - (void)addChildObject:(CEObject *)child {
     if (!_childObjects) {
         _childObjects = [NSMutableSet set];
@@ -176,11 +186,13 @@
     }
 }
 
+
 - (void)removeChildObject:(CEObject *)child {
     if ([child isKindOfClass:[CEObject class]]) {
         [_childObjects removeObject:child];
     }
 }
+
 
 - (void)removeFromParent {
     [self.parentObject removeChildObject:self];
@@ -188,15 +200,23 @@
 }
 
 
-- (CEObject *)childWithTag:(NSInteger)tag {
-    for (CEObject *childObject in _childObjects) {
-        if (childObject.tag == tag) {
-            return childObject;
+- (void)recursivePrint {
+    _parentObject ? printf("-") : printf("\n");
+    printf("%s\n", [[self debugDescription] UTF8String]);
+    for (CEObject *child in _childObjects) {
+        CEObject *obj = child;
+        while (obj.parentObject) {
+            printf("|");
+            obj = obj.parentObject;
         }
+        [child recursivePrint];
     }
-    return nil;
 }
 
+
+- (NSString *)debugDescription {
+    return [self description];
+}
 
 @end
 
