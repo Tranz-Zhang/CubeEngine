@@ -12,12 +12,7 @@
 #import "CEModel_Rendering.h"
 
 
-#pragma mark - CEObjFileLoader
-
-@implementation CEObjFileLoader  {
-    CEObjParser *_objParser;
-    CEMtlParser *_mtlParser;
-}
+@implementation CEObjFileLoader
 
 
 - (NSSet *)loadModelWithObjFileName:(NSString *)fileName {
@@ -25,10 +20,15 @@
     if (!filePath) {
         return nil;
     }
-    if (![filePath isEqualToString:_objParser.filePath]) {
-        _objParser = [CEObjParser parserWithFilePath:filePath];
+    
+    CEObjParser *objParser = [CEObjParser parserWithFilePath:filePath];
+    NSArray *groups = [objParser parse];
+    NSDictionary *materialDict = nil;
+    if (objParser.mtlFileName) {
+        NSString *mtlPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:objParser.mtlFileName];
+        CEMtlParser *mtlParser = [CEMtlParser parserWithFilePath:mtlPath];
+        materialDict = [mtlParser parse];
     }
-    NSArray *groups = [_objParser parse];
     
     // get the group structure from meshes and create models
     NSMutableDictionary *groupDict = [NSMutableDictionary dictionary];
@@ -45,7 +45,7 @@
     NSArray *sortedGroupNames = [groupDict keysSortedByValueUsingComparator:^NSComparisonResult(NSSet *set1, NSSet *set2) {
         return set1.count - set2.count;
     }];
-
+    
     NSMutableDictionary *modelDict = [NSMutableDictionary dictionary];
     NSMutableSet *topMostModels = [NSMutableSet set];
     for (NSString *groupName in sortedGroupNames) {
@@ -57,6 +57,7 @@
                                                                      attributes:mesh.attributes];
             CEModel *model = [[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
             model.name = groupName;
+            model.material = materialDict[mesh.materialName];
             modelDict[[mesh description]] = model;
             [topMostModels addObject:model];
             
@@ -80,6 +81,9 @@
             }
         }
     }
+    
+    //parse material
+    
     
     return [topMostModels copy];
 }

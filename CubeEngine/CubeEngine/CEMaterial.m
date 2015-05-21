@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEMeterial.h"
+#import "CEMaterial.h"
 
-@implementation CEMeterial
+@implementation CEMaterial
 
 @end

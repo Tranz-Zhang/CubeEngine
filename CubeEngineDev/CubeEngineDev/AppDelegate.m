@@ -6,16 +6,29 @@
 //  Copyright (c) 2015年 ByChance. All rights reserved.
 //
 
+#define TESTSTRING(text) @ #text
+
 #import "AppDelegate.h"
 
 @interface AppDelegate ()
 
 @end
 
+
+
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+#if 0
+    NSString *test = TESTSTRING(
+\\#ifdef ADFASDF
+    really;
+\\#endif
+    );
+#endif
+    
     // Override point for customization after application launch.
 //    int testList[3] = {3, 5, 7};
 //    NSMutableData *data = [NSMutableData dataWithCapacity:6];

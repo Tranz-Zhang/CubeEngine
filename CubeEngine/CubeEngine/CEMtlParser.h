@@ -7,7 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CEMaterial.h"
 
 @interface CEMtlParser : NSObject
+
+@property (nonatomic, readonly) NSString *filePath;
+
++ (CEMtlParser *)parserWithFilePath:(NSString *)filePath;
+
+// @return @{@"MaterialName" : CEMaterial}
+- (NSDictionary *)parse;
 
 @end

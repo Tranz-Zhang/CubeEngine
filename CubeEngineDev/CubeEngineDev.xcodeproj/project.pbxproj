@@ -40,6 +40,9 @@
 		2697626F1AE0B005005E95DA /* DirectionalLightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2697626E1AE0B005005E95DA /* DirectionalLightViewController.m */; };
 		26A00DB61AFB014C00E12B24 /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 26A00DB51AFB014C00E12B24 /* floor.obj */; };
 		26D4B5731ADF5D0C00EF34E7 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */; };
+		26FF85331B0A14F70075B971 /* sponza.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 26FF85301B0A14F70075B971 /* sponza.mtl */; };
+		26FF85341B0A14F70075B971 /* teapot_bump.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 26FF85311B0A14F70075B971 /* teapot_bump.mtl */; };
+		26FF85351B0A14F70075B971 /* teapot_bump.obj in Resources */ = {isa = PBXBuildFile; fileRef = 26FF85321B0A14F70075B971 /* teapot_bump.obj */; };
 		4461FD071AEE9A2700A59229 /* SpotLightControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4461FD061AEE9A2700A59229 /* SpotLightControl.m */; };
 		4461FD091AEE9A3700A59229 /* SpotLightControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4461FD081AEE9A3700A59229 /* SpotLightControl.xib */; };
 		44D0CCE51AECA3E7000C137C /* ObjectOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D0CCE41AECA3E7000C137C /* ObjectOperator.m */; };
@@ -124,6 +127,9 @@
 		26A00DB51AFB014C00E12B24 /* floor.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor.obj; sourceTree = "<group>"; };
 		26D4B5711ADF5D0C00EF34E7 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		26D4B5721ADF5D0C00EF34E7 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		26FF85301B0A14F70075B971 /* sponza.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza.mtl; sourceTree = "<group>"; };
+		26FF85311B0A14F70075B971 /* teapot_bump.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot_bump.mtl; sourceTree = "<group>"; };
+		26FF85321B0A14F70075B971 /* teapot_bump.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot_bump.obj; sourceTree = "<group>"; };
 		4461FD051AEE9A2700A59229 /* SpotLightControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpotLightControl.h; sourceTree = "<group>"; };
 		4461FD061AEE9A2700A59229 /* SpotLightControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpotLightControl.m; sourceTree = "<group>"; };
 		4461FD081AEE9A3700A59229 /* SpotLightControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpotLightControl.xib; sourceTree = "<group>"; };
@@ -257,6 +263,9 @@
 		261CD42E1AD3DE3D00C521CC /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				26FF85301B0A14F70075B971 /* sponza.mtl */,
+				26FF85311B0A14F70075B971 /* teapot_bump.mtl */,
+				26FF85321B0A14F70075B971 /* teapot_bump.obj */,
 				264B131E1B05F4540066195D /* test_scene.mtl */,
 				264B131F1B05F4540066195D /* test_scene.obj */,
 				2609491A1B05CCBE00F7465B /* test.mtl */,
@@ -408,6 +417,7 @@
 				261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */,
 				268CBC6E1ADD466E00795A6D /* teapot.png in Resources */,
 				261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */,
+				26FF85331B0A14F70075B971 /* sponza.mtl in Resources */,
 				44D0CCEE1AED26E8000C137C /* PointLightControl.xib in Resources */,
 				263C8E791AE68738004FDFE8 /* teapot.obj in Resources */,
 				264B13201B05F4540066195D /* test_scene.mtl in Resources */,
@@ -423,9 +433,11 @@
 				26A00DB61AFB014C00E12B24 /* floor.obj in Resources */,
 				4C595AF71AEC7CCD006900EF /* DirectionalLightControl.xib in Resources */,
 				263C8E781AE68738004FDFE8 /* teapot_smooth.obj in Resources */,
+				26FF85341B0A14F70075B971 /* teapot_bump.mtl in Resources */,
 				4461FD091AEE9A3700A59229 /* SpotLightControl.xib in Resources */,
 				26193F881AA833BF00787C64 /* Images.xcassets in Resources */,
 				268CBC6C1ADD466E00795A6D /* teapot.mtl in Resources */,
+				26FF85351B0A14F70075B971 /* teapot_bump.obj in Resources */,
 				2609491C1B05CCBE00F7465B /* test.mtl in Resources */,
 				269249911B02F3CF0069892D /* teapot_texture.obj in Resources */,
 				2648E6AD1AD516DA00E146D8 /* test_obj.obj in Resources */,

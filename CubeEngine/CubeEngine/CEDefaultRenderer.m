@@ -1,19 +1,19 @@
 //
-//  CEShadowRenderer.m
+//  CEDefaultRenderer.m
 //  CubeEngine
 //
-//  Created by chance on 4/30/15.
+//  Created by chance on 5/18/15.
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShadowRenderer.h"
+#import "CEDefaultRenderer.h"
 #import "CEScene_Rendering.h"
 #import "CEProgram.h"
 #import "CELight_Rendering.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
 
-NSString *const kShadowVertexShader = CE_SHADER_STRING
+NSString *const kDefaultVertexShader = CE_SHADER_STRING
 (
  attribute highp vec4 VertexPosition;
  attribute highp vec3 VertexNormal;
@@ -33,9 +33,9 @@ NSString *const kShadowVertexShader = CE_SHADER_STRING
      ShadowCoord = DepthBiasMVP * VertexPosition;
      gl_Position = MVPMatrix * VertexPosition;
  }
-);
+ );
 
-NSString *const kShadowFragmentSahder = CE_SHADER_STRING
+NSString *const kDefaultFragmentSahder = CE_SHADER_STRING
 (
  precision mediump float;
  
@@ -53,6 +53,8 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
      float SpotExponent;
  };
  uniform LightInfo Lights[LIGHT_COUNT];
+ 
+ // TODO: add material
  
  uniform vec4 BaseColor;
  uniform vec3 EyeDirection;
@@ -126,12 +128,13 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
          gl_FragColor = BaseColor;
      }
  }
-);
+ );
 
 
-@implementation CEShadowRenderer {
+@implementation CEDefaultRenderer {
     CEProgram *_program;
     NSArray *_lightUniformInfos;
+    NSMutableDictionary *_shadowMapGeneratorDict;
     
     GLint _attribVec4Position;
     GLint _attribVec3Normal;
@@ -154,7 +157,7 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
 {
     self = [super init];
     if (self) {
-
+        _shadowMapGeneratorDict = [NSMutableDictionary dictionaryWithCapacity:[CEScene currentScene].maxLightCount];
     }
     return self;
 }
@@ -163,8 +166,8 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
 - (BOOL)setupRenderer {
     if (_program.initialized) return YES;
     int maxLightCount = [CEScene currentScene].maxLightCount;
-    NSString *fragmentShader = [kShadowFragmentSahder stringByReplacingOccurrencesOfString:@"LIGHT_COUNT" withString:[NSString stringWithFormat:@"%d", maxLightCount]];
-    _program = [[CEProgram alloc] initWithVertexShaderString:kShadowVertexShader
+    NSString *fragmentShader = [kDefaultFragmentSahder stringByReplacingOccurrencesOfString:@"LIGHT_COUNT" withString:[NSString stringWithFormat:@"%d", maxLightCount]];
+    _program = [[CEProgram alloc] initWithVertexShaderString:kDefaultVertexShader
                                         fragmentShaderString:fragmentShader];
     [_program addAttribute:@"VertexPosition"];
     [_program addAttribute:@"VertexNormal"];
@@ -341,7 +344,5 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
 
 
 @end
-
-
 
 

@@ -10,7 +10,6 @@
 #import "CEVBOAttribute.h"
 
 @implementation CEObjParser {
-    NSMutableArray *_groups;
     NSMutableArray *_vertices;
     NSMutableArray *_textureCoordinates;
     NSMutableArray *_normals;
@@ -32,10 +31,6 @@
 
 
 - (NSArray *)parse {
-    if (_groups) {
-        return [_groups copy];
-    }
-    
     NSError *error;
     NSString *objContent = [[NSString alloc] initWithContentsOfFile:_filePath encoding:NSUTF8StringEncoding error:&error];
     if (error) {
@@ -47,7 +42,7 @@
      NOTE: I use [... componentsSeparatedByString:@" "] to seperate because it's short writing,
      if something wrong, use [... componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet] instead.
      */
-    _groups = [NSMutableArray array];
+    NSMutableArray *groups = [NSMutableArray array];
     _vertices = [NSMutableArray array];
     _textureCoordinates = [NSMutableArray array];
     _normals = [NSMutableArray array];
@@ -86,7 +81,7 @@
             CEObjMeshInfo *newGroup = [CEObjMeshInfo new];
             newGroup.groupNames = groupNames;
             newGroup.meshData = [NSMutableData data];
-            [_groups addObject:newGroup];
+            [groups addObject:newGroup];
             currentGroup = newGroup;
             continue;
         }
@@ -99,7 +94,7 @@
                 CEObjMeshInfo *newGroup = [CEObjMeshInfo new];
                 newGroup.groupNames = nil;
                 newGroup.meshData = [NSMutableData data];
-                [_groups addObject:newGroup];
+                [groups addObject:newGroup];
                 currentGroup = newGroup;
             }
             if (!currentGroup.attributes) {
@@ -131,7 +126,7 @@
         
         // mtl file name
         if ([lineContent hasPrefix:@"mtllib"]) {
-            _mtlFileName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 11)];
+            _mtlFileName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
         }
         
         // reference material
@@ -148,14 +143,14 @@
     
     // remove useless groups
     NSMutableArray *filteredGroups = [NSMutableArray array];
-    for (CEObjMeshInfo *group in _groups) {
+    for (CEObjMeshInfo *group in groups) {
         if (group.groupNames.count && group.attributes.count && group.meshData.length) {
             [filteredGroups addObject:group];
         }
     }
-    _groups = filteredGroups;
+    groups = filteredGroups;
     
-    return [_groups copy];
+    return [groups copy];
 }
 
 

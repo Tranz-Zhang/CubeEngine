@@ -7,6 +7,7 @@
 //
 
 #import "CEObject.h"
+#import "CEMaterial.h"
 
 @interface CEModel : CEObject
 
@@ -24,11 +25,9 @@
 // indicates if cast shadows under light, default is NO;
 @property (nonatomic, assign) BOOL castShadows;
 
-// indicates if show wireframe under debug mode
-@property (nonatomic, assign) BOOL showWireframe;
+// materials info of the model
+@property (nonatomic, strong) CEMaterial *material;
 
-// indicates if show bounds and coordinate line under debug mode;
-@property (nonatomic, assign) BOOL showAccessoryLine;
 
 
 + (CEModel *)modelWithObjFile:(NSString *)objFileName;
@@ -37,6 +36,17 @@
 - (CEModel *)childWithName:(NSString *)modelName;
 
 - (CEModel *)duplicate;
+
+
+
+#pragma mark - debug
+
+// indicates if show wireframe under debug mode
+@property (nonatomic, assign) BOOL showWireframe;
+
+// indicates if show bounds and coordinate line under debug mode;
+@property (nonatomic, assign) BOOL showAccessoryLine;
+
 
 @end
 
