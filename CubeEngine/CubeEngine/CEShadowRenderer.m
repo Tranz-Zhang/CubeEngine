@@ -171,8 +171,10 @@ NSString *const kShadowFragmentSahder = CE_SHADER_STRING
     BOOL isOK = [_program link];
     if (isOK) {
         _attribVec4Position     = [_program attributeIndex:@"VertexPosition"];
-        _attribVec3Normal       = [_program attributeIndex:@"VertexNormal"];
         _uniMtx4MVPMatrix       = [_program uniformIndex:@"MVPMatrix"];
+        
+        
+        _attribVec3Normal       = [_program attributeIndex:@"VertexNormal"];
         _uniMtx3NormalMatrix    = [_program uniformIndex:@"NormalMatrix"];
         _uniIntLightCount       = [_program uniformIndex:@"LightCount"];
         _uniVec4BaseColor       = [_program uniformIndex:@"BaseColor"];

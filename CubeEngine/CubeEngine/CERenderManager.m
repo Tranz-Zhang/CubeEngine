@@ -24,6 +24,9 @@
 #import "CEAssistRenderer.h"
 #import "CETextureRenderer.h"
 
+// test
+#import "CEMainProgram.h"
+
 
 @implementation CERenderManager {
     EAGLContext *_context;
@@ -44,7 +47,13 @@
     self = [super init];
     if (self) {
         _context = context;
+        CEProgramConfig *config = [CEProgramConfig new];
+        config.lightCount = 1;
+        config.enableShadowMapping = YES;
+        CEMainProgram *program = [CEMainProgram programWithConfig:config];
+        printf("");
     }
+
     return self;
 }
 

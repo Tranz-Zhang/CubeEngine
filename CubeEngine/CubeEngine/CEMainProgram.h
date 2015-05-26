@@ -8,6 +8,7 @@
 
 #import "CEProgram.h"
 #import "CEProgramConfig.h"
+#import "CELightUniformInfo.h"
 
 @interface CEMainProgram : CEProgram
 
@@ -23,8 +24,7 @@
 @property (nonatomic, readonly) GLint uniMtx4MVMatrix;
 @property (nonatomic, readonly) GLint uniMtx3NormalMatrix;
 @property (nonatomic, readonly) GLint uniVec3EyeDirection;
-@property (nonatomic, readonly) GLint uniIntLightCount;
-@property (nonatomic, readonly) NSArray *uniLightInfos;
+@property (nonatomic, readonly) NSArray *uniLightInfos; // return array of CELightUniformInfo
 
 // shadow map
 @property (nonatomic, readonly) GLint uniMtx4DepthBiasMVP;

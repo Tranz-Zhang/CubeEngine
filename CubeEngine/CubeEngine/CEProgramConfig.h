@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CEProgramConfig : NSObject
+@interface CEProgramConfig : NSObject <NSCopying>
 
 @property (nonatomic, assign) int lightCount;
 @property (nonatomic, assign) BOOL enableTexture;

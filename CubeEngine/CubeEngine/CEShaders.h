@@ -14,33 +14,34 @@ NSString *const kVertexShader = CE_SHADER_STRING
  // basic info
  uniform mat4 MVPMatrix;
  attribute highp vec4 VertexPosition;
- 
+
  // lighting
- >>#ifdef CE_ENABLE_LIGHTING
+ \n#ifdef CE_ENABLE_LIGHTING\n
+ 
  attribute highp vec3 VertexNormal;
  uniform mat4 MVMatrix;
  uniform mat3 NormalMatrix;
  varying vec3 Normal;
  varying vec4 Position;
- >>#endif
+ \n#endif\n
  
  // shadow mapping
- >>#ifdef CE_ENABLE_SHADOW_MAPPING
+ \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
  uniform mat4 DepthBiasMVP;
  varying vec4 ShadowCoord;
- >>#endif
+ \n#endif\n
  
  void main () {
      // lighting
-     >>#ifdef CE_ENABLE_LIGHTING
+     \n#ifdef CE_ENABLE_LIGHTING\n
      Normal = normalize(NormalMatrix * VertexNormal);
      Position = MVMatrix * VertexPosition;
-     >>#endif
+     \n#endif\n
      
      // shadow mapping
-     >>#ifdef CE_ENABLE_SHADOW_MAPPING
+     \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
      ShadowCoord = DepthBiasMVP * VertexPosition;
-     >>#endif
+     \n#endif\n
      
      gl_Position = MVPMatrix * VertexPosition;
  }
@@ -55,7 +56,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  uniform vec4 BaseColor;
  
  // lighting
- >>#ifdef CE_ENABLE_LIGHTING
+ \n#ifdef CE_ENABLE_LIGHTING\n
  struct LightInfo {
      bool IsEnabled;
      int LightType; // 0:none 1:directional 2:point 3:spot
@@ -76,10 +77,10 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  varying vec4 Position;
  
  // shadow mapping
- >>#ifdef CE_ENABLE_SHADOW_MAPPING
+\n#ifdef CE_ENABLE_SHADOW_MAPPING\n
  uniform sampler2D ShadowMapTexture;
  varying vec4 ShadowCoord;
- >>#endif
+\n#endif\n
  
  vec3 ApplyLightingEffect(vec3 inputColor) {
      vec3 scatteredLight = vec3(0.0);
@@ -130,29 +131,27 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
      }
      
      // apply shadow mapping
-     >>#ifdef CE_ENABLE_SHADOW_MAPPING
+    \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
      float depthValue = texture2D(ShadowMapTexture, vec2(ShadowCoord.x/ShadowCoord.w, ShadowCoord.y/ShadowCoord.w)).z;
      if (depthValue != 1.0 && depthValue < (ShadowCoord.z / ShadowCoord.w) - 0.005) {
          scatteredLight *= 0.5;
          reflectedLight *= 0.5;
      }
-     >>#endif
+    \n#endif\n
      
      return min(inputColor * scatteredLight + reflectedLight, vec3(1.0));
  }
  
- >>#endif
+\n#endif\n
  // end of lighting
  
- 
  void main() {
-     if (CE_ENABLE_LIGHTING) {
+     \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
          vec3 lightingColor = ApplyLightingEffect(BaseColor.rgb);
          gl_FragColor = vec4(lightingColor.rgb, BaseColor.a);
-         
-     } else {
+     \n#elif\n
          gl_FragColor = BaseColor;
-     }
+     \n#endif\n
  }
 );
 
