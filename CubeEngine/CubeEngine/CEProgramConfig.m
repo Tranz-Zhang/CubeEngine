@@ -23,7 +23,7 @@
 - (id)copyWithZone:(NSZone *)zone {
     CEProgramConfig *copiedConfig = [[CEProgramConfig allocWithZone:zone] init];
     copiedConfig.lightCount = _lightCount;
-    copiedConfig.enableShadowMapping = _enableShadowMapping;
+    copiedConfig.shadowMappingCount = _shadowMappingCount;
     copiedConfig.enableNormalMapping = _enableNormalMapping;
     copiedConfig.enableTexture = _enableTexture;
     return copiedConfig;
@@ -31,6 +31,7 @@
 
 
 - (NSUInteger)hash {
+    
     NSUInteger hashValue = _lightCount * 1000;
     hashValue += _enableTexture ? 100 : 0;
     hashValue += _enableShadowMapping ? 10 : 0;
@@ -41,8 +42,8 @@
 
 - (BOOL)isEqualToConfig:(CEProgramConfig *)config {
     return (config.lightCount == _lightCount &&
+            config.shadowMappingCount == _shadowMappingCount &&
             config.enableTexture == _enableTexture &&
-            config.enableShadowMapping == _enableShadowMapping &&
             config.enableNormalMapping == _enableNormalMapping);
 }
 

@@ -35,3 +35,6 @@
 
 
 @end
+
+multiple shadowmapping
+finish main renderer
