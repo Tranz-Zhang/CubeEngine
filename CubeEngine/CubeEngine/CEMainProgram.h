@@ -9,6 +9,7 @@
 #import "CEProgram.h"
 #import "CEProgramConfig.h"
 #import "CELightUniformInfo.h"
+#import "CEVBOAttribute.h"
 
 @interface CEMainProgram : CEProgram
 
@@ -29,6 +30,9 @@
 // shadow map
 @property (nonatomic, readonly) GLint uniMtx4DepthBiasMVP;
 @property (nonatomic, readonly) GLint uniTexShadowMapTexture;
+
+
+- (BOOL)setPositionAttribute:(CEVBOAttribute *)attribute;
 
 
 + (instancetype)programWithConfig:(CEProgramConfig *)config;

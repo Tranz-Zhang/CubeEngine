@@ -43,8 +43,8 @@
     }
 
     // calculate model size
-    NSRange readRange = NSMakeRange([vertexBuffer offsetOfAttribute:CEVBOAttributePosition] / sizeof(Byte),
-                                    positionInfo.dataSize * positionInfo.dataCount);
+    NSRange readRange = NSMakeRange(positionInfo.elementOffset,
+                                    positionInfo.primaryCount * positionInfo.primarySize);
     GLfloat maxX = FLT_MIN, maxY = FLT_MIN, maxZ = FLT_MIN;
     GLfloat minX = FLT_MAX, minY = FLT_MAX, minZ = FLT_MAX;
     for (int i = 0; i < vertexBuffer.vertexCount; i++) {
@@ -170,8 +170,8 @@
     NSMutableData *lineIndicesData = [NSMutableData data];
     unsigned int indicesCount = 0;
     NSMutableSet *insertedLineSet = [NSMutableSet set];
-    NSRange readRange = NSMakeRange([_vertexBuffer offsetOfAttribute:CEVBOAttributePosition] / sizeof(Byte),
-                                    positionAttribute.dataSize * positionAttribute.dataCount);
+    NSRange readRange = NSMakeRange(positionAttribute.elementOffset,
+                                    positionAttribute.primaryCount * positionAttribute.primarySize);
     for (int i = 0; i < _vertexBuffer.vertexCount; i += 3) {
         GLfloat points[3][3] = {0};
         for (int j = 0; j < 3; j++) {

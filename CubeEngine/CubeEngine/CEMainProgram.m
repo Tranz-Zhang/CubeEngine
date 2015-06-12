@@ -11,6 +11,7 @@
 
 @implementation CEMainProgram {
     GLint _uniIntLightCount;
+    BOOL _hasEnabledPosition;
 }
 
 
@@ -142,6 +143,16 @@
     }
     
     return [fragmentShaderString copy];
+}
+
+
+#pragma mark - Attributes & Uniforms
+- (BOOL)setupPositionAttribute:(CEVBOAttribute *)attribute {
+    if (!_hasEnabledPosition) {
+        glEnableVertexAttribArray(_attribVec4Position);
+        _hasEnabledPosition = YES;
+    }
+    ... setup attribute here
 }
 
 

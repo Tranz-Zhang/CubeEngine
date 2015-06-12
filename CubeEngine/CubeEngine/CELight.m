@@ -33,8 +33,7 @@
     if (!_sDefaultVertexBufferAttributes) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            _sDefaultVertexBufferAttributes = @[[CEVBOAttribute attributeWithname:CEVBOAttributePosition],
-                                                [CEVBOAttribute attributeWithname:CEVBOAttributeColor]];
+            _sDefaultVertexBufferAttributes = [CEVBOAttribute attributesWithNames:@[@(CEVBOAttributePosition), @(CEVBOAttributeColor)]];
         });
     }
     return _sDefaultVertexBufferAttributes;

@@ -11,6 +11,8 @@
 #import "CEScene_Rendering.h"
 #import "CERenderManager.h"
 
+#import "CEVBOAttribute.h" // test
+
 #define kDefaultFramesPerSecond 30
 #define kDefaultMaxLightCount 4
 
@@ -47,7 +49,7 @@
 }
 
 
-- (void)initializeViewController {
+- (void)initializeViewController {    
     _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     [EAGLContext setCurrentContext:_context];
     _scene = [[CEScene alloc] initWithContext:_context];

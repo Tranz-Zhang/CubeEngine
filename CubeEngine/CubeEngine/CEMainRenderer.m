@@ -15,6 +15,7 @@
 
 @implementation CEMainRenderer {
     CEMainProgram *_program;
+    CEProgramConfig *_config;
 }
 
 
@@ -25,7 +26,7 @@
 - (instancetype)initWithConfig:(CEProgramConfig *)config {
     self = [super init];
     if (self) {
-        
+        _config = config.copy;
     }
     return self;
 }
@@ -51,27 +52,15 @@
         return;
     }
     
-    // setup shadow mapping
-    CELight *shadowLight;
-    for (CELight *light in _lights) {
-        if(light.enableShadow) {
-            shadowLight = light;
-            break;
-        }
+    // setup model irrelevant properties
+    if (_config.lightCount) {
+        
+        glUniform3f(_program.uniVec3EyeDirection, 0.0, 0.0, 1.0);
     }
     
+    
     for (CEModel *model in objects) {
-        [self recursiveRenderModel:model];
-    }
-}
-
-
-- (void)recursiveRenderModel:(CEModel *)model {
-    if (model.vertexBuffer) {
         [self renderModel:model];
-    }
-    for (CEModel *child in model.childObjects) {
-        [self recursiveRenderModel:child];
     }
 }
 
@@ -81,7 +70,7 @@
         CEError(@"Empty vertexBuffer");
         return;
     }
-    
+ //*
     // setup vertex buffer
     if (![model.vertexBuffer setupBuffer] ||
         (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
@@ -139,6 +128,7 @@
     } else { // glDrawArrays
         glDrawArrays(GL_TRIANGLES, 0, model.vertexBuffer.vertexCount);
     }
+  //*/
 }
 
 

@@ -19,3 +19,10 @@
 
 @end
 
+
+/**
+ !!!: Important Note for CERenderManager
+ - response for shadowmap rendering, because it known all the models which enable shadowmap
+ - extract all models from CEModel hierarchy, sort them and use different renderer to render objects
+ 
+ */

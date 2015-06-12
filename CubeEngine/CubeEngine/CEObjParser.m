@@ -197,22 +197,22 @@
 
 - (NSArray *)vertexAttributesWithFaceAttributes:(NSString *)attributeString {
     NSArray *indices = [attributeString componentsSeparatedByString:@"/"];
-    NSMutableArray *attributes = [NSMutableArray arrayWithCapacity:indices.count];
+    NSMutableArray *attributeNames = [NSMutableArray arrayWithCapacity:indices.count];
     if (indices.count >= 1) { // add position
-        [attributes addObject:[CEVBOAttribute attributeWithname:CEVBOAttributePosition]];
+        [attributeNames addObject:@(CEVBOAttributePosition)];
     }
     if (indices.count >= 2) {
         if ([indices[1] length]) {
-            [attributes addObject:[CEVBOAttribute attributeWithname:CEVBOAttributeTextureCoord]];
+            [attributeNames addObject:@(CEVBOAttributeTextureCoord)];
         } else {
-            [attributes addObject:[CEVBOAttribute attributeWithname:CEVBOAttributeNormal]];
+            [attributeNames addObject:@(CEVBOAttributeNormal)];
         }
     }
     if (indices.count >= 3 && [indices[1] length]) {
-        [attributes addObject:[CEVBOAttribute attributeWithname:CEVBOAttributeNormal]];
+        [attributeNames addObject:@(CEVBOAttributeNormal)];
     }
     
-    return [attributes copy];
+    return [CEVBOAttribute attributesWithNames:attributeNames];
 }
 
 
