@@ -40,5 +40,5 @@
 
 @end
 
-multiple shadowmapping
+multiple shadowmapping: we create a list of shadowmapping, add shadow info in Light Infos
 finish main renderer
