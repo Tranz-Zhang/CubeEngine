@@ -18,7 +18,10 @@
 
 - (BOOL)setupBuffer;
 
-// bind shadow map framebuffer and texture
+/** 
+ bind shadow map framebuffer and texture
+ @warning: calling this method will bind current framebuffer to shadow map buffer;
+ */
 - (void)prepareBuffer;
 
 @end

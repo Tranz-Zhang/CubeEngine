@@ -323,13 +323,12 @@
 				26193F4B1AA8324600787C64 /* CubeEngine.h */,
 				26193F4D1AA8324600787C64 /* CubeEngine.m */,
 				263C88EC1AA98DEB005A2623 /* CEDefines.h */,
-				263BBBDF1AB91A3600F88F65 /* CEUtils.h */,
-				263BBBE01AB91A3600F88F65 /* CEUtils.m */,
 				269608EB1AF85E750045FB03 /* CEView.h */,
 				269608EC1AF85E750045FB03 /* CEView.m */,
 				269608FB1AF8B6430045FB03 /* CEView_Rendering.h */,
 				269608EE1AF85E9C0045FB03 /* CEViewController.h */,
 				269608EF1AF85E9C0045FB03 /* CEViewController.m */,
+				4C3992191B2AD6F500AC4B53 /* Common */,
 				2610896B1AAD31E40041E142 /* 3DScene */,
 				2610896A1AAD31CE0041E142 /* Render */,
 				2624A6121B0B1943001E3F32 /* Program */,
@@ -358,8 +357,6 @@
 				2624A60D1B0AD0B4001E3F32 /* CEProgramLoader.m */,
 				2624A60F1B0AD234001E3F32 /* CEProgramConfig.h */,
 				2624A6101B0AD234001E3F32 /* CEProgramConfig.m */,
-				26193FBD1AA85F3F00787C64 /* CEProgram.h */,
-				26193FBE1AA85F3F00787C64 /* CEProgram.m */,
 				267F4D7E1B0CD26200F25452 /* CEShaders.h */,
 				267F4D7F1B0CD81100F25452 /* CEMainProgram.h */,
 				267F4D801B0CD81100F25452 /* CEMainProgram.m */,
@@ -392,8 +389,6 @@
 				269249941B033D4A0069892D /* CEBufferGroup.m */,
 				4C43A42E1ADC37C600761CA9 /* CEVertexBuffer.h */,
 				4C43A42F1ADC37C600761CA9 /* CEVertexBuffer.m */,
-				4C43A4311ADC380A00761CA9 /* CEVBOAttribute.h */,
-				4C43A4321ADC380A00761CA9 /* CEVBOAttribute.m */,
 				268CBC591ADCB72C00795A6D /* CEIndicesBuffer.h */,
 				268CBC5A1ADCB72C00795A6D /* CEIndicesBuffer.m */,
 				269F47681B0089030030CD55 /* CEShadowMapBuffer.h */,
@@ -419,6 +414,19 @@
 				263C8E661AE62F8E004FDFE8 /* CERenderer_PointLight.m */,
 			);
 			name = Deprecated;
+			sourceTree = "<group>";
+		};
+		4C3992191B2AD6F500AC4B53 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				263BBBDF1AB91A3600F88F65 /* CEUtils.h */,
+				263BBBE01AB91A3600F88F65 /* CEUtils.m */,
+				4C43A4311ADC380A00761CA9 /* CEVBOAttribute.h */,
+				4C43A4321ADC380A00761CA9 /* CEVBOAttribute.m */,
+				26193FBD1AA85F3F00787C64 /* CEProgram.h */,
+				26193FBE1AA85F3F00787C64 /* CEProgram.m */,
+			);
+			name = Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

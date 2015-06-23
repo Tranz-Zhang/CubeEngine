@@ -42,7 +42,7 @@
         NSMutableDictionary *offsetDirt = [NSMutableDictionary dictionary];
         GLsizei offset = 0;
         for (CEVBOAttribute *attrib in attributes) {
-            GLsizei attributeSize = attrib.dataSize * attrib.dataCount;
+            GLsizei attributeSize = attrib.primarySize * attrib.primaryCount;
             if (attributeSize) {
                 attributeDirt[@(attrib.name)] = attrib;
                 offsetDirt[@(attrib.name)] = @(offset);
@@ -104,19 +104,20 @@
 
 
 - (BOOL)prepareAttribute:(CEVBOAttributeName)attribute withProgramIndex:(GLint)programIndex {
-    if (!_ready) {
-        return NO;
-    }
-    CEVBOAttribute *attrib = _attributeDict[@(attribute)];
-    if (!attrib) {
-        CEError(@"Can not find attribute");
-        return NO;
-    }
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
-    const GLvoid *offsetPtr = CE_BUFFER_OFFSET([self offsetOfAttribute:attrib.name]);
-    glEnableVertexAttribArray(programIndex);
-    glVertexAttribPointer(programIndex, attrib.dataCount, attrib.dataType, GL_FALSE, _vertexStride, offsetPtr);
-    return YES;
+    return NO;
+//    if (!_ready) {
+//        return NO;
+//    }
+//    CEVBOAttribute *attrib = _attributeDict[@(attribute)];
+//    if (!attrib) {
+//        CEError(@"Can not find attribute");
+//        return NO;
+//    }
+//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
+//    const GLvoid *offsetPtr = CE_BUFFER_OFFSET([self offsetOfAttribute:attrib.name]);
+//    glEnableVertexAttribArray(programIndex);
+//    glVertexAttribPointer(programIndex, attrib.dataCount, attrib.dataType, GL_FALSE, _vertexStride, offsetPtr);
+//    return YES;
 }
 
 

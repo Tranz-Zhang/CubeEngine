@@ -9,6 +9,7 @@
 #import "CEProgram.h"
 #import "CEProgramConfig.h"
 #import "CELightUniformInfo.h"
+#import "CEVBOAttribute.h"
 
 @interface CEMainProgram : CEProgram
 
@@ -31,7 +32,13 @@
 @property (nonatomic, readonly) GLint uniTexShadowMapTexture;
 
 
+- (BOOL)setPositionAttribute:(CEVBOAttribute *)attribute;
+
+
 + (instancetype)programWithConfig:(CEProgramConfig *)config;
 
 
 @end
+
+multiple shadowmapping: we create a list of shadowmapping, add shadow info in Light Infos
+finish main renderer

@@ -28,6 +28,12 @@
 #define CEError(xx, ...)
 #endif
 
+#if 1
+#define CEWarning(xx, ...) NSLog(xx, ##__VA_ARGS__)
+#else
+#define CEWarning(xx, ...)
+#endif
+
 
 // define printf
 #if 1
