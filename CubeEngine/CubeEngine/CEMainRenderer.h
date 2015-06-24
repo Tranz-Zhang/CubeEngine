@@ -18,7 +18,7 @@
 
 + (instancetype)rendererWithConfig:(CEProgramConfig *)config;
 
-- (void)renderObjects:(NSArray *)objects;
+- (void)renderObjects:(NSSet *)objects;
  
 
 @end

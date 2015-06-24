@@ -26,6 +26,7 @@
 
 // test
 #import "CEMainProgram.h"
+#import "CEMainRenderer.h"
 
 
 @implementation CERenderManager {
@@ -36,10 +37,12 @@
     CEShadowRenderer *_testShadowMapRenderer;
     CEBaseRenderer *_testBaseRenderer;
     CETextureRenderer *_testTextureRenderer;
+    CEMainRenderer *_mainRenderer;
     
     // debug renderer
     CEWireframeRenderer *_wireframeRenderer;
     CEAssistRenderer *_assistRenderer;
+    
 }
 
 
@@ -47,14 +50,28 @@
     self = [super init];
     if (self) {
         _context = context;
-        CEProgramConfig *config = [CEProgramConfig new];
-        config.lightCount = 1;
-        config.enableShadowMapping = YES;
-        CEMainProgram *program = [CEMainProgram programWithConfig:config];
-        printf("");
+        [self testProgramGeneration];
     }
-
+    
     return self;
+}
+
+
+- (void)testProgramGeneration {
+    printf("testProgramGeneration... ");
+    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+    [EAGLContext setCurrentContext:_context];
+    CEProgramConfig *config = [CEProgramConfig new];
+    CEMainProgram *program = [CEMainProgram programWithConfig:config];
+    config.lightCount = 2;
+    program = [CEMainProgram programWithConfig:config];
+    config.enableTexture = YES;
+    program = [CEMainProgram programWithConfig:config];
+    config.enableNormalMapping = YES;
+    program = [CEMainProgram programWithConfig:config];
+    config.shadowMappingCount = 2;
+    program = [CEMainProgram programWithConfig:config];
+    printf("%.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
 }
 
 
@@ -69,9 +86,17 @@
     glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
+    
+#if 0
     // TODO: sort model with materials
     CERenderer *renderer = [self getTestShadowRenderer];
     [renderer renderObjects:scene.allModels];
+#else
+    CEMainRenderer *renderer = [self testMainRenderer];
+    [renderer renderObjects:[self visibleModelsInScene:scene]];
+    
+    calculate CEProgramConfig
+#endif
     
     // render debug info
     if (scene.enableDebug) {
@@ -94,6 +119,26 @@
     
     return _defaultRenderer;
 }
+
+
+- (NSSet *)visibleModelsInScene:(CEScene *)scene {
+    NSMutableSet *models = [NSMutableSet set];
+    for (CEModel *model in scene.allModels) {
+        [self addVisiableModel:model toSet:models];
+    }
+    return [models copy];
+}
+
+
+- (void)addVisiableModel:(CEModel *)model toSet:(NSMutableSet *)models {
+    for (CEModel *child in model.childObjects) {
+        [self addVisiableModel:child toSet:models];
+    }
+    if (model.vertexBuffer) {
+        [models addObject:model];
+    }
+}
+
 
 #pragma mark - Test Renderer
 
@@ -144,6 +189,23 @@
     return _testTextureRenderer;
 }
 
+- (CEMainRenderer *)testMainRenderer {
+    CEScene *scene = [CEScene currentScene];
+    if (!_mainRenderer) {
+        [EAGLContext setCurrentContext:_context];
+        CEProgramConfig *config = [CEProgramConfig new];
+        config.lightCount = 0;
+        config.shadowMappingCount = 0;
+        config.enableNormalMapping = NO;
+        config.enableTexture = NO;
+        _mainRenderer = [CEMainRenderer rendererWithConfig:config];
+    }
+    _mainRenderer.lights = scene.allLights;
+    _mainRenderer.camera = scene.camera;
+    return _mainRenderer;
+}
+
+
 #pragma mark - Shadow Mapping
 - (void)renderShadowMapsForScene:(CEScene *)scene {
     // check if need render shadow map
@@ -187,7 +249,6 @@
 - (void)renderDebugScene {
     CEScene *scene = [CEScene currentScene];
     // render wireframe add assist info
-    
     [[self wireframeRenderer] renderObjects:scene.allModels];
     [[self assistRender] renderObjects:scene.allModels];
     [[self assistRender] renderLights:scene.allLights];

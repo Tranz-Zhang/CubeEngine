@@ -64,6 +64,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
      vec3 LightDirection;
      vec3 LightColor;
      vec3 AmbientColor;
+     int ShadowMapIndex; // index of ShadowMapTextures, none is -1
      float SpecularIntensity;
      float Shiniess;
      float Attenuation;
@@ -78,7 +79,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  
  // shadow mapping
 \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
- uniform sampler2D ShadowMapTexture;
+ uniform sampler2D ShadowMapTextures[CE_SHADOW_MAPPING_COUNT];
  varying vec4 ShadowCoord;
 \n#endif\n
  
@@ -132,10 +133,12 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
      
      // apply shadow mapping
     \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
-     float depthValue = texture2D(ShadowMapTexture, vec2(ShadowCoord.x/ShadowCoord.w, ShadowCoord.y/ShadowCoord.w)).z;
-     if (depthValue != 1.0 && depthValue < (ShadowCoord.z / ShadowCoord.w) - 0.005) {
-         scatteredLight *= 0.5;
-         reflectedLight *= 0.5;
+     for (int i = 0; i < CE_SHADOW_MAPPING_COUNT; i++) {
+         float depthValue = texture2D(ShadowMapTextures[i], vec2(ShadowCoord.x/ShadowCoord.w, ShadowCoord.y/ShadowCoord.w)).z;
+         if (depthValue != 1.0 && depthValue < (ShadowCoord.z / ShadowCoord.w) - 0.005) {
+             scatteredLight *= 0.5; // here decides how dark the shadow will be.
+             reflectedLight *= 0.5;
+         }
      }
     \n#endif\n
      
@@ -146,10 +149,10 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  // end of lighting
  
  void main() {
-     \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
+     \n#ifdef CE_ENABLE_LIGHTING\n
          vec3 lightingColor = ApplyLightingEffect(BaseColor.rgb);
          gl_FragColor = vec4(lightingColor.rgb, BaseColor.a);
-     \n#elif\n
+     \n#else\n
          gl_FragColor = BaseColor;
      \n#endif\n
  }

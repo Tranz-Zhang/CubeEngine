@@ -32,7 +32,7 @@
     _testModel.showAccessoryLine = YES;
     [self recursiveSetColorForModel:_testModel];
     
-    printf("Teapot loading duration: %.4f", CFAbsoluteTimeGetCurrent() - start);
+    printf("model loading duration: %.4f\n", CFAbsoluteTimeGetCurrent() - start);
     [self.scene addModel:_testModel];
     
     _wireframeSwitch.on = _testModel.showWireframe;

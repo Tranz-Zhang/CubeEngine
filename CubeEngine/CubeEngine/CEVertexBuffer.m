@@ -84,6 +84,7 @@
 
 - (BOOL)setupBuffer {
     if (_ready) {
+        glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
         return YES;
     }
     if (!_vertexData.length || !_attributeDict.count || !_vertexStride) {
@@ -104,20 +105,19 @@
 
 
 - (BOOL)prepareAttribute:(CEVBOAttributeName)attribute withProgramIndex:(GLint)programIndex {
-    return NO;
-//    if (!_ready) {
-//        return NO;
-//    }
-//    CEVBOAttribute *attrib = _attributeDict[@(attribute)];
-//    if (!attrib) {
-//        CEError(@"Can not find attribute");
-//        return NO;
-//    }
-//    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
-//    const GLvoid *offsetPtr = CE_BUFFER_OFFSET([self offsetOfAttribute:attrib.name]);
-//    glEnableVertexAttribArray(programIndex);
-//    glVertexAttribPointer(programIndex, attrib.dataCount, attrib.dataType, GL_FALSE, _vertexStride, offsetPtr);
-//    return YES;
+    if (!_ready) {
+        return NO;
+    }
+    CEVBOAttribute *attrib = _attributeDict[@(attribute)];
+    if (!attrib) {
+        CEError(@"Can not find attribute");
+        return NO;
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
+    const GLvoid *offsetPtr = CE_BUFFER_OFFSET([self offsetOfAttribute:attrib.name]);
+    glEnableVertexAttribArray(programIndex);
+    glVertexAttribPointer(programIndex, attrib.primaryCount, attrib.primaryType, GL_FALSE, _vertexStride, offsetPtr);
+    return YES;
 }
 
 

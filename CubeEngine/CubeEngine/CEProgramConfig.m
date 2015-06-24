@@ -31,11 +31,16 @@
 
 
 - (NSUInteger)hash {
+    int hashValue = 0;
     
-    NSUInteger hashValue = _lightCount * 1000;
-    hashValue += _enableTexture ? 100 : 0;
-    hashValue += _enableShadowMapping ? 10 : 0;
-    hashValue += _enableNormalMapping ? 1 : 0;
+    //8bit for bool property
+    hashValue += (_enableTexture ? 1 : 0) << 0;
+    hashValue += (_enableNormalMapping ? 1 : 0) << 1;
+    
+    // 6 x 4bit for value property
+    hashValue += _lightCount & 0x000F << 8;
+    hashValue += _shadowMappingCount & 0x000F << 12;
+    
     return hashValue;
 }
 
