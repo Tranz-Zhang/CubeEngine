@@ -94,6 +94,8 @@
 #else
     CEMainRenderer *renderer = [self testMainRenderer];
     [renderer renderObjects:[self visibleModelsInScene:scene]];
+    
+    calculate CEProgramConfig
 #endif
     
     // render debug info
