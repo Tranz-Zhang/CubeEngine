@@ -21,5 +21,4 @@
 - (instancetype)initWithVertexBuffer:(CEVertexBuffer *)vertexBuffer
                        indicesBuffer:(CEIndicesBuffer *)indicesBuffer;
 
-
 @end

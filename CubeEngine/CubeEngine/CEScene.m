@@ -116,6 +116,7 @@ static CEScene *sCurrentScene;
     _models = tmpList.copy;
 }
 
+
 #pragma mark - Light
 - (void)addLight:(CELight *)light {
     if (_lights.count < _maxLightCount &&

@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CERenderer.h"
+#import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, CELightType) {
     CEDirectionalLightType = 1,
@@ -15,7 +15,7 @@ typedef NS_ENUM(NSInteger, CELightType) {
 };
 
 // Save the uniform index of LightInfo struct in the program
-@interface CELightUniformInfo : CERenderer
+@interface CELightUniformInfo : NSObject
 
 @property (nonatomic, assign) GLint lightType_i; // 0:none 1:directional 2:point 3:spot
 @property (nonatomic, assign) GLint isEnabled_b;  
@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, CELightType) {
 @property (nonatomic, assign) GLint lightDirection_vec3;
 @property (nonatomic, assign) GLint lightColor_vec3;
 @property (nonatomic, assign) GLint ambientColor_vec3;
+@property (nonatomic, assign) GLint shadowMapIndex_i;
 @property (nonatomic, assign) GLint specularIntensity_f;
 @property (nonatomic, assign) GLint shiniess_f;
 @property (nonatomic, assign) GLint attenuation_f;

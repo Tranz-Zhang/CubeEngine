@@ -89,6 +89,7 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
     if (!_program.initialized) {
         return;
     }
+    [_program use];
     
     for (CEModel *model in objects) {
         [self recursiveRenderModel:model];
@@ -120,7 +121,7 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
         ![model.wireframeBuffer bindBuffer]){
         return;
     }
-    [_program use];
+//    [_program use];
     glLineWidth(_lineWidth);
     GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
     projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, projectionMatrix);

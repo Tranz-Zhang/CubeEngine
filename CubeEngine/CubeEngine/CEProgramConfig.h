@@ -11,7 +11,7 @@
 @interface CEProgramConfig : NSObject <NSCopying>
 
 @property (nonatomic, assign) int lightCount;
-@property (nonatomic, assign) BOOL shadowMappingCount;
+@property (nonatomic, assign) int shadowMappingCount;
 @property (nonatomic, assign) BOOL enableTexture;
 @property (nonatomic, assign) BOOL enableNormalMapping;
 

@@ -92,7 +92,7 @@
             NSArray *attributeIndies = [content componentsSeparatedByString:@" "];
             if (!currentGroup) {
                 CEObjMeshInfo *newGroup = [CEObjMeshInfo new];
-                newGroup.groupNames = nil;
+                newGroup.groupNames = @[@"DefaultGroup"];
                 newGroup.meshData = [NSMutableData data];
                 [groups addObject:newGroup];
                 currentGroup = newGroup;
