@@ -27,7 +27,7 @@
                                                  options:0
                                                    range:NSMakeRange(0, fragmentShaderString.length)];
     }
-    if (config.shadowMappingCount) {
+    if (config.enableShadowMapping) {
         [vertexShaderString insertString:@"#define CE_ENABLE_SHADOW_MAPPING\n" atIndex:0];
         [fragmentShaderString insertString:@"#define CE_ENABLE_SHADOW_MAPPING\n" atIndex:0];
     }

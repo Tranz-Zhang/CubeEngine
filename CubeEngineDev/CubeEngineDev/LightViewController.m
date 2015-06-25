@@ -79,13 +79,20 @@
     _floorModel = [CEModel modelWithObjFile:@"floor"];
     _floorModel.baseColor = [UIColor lightGrayColor];
 //    _floorModel.castShadows = YES;
-    [self.scene addModel:_floorModel];
+//    [self.scene addModel:_floorModel];
+    
+//    _directionalLight = [[CEDirectionalLight alloc] init];
+//    _directionalLight.position = GLKVector3Make(0, -8, 0);
+//    _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
+//    [_directionalLight lookAt:GLKVector3Make(0, 1, 0)];
+//    _directionalLight.enableShadow = YES;
+//    [self.scene addLight:_directionalLight];
     
     _directionalLight = [[CEDirectionalLight alloc] init];
     _directionalLight.position = GLKVector3Make(8, 8, 8);
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
-    [_directionalLight lookAt:GLKVector3Make(0, 0, 0)];
-    _directionalLight.enableShadow = YES;
+    [_directionalLight lookAt:GLKVector3Make(7.9, 0, 8)];
+//    _directionalLight.enableShadow = YES;
     [self.scene addLight:_directionalLight];
     
     _pointLight = [CEPointLight new];
@@ -98,7 +105,7 @@
     _spotLight.position = GLKVector3Make(-8, 15, 0);
     _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
     [_spotLight lookAt:_teapotModel.position];
-    _spotLight.enableShadow = YES;
+//    _spotLight.enableShadow = YES;
     [self.scene addLight:_spotLight];
     _objectOperator.operationObject = _teapotModel;
     

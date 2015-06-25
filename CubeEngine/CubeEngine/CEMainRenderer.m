@@ -10,8 +10,10 @@
 #import "CEScene_Rendering.h"
 #import "CEMainProgram.h"
 #import "CELight_Rendering.h"
+#import "CEShadowLight_Rendering.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
+
 
 @implementation CEMainRenderer {
     CEMainProgram *_program;
@@ -50,13 +52,21 @@
     }
 }
 
+- (void)setShadowLight:(CEShadowLight *)shadowLight {
+    if (!shadowLight.isEnabled || !shadowLight.enableShadow || !shadowLight.shadowMapBuffer) {
+        _shadowLight = nil;
+        return;
+    }
+    _shadowLight = shadowLight;
+}
+
 
 - (void)renderObjects:(NSSet *)objects {
     if (!_program || !_camera) {
         CEError(@"Invalid renderer environment");
         return;
     }
-    [_program use];
+    [_program beginEditing];
     
     // setup model irrelevant properties
     if (_config.lightCount) {
@@ -64,14 +74,24 @@
         for (CELight *light in _lights) {
             [light updateUniformsWithCamera:_camera];
         }
-        
         // we use eye space to do the calculation, so the eye direction is always (0, 0, 1)
         [_program setEyeDirection:GLKVector3Make(0.0, 0.0, 1.0)];
+        
+        // shadow map setting
+        if (_shadowLight) {
+            [_program setShadowDarkness:0.8];
+            [_program setShadowMapTexture:_shadowLight.shadowMapBuffer.textureId];
+            
+        } else if (_config.enableShadowMapping) {
+            [_program setShadowMapTexture:0];
+            [_program setShadowDarkness:1.0];
+        }
     }
     
     for (CEModel *model in objects) {
         [self renderModel:model];
     }
+    [_program endEditing];
 }
 
 
@@ -105,7 +125,6 @@
     GLKMatrix4 modelViewProjectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
     [_program setModelViewProjectionMatrix:modelViewProjectionMatrix];
     
-    int textureIndex = 0; // total used textures
     if (_config.lightCount) {
         if (![_program setNormalAttribute:[model.vertexBuffer attributeWithName:CEVBOAttributeNormal]]) {
             CEError(@"Fail to set normal attribute");
@@ -119,40 +138,19 @@
         [_program setNormalMatrix:normalMatrix];
         
         // setup shadow mapping
-        int shadowMapTextureIndex = 0; // for shadowMap textures
-        for (CELight *light in _lights) {
-            if (light.enabled && light.enableShadow && light.shadowMapBuffer) {
-                if (shadowMapTextureIndex < _program.uniShadowMapIndexes.count) {
-                    // setup shadow map texture
-                    glActiveTexture(GL_TEXTURE0 + textureIndex);
-                    glBindTexture(GL_TEXTURE_2D, light.shadowMapBuffer.textureId);
-                    glUniform1i([_program.uniShadowMapIndexes[shadowMapTextureIndex] intValue], textureIndex);
-                    glUniform1i(light.uniformInfo.shadowMapIndex_i, shadowMapTextureIndex);
-                    shadowMapTextureIndex++;
-                    textureIndex ++;
-                    
-                } else {
-                    CEWarning(@"Reach max shadow map textures");
-                }
-                
-                GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
-                                                       0.0, 0.5, 0.0, 0.0,
-                                                       0.0, 0.0, 0.5, 0.0,
-                                                       0.5, 0.5, 0.5, 1.0);
-                GLKMatrix4 depthMVP = GLKMatrix4Multiply(light.lightViewMatrix, model.transformMatrix);
-                depthMVP = GLKMatrix4Multiply(light.lightProjectionMatrix, depthMVP);
-                depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
-                [_program setDepthBiasModelViewProjectionMatrix:depthMVP];
-                
-            } else {
-                // disable shadow map
-                glUniform1i(light.uniformInfo.shadowMapIndex_i, -1);
-            }
+        if (_shadowLight) {
+            GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
+                                                   0.0, 0.5, 0.0, 0.0,
+                                                   0.0, 0.0, 0.5, 0.0,
+                                                   0.5, 0.5, 0.5, 1.0);
+            GLKMatrix4 depthMVP = GLKMatrix4Multiply(_shadowLight.lightViewMatrix, model.transformMatrix);
+            depthMVP = GLKMatrix4Multiply(_shadowLight.lightProjectionMatrix, depthMVP);
+            depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
+            [_program setDepthBiasModelViewProjectionMatrix:depthMVP];
         }
     }
     
     // TODO: add model texture and normal texture
-    
     
     
     if (model.indicesBuffer) { // glDrawElements

@@ -119,12 +119,13 @@
     [self recursiveSetHasChanged:YES];
 }
 
-
+ ref:http://mmmovania.blogspot.com/2014/03/making-opengl-object-look-at-another.html
 - (void)lookAt:(GLKVector3)targetPosition {
     GLKVector3 v1 = _right;//(1, 0, 0);
     GLKVector3 v2 = GLKVector3Make(targetPosition.x - _position.x,
                                    targetPosition.y - _position.y,
                                    targetPosition.z - _position.z);
+    v2 = GLKVector3Normalize(v2);
     GLKVector3 deltaVector = GLKVector3CrossProduct(v1, v2);
     double w = sqrt(pow(GLKVector3Length(v1), 2) * pow(GLKVector3Length(v2), 2)) + GLKVector3DotProduct(v1, v2);
     GLKQuaternion deltaRotation;

@@ -11,8 +11,6 @@
 #import "CEVertexBuffer.h"
 #import "CEIndicesBuffer.h"
 #import "CELightUniformInfo.h"
-#import "CEShadowMapBuffer.h"
-#import "CEModel.h"
 
 
 @interface CELight () {
@@ -37,16 +35,6 @@
 
 // must overwrite by subclass
 - (void)updateUniformsWithCamera:(CECamera *)camera;
-
-
-#pragma mark - ShadowMapping
-@property (nonatomic, readonly) CEShadowMapBuffer *shadowMapBuffer;
-// light view matrix, mainly used for shadow mapping
-@property (nonatomic, readonly) GLKMatrix4 lightViewMatrix;
-@property (nonatomic, readonly) GLKMatrix4 lightProjectionMatrix;
-
-// update view matrix and projection matrix. Should be overwited by subclass
-- (void)updateLightVPMatrixWithModels:(NSSet *)models;
 
 @end
 

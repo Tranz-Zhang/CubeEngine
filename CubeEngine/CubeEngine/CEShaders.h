@@ -64,7 +64,6 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
      vec3 LightDirection;
      vec3 LightColor;
      vec3 AmbientColor;
-     int ShadowMapIndex; // index of ShadowMapTextures, none is -1
      float SpecularIntensity;
      float Shiniess;
      float Attenuation;
@@ -79,7 +78,8 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  
  // shadow mapping
 \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
- uniform sampler2D ShadowMapTextures[CE_SHADOW_MAPPING_COUNT];
+ uniform float ShadowDarkness;
+ uniform sampler2D ShadowMapTexture;
  varying vec4 ShadowCoord;
 \n#endif\n
  
@@ -133,20 +133,11 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
      
      // apply shadow mapping
     \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
-     float scatteredLightFactor = 1.0;
-     float reflectedLightFactor = 1.0;
-     for (int i = 0; i < LightCount; i++) {
-         if (!Lights[i].IsEnabled || Lights[i].ShadowMapIndex < 0) {
-             continue;
-         }
-         float depthValue = texture2D(ShadowMapTextures[Lights[i].ShadowMapIndex], vec2(ShadowCoord.x/ShadowCoord.w, ShadowCoord.y/ShadowCoord.w)).z;
-         if (depthValue != 1.0 && depthValue < (ShadowCoord.z / ShadowCoord.w) - 0.005) {
-             scatteredLightFactor -= 0.3;
-             reflectedLightFactor -= 0.3;
-         }
+     float depthValue = texture2D(ShadowMapTexture, vec2(ShadowCoord.x/ShadowCoord.w, ShadowCoord.y/ShadowCoord.w)).z;
+     if (depthValue != 1.0 && depthValue < (ShadowCoord.z / ShadowCoord.w) - 0.005) {
+         scatteredLight *= ShadowDarkness;
+         reflectedLight *= ShadowDarkness;
      }
-     scatteredLight *= scatteredLightFactor; // here decides how dark the shadow will be.
-     reflectedLight *= reflectedLightFactor;
     \n#endif\n
      
      return min(inputColor * scatteredLight + reflectedLight, vec3(1.0));

@@ -26,31 +26,19 @@
     NSArray *_uniLightInfos;
     
     // shadow map
+    GLint _uniFloatShadowDarkness;
     GLint _uniMtx4DepthBiasMVP;
-    NSArray *_uniShadowMapIndexes;
+    GLint _uniTexShadowMap;
 }
 
 @property (nonatomic, readonly) CEProgramConfig *config;
-
-//// basic
-//@property (nonatomic, readonly) GLint attribVec4Position;
-//@property (nonatomic, readonly) GLint uniMtx4MVPMatrix;
-//@property (nonatomic, readonly) GLint uniVec4BaseColor;
-//
-//// lighting
-//@property (nonatomic, readonly) GLint attribVec3Normal;
-//@property (nonatomic, readonly) GLint uniMtx4MVMatrix;
-//@property (nonatomic, readonly) GLint uniMtx3NormalMatrix;
-//@property (nonatomic, readonly) GLint uniVec3EyeDirection;
+@property (nonatomic, readonly) BOOL isEditing;
 @property (nonatomic, readonly) NSArray *uniLightInfos; // return array of CELightUniformInfo
 
-// shadow map
-//@property (nonatomic, readonly) GLint uniMtx4DepthBiasMVP;
-//@property (nonatomic, readonly) GLint uniTexShadowMapTexture;
-@property (nonatomic, readonly) NSArray *uniShadowMapIndexes;
-
-
 + (instancetype)programWithConfig:(CEProgramConfig *)config;
+
+- (void)beginEditing;
+- (void)endEditing;
 
 
 // basic
@@ -68,14 +56,11 @@
 
 // shadow map
 - (BOOL)setDepthBiasModelViewProjectionMatrix:(GLKMatrix4)depthBiasMVPMatrix4;
-
-
+- (BOOL)setShadowDarkness:(GLfloat)shadowDarkness;
+- (BOOL)setShadowMapTexture:(GLuint)shadowMapTextureId;
 
 @end
 
-
-//multiple shadowmapping: we create a list of shadowmapping, add shadow info in Light Infos
-//finish main renderer
 
 
 

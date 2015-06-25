@@ -12,6 +12,7 @@
 @implementation CEMainProgram {
     BOOL _hasEnabledPosition;
     BOOL _hasEnabledNormal;
+    BOOL _textureCount;
 }
 
 
@@ -22,6 +23,38 @@
                                fragmentShaderString:fragmentShader
                                              config:config];
 }
+
+
+#pragma mark - Parse Shaders
++ (NSString *)vertexShaderWithConfig:(CEProgramConfig *)config {
+    NSMutableString *vertexShaderString = [kVertexShader mutableCopy];
+    if (config.lightCount > 0) {
+        [vertexShaderString insertString:@"#define CE_ENABLE_LIGHTING\n" atIndex:0];
+    }
+    if (config.enableShadowMapping > 0) {
+        [vertexShaderString insertString:@"#define CE_ENABLE_SHADOW_MAPPING\n" atIndex:0];
+    }
+    return [vertexShaderString copy];
+}
+
+
++ (NSString *)fragmentShaderWithConfig:(CEProgramConfig *)config {
+    NSMutableString *fragmentShaderString = [kFragmentSahder mutableCopy];
+    if (config.lightCount > 0) {
+        [fragmentShaderString insertString:@"#define CE_ENABLE_LIGHTING\n" atIndex:0];
+        [fragmentShaderString replaceOccurrencesOfString:@"CE_LIGHT_COUNT"
+                                              withString:[NSString stringWithFormat:@"%d", config.lightCount]
+                                                 options:0
+                                                   range:NSMakeRange(0, fragmentShaderString.length)];
+    }
+    if (config.enableShadowMapping) {
+        [fragmentShaderString insertString:@"#define CE_ENABLE_SHADOW_MAPPING\n" atIndex:0];
+    }
+    
+    return [fragmentShaderString copy];
+}
+
+
 
 
 - (instancetype)initWithVertexShaderString:(NSString *)vShaderString
@@ -44,6 +77,9 @@
         
         // shadow map
         _uniMtx4DepthBiasMVP = -1;
+        _uniFloatShadowDarkness = -1;
+        _uniTexShadowMap = -1;
+        _textureCount = 0;
         [self setupProgram];
     }
     return self;
@@ -66,7 +102,7 @@
             [self use];
             glUniform1i(_uniIntLightCount, _config.lightCount);
         }
-        if (_config.shadowMappingCount) {
+        if (_config.enableShadowMapping) {
             [self initializeShadowMapUniforms];
         }
         
@@ -80,6 +116,18 @@
         CEError(@"Vertex shader compile log: %@", vertLog);
         NSAssert(0, @"Fail to Compile Program");
     }
+}
+
+
+- (void)beginEditing {
+    [self use];
+    _isEditing = YES;
+    _textureCount = 0;
+}
+
+- (void)endEditing {
+    _isEditing = NO;
+    _textureCount = 0;
 }
 
 
@@ -112,9 +160,6 @@
         info.ambientColor_vec3 = [self uniformIndex:[NSString stringWithFormat:@"Lights[%d].AmbientColor", i]];
         if (info.ambientColor_vec3 < 0) continue;
         
-        info.shadowMapIndex_i = [self uniformIndex:[NSString stringWithFormat:@"Lights[%d].ShadowMapIndex", i]];
-        if (info.shadowMapIndex_i < 0) continue;
-        
         info.specularIntensity_f = [self uniformIndex:[NSString stringWithFormat:@"Lights[%d].SpecularIntensity", i]];
         if (info.specularIntensity_f < 0) continue;
         
@@ -138,56 +183,18 @@
 
 - (void)initializeShadowMapUniforms {
     _uniMtx4DepthBiasMVP    = [self uniformIndex:@"DepthBiasMVP"];
-    
-    NSMutableArray *shadowMapTextures = [NSMutableArray arrayWithCapacity:_config.shadowMappingCount];
-    for (int i = 0; i < _config.shadowMappingCount; i ++) {
-        GLint index = [self uniformIndex:[NSString stringWithFormat:@"ShadowMapTextures[%d]", i]];
-        if (index >= 0) {
-            [shadowMapTextures addObject:@(index)];
-        }
-    }
-    _uniShadowMapIndexes = shadowMapTextures.count ? [shadowMapTextures copy] : nil;
-}
-
-
-#pragma mark - Parse Shaders
-+ (NSString *)vertexShaderWithConfig:(CEProgramConfig *)config {
-    NSMutableString *vertexShaderString = [kVertexShader mutableCopy];
-    if (config.lightCount > 0) {
-        [vertexShaderString insertString:@"#define CE_ENABLE_LIGHTING\n" atIndex:0];
-    }
-    if (config.shadowMappingCount > 0) {
-        [vertexShaderString insertString:@"#define CE_ENABLE_SHADOW_MAPPING\n" atIndex:0];
-    }
-    return [vertexShaderString copy];
-}
-
-
-+ (NSString *)fragmentShaderWithConfig:(CEProgramConfig *)config {
-    NSMutableString *fragmentShaderString = [kFragmentSahder mutableCopy];
-    if (config.lightCount > 0) {
-        [fragmentShaderString insertString:@"#define CE_ENABLE_LIGHTING\n" atIndex:0];
-        [fragmentShaderString replaceOccurrencesOfString:@"CE_LIGHT_COUNT"
-                                              withString:[NSString stringWithFormat:@"%d", config.lightCount]
-                                                 options:0
-                                                   range:NSMakeRange(0, fragmentShaderString.length)];
-    }
-    if (config.shadowMappingCount > 0) {
-        [fragmentShaderString insertString:@"#define CE_ENABLE_SHADOW_MAPPING\n" atIndex:0];
-        [fragmentShaderString replaceOccurrencesOfString:@"CE_SHADOW_MAPPING_COUNT"
-                                              withString:[NSString stringWithFormat:@"%d", config.shadowMappingCount]
-                                                 options:0
-                                                   range:NSMakeRange(0, fragmentShaderString.length)];
-    }
-    
-    return [fragmentShaderString copy];
+    _uniFloatShadowDarkness = [self uniformIndex:@"ShadowDarkness"];
+    _uniTexShadowMap        = [self uniformIndex:@"ShadowMapTexture"];
 }
 
 
 
-#pragma mark - Attributes & Uniforms
+
+
+#pragma mark - uniform setters
 - (BOOL)setPositionAttribute:(CEVBOAttribute *)attribute {
-    if (_attribVec4Position < 0 ||
+    if (!_isEditing ||
+        _attribVec4Position < 0 ||
         attribute.name != CEVBOAttributePosition ||
         attribute.primaryCount <= 0 ||
         attribute.elementStride <= 0) {
@@ -211,7 +218,7 @@
 
 
 - (BOOL)setModelViewProjectionMatrix:(GLKMatrix4)mvpMatrix4 {
-    if (_uniMtx4MVPMatrix < 0) {
+    if (!_isEditing || _uniMtx4MVPMatrix < 0) {
         return NO;
     }
     glUniformMatrix4fv(_uniMtx4MVPMatrix, 1, GL_FALSE, mvpMatrix4.m);
@@ -220,16 +227,18 @@
 
 
 - (BOOL)setBaseColor:(GLKVector4)colorVec4 {
-    if (_uniVec4BaseColor < 0) {
+    if (!_isEditing || _uniVec4BaseColor < 0) {
         return NO;
     }
     glUniform4fv(_uniVec4BaseColor, 1, colorVec4.v);
     return YES;
 }
 
+
 // lighting
 - (BOOL)setNormalAttribute:(CEVBOAttribute *)attribute {
-    if (_attribVec3Normal < 0 ||
+    if (!_isEditing ||
+        _attribVec3Normal < 0 ||
         attribute.name != CEVBOAttributeNormal ||
         attribute.primaryCount <= 0 ||
         attribute.elementStride <= 0) {
@@ -253,7 +262,7 @@
 
 
 - (BOOL)setModelViewMatrix:(GLKMatrix4)mvMatrix4 {
-    if (_uniMtx4MVMatrix < 0) {
+    if (!_isEditing || _uniMtx4MVMatrix < 0) {
         return NO;
     }
     glUniformMatrix4fv(_uniMtx4MVMatrix, 1, GL_FALSE, mvMatrix4.m);
@@ -262,7 +271,7 @@
 
 
 - (BOOL)setNormalMatrix:(GLKMatrix3)normalMatrix3 {
-    if (_uniMtx3NormalMatrix < 0) {
+    if (!_isEditing || _uniMtx3NormalMatrix < 0) {
         return NO;
     }
     glUniformMatrix3fv(_uniMtx3NormalMatrix, 1, GL_FALSE, normalMatrix3.m);
@@ -271,7 +280,7 @@
 
 
 - (BOOL)setEyeDirection:(GLKVector3)eyeDirectionVec3 {
-    if (_uniVec3EyeDirection < 0) {
+    if (!_isEditing || _uniVec3EyeDirection < 0) {
         return NO;
     }
     glUniform3fv(_uniVec3EyeDirection, 1, eyeDirectionVec3.v);
@@ -281,13 +290,33 @@
 
 // shadow map
 - (BOOL)setDepthBiasModelViewProjectionMatrix:(GLKMatrix4)depthBiasMVPMatrix4 {
-    if (_uniMtx4DepthBiasMVP < 0) {
+    if (!_isEditing || _uniMtx4DepthBiasMVP < 0) {
         return NO;
     }
     glUniformMatrix4fv(_uniMtx4DepthBiasMVP, 1, GL_FALSE, depthBiasMVPMatrix4.m);
     return YES;
 }
 
+- (BOOL)setShadowDarkness:(GLfloat)shadowDarkness {
+    if (!_isEditing || _uniFloatShadowDarkness < 0) {
+        return NO;
+    }
+    glUniform1f(_uniFloatShadowDarkness, shadowDarkness);
+    return YES;
+}
+
+
+- (BOOL)setShadowMapTexture:(GLuint)shadowMapTextureId {
+    if (!_isEditing || _uniTexShadowMap < 0) {
+        return NO;
+    }
+    glActiveTexture(GL_TEXTURE0 + _textureCount);
+    glBindTexture(GL_TEXTURE_2D, shadowMapTextureId);
+    glUniform1i(_uniTexShadowMap, _textureCount);
+    _textureCount++;
+    
+    return YES;
+}
 
 
 @end

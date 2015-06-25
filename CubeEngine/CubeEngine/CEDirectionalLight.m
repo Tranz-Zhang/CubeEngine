@@ -8,6 +8,7 @@
 
 #import "CEDirectionalLight.h"
 #import "CELight_Rendering.h"
+#import "CEShadowLight_Rendering.h"
 
 @implementation CEDirectionalLight
 
@@ -70,6 +71,7 @@
         _hasLightChanged = YES;
     }
 }
+
 
 
 - (void)updateUniformsWithCamera:(CECamera *)camera {

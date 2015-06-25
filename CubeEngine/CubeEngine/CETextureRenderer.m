@@ -283,13 +283,13 @@ NSString *const kTextureFragmentSahder = CE_SHADER_STRING
     }
     
     // setup shadow mapping
-    CELight *shadowLight;
-    for (CELight *light in _lights) {
-        if(light.enableShadow) {
-            shadowLight = light;
-            break;
-        }
-    }
+//    CELight *shadowLight;
+//    for (CELight *light in _lights) {
+//        if(light.enableShadow) {
+//            shadowLight = light;
+//            break;
+//        }
+//    }
     
     for (CEModel *model in objects) {
         [self renderModel:model];
@@ -323,18 +323,18 @@ NSString *const kTextureFragmentSahder = CE_SHADER_STRING
     glUniform1i(_uniIntLightCount, (GLint)_lights.count);
     for (CELight *light in _lights) {
         [light updateUniformsWithCamera:_camera];
-        if (light.enabled && light.enableShadow && light.shadowMapBuffer) {
-            glBindTexture(GL_TEXTURE_2D, light.shadowMapBuffer.textureId);
-            glUniform1i(_uniTexShadowMapTexture, 0);
-            GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
-                                                   0.0, 0.5, 0.0, 0.0,
-                                                   0.0, 0.0, 0.5, 0.0,
-                                                   0.5, 0.5, 0.5, 1.0);
-            GLKMatrix4 depthMVP = GLKMatrix4Multiply(light.lightViewMatrix, model.transformMatrix);
-            depthMVP = GLKMatrix4Multiply(light.lightProjectionMatrix, depthMVP);
-            depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
-            glUniformMatrix4fv(_uniMtx4DepthBiasMVP, 1, GL_FALSE, depthMVP.m);
-        }
+//        if (light.enabled && light.shadowMapBuffer) {
+//            glBindTexture(GL_TEXTURE_2D, light.shadowMapBuffer.textureId);
+//            glUniform1i(_uniTexShadowMapTexture, 0);
+//            GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
+//                                                   0.0, 0.5, 0.0, 0.0,
+//                                                   0.0, 0.0, 0.5, 0.0,
+//                                                   0.5, 0.5, 0.5, 1.0);
+//            GLKMatrix4 depthMVP = GLKMatrix4Multiply(light.lightViewMatrix, model.transformMatrix);
+//            depthMVP = GLKMatrix4Multiply(light.lightProjectionMatrix, depthMVP);
+//            depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
+//            glUniformMatrix4fv(_uniMtx4DepthBiasMVP, 1, GL_FALSE, depthMVP.m);
+//        }
     }
     
     // setup other uniforms

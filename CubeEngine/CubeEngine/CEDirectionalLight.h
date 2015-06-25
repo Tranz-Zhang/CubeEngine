@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CELight.h"
+#import "CEShadowLight.h"
 
-@interface CEDirectionalLight : CELight
+@interface CEDirectionalLight : CEShadowLight
 
 @property (nonatomic, readonly) GLKVector3 lightDirection; // == CEObject.right
 @property (nonatomic, assign) GLint shiniess;

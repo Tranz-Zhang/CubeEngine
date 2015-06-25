@@ -11,6 +11,7 @@
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
 #import "CELight_Rendering.h"
+#import "CEShadowLight_Rendering.h"
 
 // renderer
 #import "CEBaseRenderer.h"
@@ -71,11 +72,14 @@
     }
     
     // check if need render shadow map
-    NSMutableSet *shadowLights = [NSMutableSet set];
+    CEShadowLight *shadowLight = nil;
     NSMutableSet *shadowModels = [NSMutableSet set];
     for (CELight *light in scene.allLights) {
-        if (light.enabled && light.enableShadow) {
-            [shadowLights addObject:light];
+        if ([light isKindOfClass:[CEShadowLight class]] &&
+            [(CEShadowLight *)light enableShadow] &&
+            [(CEShadowLight *)light isEnabled]) {
+            shadowLight = (CEShadowLight *)light;
+            break;
         }
     }
     for (CEModel *model in allModels) {
@@ -84,14 +88,16 @@
         }
     }
     // try render shadow mapp if needed
-    if (shadowLights.count && shadowModels.count) {
-        [self renderShadowMapsWithShadowLights:shadowLights
-                                  shadowModels:shadowModels];
+    if (shadowLight && shadowModels.count) {
+        
+        [self renderShadowMapsWithShadowLight:shadowLight
+                                 shadowModels:shadowModels];
+        
     }
     
     // sort render objects
     CEProgramConfig *baseConfig = [CEProgramConfig new];
-    baseConfig.shadowMappingCount = shadowModels.count ? shadowLights.count : 0;
+    baseConfig.enableShadowMapping = (shadowLight != nil);
     baseConfig.lightCount = scene.allLights.count;
     NSMutableDictionary *sortedRenderObjectDict = [NSMutableDictionary dictionary];
     for (CEModel *model in allModels) {
@@ -114,9 +120,10 @@
         CEMainRenderer *render = [self rendererWithConfig:config];
         render.camera = scene.camera;
         render.lights = scene.allLights;
+        render.shadowLight = shadowLight;
         [render renderObjects:models];
     }];
-
+    
     // render debug info
     if (scene.enableDebug) {
         [self renderDebugScene];
@@ -207,7 +214,7 @@
     program = [CEMainProgram programWithConfig:config];
     config.enableNormalMapping = YES;
     program = [CEMainProgram programWithConfig:config];
-    config.shadowMappingCount = 2;
+    config.enableShadowMapping = YES;
     program = [CEMainProgram programWithConfig:config];
     printf("%.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
 }
@@ -276,13 +283,14 @@
     return _testTextureRenderer;
 }
 
+
 - (CEMainRenderer *)testMainRenderer {
     CEScene *scene = [CEScene currentScene];
     if (!_mainRenderer) {
         [EAGLContext setCurrentContext:_context];
         CEProgramConfig *config = [CEProgramConfig new];
         config.lightCount = 0;
-        config.shadowMappingCount = 0;
+        config.enableShadowMapping = 0;
         config.enableNormalMapping = NO;
         config.enableTexture = NO;
         _mainRenderer = [CEMainRenderer rendererWithConfig:config];
@@ -295,8 +303,8 @@
 
 #pragma mark - Shadow Mapping
 
-- (void)renderShadowMapsWithShadowLights:(NSSet *)shadowLights shadowModels:(NSSet *)shadowModels {
-    if (!shadowLights.count || !shadowModels.count) {
+- (void)renderShadowMapsWithShadowLight:(CEShadowLight *)shadowLight shadowModels:(NSSet *)shadowModels {
+    if (!shadowLight || !shadowModels.count) {
         // no need to render shadow maps
         return;
     }
@@ -310,14 +318,13 @@
     _shadowMapRenderer.camera = [CEScene currentScene].camera;
     
     // render shadow maps
-    for (CELight *light in shadowLights) {
-        [light.shadowMapBuffer setupBuffer];
-        [light.shadowMapBuffer prepareBuffer];
-        [light updateLightVPMatrixWithModels:shadowModels];
-        _shadowMapRenderer.lightVPMatrix = GLKMatrix4Multiply(light.lightProjectionMatrix, light.lightViewMatrix);
-        [_shadowMapRenderer renderObjects:shadowModels];
-    }
+    [shadowLight.shadowMapBuffer setupBuffer];
+    [shadowLight.shadowMapBuffer prepareBuffer];
+    [shadowLight updateLightVPMatrixWithModels:shadowModels];
+    _shadowMapRenderer.lightVPMatrix = GLKMatrix4Multiply(shadowLight.lightProjectionMatrix, shadowLight.lightViewMatrix);
+    [_shadowMapRenderer renderObjects:shadowModels];
 }
+
 
 
 #pragma mark - Debug renderer

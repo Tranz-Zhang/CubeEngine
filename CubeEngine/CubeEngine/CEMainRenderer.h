@@ -9,12 +9,13 @@
 #import "CERenderer.h"
 #import "CECamera.h"
 #import "CEProgramConfig.h"
+#import "CEShadowLight.h"
 
 @interface CEMainRenderer : NSObject
 
 @property (nonatomic, strong) NSSet *lights;
 @property (nonatomic, weak) CECamera *camera;
-
+@property (nonatomic, weak) CEShadowLight *shadowLight;
 
 + (instancetype)rendererWithConfig:(CEProgramConfig *)config;
 

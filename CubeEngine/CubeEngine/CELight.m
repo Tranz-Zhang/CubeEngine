@@ -10,8 +10,6 @@
 #import "CEUtils.h"
 #import "CELight_Rendering.h"
 
-#define kDefaultTextureSize 512
-
 //static NSInteger kMaxLightCount = 8;
 
 @implementation CELight
@@ -83,20 +81,6 @@
     // MUST IMPLEMENT BY SUBCLASS
 }
 
-
-#pragma mark - Shadow Mapping
-
-- (void)setEnableShadow:(BOOL)enableShadow {
-    if (_enableShadow != enableShadow) {
-        _enableShadow = enableShadow;
-        if (enableShadow && !_shadowMapBuffer) {
-            _shadowMapBuffer = [[CEShadowMapBuffer alloc] initWithTextureSize:CGSizeMake(kDefaultTextureSize, kDefaultTextureSize)];
-            
-        } else if (!enableShadow && _shadowMapBuffer) {
-            _shadowMapBuffer = nil;
-        }
-    }
-}
 
 //- (GLKMatrix4)lightViewMatrix {
 //    if (!self.hasChanged) {

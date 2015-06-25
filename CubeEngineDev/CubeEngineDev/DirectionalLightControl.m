@@ -108,6 +108,9 @@
 }
 
 
+- (IBAction)onShadowSwitch:(UISwitch *)sender {
+    _operationLight.enableShadow = sender.on;
+}
 
 
 @end
