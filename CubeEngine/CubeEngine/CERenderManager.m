@@ -39,6 +39,8 @@
     CETextureRenderer *_testTextureRenderer;
     CEMainRenderer *_mainRenderer;
     
+    NSMutableDictionary *_rendererDict; // @{CEProgramConfig:CEMainRenderer}
+    
     // debug renderer
     CEWireframeRenderer *_wireframeRenderer;
     CEAssistRenderer *_assistRenderer;
@@ -50,11 +52,108 @@
     self = [super init];
     if (self) {
         _context = context;
+        _rendererDict = [NSMutableDictionary dictionary];
         [self testProgramGeneration];
     }
     
     return self;
 }
+
+- (void)renderCurrentScene {
+    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+    CEScene *scene = [CEScene currentScene];
+    [EAGLContext setCurrentContext:scene.context];
+    
+    // try render shadow mapp if needed
+    [self renderShadowMapsForScene:scene];
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, scene.renderCore.defaultFramebuffer);
+    glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
+    
+#if 0
+    // TODO: sort model with materials
+    CERenderer *renderer = [self getTestShadowRenderer];
+    [renderer renderObjects:scene.allModels];
+#else
+    NSDictionary *renderObjectDict = [self calculateRenderObjectsInCurrentScene];
+    [renderObjectDict enumerateKeysAndObjectsUsingBlock:^(CEProgramConfig *config, NSSet *models, BOOL *stop) {
+        CEMainRenderer *render = [self rendererWithConfig:config];
+        render.camera = scene.camera;
+        render.lights = scene.allLights;
+        [render renderObjects:models];
+    }];
+#endif
+    
+    // render debug info
+    if (scene.enableDebug) {
+        [self renderDebugScene];
+    }
+    printf("render duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+}
+
+
+// return @{CEProgramConfig:@[CEModels]}
+- (NSDictionary *)calculateRenderObjectsInCurrentScene {
+//    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+    CEScene *scene = [CEScene currentScene];
+    CEProgramConfig *baseConfig = [CEProgramConfig new];
+    baseConfig.lightCount = scene.allLights.count;
+    for (CELight *light in scene.allLights) {
+        if (light.enableShadow) {
+            baseConfig.shadowMappingCount += 1;
+        }
+    }
+    
+    // calcualte all visiable model without empty groups
+    NSMutableSet *allModels = [NSMutableSet set];
+    for (CEModel *model in scene.allModels) {
+        [self recursiveAddVisiableModel:model toSet:allModels];
+    }
+    // sort models by different config
+    NSMutableDictionary *configModelDict = [NSMutableDictionary dictionary];
+    for (CEModel *model in allModels) {
+        CEProgramConfig *modelConfig = baseConfig.copy;
+        modelConfig.enableTexture = model.material.textureMap.length ? YES : NO;
+        modelConfig.enableNormalMapping = model.material.normalMap.length ? YES : NO;
+        NSMutableSet *modelsForConfig = configModelDict[modelConfig];
+        if (!modelsForConfig) {
+            modelsForConfig = [NSMutableSet set];
+            configModelDict[modelConfig] = modelsForConfig;
+        }
+        [modelsForConfig addObject:model];
+    }
+//    printf("calculateRenderObjects: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+    return [configModelDict copy];
+}
+
+
+- (void)recursiveAddVisiableModel:(CEModel *)model toSet:(NSMutableSet *)models {
+    for (CEModel *child in model.childObjects) {
+        [self recursiveAddVisiableModel:child toSet:models];
+    }
+    if (model.vertexBuffer) {
+        [models addObject:model];
+    }
+}
+
+
+- (CEMainRenderer *)rendererWithConfig:(CEProgramConfig *)config {
+    CEMainRenderer *render = _rendererDict[config];
+    if (!render) {
+        render = [CEMainRenderer rendererWithConfig:config];
+        _rendererDict[config] = render;
+    }
+#if DEBUG
+    NSAssert(render, @"FAIL TO CREATE RENDER");
+#endif
+    return render;
+}
+
+
+
+#pragma mark - Test Renderer
 
 
 - (void)testProgramGeneration {
@@ -75,35 +174,6 @@
 }
 
 
-- (void)renderCurrentScene {
-    CEScene *scene = [CEScene currentScene];
-    [EAGLContext setCurrentContext:scene.context];
-    
-    // try render shadow mapp if needed
-    [self renderShadowMapsForScene:scene];
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, scene.renderCore.defaultFramebuffer);
-    glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
-    
-#if 0
-    // TODO: sort model with materials
-    CERenderer *renderer = [self getTestShadowRenderer];
-    [renderer renderObjects:scene.allModels];
-#else
-    CEMainRenderer *renderer = [self testMainRenderer];
-    [renderer renderObjects:[self visibleModelsInScene:scene]];
-    
-    calculate CEProgramConfig
-#endif
-    
-    // render debug info
-    if (scene.enableDebug) {
-        [self renderDebugScene];
-    }
-}
-
 
 - (CERenderer *)getRendererWithModel:(CEModel *)model {
     CEScene *scene = [CEScene currentScene];
@@ -119,28 +189,6 @@
     
     return _defaultRenderer;
 }
-
-
-- (NSSet *)visibleModelsInScene:(CEScene *)scene {
-    NSMutableSet *models = [NSMutableSet set];
-    for (CEModel *model in scene.allModels) {
-        [self addVisiableModel:model toSet:models];
-    }
-    return [models copy];
-}
-
-
-- (void)addVisiableModel:(CEModel *)model toSet:(NSMutableSet *)models {
-    for (CEModel *child in model.childObjects) {
-        [self addVisiableModel:child toSet:models];
-    }
-    if (model.vertexBuffer) {
-        [models addObject:model];
-    }
-}
-
-
-#pragma mark - Test Renderer
 
 
 - (CEBaseRenderer *)getTestBaseRenderer {

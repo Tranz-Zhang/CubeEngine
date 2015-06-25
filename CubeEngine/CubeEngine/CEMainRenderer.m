@@ -35,7 +35,7 @@
 
 - (void)setLights:(NSSet *)lights {
     if (_lights != lights) {
-        if (_lights.count != _program.uniLightInfos.count) {
+        if (lights.count != _program.uniLightInfos.count) {
             CEWarning(@"light's count dismatch!!!");
         }
         _lights = [lights copy];
