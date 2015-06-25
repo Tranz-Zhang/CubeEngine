@@ -91,13 +91,14 @@
     _pointLight = [CEPointLight new];
     _pointLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     _pointLight.position = GLKVector3Make(-8, 15, 0);
+//    _pointLight.enableShadow = YES;
     [self.scene addLight:_pointLight];
     
     _spotLight = [CESpotLight new];
     _spotLight.position = GLKVector3Make(-8, 15, 0);
     _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
     [_spotLight lookAt:_teapotModel.position];
-//    _spotLight.enableShadow = YES;
+    _spotLight.enableShadow = YES;
     [self.scene addLight:_spotLight];
     _objectOperator.operationObject = _teapotModel;
     

@@ -64,28 +64,59 @@
     CEScene *scene = [CEScene currentScene];
     [EAGLContext setCurrentContext:scene.context];
     
+    // get all visiable objects(without empty group)
+    NSMutableSet *allModels = [NSMutableSet set];
+    for (CEModel *model in scene.allModels) {
+        [self recursiveAddVisiableModel:model toSet:allModels];
+    }
+    
+    // check if need render shadow map
+    NSMutableSet *shadowLights = [NSMutableSet set];
+    NSMutableSet *shadowModels = [NSMutableSet set];
+    for (CELight *light in scene.allLights) {
+        if (light.enabled && light.enableShadow) {
+            [shadowLights addObject:light];
+        }
+    }
+    for (CEModel *model in allModels) {
+        if (model.castShadows) {
+            [shadowModels addObject:model];
+        }
+    }
     // try render shadow mapp if needed
-    [self renderShadowMapsForScene:scene];
+    if (shadowLights.count && shadowModels.count) {
+        [self renderShadowMapsWithShadowLights:shadowLights
+                                  shadowModels:shadowModels];
+    }
+    
+    // sort render objects
+    CEProgramConfig *baseConfig = [CEProgramConfig new];
+    baseConfig.shadowMappingCount = shadowModels.count ? shadowLights.count : 0;
+    baseConfig.lightCount = scene.allLights.count;
+    NSMutableDictionary *sortedRenderObjectDict = [NSMutableDictionary dictionary];
+    for (CEModel *model in allModels) {
+        CEProgramConfig *modelConfig = baseConfig.copy;
+        modelConfig.enableTexture = model.material.textureMap.length ? YES : NO;
+        modelConfig.enableNormalMapping = model.material.normalMap.length ? YES : NO;
+        NSMutableSet *modelsForConfig = sortedRenderObjectDict[modelConfig];
+        if (!modelsForConfig) {
+            modelsForConfig = [NSMutableSet set];
+            sortedRenderObjectDict[modelConfig] = modelsForConfig;
+        }
+        [modelsForConfig addObject:model];
+    }
     
     glBindFramebuffer(GL_FRAMEBUFFER, scene.renderCore.defaultFramebuffer);
     glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
-    
-#if 0
-    // TODO: sort model with materials
-    CERenderer *renderer = [self getTestShadowRenderer];
-    [renderer renderObjects:scene.allModels];
-#else
-    NSDictionary *renderObjectDict = [self calculateRenderObjectsInCurrentScene];
-    [renderObjectDict enumerateKeysAndObjectsUsingBlock:^(CEProgramConfig *config, NSSet *models, BOOL *stop) {
+    [sortedRenderObjectDict enumerateKeysAndObjectsUsingBlock:^(CEProgramConfig *config, NSSet *models, BOOL *stop) {
         CEMainRenderer *render = [self rendererWithConfig:config];
         render.camera = scene.camera;
         render.lights = scene.allLights;
         [render renderObjects:models];
     }];
-#endif
-    
+
     // render debug info
     if (scene.enableDebug) {
         [self renderDebugScene];
@@ -93,24 +124,33 @@
     printf("render duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
 }
 
-
+/*
 // return @{CEProgramConfig:@[CEModels]}
-- (NSDictionary *)calculateRenderObjectsInCurrentScene {
-//    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+- (NSDictionary *)calculateRenderObjectsWithBaseConfig:(CEProgramConfig *)baseConfig {
     CEScene *scene = [CEScene currentScene];
-    CEProgramConfig *baseConfig = [CEProgramConfig new];
-    baseConfig.lightCount = scene.allLights.count;
-    for (CELight *light in scene.allLights) {
-        if (light.enableShadow) {
-            baseConfig.shadowMappingCount += 1;
-        }
-    }
-    
     // calcualte all visiable model without empty groups
     NSMutableSet *allModels = [NSMutableSet set];
     for (CEModel *model in scene.allModels) {
         [self recursiveAddVisiableModel:model toSet:allModels];
     }
+    // check shadowmap config
+    CEProgramConfig *baseConfig = [CEProgramConfig new];
+    baseConfig.lightCount = scene.allLights.count;
+    BOOL enableModelShadow = NO;
+    for (CEModel *model in allModels) {
+        if (model.castShadows) {
+            enableModelShadow = YES;
+            break;
+        }
+    }
+    if (enableModelShadow) {
+        for (CELight *light in scene.allLights) {
+            if (light.enableShadow) {
+                baseConfig.shadowMappingCount += 1;
+            }
+        }
+    }
+    
     // sort models by different config
     NSMutableDictionary *configModelDict = [NSMutableDictionary dictionary];
     for (CEModel *model in allModels) {
@@ -124,10 +164,9 @@
         }
         [modelsForConfig addObject:model];
     }
-//    printf("calculateRenderObjects: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
     return [configModelDict copy];
 }
-
+//*/
 
 - (void)recursiveAddVisiableModel:(CEModel *)model toSet:(NSMutableSet *)models {
     for (CEModel *child in model.childObjects) {
@@ -255,20 +294,8 @@
 
 
 #pragma mark - Shadow Mapping
-- (void)renderShadowMapsForScene:(CEScene *)scene {
-    // check if need render shadow map
-    NSMutableSet *shadowLights = [NSMutableSet set];
-    NSMutableSet *shadowModels = [NSMutableSet set];
-    for (CELight *light in scene.allLights) {
-        if (light.enabled && light.enableShadow) {
-            [shadowLights addObject:light];
-        }
-    }
-    for (CEModel *model in scene.allModels) {
-        if (model.castShadows) {
-            [shadowModels addObject:model];
-        }
-    }
+
+- (void)renderShadowMapsWithShadowLights:(NSSet *)shadowLights shadowModels:(NSSet *)shadowModels {
     if (!shadowLights.count || !shadowModels.count) {
         // no need to render shadow maps
         return;
@@ -277,10 +304,10 @@
     // check shadow map renderer
     if (!_shadowMapRenderer) {
         _shadowMapRenderer = [[CEShadowMapRenderer alloc] init];
-        _shadowMapRenderer.context = scene.context;
+        _shadowMapRenderer.context = [CEScene currentScene].context;
         [_shadowMapRenderer setupRenderer];
     }
-    _shadowMapRenderer.camera = scene.camera;
+    _shadowMapRenderer.camera = [CEScene currentScene].camera;
     
     // render shadow maps
     for (CELight *light in shadowLights) {

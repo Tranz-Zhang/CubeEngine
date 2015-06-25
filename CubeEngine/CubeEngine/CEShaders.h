@@ -133,13 +133,20 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
      
      // apply shadow mapping
     \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
-     for (int i = 0; i < CE_SHADOW_MAPPING_COUNT; i++) {
-         float depthValue = texture2D(ShadowMapTextures[i], vec2(ShadowCoord.x/ShadowCoord.w, ShadowCoord.y/ShadowCoord.w)).z;
+     float scatteredLightFactor = 1.0;
+     float reflectedLightFactor = 1.0;
+     for (int i = 0; i < LightCount; i++) {
+         if (!Lights[i].IsEnabled || Lights[i].ShadowMapIndex < 0) {
+             continue;
+         }
+         float depthValue = texture2D(ShadowMapTextures[Lights[i].ShadowMapIndex], vec2(ShadowCoord.x/ShadowCoord.w, ShadowCoord.y/ShadowCoord.w)).z;
          if (depthValue != 1.0 && depthValue < (ShadowCoord.z / ShadowCoord.w) - 0.005) {
-             scatteredLight *= 0.5; // here decides how dark the shadow will be.
-             reflectedLight *= 0.5;
+             scatteredLightFactor -= 0.3;
+             reflectedLightFactor -= 0.3;
          }
      }
+     scatteredLight *= scatteredLightFactor; // here decides how dark the shadow will be.
+     reflectedLight *= reflectedLightFactor;
     \n#endif\n
      
      return min(inputColor * scatteredLight + reflectedLight, vec3(1.0));

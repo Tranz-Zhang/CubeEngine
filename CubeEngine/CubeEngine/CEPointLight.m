@@ -75,6 +75,10 @@
     }
 }
 
+- (void)setEnableShadow:(BOOL)enableShadow {
+    CEWarning(@"Spot light shadow is disabled right now");
+}
+
 - (void)updateUniformsWithCamera:(CECamera *)camera {
     if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
     

@@ -16,6 +16,7 @@
 @implementation CEMainRenderer {
     CEMainProgram *_program;
     CEProgramConfig *_config;
+    int _lastUsedTextureIndex;
 }
 
 
@@ -62,20 +63,6 @@
         // setup lighting uniforms !!!: must setup light before mvp matrix;
         for (CELight *light in _lights) {
             [light updateUniformsWithCamera:_camera];
-            
-            // shadowm mapping code
-//            if (light.enabled && light.enableShadow && light.shadowMapBuffer) {
-//                glBindTexture(GL_TEXTURE_2D, light.shadowMapBuffer.textureId);
-//                glUniform1i(_uniTexShadowMapTexture, 0);
-//                GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
-//                                                       0.0, 0.5, 0.0, 0.0,
-//                                                       0.0, 0.0, 0.5, 0.0,
-//                                                       0.5, 0.5, 0.5, 1.0);
-//                GLKMatrix4 depthMVP = GLKMatrix4Multiply(light.lightViewMatrix, model.transformMatrix);
-//                depthMVP = GLKMatrix4Multiply(light.lightProjectionMatrix, depthMVP);
-//                depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
-//                glUniformMatrix4fv(_uniMtx4DepthBiasMVP, 1, GL_FALSE, depthMVP.m);
-//            }
         }
         
         // we use eye space to do the calculation, so the eye direction is always (0, 0, 1)
@@ -118,6 +105,7 @@
     GLKMatrix4 modelViewProjectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
     [_program setModelViewProjectionMatrix:modelViewProjectionMatrix];
     
+    int textureIndex = 0; // total used textures
     if (_config.lightCount) {
         if (![_program setNormalAttribute:[model.vertexBuffer attributeWithName:CEVBOAttributeNormal]]) {
             CEError(@"Fail to set normal attribute");
@@ -129,7 +117,43 @@
         GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(modelViewMatrix);
         normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
         [_program setNormalMatrix:normalMatrix];
+        
+        // setup shadow mapping
+        int shadowMapTextureIndex = 0; // for shadowMap textures
+        for (CELight *light in _lights) {
+            if (light.enabled && light.enableShadow && light.shadowMapBuffer) {
+                if (shadowMapTextureIndex < _program.uniShadowMapIndexes.count) {
+                    // setup shadow map texture
+                    glActiveTexture(GL_TEXTURE0 + textureIndex);
+                    glBindTexture(GL_TEXTURE_2D, light.shadowMapBuffer.textureId);
+                    glUniform1i([_program.uniShadowMapIndexes[shadowMapTextureIndex] intValue], textureIndex);
+                    glUniform1i(light.uniformInfo.shadowMapIndex_i, shadowMapTextureIndex);
+                    shadowMapTextureIndex++;
+                    textureIndex ++;
+                    
+                } else {
+                    CEWarning(@"Reach max shadow map textures");
+                }
+                
+                GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
+                                                       0.0, 0.5, 0.0, 0.0,
+                                                       0.0, 0.0, 0.5, 0.0,
+                                                       0.5, 0.5, 0.5, 1.0);
+                GLKMatrix4 depthMVP = GLKMatrix4Multiply(light.lightViewMatrix, model.transformMatrix);
+                depthMVP = GLKMatrix4Multiply(light.lightProjectionMatrix, depthMVP);
+                depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
+                [_program setDepthBiasModelViewProjectionMatrix:depthMVP];
+                
+            } else {
+                // disable shadow map
+                glUniform1i(light.uniformInfo.shadowMapIndex_i, -1);
+            }
+        }
     }
+    
+    // TODO: add model texture and normal texture
+    
+    
     
     if (model.indicesBuffer) { // glDrawElements
         glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);
