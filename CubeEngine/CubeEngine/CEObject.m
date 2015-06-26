@@ -119,8 +119,12 @@
     [self recursiveSetHasChanged:YES];
 }
 
- ref:http://mmmovania.blogspot.com/2014/03/making-opengl-object-look-at-another.html
+// ref:http://mmmovania.blogspot.com/2014/03/making-opengl-object-look-at-another.html
 - (void)lookAt:(GLKVector3)targetPosition {
+//*
+    if (GLKVector3AllEqualToVector3(targetPosition, _position)) {
+        return;
+    }
     GLKVector3 v1 = _right;//(1, 0, 0);
     GLKVector3 v2 = GLKVector3Make(targetPosition.x - _position.x,
                                    targetPosition.y - _position.y,
@@ -141,8 +145,38 @@
     CEGetEulerAngles(rotation, &angleY, &angleZ, &angleX);
     // NOTE: the roll rotation is eliminated.
     [self setEulerAngles:GLKVector3Make(0, angleY, angleZ)];
+//*/
 }
 
+/*
+glm::quat RotationBetweenVectors(glm::vec3 start, glm::vec3 dest){
+    start = glm::normalize(start);
+    dest = glm::normalize(dest);
+    
+    float cosTheta = glm::dot(start, dest);
+    glm::vec3 rotationAxis;
+    
+    if (cosTheta < -1 + 0.001f){
+        rotationAxis = glm::cross(glm::vec3(0.0f, 0.0f, 1.0f), start);
+        if (glm::length(rotationAxis) < 0.01 )
+            rotationAxis = glm::cross(glm::vec3(1.0f, 0.0f, 0.0f), start);
+        rotationAxis = glm::normalize(rotationAxis);
+        return glm::angleAxis(180.0f, rotationAxis);
+    }
+    
+    rotationAxis = glm::cross(start, dest);
+    
+    float s = sqrt( (1+cosTheta)*2 );
+    float invs = 1 / s;
+    
+    return glm::quat(
+                     s * 0.5f,
+                     rotationAxis.x * invs,
+                     rotationAxis.y * invs,
+                     rotationAxis.z * invs
+                     ); 
+}
+//*/
 
 - (GLKMatrix4)transformMatrix {
     if (!self.hasChanged) {

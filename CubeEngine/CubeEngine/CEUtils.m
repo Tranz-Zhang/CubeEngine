@@ -35,15 +35,15 @@ void CEGetEulerAngles(GLKQuaternion q, float *y, float *z, float *x) {
     double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
     double test = q.x * q.y + q.z * q.w;
     if (test > 0.49999 * unit) { // singularity at north pole
-        *y = 2 * atan2(q.x,q.w);
-        *z = M_PI_2;
-        *x = 0;
+        *y = GLKMathRadiansToDegrees(2 * atan2(q.x,q.w));
+        *z = GLKMathRadiansToDegrees(M_PI_2);
+        *x = GLKMathRadiansToDegrees(0);
         return;
     }
     if (test < -0.49999 * unit) { // singularity at south pole
-        *y = -2 * atan2(q.x,q.w);
-        *z = -M_PI_2;
-        *x = 0;
+        *y = GLKMathRadiansToDegrees(2 * atan2(q.x,q.w));
+        *z = GLKMathRadiansToDegrees(-M_PI_2);
+        *x = GLKMathRadiansToDegrees(0);
         return;
     }
     double angleY = atan2(2 * q.y * q.w - 2 * q.x * q.z , sqx - sqy - sqz + sqw);
