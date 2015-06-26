@@ -66,7 +66,9 @@
         CEError(@"Invalid renderer environment");
         return;
     }
-    [_program beginEditing];
+    [_program beginRendering];
+    
+    lighting problem : one light response to multiple LightUniformInfos
     
     // setup model irrelevant properties
     if (_config.lightCount) {
@@ -79,19 +81,19 @@
         
         // shadow map setting
         if (_shadowLight) {
-            [_program setShadowDarkness:0.8];
+            [_program setShadowDarkness:1.0 - _shadowLight.shadowDarkness];
             [_program setShadowMapTexture:_shadowLight.shadowMapBuffer.textureId];
             
         } else if (_config.enableShadowMapping) {
-            [_program setShadowMapTexture:0];
-            [_program setShadowDarkness:1 - _shadowLight.shadowDarkness];
+            [_program setShadowMapTexture:0.0];
+            [_program setShadowDarkness:1.0];
         }
     }
     
     for (CEModel *model in objects) {
         [self renderModel:model];
     }
-    [_program endEditing];
+    [_program endRendering];
 }
 
 
@@ -151,7 +153,17 @@
     }
     
     // TODO: add model texture and normal texture
-    // ...
+    if (_config.enableTexture) {
+        CEVBOAttribute *textureCoordAttri = [model.vertexBuffer attributeWithName:CEVBOAttributeTextureCoord];
+        if (model.texture && textureCoordAttri) {
+            [_program setTextureCoordinateAttribute:textureCoordAttri];
+            [_program setTexture:model.texture.name];
+            
+        } else {
+            [_program setTextureCoordinateAttribute:nil];
+            [_program setTexture:0];
+        }
+    }
     
     if (model.indicesBuffer) { // glDrawElements
         glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);

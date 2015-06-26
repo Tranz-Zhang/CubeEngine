@@ -17,8 +17,7 @@ NSString *const kVertexShader = CE_SHADER_STRING
 
  // lighting
  \n#ifdef CE_ENABLE_LIGHTING\n
- 
- attribute highp vec3 VertexNormal;
+  attribute highp vec3 VertexNormal;
  uniform mat4 MVMatrix;
  uniform mat3 NormalMatrix;
  varying vec3 Normal;
@@ -31,6 +30,12 @@ NSString *const kVertexShader = CE_SHADER_STRING
  varying vec4 ShadowCoord;
  \n#endif\n
  
+ // texture
+ \n#ifdef CE_ENABLE_TEXTURE\n
+ attribute highp vec2 TextureCoord;
+ varying vec2 TextureCoordOut;
+ \n#endif\n
+ 
  void main () {
      // lighting
      \n#ifdef CE_ENABLE_LIGHTING\n
@@ -41,6 +46,11 @@ NSString *const kVertexShader = CE_SHADER_STRING
      // shadow mapping
      \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
      ShadowCoord = DepthBiasMVP * VertexPosition;
+     \n#endif\n
+     
+     // texture
+     \n#ifdef CE_ENABLE_TEXTURE\n
+     TextureCoordOut = TextureCoord;
      \n#endif\n
      
      gl_Position = MVPMatrix * VertexPosition;
@@ -146,12 +156,28 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
 \n#endif\n
  // end of lighting
  
+ 
+// texture
+\n#ifdef CE_ENABLE_TEXTURE\n
+ uniform lowp sampler2D TextureMap;
+ varying vec2 TextureCoordOut;
+\n#endif\n
+// end of texture
+ 
  void main() {
-     \n#ifdef CE_ENABLE_LIGHTING\n
-         vec3 lightingColor = ApplyLightingEffect(BaseColor.rgb);
-         gl_FragColor = vec4(lightingColor.rgb, BaseColor.a);
+     vec4 inputColor;
+     
+     \n#ifdef CE_ENABLE_TEXTURE\n
+     inputColor = texture2D(TextureMap, TextureCoordOut);
      \n#else\n
-         gl_FragColor = BaseColor;
+     inputColor = BaseColor;
+     \n#endif\n
+     
+     \n#ifdef CE_ENABLE_LIGHTING\n
+         vec3 lightingColor = ApplyLightingEffect(inputColor.rgb);
+         gl_FragColor = vec4(lightingColor.rgb, inputColor.a);
+     \n#else\n
+         gl_FragColor = inputColor;
      \n#endif\n
  }
 );

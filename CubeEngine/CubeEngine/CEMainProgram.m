@@ -11,8 +11,10 @@
 
 @implementation CEMainProgram {
     BOOL _hasEnabledPosition;
+    BOOL _hasEnableTexture;
     BOOL _hasEnabledNormal;
-    BOOL _textureCount;
+    
+    int _textureCount;
 }
 
 
@@ -34,6 +36,9 @@
     if (config.enableShadowMapping > 0) {
         [vertexShaderString insertString:@"#define CE_ENABLE_SHADOW_MAPPING\n" atIndex:0];
     }
+    if (config.enableTexture) {
+        [vertexShaderString insertString:@"#define CE_ENABLE_TEXTURE\n" atIndex:0];
+    }
     return [vertexShaderString copy];
 }
 
@@ -50,7 +55,9 @@
     if (config.enableShadowMapping) {
         [fragmentShaderString insertString:@"#define CE_ENABLE_SHADOW_MAPPING\n" atIndex:0];
     }
-    
+    if (config.enableTexture) {
+        [fragmentShaderString insertString:@"#define CE_ENABLE_TEXTURE\n" atIndex:0];
+    }
     return [fragmentShaderString copy];
 }
 
@@ -91,6 +98,9 @@
     if (_config.lightCount > 0) {
         [self addAttribute:@"VertexNormal"];
     }
+    if (_config.enableTexture) {
+        [self addAttribute:@"TextureCoord"];
+    }
     
     BOOL isOK = [self link];
     if (isOK) {
@@ -104,6 +114,9 @@
         }
         if (_config.enableShadowMapping) {
             [self initializeShadowMapUniforms];
+        }
+        if (_config.enableTexture) {
+            [self initializeTextureUniforms];
         }
         
     } else {
@@ -119,13 +132,13 @@
 }
 
 
-- (void)beginEditing {
+- (void)beginRendering {
     [self use];
     _isEditing = YES;
     _textureCount = 0;
 }
 
-- (void)endEditing {
+- (void)endRendering {
     _isEditing = NO;
     _textureCount = 0;
 }
@@ -188,16 +201,26 @@
 }
 
 
-
+- (void)initializeTextureUniforms {
+    _attriVec2TextureCoord  = [self attributeIndex:@"TextureCoord"];
+    _uniTexTextureMap       = [self uniformIndex:@"TextureMap"];
+}
 
 
 #pragma mark - uniform setters
 - (BOOL)setPositionAttribute:(CEVBOAttribute *)attribute {
     if (!_isEditing ||
-        _attribVec4Position < 0 ||
-        attribute.name != CEVBOAttributePosition ||
-        attribute.primaryCount <= 0 ||
-        attribute.elementStride <= 0) {
+        _attribVec4Position < 0) {
+        CEWarning(@"Fail to setup position attribute");
+        return NO;
+    }
+    if (!attribute) {
+        glDisableVertexAttribArray(_attribVec4Position);
+        _hasEnabledPosition = NO;
+        
+    } else if (attribute.name != CEVBOAttributePosition ||
+               attribute.primaryCount <= 0 ||
+               attribute.elementStride <= 0) {
         CEWarning(@"Fail to setup position attribute");
         return NO;
     }
@@ -235,13 +258,20 @@
 }
 
 
-// lighting
+#pragma mark - lighting
 - (BOOL)setNormalAttribute:(CEVBOAttribute *)attribute {
     if (!_isEditing ||
-        _attribVec3Normal < 0 ||
-        attribute.name != CEVBOAttributeNormal ||
-        attribute.primaryCount <= 0 ||
-        attribute.elementStride <= 0) {
+        _attribVec3Normal < 0) {
+        CEWarning(@"Fail to setup normal attribute");
+        return NO;
+    }
+    if (!attribute) {
+        glDisableVertexAttribArray(_attribVec3Normal);
+        _hasEnabledNormal = NO;
+        
+    } else if (attribute.name != CEVBOAttributeNormal ||
+               attribute.primaryCount <= 0 ||
+               attribute.elementStride <= 0) {
         CEWarning(@"Fail to setup normal attribute");
         return NO;
     }
@@ -288,7 +318,52 @@
 }
 
 
-// shadow map
+#pragma mark - texture
+- (BOOL)setTextureCoordinateAttribute:(CEVBOAttribute *)attribute {
+    if (!_isEditing ||
+        _attriVec2TextureCoord < 0) {
+        CEWarning(@"Fail to setup texture attribute");
+        return NO;
+    }
+    if (!attribute) {
+        glDisableVertexAttribArray(_attriVec2TextureCoord);
+        _hasEnableTexture = NO;
+        
+    } else if (attribute.name != CEVBOAttributeTextureCoord ||
+               attribute.primaryCount <= 0 ||
+               attribute.elementStride <= 0) {
+        CEWarning(@"Fail to setup texture attribute");
+        return NO;
+    }
+    
+    if (!_hasEnableTexture) {
+        glEnableVertexAttribArray(_attriVec2TextureCoord);
+        _hasEnableTexture = YES;
+    }
+    //    ... setup attribute here
+    glVertexAttribPointer(_attriVec2TextureCoord,
+                          attribute.primaryCount,
+                          attribute.primaryType,
+                          GL_FALSE,
+                          attribute.elementStride,
+                          CE_BUFFER_OFFSET(attribute.elementOffset));
+    return YES;
+}
+
+- (BOOL)setTexture:(GLuint)textureId {
+    if (!_isEditing || _uniTexTextureMap < 0) {
+        return NO;
+    }
+    glActiveTexture(GL_TEXTURE0 + _textureCount);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glUniform1i(_uniTexTextureMap, _textureCount);
+    _textureCount++;
+    
+    return YES;
+}
+
+
+#pragma mark - shadow map
 - (BOOL)setDepthBiasModelViewProjectionMatrix:(GLKMatrix4)depthBiasMVPMatrix4 {
     if (!_isEditing || _uniMtx4DepthBiasMVP < 0) {
         return NO;

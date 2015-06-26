@@ -55,22 +55,21 @@
     [self.view addSubview:_segmentViewControl];
     
     self.scene.backgroundColor = [UIColor whiteColor];
-//    self.scene.camera.projectionType = CEProjectionOrthographic;
     self.scene.camera.position = GLKVector3Make(0, 30, 30);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
-    CEModel *templateModel = [CEModel modelWithObjFile:@"cube_triangle"];
-    templateModel.scale = GLKVector3Make(0.1, 0.1, 0.1);
-    templateModel.castShadows = YES;
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j ++) {
-            CEModel *cube = [templateModel duplicate];
-            cube.position = GLKVector3Make(- 10 + i * 2, -3, - 10 + j * 2);
+//    CEModel *templateModel = [CEModel modelWithObjFile:@"cube_triangle"];
+//    templateModel.scale = GLKVector3Make(0.1, 0.1, 0.1);
+//    templateModel.castShadows = YES;
+//    for (int i = 0; i < 10; i++) {
+//        for (int j = 0; j < 10; j ++) {
+//            CEModel *cube = [templateModel duplicate];
+//            cube.position = GLKVector3Make(- 10 + i * 2, -3, - 10 + j * 2);
 //            [self.scene addModel:cube];
-        }
-    }
+//        }
+//    }
     
-    _teapotModel = [CEModel modelWithObjFile:@"teapot_smooth"];
+    _teapotModel = [CEModel modelWithObjFile:@"teapot_bump"];
     _teapotModel.showAccessoryLine = YES;
     _teapotModel.castShadows = YES;
     _teapotModel.baseColor = [UIColor orangeColor];
@@ -103,8 +102,8 @@
     _objectOperator.operationObject = _teapotModel;
     
     // update light switches
-    _directionalLight.enabled = YES;
-    _pointLight.enabled = NO;
+    _directionalLight.enabled = NO;
+    _pointLight.enabled = YES;
     _spotLight.enabled = NO;
     _directionalLightSwitch.on = _directionalLight.isEnabled;
     _pointLightSwitch.on = _pointLight.isEnabled;

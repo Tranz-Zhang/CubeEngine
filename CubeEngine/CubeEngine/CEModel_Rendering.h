@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
+#import <GLKit/GLKit.h>
 #import "CEModel.h"
 #import "CEVertexBuffer.h"
 #import "CEIndicesBuffer.h"
@@ -16,6 +17,10 @@
 @property (nonatomic, readonly) CEIndicesBuffer *indicesBuffer;
 @property (nonatomic, readonly) CEIndicesBuffer *wireframeBuffer;
 @property (nonatomic, readonly) GLKVector4 vec3BaseColor;
+
+// textures
+@property (nonatomic, strong) GLKTextureInfo *texture;
+
 
 // initialization
 - (instancetype)initWithVertexBuffer:(CEVertexBuffer *)vertexBuffer

@@ -28,7 +28,7 @@
         return;
     }
     
-    [_program beginEditing];
+    [_program beginRendering];
     for (CEModel *model in objects) {
         // setup vertex buffer
         if (![model.vertexBuffer setupBuffer] ||
@@ -53,7 +53,7 @@
             glDrawArrays(GL_TRIANGLES, 0, model.vertexBuffer.vertexCount);
         }
     }
-    [_program endEditing];
+    [_program endRendering];
 }
 
 

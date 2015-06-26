@@ -10,7 +10,6 @@
 #import "CEScene_Rendering.h"
 
 @interface CEScene () {
-    
     NSSet *_models;
     NSSet *_lights;
 }
@@ -64,6 +63,7 @@ static CEScene *sCurrentScene;
 - (NSSet *)allModels {
     return _models;
 }
+
 
 - (NSSet *)allLights {
     return _lights;

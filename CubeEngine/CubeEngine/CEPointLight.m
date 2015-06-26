@@ -80,7 +80,7 @@
 }
 
 - (void)updateUniformsWithCamera:(CECamera *)camera {
-    if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
+//    if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
     
     glUniform1i(_uniformInfo.lightType_i, CEPointLightType);
     glUniform1f(_uniformInfo.isEnabled_b, _enabled ? 1.0 : 0.0);
@@ -93,6 +93,9 @@
     GLKVector4 lightPosition = GLKMatrix4MultiplyVector4([self transformMatrix], GLKVector4Make(0, 0, 0, 1));
     lightPosition = GLKMatrix4MultiplyVector4(camera.viewMatrix, lightPosition);
     glUniform4fv(_uniformInfo.lightPosition_vec4, 1, lightPosition.v);
+    
+    [self transformMatrix];
+    return;
     
     _hasLightChanged = NO;
     if (self.hasChanged) {

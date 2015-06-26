@@ -46,9 +46,14 @@
     _vertices = [NSMutableArray array];
     _textureCoordinates = [NSMutableArray array];
     _normals = [NSMutableArray array];
-    CEObjMeshInfo *currentGroup = nil;
     NSArray *lines = [objContent componentsSeparatedByString:@"\n"];
     int vertextCount = 0;
+    
+    CEObjMeshInfo *currentGroup = [CEObjMeshInfo new];
+    currentGroup.groupNames = @[@"DefaultGroup"];
+    currentGroup.meshData = [NSMutableData data];
+    [groups addObject:currentGroup];
+    
     for (NSString *lineContent in lines) {
         // parse vertex "v 2.963007 0.335381 -0.052237"
         if ([lineContent hasPrefix:@"v "]) {
@@ -90,13 +95,6 @@
         if ([lineContent hasPrefix:@"f "]) {
             NSString *content = [lineContent substringFromIndex:2];
             NSArray *attributeIndies = [content componentsSeparatedByString:@" "];
-            if (!currentGroup) {
-                CEObjMeshInfo *newGroup = [CEObjMeshInfo new];
-                newGroup.groupNames = @[@"DefaultGroup"];
-                newGroup.meshData = [NSMutableData data];
-                [groups addObject:newGroup];
-                currentGroup = newGroup;
-            }
             if (!currentGroup.attributes) {
                 currentGroup.attributes = [self vertexAttributesWithFaceAttributes:attributeIndies[0]];
             }

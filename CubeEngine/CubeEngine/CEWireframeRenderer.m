@@ -42,7 +42,7 @@
     if (!_program.initialized) {
         return;
     }
-    [_program beginEditing];
+    [_program beginRendering];
     for (CEModel *model in objects) {
         if (!model.showWireframe || !model.wireframeBuffer) {
             continue;
@@ -64,7 +64,7 @@
         [_program setBaseColor:_lineColorVec4];
         glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);
     }
-    [_program endEditing];
+    [_program endRendering];
 }
 
  

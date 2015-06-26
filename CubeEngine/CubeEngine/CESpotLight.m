@@ -140,7 +140,7 @@
 
 
 - (void)updateUniformsWithCamera:(CECamera *)camera {
-    if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
+//    if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
     
     glUniform1i(_uniformInfo.lightType_i, CESpotLightType);
     glUniform1f(_uniformInfo.isEnabled_b, _enabled ? 1.0 : 0.0);

@@ -25,6 +25,10 @@
     GLint _uniVec3EyeDirection;
     NSArray *_uniLightInfos;
     
+    // texture
+    GLint _attriVec2TextureCoord;
+    GLint _uniTexTextureMap;
+    
     // shadow map
     GLint _uniFloatShadowDarkness;
     GLint _uniMtx4DepthBiasMVP;
@@ -37,8 +41,8 @@
 
 + (instancetype)programWithConfig:(CEProgramConfig *)config;
 
-- (void)beginEditing;
-- (void)endEditing;
+- (void)beginRendering;
+- (void)endRendering;
 
 
 // basic
@@ -46,20 +50,25 @@
 - (BOOL)setModelViewProjectionMatrix:(GLKMatrix4)mvpMatrix4;
 - (BOOL)setBaseColor:(GLKVector4)colorVec4;
 
-
 // lighting
 - (BOOL)setNormalAttribute:(CEVBOAttribute *)attribute;
 - (BOOL)setModelViewMatrix:(GLKMatrix4)mvMatrix4;
 - (BOOL)setNormalMatrix:(GLKMatrix3)normalMatrix3;
 - (BOOL)setEyeDirection:(GLKVector3)eyeDirectionVec3;
 
+// texture
+- (BOOL)setTextureCoordinateAttribute:(CEVBOAttribute *)attribute;
+- (BOOL)setTexture:(GLuint)textureId;
 
 // shadow map
 - (BOOL)setDepthBiasModelViewProjectionMatrix:(GLKMatrix4)depthBiasMVPMatrix4;
 - (BOOL)setShadowDarkness:(GLfloat)shadowDarkness;
 - (BOOL)setShadowMapTexture:(GLuint)shadowMapTextureId;
 
+
+
 @end
+
 
 
 

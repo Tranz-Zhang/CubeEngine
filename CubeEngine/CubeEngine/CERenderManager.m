@@ -98,6 +98,10 @@
         [modelsForConfig addObject:model];
     }
     
+    // 4. load texture for models
+    [self loadTextureForModels:allModels];
+    
+    // 5. render models
     glBindFramebuffer(GL_FRAMEBUFFER, scene.renderCore.defaultFramebuffer);
     glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -110,7 +114,7 @@
         [render renderObjects:models];
     }];
     
-    // 4. render debug info
+    // 6. render debug info
     if (scene.enableDebug) {
         [self renderDebugSceneWithObjects:allModels];
     }
@@ -183,6 +187,23 @@
     return render;
 }
 
+
+- (void)loadTextureForModels:(NSSet *)models {
+    for (CEModel *model in models) {
+        if (model.material.textureMap && !model.texture) {
+            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+            NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:model.material.textureMap];
+            NSError *error;
+            model.texture = [GLKTextureLoader textureWithContentsOfFile:path options:nil error:&error];
+            if (error) {
+                CEWarning(@"Fail to load texture: %@", error);
+                
+            } else {
+                CEPrintf("load texture OK duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+            }
+        }
+    }
+}
 
 
 #pragma mark - Test Renderer

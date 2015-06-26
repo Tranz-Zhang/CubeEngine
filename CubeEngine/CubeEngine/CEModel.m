@@ -21,8 +21,7 @@
 }
 
 - (instancetype)initWithVertexBuffer:(CEVertexBuffer *)vertexBuffer
-                       indicesBuffer:(CEIndicesBuffer *)indicesBuffer
-{
+                       indicesBuffer:(CEIndicesBuffer *)indicesBuffer {
     self = [super init];
     if (self) {
         _vertexBuffer = vertexBuffer;
@@ -31,6 +30,15 @@
         [self setBaseColor:[UIColor whiteColor]];
     }
     return self;
+}
+
+
+- (void)dealloc {
+    if (_texture) {
+        GLuint name = _texture.name;
+        glDeleteTextures(1, &name);
+        _texture = nil;
+    }
 }
 
 

@@ -47,6 +47,14 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
     GLuint _worldOriginVertexBufferIndex;
 }
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [self setupRenderer];
+    }
+    return self;
+}
+
 
 - (void)dealloc {
     if (_indicesBufferIndex) {
