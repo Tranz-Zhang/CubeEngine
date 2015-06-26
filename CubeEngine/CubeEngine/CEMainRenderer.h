@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CERenderer.h"
+#import <Foundation/Foundation.h>
 #import "CECamera.h"
 #import "CEProgramConfig.h"
 #import "CEShadowLight.h"

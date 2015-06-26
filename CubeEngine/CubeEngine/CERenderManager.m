@@ -14,11 +14,8 @@
 #import "CEShadowLight_Rendering.h"
 
 // renderer
-#import "CEBaseRenderer.h"
-#import "CEShadowRenderer.h"
+#import "CEMainRenderer.h"
 #import "CEShadowMapRenderer.h"
-#import "CERenderer_V.h"
-#import "CERenderer_V_VN.h"
 
 // debug renderer
 #import "CEWireframeRenderer.h"
@@ -27,20 +24,13 @@
 
 // test
 #import "CEMainProgram.h"
-#import "CEMainRenderer.h"
 
 
 @implementation CERenderManager {
     EAGLContext *_context;
-    CEBaseRenderer *_defaultRenderer;
-    CEShadowMapRenderer *_shadowMapRenderer;
-    
-    CEShadowRenderer *_testShadowMapRenderer;
-    CEBaseRenderer *_testBaseRenderer;
-    CETextureRenderer *_testTextureRenderer;
-    CEMainRenderer *_mainRenderer;
-    
     NSMutableDictionary *_rendererDict; // @{CEProgramConfig:CEMainRenderer}
+    CEMainRenderer *_mainRenderer;
+    CEShadowMapRenderer *_shadowMapRenderer;
     
     // debug renderer
     CEWireframeRenderer *_wireframeRenderer;
@@ -65,13 +55,13 @@
     CEScene *scene = [CEScene currentScene];
     [EAGLContext setCurrentContext:scene.context];
     
-    // get all visiable objects(without empty group)
+    // 1. get all visiable objects(without empty group)
     NSMutableSet *allModels = [NSMutableSet set];
     for (CEModel *model in scene.allModels) {
         [self recursiveAddVisiableModel:model toSet:allModels];
     }
     
-    // check if need render shadow map
+    // 2. check if need render shadow map
     CEShadowLight *shadowLight = nil;
     NSMutableSet *shadowModels = [NSMutableSet set];
     for (CELight *light in scene.allLights) {
@@ -87,18 +77,14 @@
             [shadowModels addObject:model];
         }
     }
-    // try render shadow mapp if needed
-    if (shadowLight && shadowModels.count) {
-        
-        [self renderShadowMapsWithShadowLight:shadowLight
-                                 shadowModels:shadowModels];
-        
+    if (shadowLight && shadowModels.count) { // try render shadow mapp if needed
+        [self renderShadowMapsWithShadowLight:shadowLight shadowModels:shadowModels];
     }
     
-    // sort render objects
+    // 3 .sort render objects
     CEProgramConfig *baseConfig = [CEProgramConfig new];
-    baseConfig.enableShadowMapping = (shadowLight != nil);
-    baseConfig.lightCount = scene.allLights.count;
+    baseConfig.enableShadowMapping = (shadowLight && shadowModels.count);
+    baseConfig.lightCount = (int)scene.allLights.count;
     NSMutableDictionary *sortedRenderObjectDict = [NSMutableDictionary dictionary];
     for (CEModel *model in allModels) {
         CEProgramConfig *modelConfig = baseConfig.copy;
@@ -124,9 +110,9 @@
         [render renderObjects:models];
     }];
     
-    // render debug info
+    // 4. render debug info
     if (scene.enableDebug) {
-        [self renderDebugScene];
+        [self renderDebugSceneWithObjects:allModels];
     }
     printf("render duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
 }
@@ -201,7 +187,6 @@
 
 #pragma mark - Test Renderer
 
-
 - (void)testProgramGeneration {
     printf("testProgramGeneration... ");
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
@@ -220,87 +205,6 @@
 }
 
 
-
-- (CERenderer *)getRendererWithModel:(CEModel *)model {
-    CEScene *scene = [CEScene currentScene];
-    if (!_defaultRenderer) {
-        [EAGLContext setCurrentContext:_context];
-        _defaultRenderer = [CEBaseRenderer new];
-        _defaultRenderer.maxLightCount = scene.maxLightCount;
-        _defaultRenderer.context = scene.context;
-        [_defaultRenderer setupRenderer];
-    }
-    _defaultRenderer.camera = scene.camera;
-    _defaultRenderer.lights = scene.allLights;
-    
-    return _defaultRenderer;
-}
-
-
-- (CEBaseRenderer *)getTestBaseRenderer {
-    CEScene *scene = [CEScene currentScene];
-    if (!_testBaseRenderer) {
-        [EAGLContext setCurrentContext:_context];
-        _testBaseRenderer = [[CEBaseRenderer alloc] init];
-        _testBaseRenderer.context = scene.context;
-        [_testBaseRenderer setupRenderer];
-    }
-    _testBaseRenderer.lights = scene.allLights;
-    _testBaseRenderer.camera = scene.camera;
-    
-    return _testBaseRenderer;
-}
-
-
-- (CEShadowRenderer *)getTestShadowRenderer {
-    CEScene *scene = [CEScene currentScene];
-    if (!_testShadowMapRenderer) {
-        [EAGLContext setCurrentContext:_context];
-        _testShadowMapRenderer = [[CEShadowRenderer alloc] init];
-        _testShadowMapRenderer.context = scene.context;
-        [_testShadowMapRenderer setupRenderer];
-    }
-    
-    _testShadowMapRenderer.lights = scene.allLights;
-    _testShadowMapRenderer.camera = scene.camera;
-    
-    return _testShadowMapRenderer;
-}
-
-
-- (CETextureRenderer *)getTestTextureRenderer {
-    CEScene *scene = [CEScene currentScene];
-    if (!_testTextureRenderer) {
-        [EAGLContext setCurrentContext:_context];
-        _testTextureRenderer = [[CETextureRenderer alloc] init];
-        _testTextureRenderer.context = scene.context;
-        [_testTextureRenderer setupRenderer];
-    }
-    
-    _testTextureRenderer.lights = scene.allLights;
-    _testTextureRenderer.camera = scene.camera;
-    
-    return _testTextureRenderer;
-}
-
-
-- (CEMainRenderer *)testMainRenderer {
-    CEScene *scene = [CEScene currentScene];
-    if (!_mainRenderer) {
-        [EAGLContext setCurrentContext:_context];
-        CEProgramConfig *config = [CEProgramConfig new];
-        config.lightCount = 0;
-        config.enableShadowMapping = 0;
-        config.enableNormalMapping = NO;
-        config.enableTexture = NO;
-        _mainRenderer = [CEMainRenderer rendererWithConfig:config];
-    }
-    _mainRenderer.lights = scene.allLights;
-    _mainRenderer.camera = scene.camera;
-    return _mainRenderer;
-}
-
-
 #pragma mark - Shadow Mapping
 
 - (void)renderShadowMapsWithShadowLight:(CEShadowLight *)shadowLight shadowModels:(NSSet *)shadowModels {
@@ -312,28 +216,24 @@
     // check shadow map renderer
     if (!_shadowMapRenderer) {
         _shadowMapRenderer = [[CEShadowMapRenderer alloc] init];
-        _shadowMapRenderer.context = [CEScene currentScene].context;
-        [_shadowMapRenderer setupRenderer];
     }
-    _shadowMapRenderer.camera = [CEScene currentScene].camera;
     
     // render shadow maps
     [shadowLight.shadowMapBuffer setupBuffer];
     [shadowLight.shadowMapBuffer prepareBuffer];
     [shadowLight updateLightVPMatrixWithModels:shadowModels];
     _shadowMapRenderer.lightVPMatrix = GLKMatrix4Multiply(shadowLight.lightProjectionMatrix, shadowLight.lightViewMatrix);
-    [_shadowMapRenderer renderObjects:shadowModels];
+    [_shadowMapRenderer renderShadowMapWithObjects:shadowModels];
 }
 
 
 
 #pragma mark - Debug renderer
-- (void)renderDebugScene {
-    CEScene *scene = [CEScene currentScene];
+- (void)renderDebugSceneWithObjects:(NSSet *)objects {
     // render wireframe add assist info
-    [[self wireframeRenderer] renderObjects:scene.allModels];
-    [[self assistRender] renderObjects:scene.allModels];
-    [[self assistRender] renderLights:scene.allLights];
+    [[self wireframeRenderer] renderWireframeForObjects:objects];
+    [[self assistRender] renderBoundsForObjects:objects];
+    [[self assistRender] renderLights:[CEScene currentScene].allLights];
     [[self assistRender] renderWorldOriginCoordinate];
 }
 
@@ -342,8 +242,6 @@
     if (!_wireframeRenderer) {
         _wireframeRenderer = [CEWireframeRenderer new];
         _wireframeRenderer.lineWidth = 1.0f;
-        _wireframeRenderer.context = [CEScene currentScene].context;
-        [_wireframeRenderer setupRenderer];
     }
     _wireframeRenderer.camera = [CEScene currentScene].camera;
     return _wireframeRenderer;
@@ -353,8 +251,6 @@
 - (CEAssistRenderer *)assistRender {
     if (!_assistRenderer) {
         _assistRenderer = [CEAssistRenderer new];
-        _assistRenderer.context = [CEScene currentScene].context;
-        [_assistRenderer setupRenderer];
     }
     _assistRenderer.camera = [CEScene currentScene].camera;
     return _assistRenderer;

@@ -11,6 +11,15 @@
 
 @implementation CEShadowLight
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _shadowDarkness = 0.5;
+    }
+    return self;
+}
+
 - (void)setEnableShadow:(BOOL)enableShadow {
     if (_enableShadow != enableShadow) {
         _enableShadow = enableShadow;
@@ -23,6 +32,10 @@
     }
 }
 
+
+- (void)setShadowDarkness:(float)shadowDarkness {
+    _shadowDarkness = MIN(MAX(shadowDarkness, 0.0), 1.0);
+}
 
 
 @end

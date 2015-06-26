@@ -84,7 +84,7 @@
             
         } else if (_config.enableShadowMapping) {
             [_program setShadowMapTexture:0];
-            [_program setShadowDarkness:1.0];
+            [_program setShadowDarkness:1 - _shadowLight.shadowDarkness];
         }
     }
     
@@ -151,7 +151,7 @@
     }
     
     // TODO: add model texture and normal texture
-    
+    // ...
     
     if (model.indicesBuffer) { // glDrawElements
         glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);

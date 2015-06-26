@@ -78,21 +78,14 @@
     
     _floorModel = [CEModel modelWithObjFile:@"floor"];
     _floorModel.baseColor = [UIColor lightGrayColor];
-//    _floorModel.castShadows = YES;
-//    [self.scene addModel:_floorModel];
-    
-//    _directionalLight = [[CEDirectionalLight alloc] init];
-//    _directionalLight.position = GLKVector3Make(0, -8, 0);
-//    _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
-//    [_directionalLight lookAt:GLKVector3Make(0, 1, 0)];
-//    _directionalLight.enableShadow = YES;
-//    [self.scene addLight:_directionalLight];
+    _floorModel.castShadows = YES;
+    [self.scene addModel:_floorModel];
     
     _directionalLight = [[CEDirectionalLight alloc] init];
     _directionalLight.position = GLKVector3Make(8, 8, 8);
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [_directionalLight lookAt:GLKVector3Make(0, 0, 0)];
-//    _directionalLight.enableShadow = YES;
+    _directionalLight.enableShadow = YES;
     [self.scene addLight:_directionalLight];
     
     _pointLight = [CEPointLight new];
@@ -133,6 +126,7 @@
     _pointLight.position = GLKVector3Make(-8, 15, 0);
 }
 
+
 - (IBAction)onObjectSegmentChanged:(UISegmentedControl *)segment {
     switch (segment.selectedSegmentIndex) {
         case 0:
@@ -155,6 +149,7 @@
     }
 }
 
+
 - (IBAction)onDirectionalLightSwitch:(UISwitch *)switcher {
     _directionalLight.enabled = switcher.on;
 }
@@ -169,32 +164,32 @@
 
 
 - (IBAction)onLookAt:(id)sender {
-//    [_directionalLight lookAt:_teapotModel.position];
-    static int lookAtCount = 0;
-    switch (lookAtCount % 6) {
-        case 0:
-            [_directionalLight lookAt:GLKVector3Make(8, 18, 8)];
-            break;
-        case 1:
-            [_directionalLight lookAt:GLKVector3Make(8, -8, 8)];
-             break;
-        case 2:
-            [_directionalLight lookAt:GLKVector3Make(18, 8, 8)];
-            break;
-        case 3:
-            [_directionalLight lookAt:GLKVector3Make(-8, 8, 8)];
-            break;
-        case 4:
-            [_directionalLight lookAt:GLKVector3Make(8, 8, 18)];
-            break;
-        case 5:
-            [_directionalLight lookAt:GLKVector3Make(8, 8, -8)];
-            break;
-            
-        default:
-            break;
-    }
-    lookAtCount++;
+    [_directionalLight lookAt:_teapotModel.position];
+//    static int lookAtCount = 0;
+//    switch (lookAtCount % 6) {
+//        case 0:
+//            [_directionalLight lookAt:GLKVector3Make(8, 18, 8)];
+//            break;
+//        case 1:
+//            [_directionalLight lookAt:GLKVector3Make(8, -8, 8)];
+//             break;
+//        case 2:
+//            [_directionalLight lookAt:GLKVector3Make(18, 8, 8)];
+//            break;
+//        case 3:
+//            [_directionalLight lookAt:GLKVector3Make(-8, 8, 8)];
+//            break;
+//        case 4:
+//            [_directionalLight lookAt:GLKVector3Make(8, 8, 18)];
+//            break;
+//        case 5:
+//            [_directionalLight lookAt:GLKVector3Make(8, 8, -8)];
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//    lookAtCount++;
 }
 
 

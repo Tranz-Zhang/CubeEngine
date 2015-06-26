@@ -14,6 +14,11 @@
     GLKMatrix4 _lightProjectionMatrix;
 }
 
-@property (nonatomic, assign) BOOL enableShadow; // indicates if this light cast shadow on objects
+// indicates if this light cast shadow on objects
+@property (nonatomic, assign) BOOL enableShadow;
+
+// range:[0.0f - 1.0f], indicates how dark the shadow will be. default is 0.5
+@property (nonatomic, assign) float shadowDarkness;
+
 
 @end

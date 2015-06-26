@@ -46,6 +46,7 @@
 
 - (BOOL)setupBuffer {
     if (_ready) {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indicesBufferIndex);
         return YES;
     }
     if (!_indicesBufferData.length || !_indicesCount || !_dataSize) {

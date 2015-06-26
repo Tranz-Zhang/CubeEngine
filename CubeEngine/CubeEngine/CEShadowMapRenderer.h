@@ -6,10 +6,12 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CERenderer.h"
+#import <Foundation/Foundation.h>
 
-@interface CEShadowMapRenderer : CERenderer
+@interface CEShadowMapRenderer : NSObject
 
 @property (nonatomic, assign) GLKMatrix4 lightVPMatrix;
+
+- (void)renderShadowMapWithObjects:(NSSet *)objects;
 
 @end

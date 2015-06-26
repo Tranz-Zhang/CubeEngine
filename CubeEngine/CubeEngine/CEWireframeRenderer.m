@@ -7,46 +7,26 @@
 //
 
 #import "CEWireframeRenderer.h"
-#import "CEProgram.h"
+#import "CEMainProgram.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
 
-NSString *const kWireframeVertexShader = CE_SHADER_STRING
-(
- attribute highp vec4 position;
- uniform mat4 projection;
- 
- void main () {
-     gl_Position = projection * position;
- }
- );
-
-NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
-(
- uniform lowp vec4 drawColor;
- void main() {
-     gl_FragColor = drawColor;
- }
-);
-
-
 @implementation CEWireframeRenderer {
-    CEProgram *_program;
-    GLint _attributePosition;
-    GLint _uniformProjection;
-    GLint _uniformDrawColor;
+    CEMainProgram *_program;
     GLKVector4 _lineColorVec4;
 }
 
-- (instancetype)init
-{
+
+- (instancetype)init {
     self = [super init];
     if (self) {
+        _program = [CEMainProgram programWithConfig:[CEProgramConfig new]];
         _lineWidth = 2.0f;
         [self setLineColor:[UIColor colorWithWhite:0.2 alpha:1.0f]];
     }
     return self;
 }
+
 
 - (void)setLineColor:(UIColor *)lineColor {
     if (_lineColor != lineColor) {
@@ -57,79 +37,37 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
     }
 }
 
-- (BOOL)setupRenderer {
-    if (_program.initialized) return YES;
-    
-    _program = [[CEProgram alloc] initWithVertexShaderString:kWireframeVertexShader
-                                        fragmentShaderString:kWireframeFragmentSahder];
-    [_program addAttribute:@"position"];
-    BOOL isOK = [_program link];
-    if (isOK) {
-        _attributePosition = [_program attributeIndex:@"position"];
-        _uniformProjection = [_program uniformIndex:@"projection"];
-        _uniformDrawColor = [_program uniformIndex:@"drawColor"];
-        
-    } else {
-        // print error info
-        NSString *progLog = [_program programLog];
-        CEError(@"Program link log: %@", progLog);
-        NSString *fragLog = [_program fragmentShaderLog];
-        CEError(@"Fragment shader compile log: %@", fragLog);
-        NSString *vertLog = [_program vertexShaderLog];
-        CEError(@"Vertex shader compile log: %@", vertLog);
-        _program = nil;
-        NSAssert(0, @"Fail to Compile Program");
-    }
-    
-    return isOK;
-}
 
-
-- (void)renderObjects:(NSSet *)objects {
+- (void)renderWireframeForObjects:(NSSet *)objects {
     if (!_program.initialized) {
         return;
     }
-    [_program use];
-    
+    [_program beginEditing];
     for (CEModel *model in objects) {
-        [self recursiveRenderModel:model];
+        if (!model.showWireframe || !model.wireframeBuffer) {
+            continue;
+        }
+        // setup vertex buffer
+        if (![model.wireframeBuffer setupBuffer] ||
+            ![model.vertexBuffer setupBuffer]) {
+            continue;
+        }
+        // prepare attribute for rendering
+        CEVBOAttribute *positionAttri = [model.vertexBuffer attributeWithName:CEVBOAttributePosition];
+        if (![_program setPositionAttribute:positionAttri]){
+            continue;
+        }
+        glLineWidth(_lineWidth);
+        GLKMatrix4 mvpMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
+        mvpMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, mvpMatrix);
+        [_program setModelViewProjectionMatrix:mvpMatrix];
+        [_program setBaseColor:_lineColorVec4];
+        glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);
     }
+    [_program endEditing];
 }
 
-
-- (void)recursiveRenderModel:(CEModel *)model {
-    if (model.vertexBuffer) {
-        [self renderModel:model];
-    }
-    for (CEModel *child in model.childObjects) {
-        [self recursiveRenderModel:child];
-    }
-}
-
-
-- (void)renderModel:(CEModel *)model {
-    if (!model.showWireframe || !model.wireframeBuffer) {
-        return;
-    }
-    // setup vertex buffer
-    if (![model.wireframeBuffer setupBuffer] ||
-        ![model.vertexBuffer setupBuffer]) {
-        return;
-    }
-    // prepare attribute for rendering
-    if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attributePosition] ||
-        ![model.wireframeBuffer bindBuffer]){
-        return;
-    }
-//    [_program use];
-    glLineWidth(_lineWidth);
-    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
-    projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, projectionMatrix);
-    glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
-    glUniform4f(_uniformDrawColor, _lineColorVec4.r, _lineColorVec4.g, _lineColorVec4.b, _lineColorVec4.a);
-    glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);
-}
-
+ 
 
 
 

@@ -90,7 +90,7 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
 
 // data struct: position[3] color[4]
 
-- (void)renderObjects:(NSSet *)objects {
+- (void)renderBoundsForObjects:(NSSet *)objects {
     if (!_program.initialized) {
         return;
     }
@@ -98,14 +98,7 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
     [_program use];
     glLineWidth(1.0);
     for (CEModel *model in objects) {
-        [self recursiveRenderModel:model];
-    }
-}
-
-- (void)recursiveRenderModel:(CEModel *)model {
-    [self renderBoundsWithModel:model];
-    for (CEModel *child in model.childObjects) {
-        [self recursiveRenderModel:child];
+        [self renderBoundsWithModel:model];
     }
 }
 

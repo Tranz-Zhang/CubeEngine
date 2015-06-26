@@ -9,6 +9,7 @@
 #import "ModelViewController.h"
 #import "CEObjFileLoader.h"
 #import "ObjectOperator.h"
+#import "CEDirectionalLight.h"
 
 
 @implementation ModelViewController {
@@ -21,14 +22,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.scene.camera.position = GLKVector3Make(20, 20, 20);
+    self.scene.camera.position = GLKVector3Make(0, 20, 20);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     self.scene.camera.nearZ = 10;
     self.scene.camera.farZ = 50;
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     _testModel = [CEModel modelWithObjFile:@"test_scene"];
-    _testModel.showWireframe = NO;
+    _testModel.scale = GLKVector3Make(0.9, 0.9, 0.9);
+    _testModel.eulerAngles = GLKVector3Make(0, 15, 0);
+    _testModel.showWireframe = YES;
     _testModel.showAccessoryLine = YES;
     [self recursiveSetColorForModel:_testModel];
     
@@ -40,6 +43,13 @@
     
     _operator = [[ObjectOperator alloc] initWithBaseView:self.view];
     _operator.operationObject = _testModel;
+    
+    CEDirectionalLight *directionalLight = [[CEDirectionalLight alloc] init];
+    directionalLight.position = GLKVector3Make(8, 12, 8);
+    directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
+    [directionalLight lookAt:GLKVector3Make(0, 0, 0)];
+    directionalLight.enableShadow = YES;
+    [self.scene addLight:directionalLight];
 }
 
 
@@ -69,6 +79,7 @@
 #pragma mark - Others
 - (void)recursiveSetColorForModel:(CEModel *)model {
     model.baseColor = [self randomColor];
+    model.castShadows = YES;
     for (CEModel *child in model.childObjects) {
         [self recursiveSetColorForModel:child];
     }
@@ -76,9 +87,9 @@
 
 
 - (UIColor *)randomColor {
-    return [UIColor colorWithRed:arc4random() % 255 / 255.0
-                           green:arc4random() % 255 / 255.0
-                            blue:arc4random() % 255 / 255.0
+    return [UIColor colorWithRed:arc4random() % 127 / 255.0 + 0.5
+                           green:arc4random() % 127 / 255.0 + 0.5
+                            blue:arc4random() % 127 / 255.0 + 0.5
                            alpha:1.0];
 }
 

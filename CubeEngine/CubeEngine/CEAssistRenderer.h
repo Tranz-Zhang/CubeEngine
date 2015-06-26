@@ -6,13 +6,18 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CERenderer.h"
+#import <Foundation/Foundation.h>
 #import "CELight.h"
+#import "CECamera.h"
 
 /**
  Use to render accessory info of the model, like bounds, local coordinate indicator
  */
-@interface CEAssistRenderer : CERenderer
+@interface CEAssistRenderer : NSObject
+
+@property (nonatomic, weak) CECamera *camera;
+
+- (void)renderBoundsForObjects:(NSSet *)objects;
 
 - (void)renderLights:(NSSet *)lights;
 

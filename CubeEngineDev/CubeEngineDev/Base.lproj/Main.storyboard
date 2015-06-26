@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="R24-Ww-GUK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="LLu-Zq-wEI">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -137,7 +137,7 @@
                                 <rect key="frame" x="256" y="502" width="48" height="12"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ALW-MU-jgs">
@@ -161,7 +161,7 @@
                                 <rect key="frame" x="191" y="502" width="49" height="12"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MmN-71-IK1">
@@ -309,206 +309,6 @@
             </objects>
             <point key="canvasLocation" x="-3252" y="1471"/>
         </scene>
-        <!--Directional Light View Controller-->
-        <scene sceneID="O7K-Hm-Rdg">
-            <objects>
-                <viewController id="EeN-hv-xmw" customClass="DirectionalLightViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="EtF-zj-Jr9" customClass="CEView">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="gQu-cV-jjs">
-                                <rect key="frame" x="14" y="452" width="292" height="31"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <action selector="onRedSliderChanged:" destination="EeN-hv-xmw" eventType="valueChanged" id="OQS-x5-Kyo"/>
-                                </connections>
-                            </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="NtY-Eo-VyL">
-                                <rect key="frame" x="14" y="528" width="292" height="31"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <connections>
-                                    <action selector="onGreenSliderChanged:" destination="EeN-hv-xmw" eventType="valueChanged" id="f4z-30-vYz"/>
-                                </connections>
-                            </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="nwN-mF-A5h">
-                                <rect key="frame" x="14" y="490" width="292" height="31"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <color key="tintColor" red="0.28243491279999999" green="0.82700892859999997" blue="0.0026009810880000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <action selector="onBlueSliderChanged:" destination="EeN-hv-xmw" eventType="valueChanged" id="LLW-sR-DWS"/>
-                                </connections>
-                            </slider>
-                            <view contentMode="scaleToFill" id="pi8-43-cv2">
-                                <rect key="frame" x="274" y="342" width="30" height="28"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <color key="backgroundColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="CGV-bc-5aL">
-                                <rect key="frame" x="16" y="20" width="64" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Reset">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onReset:" destination="EeN-hv-xmw" eventType="touchUpInside" id="C1O-24-6Wl"/>
-                                </connections>
-                            </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="0dP-iq-T4f">
-                                <rect key="frame" x="16" y="380" width="133" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <segments>
-                                    <segment title="Shiness"/>
-                                    <segment title="Strength"/>
-                                </segments>
-                                <connections>
-                                    <action selector="onSingleValueSegmentChanged:" destination="EeN-hv-xmw" eventType="valueChanged" id="N1r-69-iOm"/>
-                                </connections>
-                            </segmentedControl>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="VwT-0c-2ve">
-                                <rect key="frame" x="155" y="379" width="151" height="31"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <connections>
-                                    <action selector="onFloatSliderChanged:" destination="EeN-hv-xmw" eventType="valueChanged" id="FYS-3I-Bav"/>
-                                </connections>
-                            </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Light" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Qp1-ky-dkJ">
-                                <rect key="frame" x="265" y="9" width="33" height="17"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="o3s-nb-IPr">
-                                <rect key="frame" x="255" y="28" width="51" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <action selector="onLightOperationSwitch:" destination="EeN-hv-xmw" eventType="valueChanged" id="gcb-eO-8zd"/>
-                                </connections>
-                            </switch>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="vnp-So-huU">
-                                <rect key="frame" x="16" y="416" width="288" height="29"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <segments>
-                                    <segment title="Base"/>
-                                    <segment title="Ambient"/>
-                                    <segment title="Light"/>
-                                </segments>
-                                <color key="tintColor" red="0.29803922772407532" green="0.29803922772407532" blue="0.29803922772407532" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <action selector="onAttributeSegmentChanged:" destination="EeN-hv-xmw" eventType="valueChanged" id="g7s-uQ-UcO"/>
-                                </connections>
-                            </segmentedControl>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <outlet property="attributeSegment" destination="vnp-So-huU" id="t97-7g-1GP"/>
-                        <outlet property="blueSlider" destination="NtY-Eo-VyL" id="ajR-UB-amf"/>
-                        <outlet property="colorView" destination="pi8-43-cv2" id="buB-Bz-nGF"/>
-                        <outlet property="floatSlider" destination="VwT-0c-2ve" id="ubE-lB-GOu"/>
-                        <outlet property="greenSlider" destination="nwN-mF-A5h" id="9Rd-zp-0c8"/>
-                        <outlet property="lightOpereationSwitch" destination="o3s-nb-IPr" id="E5j-36-iei"/>
-                        <outlet property="redSlider" destination="gQu-cV-jjs" id="4BG-MY-0bA"/>
-                        <outlet property="singleValueSegment" destination="0dP-iq-T4f" id="l7Y-Je-hGv"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="32j-2K-zAA" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2810" y="1471"/>
-        </scene>
-        <!--Point Light View Controller-->
-        <scene sceneID="4mS-qd-1fR">
-            <objects>
-                <viewController id="CtP-NC-lRH" customClass="PointLightViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="uXn-Go-Q0c" customClass="CEView">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="aHp-qB-vai">
-                                <rect key="frame" x="14" y="528" width="292" height="31"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <connections>
-                                    <action selector="onBlueSliderChanged:" destination="CtP-NC-lRH" eventType="valueChanged" id="HRz-lq-PCd"/>
-                                </connections>
-                            </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="TXl-Ih-ZAE">
-                                <rect key="frame" x="14" y="490" width="292" height="31"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <color key="tintColor" red="0.28243491279999999" green="0.82700892859999997" blue="0.0026009810880000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <action selector="onGreenSliderChanged:" destination="CtP-NC-lRH" eventType="valueChanged" id="oY9-gp-gyA"/>
-                                </connections>
-                            </slider>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="47v-Ib-3qc">
-                                <rect key="frame" x="16" y="417" width="288" height="29"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <segments>
-                                    <segment title="Vertex"/>
-                                    <segment title="Ambient"/>
-                                    <segment title="Light Color"/>
-                                    <segment title="Positon"/>
-                                </segments>
-                                <connections>
-                                    <action selector="onAttributeSegmentChanged:" destination="CtP-NC-lRH" eventType="valueChanged" id="Hd5-nU-WhX"/>
-                                </connections>
-                            </segmentedControl>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="msD-cB-ix5">
-                                <rect key="frame" x="16" y="20" width="64" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Reset">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onReset:" destination="CtP-NC-lRH" eventType="touchUpInside" id="JRR-Cl-TF1"/>
-                                </connections>
-                            </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="s9I-WC-MRc">
-                                <rect key="frame" x="16" y="343" width="288" height="29"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <segments>
-                                    <segment title="Shiness"/>
-                                    <segment title="Strength"/>
-                                    <segment title="Constant A"/>
-                                    <segment title="Linear A"/>
-                                    <segment title="Quadratic A"/>
-                                </segments>
-                                <connections>
-                                    <action selector="onSingleValueSegmentChanged:" destination="CtP-NC-lRH" eventType="valueChanged" id="KjO-VL-sKV"/>
-                                </connections>
-                            </segmentedControl>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="Csu-z3-db2">
-                                <rect key="frame" x="14" y="379" width="292" height="31"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <connections>
-                                    <action selector="onFloatSliderChanged:" destination="CtP-NC-lRH" eventType="valueChanged" id="Mcc-aA-0Wc"/>
-                                </connections>
-                            </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="SaY-rl-wSR">
-                                <rect key="frame" x="14" y="452" width="292" height="31"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <action selector="onRedSliderChanged:" destination="CtP-NC-lRH" eventType="valueChanged" id="Tut-no-hAA"/>
-                                </connections>
-                            </slider>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <outlet property="attributeSegment" destination="47v-Ib-3qc" id="ja6-Za-zbW"/>
-                        <outlet property="blueSlider" destination="aHp-qB-vai" id="gRk-FS-fYp"/>
-                        <outlet property="floatSlider" destination="Csu-z3-db2" id="qN8-V6-DWX"/>
-                        <outlet property="greenSlider" destination="TXl-Ih-ZAE" id="gjR-pR-0dz"/>
-                        <outlet property="redSlider" destination="SaY-rl-wSR" id="aE9-8q-udj"/>
-                        <outlet property="singleValueSegment" destination="s9I-WC-MRc" id="Jyh-Ez-Ziy"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2hQ-GR-bZi" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-3284" y="2107"/>
-        </scene>
         <!--Light View Controller-->
         <scene sceneID="7c4-Xj-jwd">
             <objects>
@@ -562,7 +362,6 @@
                                 </state>
                                 <connections>
                                     <action selector="onReset:" destination="R24-Ww-GUK" eventType="touchUpInside" id="aSB-bb-TyI"/>
-                                    <action selector="onReset:" destination="EeN-hv-xmw" eventType="touchUpInside" id="slS-XI-qQW"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="NGF-eU-eH3">
@@ -587,7 +386,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vwt-yx-hf4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2884" y="2107"/>
+            <point key="canvasLocation" x="-2802" y="1477"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

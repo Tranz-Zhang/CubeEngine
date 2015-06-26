@@ -6,12 +6,16 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CERenderer.h"
+#import <Foundation/Foundation.h>
 #import "CEModel.h"
+#import "CECamera.h"
 
-@interface CEWireframeRenderer : CERenderer
+@interface CEWireframeRenderer : NSObject
 
+@property (nonatomic, weak) CECamera *camera;
 @property (nonatomic, assign) GLfloat lineWidth;
 @property (nonatomic, copy) UIColor *lineColor;
+
+- (void)renderWireframeForObjects:(NSSet *)objects;
 
 @end
