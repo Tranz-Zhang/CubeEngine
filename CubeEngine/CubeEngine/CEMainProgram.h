@@ -27,7 +27,7 @@
     
     // texture
     GLint _attriTextureCoord_vec2;
-    GLint _uniTextureMap_tex;
+    GLint _uniModelTexture_tex;
     
     // shadow map
     GLint _uniShadowDarkness_f;
@@ -65,7 +65,7 @@
 // shadow map
 - (BOOL)setDepthBiasModelViewProjectionMatrix:(GLKMatrix4)depthBiasMVPMatrix4;
 - (BOOL)setShadowDarkness:(GLfloat)shadowDarkness;
-- (BOOL)setShadowMapTexture:(GLuint)shadowMapTextureId;
+- (BOOL)setShadowMapTexture:(GLuint)textureId;
 
 
 

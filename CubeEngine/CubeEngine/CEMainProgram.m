@@ -10,12 +10,21 @@
 #import "CEShaders.h"
 #import "CELightUniforms.h"
 
+#define kMaxTextureUnitCount 8
+
+typedef NS_ENUM(GLuint, CETextureUnit) {
+    CETextureUnitModel      = 0,
+    CETextureUnitNormalMap  = 1,
+    CETextureUnitShadowMap  = 2,
+    // max = 8
+};
+
+
 @implementation CEMainProgram {
     BOOL _hasEnabledPosition;
     BOOL _hasEnableTexture;
     BOOL _hasEnabledNormal;
-    
-    int _textureCount;
+    GLuint _textureIds[kMaxTextureUnitCount]; // _textureIds[textureUnit] = textureId
 }
 
 
@@ -85,7 +94,8 @@
         _uniDepthBiasMVP_mtx4 = -1;
         _uniShadowDarkness_f = -1;
         _uniShadowMap_tex = -1;
-        _textureCount = 0;
+        
+        memset(_textureIds, 0, sizeof(_textureIds));
         [self setupProgram];
     }
     return self;
@@ -134,12 +144,10 @@
 - (void)beginRendering {
     [self use];
     _isEditing = YES;
-    _textureCount = 0;
 }
 
 - (void)endRendering {
     _isEditing = NO;
-    _textureCount = 0;
 }
 
 
@@ -202,7 +210,7 @@
 
 - (void)initializeTextureUniforms {
     _attriTextureCoord_vec2  = [self attributeIndex:@"TextureCoord"];
-    _uniTextureMap_tex       = [self uniformIndex:@"TextureMap"];
+    _uniModelTexture_tex       = [self uniformIndex:@"TextureMap"];
 }
 
 
@@ -372,13 +380,16 @@
 }
 
 - (BOOL)setTexture:(GLuint)textureId {
-    if (!_isEditing || _uniTextureMap_tex < 0) {
+    if (!_isEditing || _uniModelTexture_tex < 0) {
         return NO;
     }
-    glActiveTexture(GL_TEXTURE0 + _textureCount);
-    glBindTexture(GL_TEXTURE_2D, textureId);
-    glUniform1i(_uniTextureMap_tex, _textureCount);
-    _textureCount++;
+    GLuint currentTextureId = _textureIds[CETextureUnitModel];
+    if (currentTextureId != textureId) {
+        glActiveTexture(GL_TEXTURE0 + CETextureUnitModel);
+        glBindTexture(GL_TEXTURE_2D, textureId);
+        glUniform1i(_uniModelTexture_tex, CETextureUnitModel);
+        _textureIds[CETextureUnitModel] = textureId;
+    }
     
     return YES;
 }
@@ -393,6 +404,7 @@
     return YES;
 }
 
+
 - (BOOL)setShadowDarkness:(GLfloat)shadowDarkness {
     if (!_isEditing || _uniShadowDarkness_f < 0) {
         return NO;
@@ -402,14 +414,17 @@
 }
 
 
-- (BOOL)setShadowMapTexture:(GLuint)shadowMapTextureId {
+- (BOOL)setShadowMapTexture:(GLuint)textureId {
     if (!_isEditing || _uniShadowMap_tex < 0) {
         return NO;
     }
-    glActiveTexture(GL_TEXTURE0 + _textureCount);
-    glBindTexture(GL_TEXTURE_2D, shadowMapTextureId);
-    glUniform1i(_uniShadowMap_tex, _textureCount);
-    _textureCount++;
+    GLuint currentTextureId = _textureIds[CETextureUnitShadowMap];
+    if (currentTextureId != textureId) {
+        glActiveTexture(GL_TEXTURE0 + CETextureUnitShadowMap);
+        glBindTexture(GL_TEXTURE_2D, textureId);
+        glUniform1i(_uniShadowMap_tex, CETextureUnitShadowMap);
+        _textureIds[CETextureUnitModel] = textureId;
+    }
     
     return YES;
 }

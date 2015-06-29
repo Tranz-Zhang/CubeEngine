@@ -114,6 +114,7 @@
     
     [_program setBaseColor:model.vec3BaseColor];
     
+    
     // setup vertex buffer
     if (![model.vertexBuffer setupBuffer] ||
         (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
@@ -126,10 +127,12 @@
         return;
     }
     
+    
     // setup MVP matrix
     GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
     GLKMatrix4 modelViewProjectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
     [_program setModelViewProjectionMatrix:modelViewProjectionMatrix];
+    
     
     if (_config.lightCount) {
         if (![_program setNormalAttribute:[model.vertexBuffer attributeWithName:CEVBOAttributeNormal]]) {
