@@ -77,7 +77,7 @@
     
     _floorModel = [CEModel modelWithObjFile:@"floor"];
     _floorModel.baseColor = [UIColor lightGrayColor];
-    _floorModel.castShadows = YES;
+//    _floorModel.castShadows = YES;
     [self.scene addModel:_floorModel];
     
     _directionalLight = [[CEDirectionalLight alloc] init];
@@ -102,8 +102,8 @@
     _objectOperator.operationObject = _teapotModel;
     
     // update light switches
-    _directionalLight.enabled = NO;
-    _pointLight.enabled = YES;
+    _directionalLight.enabled = YES;
+    _pointLight.enabled = NO;
     _spotLight.enabled = NO;
     _directionalLightSwitch.on = _directionalLight.isEnabled;
     _pointLightSwitch.on = _pointLight.isEnabled;

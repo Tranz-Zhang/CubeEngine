@@ -17,7 +17,8 @@
     self = [super init];
     if (self) {
         [self setupSharedVertexBuffer];
-        _shiniess = 20;
+        _lightInfo.lightType = CELightTypeDirectional;
+        [self setShiniess:20];
     }
     return self;
 }
@@ -68,33 +69,47 @@
 - (void)setShiniess:(GLint)shiniess {
     if (_shiniess != shiniess) {
         _shiniess = shiniess;
-        _hasLightChanged = YES;
+        _lightInfo.shiniess = shiniess;
     }
 }
 
-
-
-- (void)updateUniformsWithCamera:(CECamera *)camera {
-//    if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
+/*
+- (CELightInfos *)generateLightInfoWithCamera:(CECamera *)camera {
+    if (!_hasLightChanged && !self.hasChanged && !camera.hasChanged) {
+        return _lightInfo;
+    }
     
-    glUniform1i(_uniformInfo.lightType_i, CEDirectionalLightType);
-    glUniform1f(_uniformInfo.isEnabled_b, _enabled ? 1.0 : 0.0);
-    glUniform3fv(_uniformInfo.lightColor_vec3, 1, _lightColorV3.v);
-    glUniform3fv(_uniformInfo.ambientColor_vec3, 1, _ambientColorV3.v);
-    glUniform1f(_uniformInfo.shiniess_f, (GLfloat)_shiniess);
-    
-    // !!!: transfer light direction in view space
+    CELightInfos *lightInfo = [CELightInfos new];
+    lightInfo.lightType = CELightTypeDirectional;
+    lightInfo.isEnabled = _enabled;
+    lightInfo.lightColor = _lightColorV3;
+    lightInfo.ambientColor = _ambientColorV3;
+    lightInfo.shiniess = _shiniess;
+    // !!!: transfer light position in view space
     GLKVector3 lightDirection = GLKVector3Make(-_right.x, -_right.y, -_right.z);
     lightDirection = GLKMatrix4MultiplyVector3(camera.viewMatrix, lightDirection);
-    glUniform3fv(_uniformInfo.lightDirection_vec3, 1, lightDirection.v);
+    lightInfo.lightDirection = lightDirection;
+    _lightInfo = lightInfo;
+    
+//    glUniform1i(_uniformInfo.lightType_i, CELightTypeDirectional);
+//    glUniform1f(_uniformInfo.isEnabled_b, _enabled ? 1.0 : 0.0);
+//    glUniform3fv(_uniformInfo.lightColor_vec3, 1, _lightColorV3.v);
+//    glUniform3fv(_uniformInfo.ambientColor_vec3, 1, _ambientColorV3.v);
+//    glUniform1f(_uniformInfo.shiniess_f, (GLfloat)_shiniess);
+//    
+//    // !!!: transfer light direction in view space
+//    GLKVector3 lightDirection = GLKVector3Make(-_right.x, -_right.y, -_right.z);
+//    lightDirection = GLKMatrix4MultiplyVector3(camera.viewMatrix, lightDirection);
+//    glUniform3fv(_uniformInfo.lightDirection_vec3, 1, lightDirection.v);
     
     _hasLightChanged = NO;
     if (self.hasChanged) {
         [self transformMatrix]; // call to set the hasChanged property to NO
     }
-//    CEPrintf("Update Direational Light Uniform\n");
+    CEPrintf("Update Direational Light Uniform\n");
+    return _lightInfo;
 }
-
+//*/
 
 #pragma mark - Shadow Mapping
 - (void)updateLightVPMatrixWithModels:(NSSet *)models {

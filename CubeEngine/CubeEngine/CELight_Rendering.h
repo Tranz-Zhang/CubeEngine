@@ -7,19 +7,17 @@
 //
 
 #import "CELight.h"
-#import "CECamera_Rendering.h"
 #import "CEVertexBuffer.h"
 #import "CEIndicesBuffer.h"
-#import "CELightUniformInfo.h"
+#import "CELightInfo.h"
 
 
 @interface CELight () {
     @protected
     CEVertexBuffer *_vertexBuffer;
     CEIndicesBuffer *_indicesBuffer;
-    CELightUniformInfo *_uniformInfo;
+    CELightInfo *_lightInfo;
     BOOL _enabled;
-    BOOL _hasLightChanged;
 }
 
 // light visual model
@@ -27,14 +25,9 @@
 @property (nonatomic, readonly) CEVertexBuffer *vertexBuffer;
 @property (nonatomic, readonly) CEIndicesBuffer *indicesBuffer;
 
-// Light info
-@property (nonatomic, strong) CELightUniformInfo *uniformInfo;
+// light info
+@property (nonatomic, readonly) CELightInfo *lightInfo;
 
-// Indicates if light attributes have changed since last time
-@property (nonatomic, assign) BOOL hasLightChanged;
-
-// must overwrite by subclass
-- (void)updateUniformsWithCamera:(CECamera *)camera;
 
 @end
 

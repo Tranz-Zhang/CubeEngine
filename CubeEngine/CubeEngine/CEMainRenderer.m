@@ -36,22 +36,6 @@
 }
 
 
-- (void)setLights:(NSSet *)lights {
-    if (_lights != lights) {
-        if (lights.count != _program.uniLightInfos.count) {
-            CEWarning(@"light's count dismatch!!!");
-        }
-        _lights = [lights copy];
-        int idx = 0;
-        for (CELight *light in _lights) {
-            if (idx < _program.uniLightInfos.count) {
-                light.uniformInfo = _program.uniLightInfos[idx];
-            }
-            idx++;
-        }
-    }
-}
-
 - (void)setShadowLight:(CEShadowLight *)shadowLight {
     if (!shadowLight.isEnabled || !shadowLight.enableShadow || !shadowLight.shadowMapBuffer) {
         _shadowLight = nil;
@@ -68,32 +52,52 @@
     }
     [_program beginRendering];
     
-    lighting problem : one light response to multiple LightUniformInfos
-    
-    // setup model irrelevant properties
-    if (_config.lightCount) {
-        // setup lighting uniforms !!!: must setup light before mvp matrix;
-        for (CELight *light in _lights) {
-            [light updateUniformsWithCamera:_camera];
-        }
-        // we use eye space to do the calculation, so the eye direction is always (0, 0, 1)
-        [_program setEyeDirection:GLKVector3Make(0.0, 0.0, 1.0)];
-        
-        // shadow map setting
-        if (_shadowLight) {
-            [_program setShadowDarkness:1.0 - _shadowLight.shadowDarkness];
-            [_program setShadowMapTexture:_shadowLight.shadowMapBuffer.textureId];
-            
-        } else if (_config.enableShadowMapping) {
-            [_program setShadowMapTexture:0.0];
-            [_program setShadowDarkness:1.0];
-        }
-    }
-    
+    [self setupLightInfosForRendering];
     for (CEModel *model in objects) {
         [self renderModel:model];
     }
+    
     [_program endRendering];
+}
+
+- (void)setupLightInfosForRendering {
+    if (!_config.lightCount) {
+        return;
+    }
+    int idx = 0;
+    for (CELight *light in _lights) {
+        if (light.enabled) {
+            // !!!: transfer light position in view space
+            if (light.lightInfo.lightType == CELightTypePoint ||
+                light.lightInfo.lightType == CELightTypeSpot) {
+                GLKVector4 lightPosition = GLKMatrix4MultiplyVector4(light.transformMatrix, GLKVector4Make(0, 0, 0, 1));
+                lightPosition = GLKMatrix4MultiplyVector4(_camera.viewMatrix, lightPosition);
+                light.lightInfo.lightPosition = lightPosition;
+            }
+            
+            // !!!: transfer light direction in view space
+            if (light.lightInfo.lightType == CELightTypeDirectional ||
+                light.lightInfo.lightType == CELightTypeSpot) {
+                GLKVector3 lightDirection = GLKVector3Make(-light.right.x, -light.right.y, -light.right.z);
+                lightDirection = GLKMatrix4MultiplyVector3(_camera.viewMatrix, lightDirection);
+                light.lightInfo.lightDirection = lightDirection;
+            }
+        }
+        [_program setLightUniformsWithInfo:light.lightInfo atIndex:idx];
+        idx++;
+    }
+    // we use eye space to do the calculation, so the eye direction is always (0, 0, 1)
+    [_program setEyeDirection:GLKVector3Make(0.0, 0.0, 1.0)];
+    
+    // shadow map setting
+    if (_shadowLight) {
+        [_program setShadowDarkness:1.0 - _shadowLight.shadowDarkness];
+        [_program setShadowMapTexture:_shadowLight.shadowMapBuffer.textureId];
+        
+    } else if (_config.enableShadowMapping) {
+        [_program setShadowMapTexture:0.0];
+        [_program setShadowDarkness:1.0];
+    }
 }
 
 

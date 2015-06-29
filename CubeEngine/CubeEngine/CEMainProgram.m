@@ -8,6 +8,7 @@
 
 #import "CEMainProgram.h"
 #import "CEShaders.h"
+#import "CELightUniforms.h"
 
 @implementation CEMainProgram {
     BOOL _hasEnabledPosition;
@@ -62,8 +63,6 @@
 }
 
 
-
-
 - (instancetype)initWithVertexShaderString:(NSString *)vShaderString
                       fragmentShaderString:(NSString *)fShaderString
                                     config:(CEProgramConfig *)config {
@@ -71,21 +70,21 @@
                         fragmentShaderString:fShaderString];
     if (self) {
         _config = [config copy];
-        _attribVec4Position = -1;
-        _uniMtx4MVPMatrix = -1;
-        _uniVec4BaseColor = -1;
+        _attribPosition_vec4 = -1;
+        _uni4MVPMatrix_mtx4 = -1;
+        _uniBaseColor_vec4 = -1;
         
         // lighting
-        _uniIntLightCount = -1;
-        _attribVec3Normal = -1;
-        _uniMtx4MVMatrix = -1;
-        _uniMtx3NormalMatrix = -1;
-        _uniVec3EyeDirection = -1;
+        _uniLightCount_i = -1;
+        _attribNormal_vec3 = -1;
+        _uniMVMatrix_mtx4 = -1;
+        _uniNormalMatrix_mtx3 = -1;
+        _uniEyeDirection_vec3 = -1;
         
         // shadow map
-        _uniMtx4DepthBiasMVP = -1;
-        _uniFloatShadowDarkness = -1;
-        _uniTexShadowMap = -1;
+        _uniDepthBiasMVP_mtx4 = -1;
+        _uniShadowDarkness_f = -1;
+        _uniShadowMap_tex = -1;
         _textureCount = 0;
         [self setupProgram];
     }
@@ -104,13 +103,13 @@
     
     BOOL isOK = [self link];
     if (isOK) {
-        _attribVec4Position = [self attributeIndex:@"VertexPosition"];
-        _uniMtx4MVPMatrix   = [self uniformIndex:@"MVPMatrix"];
-        _uniVec4BaseColor   = [self uniformIndex:@"BaseColor"];
+        _attribPosition_vec4 = [self attributeIndex:@"VertexPosition"];
+        _uni4MVPMatrix_mtx4   = [self uniformIndex:@"MVPMatrix"];
+        _uniBaseColor_vec4   = [self uniformIndex:@"BaseColor"];
         if (_config.lightCount > 0) {
             [self initializeLightUniforms];
             [self use];
-            glUniform1i(_uniIntLightCount, _config.lightCount);
+            glUniform1i(_uniLightCount_i, _config.lightCount);
         }
         if (_config.enableShadowMapping) {
             [self initializeShadowMapUniforms];
@@ -146,15 +145,15 @@
 
 #pragma makr - Initialize Uniforms {
 - (void)initializeLightUniforms {
-    _attribVec3Normal       = [self attributeIndex:@"VertexNormal"];
-    _uniMtx3NormalMatrix    = [self uniformIndex:@"NormalMatrix"];
-    _uniIntLightCount       = [self uniformIndex:@"LightCount"];
-    _uniMtx4MVMatrix        = [self uniformIndex:@"MVMatrix"];
-    _uniVec3EyeDirection    = [self uniformIndex:@"EyeDirection"];
+    _attribNormal_vec3       = [self attributeIndex:@"VertexNormal"];
+    _uniNormalMatrix_mtx3    = [self uniformIndex:@"NormalMatrix"];
+    _uniLightCount_i       = [self uniformIndex:@"LightCount"];
+    _uniMVMatrix_mtx4        = [self uniformIndex:@"MVMatrix"];
+    _uniEyeDirection_vec3    = [self uniformIndex:@"EyeDirection"];
     
     NSMutableArray *uniformInfos = [NSMutableArray arrayWithCapacity:_config.lightCount];
     for (int i = 0; i < _config.lightCount; i++) {
-        CELightUniformInfo *info = [CELightUniformInfo new];
+        CELightUniforms *info = [CELightUniforms new];
         info.lightType_i = [self uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightType", i]];
         if (info.lightType_i < 0) continue;
         
@@ -195,27 +194,27 @@
 
 
 - (void)initializeShadowMapUniforms {
-    _uniMtx4DepthBiasMVP    = [self uniformIndex:@"DepthBiasMVP"];
-    _uniFloatShadowDarkness = [self uniformIndex:@"ShadowDarkness"];
-    _uniTexShadowMap        = [self uniformIndex:@"ShadowMapTexture"];
+    _uniDepthBiasMVP_mtx4    = [self uniformIndex:@"DepthBiasMVP"];
+    _uniShadowDarkness_f = [self uniformIndex:@"ShadowDarkness"];
+    _uniShadowMap_tex        = [self uniformIndex:@"ShadowMapTexture"];
 }
 
 
 - (void)initializeTextureUniforms {
-    _attriVec2TextureCoord  = [self attributeIndex:@"TextureCoord"];
-    _uniTexTextureMap       = [self uniformIndex:@"TextureMap"];
+    _attriTextureCoord_vec2  = [self attributeIndex:@"TextureCoord"];
+    _uniTextureMap_tex       = [self uniformIndex:@"TextureMap"];
 }
 
 
 #pragma mark - uniform setters
 - (BOOL)setPositionAttribute:(CEVBOAttribute *)attribute {
     if (!_isEditing ||
-        _attribVec4Position < 0) {
+        _attribPosition_vec4 < 0) {
         CEWarning(@"Fail to setup position attribute");
         return NO;
     }
     if (!attribute) {
-        glDisableVertexAttribArray(_attribVec4Position);
+        glDisableVertexAttribArray(_attribPosition_vec4);
         _hasEnabledPosition = NO;
         
     } else if (attribute.name != CEVBOAttributePosition ||
@@ -226,11 +225,11 @@
     }
     
     if (!_hasEnabledPosition) {
-        glEnableVertexAttribArray(_attribVec4Position);
+        glEnableVertexAttribArray(_attribPosition_vec4);
         _hasEnabledPosition = YES;
     }
 //    ... setup attribute here
-    glVertexAttribPointer(_attribVec4Position,
+    glVertexAttribPointer(_attribPosition_vec4,
                           attribute.primaryCount,
                           attribute.primaryType,
                           GL_FALSE,
@@ -241,32 +240,54 @@
 
 
 - (BOOL)setModelViewProjectionMatrix:(GLKMatrix4)mvpMatrix4 {
-    if (!_isEditing || _uniMtx4MVPMatrix < 0) {
+    if (!_isEditing || _uni4MVPMatrix_mtx4 < 0) {
         return NO;
     }
-    glUniformMatrix4fv(_uniMtx4MVPMatrix, 1, GL_FALSE, mvpMatrix4.m);
+    glUniformMatrix4fv(_uni4MVPMatrix_mtx4, 1, GL_FALSE, mvpMatrix4.m);
     return YES;
 }
 
 
 - (BOOL)setBaseColor:(GLKVector4)colorVec4 {
-    if (!_isEditing || _uniVec4BaseColor < 0) {
+    if (!_isEditing || _uniBaseColor_vec4 < 0) {
         return NO;
     }
-    glUniform4fv(_uniVec4BaseColor, 1, colorVec4.v);
+    glUniform4fv(_uniBaseColor_vec4, 1, colorVec4.v);
     return YES;
 }
 
 
 #pragma mark - lighting
+- (BOOL)setLightUniformsWithInfo:(CELightInfo *)lightInfos atIndex:(int)index {
+    if (!_isEditing || index > _uniLightInfos.count) {
+        return NO;
+    }
+    CELightUniforms *lightUniforms = _uniLightInfos[index];
+    glUniform1i(lightUniforms.isEnabled_b, lightInfos.isEnabled ? 1 : 0);
+    if (lightInfos.isEnabled) {
+        glUniform1i(lightUniforms.lightType_i, lightInfos.lightType);
+        glUniform4fv(lightUniforms.lightPosition_vec4, 1, lightInfos.lightPosition.v);
+        glUniform3fv(lightUniforms.lightDirection_vec3, 1, lightInfos.lightDirection.v);
+        glUniform3fv(lightUniforms.lightColor_vec3, 1, lightInfos.lightColor.v);
+        glUniform3fv(lightUniforms.ambientColor_vec3, 1, lightInfos.ambientColor.v);
+        glUniform1f(lightUniforms.specularIntensity_f, lightInfos.specularIntensity);
+        glUniform1f(lightUniforms.shiniess_f, lightInfos.shiniess);
+        glUniform1f(lightUniforms.attenuation_f, lightInfos.attenuation);
+        glUniform1f(lightUniforms.spotCosCutoff_f, lightInfos.spotCosCutOff);
+        glUniform1f(lightUniforms.spotExponent_f, lightInfos.spotExponent);
+    }
+    return NO;
+}
+
+
 - (BOOL)setNormalAttribute:(CEVBOAttribute *)attribute {
     if (!_isEditing ||
-        _attribVec3Normal < 0) {
+        _attribNormal_vec3 < 0) {
         CEWarning(@"Fail to setup normal attribute");
         return NO;
     }
     if (!attribute) {
-        glDisableVertexAttribArray(_attribVec3Normal);
+        glDisableVertexAttribArray(_attribNormal_vec3);
         _hasEnabledNormal = NO;
         
     } else if (attribute.name != CEVBOAttributeNormal ||
@@ -277,11 +298,11 @@
     }
     
     if (!_hasEnabledNormal) {
-        glEnableVertexAttribArray(_attribVec3Normal);
+        glEnableVertexAttribArray(_attribNormal_vec3);
         _hasEnabledNormal = YES;
     }
     //    ... setup attribute here
-    glVertexAttribPointer(_attribVec3Normal,
+    glVertexAttribPointer(_attribNormal_vec3,
                           attribute.primaryCount,
                           attribute.primaryType,
                           GL_FALSE,
@@ -292,28 +313,28 @@
 
 
 - (BOOL)setModelViewMatrix:(GLKMatrix4)mvMatrix4 {
-    if (!_isEditing || _uniMtx4MVMatrix < 0) {
+    if (!_isEditing || _uniMVMatrix_mtx4 < 0) {
         return NO;
     }
-    glUniformMatrix4fv(_uniMtx4MVMatrix, 1, GL_FALSE, mvMatrix4.m);
+    glUniformMatrix4fv(_uniMVMatrix_mtx4, 1, GL_FALSE, mvMatrix4.m);
     return YES;
 }
 
 
 - (BOOL)setNormalMatrix:(GLKMatrix3)normalMatrix3 {
-    if (!_isEditing || _uniMtx3NormalMatrix < 0) {
+    if (!_isEditing || _uniNormalMatrix_mtx3 < 0) {
         return NO;
     }
-    glUniformMatrix3fv(_uniMtx3NormalMatrix, 1, GL_FALSE, normalMatrix3.m);
+    glUniformMatrix3fv(_uniNormalMatrix_mtx3, 1, GL_FALSE, normalMatrix3.m);
     return YES;
 }
 
 
 - (BOOL)setEyeDirection:(GLKVector3)eyeDirectionVec3 {
-    if (!_isEditing || _uniVec3EyeDirection < 0) {
+    if (!_isEditing || _uniEyeDirection_vec3 < 0) {
         return NO;
     }
-    glUniform3fv(_uniVec3EyeDirection, 1, eyeDirectionVec3.v);
+    glUniform3fv(_uniEyeDirection_vec3, 1, eyeDirectionVec3.v);
     return YES;
 }
 
@@ -321,12 +342,12 @@
 #pragma mark - texture
 - (BOOL)setTextureCoordinateAttribute:(CEVBOAttribute *)attribute {
     if (!_isEditing ||
-        _attriVec2TextureCoord < 0) {
+        _attriTextureCoord_vec2 < 0) {
         CEWarning(@"Fail to setup texture attribute");
         return NO;
     }
     if (!attribute) {
-        glDisableVertexAttribArray(_attriVec2TextureCoord);
+        glDisableVertexAttribArray(_attriTextureCoord_vec2);
         _hasEnableTexture = NO;
         
     } else if (attribute.name != CEVBOAttributeTextureCoord ||
@@ -337,11 +358,11 @@
     }
     
     if (!_hasEnableTexture) {
-        glEnableVertexAttribArray(_attriVec2TextureCoord);
+        glEnableVertexAttribArray(_attriTextureCoord_vec2);
         _hasEnableTexture = YES;
     }
     //    ... setup attribute here
-    glVertexAttribPointer(_attriVec2TextureCoord,
+    glVertexAttribPointer(_attriTextureCoord_vec2,
                           attribute.primaryCount,
                           attribute.primaryType,
                           GL_FALSE,
@@ -351,12 +372,12 @@
 }
 
 - (BOOL)setTexture:(GLuint)textureId {
-    if (!_isEditing || _uniTexTextureMap < 0) {
+    if (!_isEditing || _uniTextureMap_tex < 0) {
         return NO;
     }
     glActiveTexture(GL_TEXTURE0 + _textureCount);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    glUniform1i(_uniTexTextureMap, _textureCount);
+    glUniform1i(_uniTextureMap_tex, _textureCount);
     _textureCount++;
     
     return YES;
@@ -365,29 +386,29 @@
 
 #pragma mark - shadow map
 - (BOOL)setDepthBiasModelViewProjectionMatrix:(GLKMatrix4)depthBiasMVPMatrix4 {
-    if (!_isEditing || _uniMtx4DepthBiasMVP < 0) {
+    if (!_isEditing || _uniDepthBiasMVP_mtx4 < 0) {
         return NO;
     }
-    glUniformMatrix4fv(_uniMtx4DepthBiasMVP, 1, GL_FALSE, depthBiasMVPMatrix4.m);
+    glUniformMatrix4fv(_uniDepthBiasMVP_mtx4, 1, GL_FALSE, depthBiasMVPMatrix4.m);
     return YES;
 }
 
 - (BOOL)setShadowDarkness:(GLfloat)shadowDarkness {
-    if (!_isEditing || _uniFloatShadowDarkness < 0) {
+    if (!_isEditing || _uniShadowDarkness_f < 0) {
         return NO;
     }
-    glUniform1f(_uniFloatShadowDarkness, shadowDarkness);
+    glUniform1f(_uniShadowDarkness_f, shadowDarkness);
     return YES;
 }
 
 
 - (BOOL)setShadowMapTexture:(GLuint)shadowMapTextureId {
-    if (!_isEditing || _uniTexShadowMap < 0) {
+    if (!_isEditing || _uniShadowMap_tex < 0) {
         return NO;
     }
     glActiveTexture(GL_TEXTURE0 + _textureCount);
     glBindTexture(GL_TEXTURE_2D, shadowMapTextureId);
-    glUniform1i(_uniTexShadowMap, _textureCount);
+    glUniform1i(_uniShadowMap_tex, _textureCount);
     _textureCount++;
     
     return YES;

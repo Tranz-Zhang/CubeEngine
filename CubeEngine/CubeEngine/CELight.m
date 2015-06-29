@@ -14,14 +14,13 @@
 
 @implementation CELight
 
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init];
     if (self) {
+        _lightInfo = [CELightInfo new];
         [self setLightColor:[UIColor whiteColor]];
         [self setAmbientColor:[UIColor colorWithWhite:0.1 alpha:1]];
-        _hasLightChanged = YES;
-        _enabled = YES;
+        [self setEnabled:YES];
     }
     return self;
 }
@@ -41,14 +40,7 @@
 - (void)setEnabled:(BOOL)enabled {
     if (_enabled != enabled) {
         _enabled = enabled;
-        _hasLightChanged = YES;
-    }
-}
-
-- (void)setUniformInfo:(CELightUniformInfo *)uniformInfo {
-    if (_uniformInfo != uniformInfo) {
-        _uniformInfo = uniformInfo;
-        _hasLightChanged = YES;
+        _lightInfo.isEnabled = enabled;
     }
 }
 
@@ -56,7 +48,7 @@
     if (_lightColor != lightColor) {
         _lightColor = [lightColor copy];
         _lightColorV3 = CEVec3WithColor(lightColor);
-        _hasLightChanged = YES;
+        _lightInfo.lightColor = _lightColorV3;
     }
 }
 
@@ -64,10 +56,12 @@
     if (_ambientColor != ambientColor) {
         _ambientColor = [ambientColor copy];
         _ambientColorV3 = CEVec3WithColor(ambientColor);
-        _hasLightChanged = YES;
+        _lightInfo.ambientColor = _ambientColorV3;
     }
 }
 
+
+/*
 //- (void)setPosition:(GLKVector3)position {
 //    _hasChanged = !GLKVector3AllEqualToVector3(_position, position);
 //    [super setPosition:position];
@@ -111,6 +105,6 @@
 - (void)updateLightVPMatrixWithModels:(NSSet *)models {
     // should be overwited by subclass
 }
-
+//*/
 
 @end

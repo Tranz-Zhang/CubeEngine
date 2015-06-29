@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CELightUniformInfo.h"
+#import "CELightInfo.h"
 
-@implementation CELightUniformInfo
+@implementation CELightInfo
 
 @end

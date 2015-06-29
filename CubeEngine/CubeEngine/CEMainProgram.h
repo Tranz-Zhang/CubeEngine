@@ -8,32 +8,33 @@
 
 #import "CEProgram.h"
 #import "CEProgramConfig.h"
-#import "CELightUniformInfo.h"
 #import "CEVBOAttribute.h"
+#import "CELightInfo.h"
 
 @interface CEMainProgram : CEProgram {
     // basic
-    GLint _attribVec4Position;
-    GLint _uniMtx4MVPMatrix;
-    GLint _uniVec4BaseColor;
+    GLint _attribPosition_vec4;
+    GLint _uni4MVPMatrix_mtx4;
+    GLint _uniBaseColor_vec4;
     
     // lighting
-    GLint _uniIntLightCount;
-    GLint _attribVec3Normal;
-    GLint _uniMtx4MVMatrix;
-    GLint _uniMtx3NormalMatrix;
-    GLint _uniVec3EyeDirection;
+    GLint _attribNormal_vec3;
+    GLint _uniLightCount_i;
+    GLint _uniMVMatrix_mtx4;
+    GLint _uniNormalMatrix_mtx3;
+    GLint _uniEyeDirection_vec3;
     NSArray *_uniLightInfos;
     
     // texture
-    GLint _attriVec2TextureCoord;
-    GLint _uniTexTextureMap;
+    GLint _attriTextureCoord_vec2;
+    GLint _uniTextureMap_tex;
     
     // shadow map
-    GLint _uniFloatShadowDarkness;
-    GLint _uniMtx4DepthBiasMVP;
-    GLint _uniTexShadowMap;
+    GLint _uniShadowDarkness_f;
+    GLint _uniDepthBiasMVP_mtx4;
+    GLint _uniShadowMap_tex;
 }
+
 
 @property (nonatomic, readonly) CEProgramConfig *config;
 @property (nonatomic, readonly) BOOL isEditing;
@@ -51,6 +52,7 @@
 - (BOOL)setBaseColor:(GLKVector4)colorVec4;
 
 // lighting
+- (BOOL)setLightUniformsWithInfo:(CELightInfo *)lightInfos atIndex:(int)index;
 - (BOOL)setNormalAttribute:(CEVBOAttribute *)attribute;
 - (BOOL)setModelViewMatrix:(GLKMatrix4)mvMatrix4;
 - (BOOL)setNormalMatrix:(GLKMatrix3)normalMatrix3;

@@ -21,9 +21,10 @@
     if (self) {
         [self setConeAngle:30];
         [self setupSharedVertexBuffer];
-        _shiniess = 20;
-        _attenuation = 0.001;
-        _spotExponent = 10;
+        _lightInfo.lightType = CELightTypeSpot;
+        [self setShiniess:20];
+        [self setAttenuation:0.001];
+        [self setSpotExponent:10];
     }
     return self;
 }
@@ -101,7 +102,7 @@
 - (void)setShiniess:(GLint)shiniess {
     if (_shiniess != shiniess) {
         _shiniess = shiniess;
-        _hasLightChanged = YES;
+        _lightInfo.shiniess = shiniess;
     }
 }
 
@@ -109,7 +110,7 @@
 - (void)setAttenuation:(GLfloat)attenuation {
     if (_attenuation != attenuation) {
         _attenuation = attenuation;
-        _hasLightChanged = YES;
+        _lightInfo.attenuation = attenuation;
     }
 }
 
@@ -122,7 +123,7 @@
         NSData *vertexData = [NSData dataWithBytes:&_vertices length:sizeof(_vertices)];
         NSArray *attributes = [CELight defaultVertexBufferAttributes];
         [_vertexBuffer updateVertexData:vertexData attributes:attributes];
-        _hasLightChanged = YES;
+        _lightInfo.spotCosCutOff = cosf(GLKMathDegreesToRadians(coneAngle));
     }
 }
 
@@ -130,7 +131,7 @@
 - (void)setSpotExponent:(GLfloat)spotExponent {
     if (_spotExponent != spotExponent) {
         _spotExponent = spotExponent;
-        _hasLightChanged = YES;
+        _lightInfo.spotExponent = spotExponent;
     }
 }
 
@@ -139,34 +140,58 @@
 }
 
 
-- (void)updateUniformsWithCamera:(CECamera *)camera {
-//    if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
+/*
+- (CELightInfos *)generateLightInfoWithCamera:(CECamera *)camera {
+    if (!_hasLightChanged && !self.hasChanged && !camera.hasChanged) {
+        return _lightInfo;
+    }
     
-    glUniform1i(_uniformInfo.lightType_i, CESpotLightType);
-    glUniform1f(_uniformInfo.isEnabled_b, _enabled ? 1.0 : 0.0);
-    glUniform3fv(_uniformInfo.lightColor_vec3, 1, _lightColorV3.v);
-    glUniform3fv(_uniformInfo.ambientColor_vec3, 1, _ambientColorV3.v);
-    glUniform1f(_uniformInfo.shiniess_f, (GLfloat)_shiniess);
-    glUniform1f(_uniformInfo.attenuation_f, _attenuation);
-    GLfloat spotCosCutoff = cosf(GLKMathDegreesToRadians(_coneAngle));
-    glUniform1f(_uniformInfo.spotCosCutoff_f, spotCosCutoff);
-    glUniform1f(_uniformInfo.spotExponent_f, _spotExponent);
-    
+    CELightInfos *lightInfo = [CELightInfos new];
+    lightInfo.lightType = CELightTypeSpot;
+    lightInfo.isEnabled = _enabled;
+    lightInfo.lightColor = _lightColorV3;
+    lightInfo.ambientColor = _ambientColorV3;
+    lightInfo.shiniess = _shiniess;
+    lightInfo.attenuation = _attenuation;
+    lightInfo.spotCosCutOff = cosf(GLKMathDegreesToRadians(_coneAngle));
+    lightInfo.spotExponent = _spotExponent;
     // !!!: transfer light position in view space
     GLKVector4 lightPosition = GLKMatrix4MultiplyVector4([self transformMatrix], GLKVector4Make(0, 0, 0, 1));
     lightPosition = GLKMatrix4MultiplyVector4(camera.viewMatrix, lightPosition);
-    glUniform4fv(_uniformInfo.lightPosition_vec4, 1, lightPosition.v);
+    lightInfo.lightPosition = lightPosition;
     // !!!: transfer light direction in view space
     GLKVector3 lightDirection = GLKVector3Make(-_right.x, -_right.y, -_right.z);
     lightDirection = GLKMatrix4MultiplyVector3(camera.viewMatrix, lightDirection);
-    glUniform3fv(_uniformInfo.lightDirection_vec3, 1, lightDirection.v);
+    lightInfo.lightDirection = lightDirection;
+    _lightInfo = lightInfo;
+    
+//    glUniform1i(_uniformInfo.lightType_i, CELightTypeSpot);
+//    glUniform1f(_uniformInfo.isEnabled_b, _enabled ? 1.0 : 0.0);
+//    glUniform3fv(_uniformInfo.lightColor_vec3, 1, _lightColorV3.v);
+//    glUniform3fv(_uniformInfo.ambientColor_vec3, 1, _ambientColorV3.v);
+//    glUniform1f(_uniformInfo.shiniess_f, (GLfloat)_shiniess);
+//    glUniform1f(_uniformInfo.attenuation_f, _attenuation);
+//    GLfloat spotCosCutoff = cosf(GLKMathDegreesToRadians(_coneAngle));
+//    glUniform1f(_uniformInfo.spotCosCutoff_f, spotCosCutoff);
+//    glUniform1f(_uniformInfo.spotExponent_f, _spotExponent);
+//    // !!!: transfer light position in view space
+    GLKVector4 lightPosition = GLKMatrix4MultiplyVector4([self transformMatrix], GLKVector4Make(0, 0, 0, 1));
+    lightPosition = GLKMatrix4MultiplyVector4(camera.viewMatrix, lightPosition);
+//    glUniform4fv(_uniformInfo.lightPosition_vec4, 1, lightPosition.v);
+//    // !!!: transfer light direction in view space
+    GLKVector3 lightDirection = GLKVector3Make(-_right.x, -_right.y, -_right.z);
+    lightDirection = GLKMatrix4MultiplyVector3(camera.viewMatrix, lightDirection);
+//    glUniform3fv(_uniformInfo.lightDirection_vec3, 1, lightDirection.v);
+
     
     _hasLightChanged = NO;
     if (self.hasChanged) {
         [self transformMatrix]; // call to set the hasChanged property to NO
     }
-//    CEPrintf("Update Spot Light Uniform\n");
+    CEPrintf("Update Spot Light Uniform\n");
+    return _lightInfo;
 }
+//*/
 
 
 #pragma mark - Shadow Mapping

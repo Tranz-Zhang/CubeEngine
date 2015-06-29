@@ -16,8 +16,9 @@
     self = [super init];
     if (self) {
         [self setupSharedVertexBuffer];
-        _shiniess = 20;
-        _attenuation = 0.001;
+        _lightInfo.lightType = CELightTypePoint;
+        [self setShiniess:20];
+        [self setAttenuation:0.001];
     }
     return self;
 }
@@ -64,14 +65,14 @@
 - (void)setShiniess:(GLint)shiniess {
     if (_shiniess != shiniess) {
         _shiniess = shiniess;
-        _hasLightChanged = YES;
+        _lightInfo.shiniess = shiniess;
     }
 }
 
 - (void)setAttenuation:(GLfloat)attenuation {
     if (_attenuation != attenuation) {
         _attenuation = attenuation;
-        _hasLightChanged = YES;
+        _lightInfo.attenuation = attenuation;
     }
 }
 
@@ -79,30 +80,46 @@
     CEWarning(@"Spot light shadow is disabled right now");
 }
 
-- (void)updateUniformsWithCamera:(CECamera *)camera {
-//    if (!_uniformInfo || (!_hasLightChanged && !self.hasChanged && !camera.hasChanged)) return;
+
+/*
+- (CELightInfos *)generateLightInfoWithCamera:(CECamera *)camera {
+    if (!_hasLightChanged && !self.hasChanged && !camera.hasChanged) {
+        return _lightInfo;
+    }
     
-    glUniform1i(_uniformInfo.lightType_i, CEPointLightType);
-    glUniform1f(_uniformInfo.isEnabled_b, _enabled ? 1.0 : 0.0);
-    glUniform3fv(_uniformInfo.lightColor_vec3, 1, _lightColorV3.v);
-    glUniform3fv(_uniformInfo.ambientColor_vec3, 1, _ambientColorV3.v);
-    glUniform1f(_uniformInfo.shiniess_f, (GLfloat)_shiniess);
-    glUniform1f(_uniformInfo.attenuation_f, _attenuation);
-    
+    CELightInfos *lightInfo = [CELightInfos new];
+    lightInfo.lightType = CELightTypePoint;
+    lightInfo.isEnabled = _enabled;
+    lightInfo.lightColor = _lightColorV3;
+    lightInfo.ambientColor = _ambientColorV3;
+    lightInfo.shiniess = _shiniess;
+    lightInfo.attenuation = _attenuation;
     // !!!: transfer light position in view space
     GLKVector4 lightPosition = GLKMatrix4MultiplyVector4([self transformMatrix], GLKVector4Make(0, 0, 0, 1));
     lightPosition = GLKMatrix4MultiplyVector4(camera.viewMatrix, lightPosition);
-    glUniform4fv(_uniformInfo.lightPosition_vec4, 1, lightPosition.v);
+    lightInfo.lightPosition = lightPosition;
+    _lightInfo = lightInfo;
     
-    [self transformMatrix];
-    return;
+//    glUniform1i(_uniformInfo.lightType_i, CELightTypePoint);
+//    glUniform1f(_uniformInfo.isEnabled_b, _enabled ? 1.0 : 0.0);
+//    glUniform3fv(_uniformInfo.lightColor_vec3, 1, _lightColorV3.v);
+//    glUniform3fv(_uniformInfo.ambientColor_vec3, 1, _ambientColorV3.v);
+//    glUniform1f(_uniformInfo.shiniess_f, (GLfloat)_shiniess);
+//    glUniform1f(_uniformInfo.attenuation_f, _attenuation);
+//    
+//    // !!!: transfer light position in view space
+//    GLKVector4 lightPosition = GLKMatrix4MultiplyVector4([self transformMatrix], GLKVector4Make(0, 0, 0, 1));
+//    lightPosition = GLKMatrix4MultiplyVector4(camera.viewMatrix, lightPosition);
+//    glUniform4fv(_uniformInfo.lightPosition_vec4, 1, lightPosition.v);
     
     _hasLightChanged = NO;
     if (self.hasChanged) {
         [self transformMatrix]; // call to set the hasChanged property to NO
     }
-//    CEPrintf("Update Point Light Uniform\n");
+    CEPrintf("Update Point Light Uniform\n");
+    return _lightInfo;
 }
+//*/
 
 
 #pragma mark - Shadow Mapping
