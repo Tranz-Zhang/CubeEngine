@@ -22,18 +22,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.scene.camera.position = GLKVector3Make(0, 20, 20);
-    [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
-    self.scene.camera.nearZ = 10;
-    self.scene.camera.farZ = 50;
+    self.scene.camera.position = GLKVector3Make(0, 2, 5);
+    [self.scene.camera lookAt:GLKVector3Make(0, 1, 0)];
+//    self.scene.camera.nearZ = 0;
+//    self.scene.camera.farZ = 100;
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    _testModel = [CEModel modelWithObjFile:@"test_scene"];
-    _testModel.scale = GLKVector3Make(0.9, 0.9, 0.9);
-    _testModel.eulerAngles = GLKVector3Make(0, 15, 0);
+    _testModel = [CEModel modelWithObjFile:@"sample_scene"];
+    _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
     _testModel.showWireframe = YES;
     _testModel.showAccessoryLine = YES;
     [self recursiveSetColorForModel:_testModel];
+    for (CEModel *model in _testModel.childObjects) {
+        if ([model.name isEqualToString:@"leaf"]) {
+            model.material.materialType = CEMaterialAlphaTested;
+        }
+    }
     
     printf("model loading duration: %.4f\n", CFAbsoluteTimeGetCurrent() - start);
     [self.scene addModel:_testModel];
@@ -48,7 +52,7 @@
     directionalLight.position = GLKVector3Make(8, 12, 8);
     directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [directionalLight lookAt:GLKVector3Make(0, 0, 0)];
-    directionalLight.enableShadow = YES;
+//    directionalLight.enableShadow = YES;
     [self.scene addLight:directionalLight];
 }
 
@@ -69,17 +73,15 @@
 }
 
 
-- (IBAction)onParse:(id)sender {
-    [_testModel recursivePrint];
-//    CEModel *cube = [_testModel childWithName:@"MyPlande"];
-//    cube.baseColor = [self randomColor];
+- (IBAction)onSliderChanged:(UISlider *)sender {
+    CEModel *test = [_testModel childWithName:@"monkey"];
+    test.material.transparency = sender.value;
 }
 
 
 #pragma mark - Others
 - (void)recursiveSetColorForModel:(CEModel *)model {
     model.baseColor = [self randomColor];
-    model.castShadows = YES;
     for (CEModel *child in model.childObjects) {
         [self recursiveSetColorForModel:child];
     }

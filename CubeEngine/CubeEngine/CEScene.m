@@ -10,8 +10,8 @@
 #import "CEScene_Rendering.h"
 
 @interface CEScene () {
-    NSSet *_models;
-    NSSet *_lights;
+    NSArray *_models;
+    NSArray *_lights;
 }
 
 @end
@@ -60,12 +60,12 @@ static CEScene *sCurrentScene;
 }
 
 
-- (NSSet *)allModels {
+- (NSArray *)allModels {
     return _models;
 }
 
 
-- (NSSet *)allLights {
+- (NSArray *)allLights {
     return _lights;
 }
 
@@ -73,7 +73,7 @@ static CEScene *sCurrentScene;
 - (void)addModel:(CEModel *)model {
     if ([model isKindOfClass:[CEModel class]] &&
         ![_models containsObject:model]) {
-        NSMutableSet *tmpList = [NSMutableSet setWithSet:_models];
+        NSMutableArray *tmpList = [NSMutableArray arrayWithArray:_models];
         [tmpList addObject:model];
         _models = tmpList.copy;
         
@@ -85,7 +85,7 @@ static CEScene *sCurrentScene;
 
 - (void)removeModel:(CEModel *)model {
     if ([_models containsObject:model]) {
-        NSMutableSet *tmpList = [NSMutableSet setWithSet:_models];
+        NSMutableArray *tmpList = [NSMutableArray arrayWithArray:_models];
         [tmpList removeObject:model];
         _models = tmpList.copy;
     }
@@ -94,7 +94,7 @@ static CEScene *sCurrentScene;
 
 - (void)addModels:(NSArray *)models {
     if (!models.count) return;
-    NSMutableSet *tmpList = [NSMutableSet setWithSet:_models];
+    NSMutableArray *tmpList = [NSMutableArray arrayWithArray:_models];
     for (CEModel *model in models) {
         if ([model isKindOfClass:[CEModel class]] &&
             ![tmpList containsObject:model]) {
@@ -107,7 +107,7 @@ static CEScene *sCurrentScene;
 
 - (void)removeModels:(NSArray *)models {
     if (!models.count) return;
-    NSMutableSet *tmpList = [NSMutableSet setWithSet:_models];
+    NSMutableArray *tmpList = [NSMutableArray arrayWithArray:_models];
     for (CEModel *model in models) {
         if ([tmpList containsObject:model]) {
             [tmpList removeObject:model];
@@ -123,7 +123,7 @@ static CEScene *sCurrentScene;
         [light isKindOfClass:[CELight class]] &&
         ![_lights containsObject:light]) {
         
-        NSMutableSet *tmpList = [NSMutableSet setWithSet:_lights];
+        NSMutableArray *tmpList = [NSMutableArray arrayWithArray:_lights];
         [tmpList addObject:light];
         _lights = tmpList.copy;
     }
@@ -132,7 +132,7 @@ static CEScene *sCurrentScene;
 
 - (void)removeLight:(CELight *)light {
     if ([_lights containsObject:light]) {
-        NSMutableSet *tmpList = [NSMutableSet setWithSet:_lights];
+        NSMutableArray *tmpList = [NSMutableArray arrayWithArray:_lights];
         [tmpList removeObject:light];
         _lights = tmpList.copy;
     }

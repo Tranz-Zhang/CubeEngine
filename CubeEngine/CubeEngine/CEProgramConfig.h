@@ -8,8 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(int, CERenderMode) {
+    CERenderModeSolid = 0,
+    CERenderModeAlphaTest,
+    CERenderModeTransparent,
+};
+
 @interface CEProgramConfig : NSObject <NSCopying>
 
+@property (nonatomic, assign) CERenderMode renderMode;
 @property (nonatomic, assign) int lightCount;
 @property (nonatomic, assign) BOOL enableShadowMapping;
 @property (nonatomic, assign) BOOL enableTexture;

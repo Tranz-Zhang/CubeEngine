@@ -80,7 +80,7 @@
         }
         
         // parse group "g group1 pPipe1 group2"
-        if ([lineContent hasPrefix:@"g "]) {
+        if ([lineContent hasPrefix:@"g "] || [lineContent hasPrefix:@"o "]) {
             NSString *valueString = [lineContent substringFromIndex:2];
             NSArray *groupNames = [valueString componentsSeparatedByString:@" "];
             CEObjMeshInfo *newGroup = [CEObjMeshInfo new];

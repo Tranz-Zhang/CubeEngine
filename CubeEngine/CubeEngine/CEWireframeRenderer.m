@@ -38,7 +38,7 @@
 }
 
 
-- (void)renderWireframeForObjects:(NSSet *)objects {
+- (void)renderWireframeForObjects:(NSArray *)objects {
     if (!_program.initialized) {
         return;
     }

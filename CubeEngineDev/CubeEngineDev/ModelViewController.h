@@ -12,3 +12,5 @@
 @interface ModelViewController : CEViewController
 
 @end
+
+#warning Test object look function with child object (object that has parent)

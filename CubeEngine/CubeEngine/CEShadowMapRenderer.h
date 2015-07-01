@@ -12,6 +12,6 @@
 
 @property (nonatomic, assign) GLKMatrix4 lightVPMatrix;
 
-- (void)renderShadowMapWithObjects:(NSSet *)objects;
+- (void)renderShadowMapWithObjects:(NSArray *)objects;
 
 @end

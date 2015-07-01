@@ -98,7 +98,7 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
 
 // data struct: position[3] color[4]
 
-- (void)renderBoundsForObjects:(NSSet *)objects {
+- (void)renderBoundsForObjects:(NSArray *)objects {
     if (!_program.initialized) {
         return;
     }
@@ -185,7 +185,7 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
 
 
 #pragma mark - Light
-- (void)renderLights:(NSSet *)lights {
+- (void)renderLights:(NSArray *)lights {
     if (!_program.initialized || !lights.count) {
         return;
     }

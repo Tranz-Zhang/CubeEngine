@@ -23,8 +23,8 @@
  */
 @interface CEScene : NSObject
 
-@property (nonatomic, readonly) NSSet *allModels;
-@property (nonatomic, readonly) NSSet *allLights;
+@property (nonatomic, readonly) NSArray *allModels;
+@property (nonatomic, readonly) NSArray *allLights;
 @property (nonatomic, readonly) NSInteger maxLightCount;
 @property (nonatomic, readonly) CECamera *camera;
 @property (nonatomic, copy) UIColor *backgroundColor;

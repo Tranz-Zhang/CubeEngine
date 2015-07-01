@@ -38,7 +38,6 @@
 - (CEModel *)duplicate;
 
 
-
 #pragma mark - debug
 
 // indicates if show wireframe under debug mode

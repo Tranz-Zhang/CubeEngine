@@ -27,12 +27,15 @@
     
     // texture
     GLint _attriTextureCoord_vec2;
-    GLint _uniModelTexture_tex;
+    GLint _uniDiffuseTexture_tex;
     
     // shadow map
     GLint _uniShadowDarkness_f;
     GLint _uniDepthBiasMVP_mtx4;
     GLint _uniShadowMap_tex;
+    
+    // transparency
+    GLint _uniTransparency_f;
 }
 
 
@@ -60,14 +63,15 @@
 
 // texture
 - (BOOL)setTextureCoordinateAttribute:(CEVBOAttribute *)attribute;
-- (BOOL)setTexture:(GLuint)textureId;
+- (BOOL)setDiffuseTexture:(GLuint)textureId;
 
 // shadow map
 - (BOOL)setDepthBiasModelViewProjectionMatrix:(GLKMatrix4)depthBiasMVPMatrix4;
 - (BOOL)setShadowDarkness:(GLfloat)shadowDarkness;
 - (BOOL)setShadowMapTexture:(GLuint)textureId;
 
-
+// transparency
+- (BOOL)setTransparency:(GLfloat)transparency;
 
 @end
 

@@ -112,7 +112,7 @@
 //*/
 
 #pragma mark - Shadow Mapping
-- (void)updateLightVPMatrixWithModels:(NSSet *)models {
+- (void)updateLightVPMatrixWithModels:(NSArray *)models {
     if (!models.count) return;
     
     // update light projection matrix

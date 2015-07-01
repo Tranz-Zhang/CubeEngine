@@ -1,0 +1,45 @@
+newmtl sample_scene:background_background_png
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd background.png
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 96.08
+newmtl sample_scene:balloon_balloon_png
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 0.65 0.65 0.65
+map_Kd balloon.png
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 66.67
+newmtl sample_scene:ground_grass_png
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd grass.png
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 96.08
+newmtl sample_scene:momo_momo_png
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd momo.png
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 96.08
+newmtl sample_scene:tree_tree_png
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd tree.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 96.08

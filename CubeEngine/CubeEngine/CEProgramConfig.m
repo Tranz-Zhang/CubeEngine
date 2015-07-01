@@ -22,6 +22,7 @@
 
 - (id)copyWithZone:(NSZone *)zone {
     CEProgramConfig *copiedConfig = [[CEProgramConfig allocWithZone:zone] init];
+    copiedConfig.renderMode = _renderMode;
     copiedConfig.lightCount = _lightCount;
     copiedConfig.enableShadowMapping = _enableShadowMapping;
     copiedConfig.enableNormalMapping = _enableNormalMapping;
@@ -38,13 +39,15 @@
     hashValue += (_enableNormalMapping ? 1 : 0) << 1;
     hashValue += (_enableShadowMapping ? 1 : 0) << 2;
     // 6 x 4bit for value property
-    hashValue += _lightCount & 0x000F << 8;
+    hashValue += _renderMode & 0x000F << 8;
+    hashValue += _lightCount & 0x000F << 12;
     return hashValue;
 }
 
 
 - (BOOL)isEqualToConfig:(CEProgramConfig *)config {
-    return (config.lightCount == _lightCount &&
+    return (config.renderMode == _renderMode &&
+            config.lightCount == _lightCount &&
             config.enableShadowMapping == _enableShadowMapping &&
             config.enableTexture == _enableTexture &&
             config.enableNormalMapping == _enableNormalMapping);

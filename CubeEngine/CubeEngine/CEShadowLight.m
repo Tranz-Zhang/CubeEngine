@@ -38,4 +38,9 @@
 }
 
 
+- (void)updateLightVPMatrixWithModels:(NSArray *)models {
+    // implemented by subclass
+}
+
+
 @end

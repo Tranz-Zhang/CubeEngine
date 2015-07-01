@@ -45,7 +45,7 @@
 }
 
 
-- (void)renderObjects:(NSSet *)objects {
+- (void)renderObjects:(NSArray *)objects {
     if (!_program || !_camera) {
         CEError(@"Invalid renderer environment");
         return;
@@ -114,7 +114,6 @@
     
     [_program setBaseColor:model.vec3BaseColor];
     
-    
     // setup vertex buffer
     if (![model.vertexBuffer setupBuffer] ||
         (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
@@ -127,12 +126,10 @@
         return;
     }
     
-    
     // setup MVP matrix
     GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
     GLKMatrix4 modelViewProjectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
     [_program setModelViewProjectionMatrix:modelViewProjectionMatrix];
-    
     
     if (_config.lightCount) {
         if (![_program setNormalAttribute:[model.vertexBuffer attributeWithName:CEVBOAttributeNormal]]) {
@@ -164,12 +161,17 @@
         CEVBOAttribute *textureCoordAttri = [model.vertexBuffer attributeWithName:CEVBOAttributeTextureCoord];
         if (model.texture && textureCoordAttri) {
             [_program setTextureCoordinateAttribute:textureCoordAttri];
-            [_program setTexture:model.texture.name];
+            [_program setDiffuseTexture:model.texture.name];
             
         } else {
             [_program setTextureCoordinateAttribute:nil];
-            [_program setTexture:0];
+            [_program setDiffuseTexture:0];
         }
+    }
+    
+    // transparency
+    if (_config.renderMode == CERenderModeTransparent) {
+        [_program setTransparency:model.material.transparency];
     }
     
     if (model.indicesBuffer) { // glDrawElements

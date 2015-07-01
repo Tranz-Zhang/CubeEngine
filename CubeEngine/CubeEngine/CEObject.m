@@ -148,6 +148,18 @@
 //*/
 }
 
+
+- (GLKVector3)positionInWorldCoordinate {
+    GLKVector3 position = _position;
+    CEObject *parent = _parentObject;
+    while (parent) {
+        position = GLKVector3Add(position, parent.position);
+        parent = parent.parentObject;
+    }
+    return position;
+}
+
+
 /*
 glm::quat RotationBetweenVectors(glm::vec3 start, glm::vec3 dest){
     start = glm::normalize(start);

@@ -17,9 +17,9 @@
 
 @property (nonatomic, weak) CECamera *camera;
 
-- (void)renderBoundsForObjects:(NSSet *)objects;
+- (void)renderBoundsForObjects:(NSArray *)objects;
 
-- (void)renderLights:(NSSet *)lights;
+- (void)renderLights:(NSArray *)lights;
 
 - (void)renderWorldOriginCoordinate;
 

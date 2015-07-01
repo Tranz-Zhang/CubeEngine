@@ -21,6 +21,6 @@
 @property (nonatomic, readonly) GLKMatrix4 lightProjectionMatrix;
 
 // update view matrix and projection matrix. Should be overwited by subclass
-- (void)updateLightVPMatrixWithModels:(NSSet *)models;
+- (void)updateLightVPMatrixWithModels:(NSArray *)models;
 
 @end

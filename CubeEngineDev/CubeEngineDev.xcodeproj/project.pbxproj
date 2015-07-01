@@ -48,6 +48,15 @@
 		44D0CCE91AECA677000C137C /* rotation_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44D0CCE71AECA677000C137C /* rotation_icon@2x.png */; };
 		44D0CCEC1AECFEBC000C137C /* PointLightControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D0CCEB1AECFEBC000C137C /* PointLightControl.m */; };
 		44D0CCEE1AED26E8000C137C /* PointLightControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44D0CCED1AED26E8000C137C /* PointLightControl.xib */; };
+		4C10ED931B4248A80048636C /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED8C1B4248A80048636C /* background.png */; };
+		4C10ED941B4248A80048636C /* balloon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED8D1B4248A80048636C /* balloon.png */; };
+		4C10ED951B4248A80048636C /* grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED8E1B4248A80048636C /* grass.png */; };
+		4C10ED961B4248A80048636C /* leaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED8F1B4248A80048636C /* leaf.png */; };
+		4C10ED971B4248A80048636C /* momo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED901B4248A80048636C /* momo.png */; };
+		4C10ED981B4248A80048636C /* sample_scene.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED911B4248A80048636C /* sample_scene.mtl */; };
+		4C10ED991B4248A80048636C /* sample_scene.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED921B4248A80048636C /* sample_scene.obj */; };
+		4C10ED9D1B4282BA0048636C /* sample_scene_noleaf.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED9B1B4282BA0048636C /* sample_scene_noleaf.mtl */; };
+		4C10ED9E1B4282BA0048636C /* sample_scene_noleaf.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED9C1B4282BA0048636C /* sample_scene_noleaf.obj */; };
 		4C595AF51AEC7C60006900EF /* DirectionalLightControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C595AF41AEC7C60006900EF /* DirectionalLightControl.m */; };
 		4C595AF71AEC7CCD006900EF /* DirectionalLightControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C595AF61AEC7CCD006900EF /* DirectionalLightControl.xib */; };
 		4C595AFB1AEC835D006900EF /* UINibView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C595AFA1AEC835D006900EF /* UINibView.m */; };
@@ -134,6 +143,15 @@
 		44D0CCEA1AECFEBC000C137C /* PointLightControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointLightControl.h; sourceTree = "<group>"; };
 		44D0CCEB1AECFEBC000C137C /* PointLightControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointLightControl.m; sourceTree = "<group>"; };
 		44D0CCED1AED26E8000C137C /* PointLightControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PointLightControl.xib; sourceTree = "<group>"; };
+		4C10ED8C1B4248A80048636C /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		4C10ED8D1B4248A80048636C /* balloon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = balloon.png; sourceTree = "<group>"; };
+		4C10ED8E1B4248A80048636C /* grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass.png; sourceTree = "<group>"; };
+		4C10ED8F1B4248A80048636C /* leaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaf.png; sourceTree = "<group>"; };
+		4C10ED901B4248A80048636C /* momo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = momo.png; sourceTree = "<group>"; };
+		4C10ED911B4248A80048636C /* sample_scene.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_scene.mtl; sourceTree = "<group>"; };
+		4C10ED921B4248A80048636C /* sample_scene.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_scene.obj; sourceTree = "<group>"; };
+		4C10ED9B1B4282BA0048636C /* sample_scene_noleaf.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_scene_noleaf.mtl; sourceTree = "<group>"; };
+		4C10ED9C1B4282BA0048636C /* sample_scene_noleaf.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_scene_noleaf.obj; sourceTree = "<group>"; };
 		4C595AF31AEC7C60006900EF /* DirectionalLightControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionalLightControl.h; sourceTree = "<group>"; };
 		4C595AF41AEC7C60006900EF /* DirectionalLightControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionalLightControl.m; sourceTree = "<group>"; };
 		4C595AF61AEC7CCD006900EF /* DirectionalLightControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DirectionalLightControl.xib; sourceTree = "<group>"; };
@@ -253,6 +271,7 @@
 		261CD42E1AD3DE3D00C521CC /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4C10ED791B4237C40048636C /* SampleScene */,
 				26FF85301B0A14F70075B971 /* sponza.mtl */,
 				26FF85311B0A14F70075B971 /* teapot_bump.mtl */,
 				26FF85321B0A14F70075B971 /* teapot_bump.obj */,
@@ -279,6 +298,22 @@
 				261CD4321AD3DE8B00C521CC /* cylinder.obj */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		4C10ED791B4237C40048636C /* SampleScene */ = {
+			isa = PBXGroup;
+			children = (
+				4C10ED8C1B4248A80048636C /* background.png */,
+				4C10ED8D1B4248A80048636C /* balloon.png */,
+				4C10ED8E1B4248A80048636C /* grass.png */,
+				4C10ED8F1B4248A80048636C /* leaf.png */,
+				4C10ED901B4248A80048636C /* momo.png */,
+				4C10ED911B4248A80048636C /* sample_scene.mtl */,
+				4C10ED921B4248A80048636C /* sample_scene.obj */,
+				4C10ED9B1B4282BA0048636C /* sample_scene_noleaf.mtl */,
+				4C10ED9C1B4282BA0048636C /* sample_scene_noleaf.obj */,
+			);
+			path = SampleScene;
 			sourceTree = "<group>";
 		};
 		4C595AF21AEC7C25006900EF /* Accessory */ = {
@@ -410,18 +445,23 @@
 				26FF85331B0A14F70075B971 /* sponza.mtl in Resources */,
 				44D0CCEE1AED26E8000C137C /* PointLightControl.xib in Resources */,
 				263C8E791AE68738004FDFE8 /* teapot.obj in Resources */,
+				4C10ED951B4248A80048636C /* grass.png in Resources */,
 				264B13201B05F4540066195D /* test_scene.mtl in Resources */,
 				2684E9CD1B044A140044C16E /* normal.jpg in Resources */,
 				44D0CCE91AECA677000C137C /* rotation_icon@2x.png in Resources */,
+				4C10ED961B4248A80048636C /* leaf.png in Resources */,
 				2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */,
 				269249901B02F3CF0069892D /* teapot_texture.mtl in Resources */,
 				268CBC661ADD412200795A6D /* cube.obj in Resources */,
 				261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */,
 				269249921B02F3CF0069892D /* default.png in Resources */,
+				4C10ED991B4248A80048636C /* sample_scene.obj in Resources */,
 				26193F861AA833BF00787C64 /* Main.storyboard in Resources */,
 				44D0CCE81AECA677000C137C /* transition_icon@2x.png in Resources */,
+				4C10ED941B4248A80048636C /* balloon.png in Resources */,
 				26A00DB61AFB014C00E12B24 /* floor.obj in Resources */,
 				4C595AF71AEC7CCD006900EF /* DirectionalLightControl.xib in Resources */,
+				4C10ED971B4248A80048636C /* momo.png in Resources */,
 				263C8E781AE68738004FDFE8 /* teapot_smooth.obj in Resources */,
 				26FF85341B0A14F70075B971 /* teapot_bump.mtl in Resources */,
 				4461FD091AEE9A3700A59229 /* SpotLightControl.xib in Resources */,
@@ -433,7 +473,11 @@
 				2648E6AD1AD516DA00E146D8 /* test_obj.obj in Resources */,
 				2609491D1B05CCBE00F7465B /* test.obj in Resources */,
 				264B13211B05F4540066195D /* test_scene.obj in Resources */,
+				4C10ED9E1B4282BA0048636C /* sample_scene_noleaf.obj in Resources */,
 				268CBC681ADD42A900795A6D /* cube_triangle.obj in Resources */,
+				4C10ED931B4248A80048636C /* background.png in Resources */,
+				4C10ED9D1B4282BA0048636C /* sample_scene_noleaf.mtl in Resources */,
+				4C10ED981B4248A80048636C /* sample_scene.mtl in Resources */,
 				4C595B001AEC90CC006900EF /* hide_icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

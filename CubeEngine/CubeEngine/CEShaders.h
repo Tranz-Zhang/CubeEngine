@@ -159,26 +159,43 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  
 // texture
 \n#ifdef CE_ENABLE_TEXTURE\n
- uniform lowp sampler2D TextureMap;
+ uniform lowp sampler2D DiffuseTexture;
  varying vec2 TextureCoordOut;
 \n#endif\n
 // end of texture
  
+ \n#ifdef CE_RENDER_TRANSPARENT_OBJECT\n // TRANSPARENT OBJECT
+ uniform float Transparency;
+ \n#endif\n
+ 
  void main() {
+     //---------------------- input color ----------------------
      vec4 inputColor;
-     
      \n#ifdef CE_ENABLE_TEXTURE\n
-     inputColor = texture2D(TextureMap, TextureCoordOut);
+     inputColor = texture2D(DiffuseTexture, TextureCoordOut);
      \n#else\n
      inputColor = BaseColor;
      \n#endif\n
      
+     \n#ifdef CE_RENDER_ALPHA_TESTED_OBJECT\n // ALPHA TESTED OBJECT
+     if (inputColor.a < 0.5) discard;
+     \n#endif\n
+     
+     //--------------------- process color ---------------------
+     vec4 processedColor;
      \n#ifdef CE_ENABLE_LIGHTING\n
          vec3 lightingColor = ApplyLightingEffect(inputColor.rgb);
-         gl_FragColor = vec4(lightingColor.rgb, inputColor.a);
+         processedColor = vec4(lightingColor.rgb, inputColor.a);
      \n#else\n
-         gl_FragColor = inputColor;
+         processedColor = inputColor;
      \n#endif\n
+     
+     //--------------------- final blending ---------------------
+     \n#ifdef CE_RENDER_TRANSPARENT_OBJECT\n // TRANSPARENT OBJECT
+     processedColor.a = Transparency;
+     \n#endif\n
+     
+     gl_FragColor = processedColor;
  }
 );
 

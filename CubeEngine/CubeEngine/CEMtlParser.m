@@ -85,25 +85,36 @@
             currentMaterial.emission = [self vec3FromString:valueString];
             continue;
         }
+        if ([lineContent hasPrefix:@"Tf "]) {
+            NSString *valueString = [lineContent substringFromIndex:3];
+            GLKVector3 tf = [self vec3FromString:valueString];
+            currentMaterial.transparency = (tf.x + tf.y + tf.z) / 3.0;
+            continue;
+        }
         if ([lineContent hasPrefix:@"Ns "]) {
             NSString *valueString = [lineContent substringFromIndex:3];
             currentMaterial.exponent = [valueString floatValue];
+            continue;
         }
         if ([lineContent hasPrefix:@"sharpness "]) {
             NSString *valueString = [lineContent substringFromIndex:10];
             currentMaterial.shiniess = [valueString floatValue];
+            continue;
         }
         if ([lineContent hasPrefix:@"map_Kd "]) {
             NSString *valueString = [lineContent substringFromIndex:7];
-            currentMaterial.textureMap = valueString;
+            currentMaterial.diffuseTexture = valueString;
+            continue;
         }
         if ([lineContent hasPrefix:@"map_Kd "]) {
             NSString *valueString = [lineContent substringFromIndex:7];
-            currentMaterial.textureMap = valueString;
+            currentMaterial.diffuseTexture = valueString;
+            continue;
         }
         if ([lineContent hasPrefix:@"bump "]) {
             NSArray *values = [lineContent componentsSeparatedByString:@" "];
-            currentMaterial.normalMap = values[1];
+            currentMaterial.normalTexture = values[1];
+            continue;
         }
     }
     

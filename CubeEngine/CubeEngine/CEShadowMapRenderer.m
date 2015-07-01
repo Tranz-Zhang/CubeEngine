@@ -23,7 +23,7 @@
 }
 
 
-- (void)renderShadowMapWithObjects:(NSSet *)objects {
+- (void)renderShadowMapWithObjects:(NSArray *)objects {
     if (!_program || !objects.count) {
         return;
     }

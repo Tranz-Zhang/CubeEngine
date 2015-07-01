@@ -55,6 +55,14 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
 
 + (NSString *)fragmentShaderWithConfig:(CEProgramConfig *)config {
     NSMutableString *fragmentShaderString = [kFragmentSahder mutableCopy];
+    
+    if (config.renderMode == CERenderModeAlphaTest) {
+        [fragmentShaderString insertString:@"#define CE_RENDER_ALPHA_TESTED_OBJECT\n" atIndex:0];
+        
+    } else if (config.renderMode == CERenderModeTransparent) {
+        [fragmentShaderString insertString:@"#define CE_RENDER_TRANSPARENT_OBJECT\n" atIndex:0];
+    }
+    
     if (config.lightCount > 0) {
         [fragmentShaderString insertString:@"#define CE_ENABLE_LIGHTING\n" atIndex:0];
         [fragmentShaderString replaceOccurrencesOfString:@"CE_LIGHT_COUNT"
@@ -126,6 +134,9 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         }
         if (_config.enableTexture) {
             [self initializeTextureUniforms];
+        }
+        if (_config.renderMode == CERenderModeTransparent) {
+            _uniTransparency_f = [self uniformIndex:@"Transparency"];
         }
         
     } else {
@@ -210,7 +221,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
 
 - (void)initializeTextureUniforms {
     _attriTextureCoord_vec2  = [self attributeIndex:@"TextureCoord"];
-    _uniModelTexture_tex       = [self uniformIndex:@"TextureMap"];
+    _uniDiffuseTexture_tex       = [self uniformIndex:@"DiffuseTexture"];
 }
 
 
@@ -224,6 +235,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     if (!attribute) {
         glDisableVertexAttribArray(_attribPosition_vec4);
         _hasEnabledPosition = NO;
+        return YES;
         
     } else if (attribute.name != CEVBOAttributePosition ||
                attribute.primaryCount <= 0 ||
@@ -297,6 +309,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     if (!attribute) {
         glDisableVertexAttribArray(_attribNormal_vec3);
         _hasEnabledNormal = NO;
+        return YES;
         
     } else if (attribute.name != CEVBOAttributeNormal ||
                attribute.primaryCount <= 0 ||
@@ -357,6 +370,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     if (!attribute) {
         glDisableVertexAttribArray(_attriTextureCoord_vec2);
         _hasEnableTexture = NO;
+        return YES;
         
     } else if (attribute.name != CEVBOAttributeTextureCoord ||
                attribute.primaryCount <= 0 ||
@@ -379,15 +393,20 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     return YES;
 }
 
-- (BOOL)setTexture:(GLuint)textureId {
-    if (!_isEditing || _uniModelTexture_tex < 0) {
+- (BOOL)setDiffuseTexture:(GLuint)textureId {
+    if (!_isEditing || _uniDiffuseTexture_tex < 0) {
         return NO;
     }
+    
+    glActiveTexture(GL_TEXTURE0 + CETextureUnitModel);
+    glBindTexture(GL_TEXTURE_2D, textureId);
     GLuint currentTextureId = _textureIds[CETextureUnitModel];
     if (currentTextureId != textureId) {
-        glActiveTexture(GL_TEXTURE0 + CETextureUnitModel);
-        glBindTexture(GL_TEXTURE_2D, textureId);
-        glUniform1i(_uniModelTexture_tex, CETextureUnitModel);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glUniform1i(_uniDiffuseTexture_tex, CETextureUnitModel);
         _textureIds[CETextureUnitModel] = textureId;
     }
     
@@ -428,6 +447,17 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     
     return YES;
 }
+
+
+#pragma mark - transparency
+- (BOOL)setTransparency:(GLfloat)transparency {
+    if (!_isEditing || _uniTransparency_f < 0) {
+        return NO;
+    }
+    glUniform1f(_uniTransparency_f, transparency);
+    return YES;
+}
+
 
 
 @end

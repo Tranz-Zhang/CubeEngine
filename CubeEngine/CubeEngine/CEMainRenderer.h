@@ -13,13 +13,13 @@
 
 @interface CEMainRenderer : NSObject
 
-@property (nonatomic, strong) NSSet *lights;
+@property (nonatomic, strong) NSArray *lights;
 @property (nonatomic, weak) CECamera *camera;
 @property (nonatomic, weak) CEShadowLight *shadowLight;
 
 + (instancetype)rendererWithConfig:(CEProgramConfig *)config;
 
-- (void)renderObjects:(NSSet *)objects;
+- (void)renderObjects:(NSArray *)objects;
  
 
 @end
