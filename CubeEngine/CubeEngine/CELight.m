@@ -19,7 +19,6 @@
     if (self) {
         _lightInfo = [CELightInfo new];
         [self setLightColor:[UIColor whiteColor]];
-        [self setAmbientColor:[UIColor colorWithWhite:0.1 alpha:1]];
         [self setEnabled:YES];
     }
     return self;
@@ -51,15 +50,6 @@
         _lightInfo.lightColor = _lightColorV3;
     }
 }
-
-- (void)setAmbientColor:(UIColor *)ambientColor {
-    if (_ambientColor != ambientColor) {
-        _ambientColor = [ambientColor copy];
-        _ambientColorV3 = CEVec3WithColor(ambientColor);
-        _lightInfo.ambientColor = _ambientColorV3;
-    }
-}
-
 
 /*
 //- (void)setPosition:(GLKVector3)position {

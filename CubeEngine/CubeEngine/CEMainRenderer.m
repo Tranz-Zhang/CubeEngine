@@ -112,7 +112,9 @@
         return;
     }
     
-    [_program setBaseColor:model.vec3BaseColor];
+    if (model.material) {
+        [_program setDiffuseColor:GLKVector4MakeWithVector3(model.material.diffuseColor, 1.0)];
+    }
     
     // setup vertex buffer
     if (![model.vertexBuffer setupBuffer] ||
@@ -137,6 +139,11 @@
             return;
         }
         [_program setModelViewMatrix:modelViewMatrix];
+        if (model.material) {
+            [_program setSpecularColor:model.material.specularColor];
+            [_program setAmbientColor:model.material.ambientColor];
+            [_program setShininessExponent:model.material.shininessExponent];
+        }
         
         // setup normal matrix
         GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(modelViewMatrix);

@@ -57,7 +57,14 @@
                                                                      attributes:mesh.attributes];
             CEModel *model = [[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
             model.name = groupName;
-            model.material = materialDict[mesh.materialName];
+            model.material = [materialDict[mesh.materialName] copy];
+            if (!model.material) {
+                CEMaterial *defaultMaterial = [CEMaterial new];
+                defaultMaterial.name = @"DefaultMaterial";
+                defaultMaterial.materialType = CEMaterialSolid;
+                defaultMaterial.diffuseColor = GLKVector3Make(1.0, 1.0, 1.0);
+                model.material = defaultMaterial;
+            }
             modelDict[[mesh description]] = model;
             [topMostModels addObject:model];
             

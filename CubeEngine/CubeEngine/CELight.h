@@ -10,12 +10,10 @@
 
 @interface CELight : CEObject {
     GLKVector3 _lightColorV3;
-    GLKVector3 _ambientColorV3;
 }
 
 @property (nonatomic, assign, getter=isEnabled) BOOL enabled;
 @property (nonatomic, copy) UIColor *lightColor; // default is withte
-@property (nonatomic, copy) UIColor *ambientColor; // default is 0.2*White
 
 
 @end

@@ -62,20 +62,21 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
 (
  precision mediump float;
  
- //  basic info
- uniform vec4 BaseColor;
+ //  material
+ uniform vec4 DiffuseColor;
  
  // lighting
  \n#ifdef CE_ENABLE_LIGHTING\n
+ uniform vec3 SpecularColor;
+ uniform vec3 AmbientColor;
+ uniform float ShininessExponent;
+ 
  struct LightInfo {
      bool IsEnabled;
      int LightType; // 0:none 1:directional 2:point 3:spot
      vec4 LightPosition;
      vec3 LightDirection;
      vec3 LightColor;
-     vec3 AmbientColor;
-     float SpecularIntensity;
-     float Shiniess;
      float Attenuation;
      float SpotConsCutoff;
      float SpotExponent;
@@ -136,9 +137,9 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
          float diffuse = max(0.0, dot(Normal, lightDirection));
          float specular = max(0.0, dot(Normal, halfVector));
          
-         specular = (diffuse == 0.0) ? 0.0 : pow(specular, Lights[i].Shiniess);
-         scatteredLight += Lights[i].AmbientColor * attenuation + Lights[i].LightColor * diffuse * attenuation;
-         reflectedLight += Lights[i].LightColor * specular * attenuation;
+         specular = (diffuse == 0.0 || ShininessExponent == 0.0) ? 0.0 : pow(specular, ShininessExponent);
+         scatteredLight += AmbientColor * attenuation + Lights[i].LightColor * diffuse * attenuation;
+         reflectedLight += SpecularColor * specular * attenuation;
      }
      
      // apply shadow mapping
@@ -174,7 +175,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
      \n#ifdef CE_ENABLE_TEXTURE\n
      inputColor = texture2D(DiffuseTexture, TextureCoordOut);
      \n#else\n
-     inputColor = BaseColor;
+     inputColor = DiffuseColor;
      \n#endif\n
      
      \n#ifdef CE_RENDER_ALPHA_TESTED_OBJECT\n // ALPHA TESTED OBJECT

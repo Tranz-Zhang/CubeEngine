@@ -15,9 +15,9 @@
 @property (nonatomic, assign) GLint lightPosition_vec4;
 @property (nonatomic, assign) GLint lightDirection_vec3;
 @property (nonatomic, assign) GLint lightColor_vec3;
-@property (nonatomic, assign) GLint ambientColor_vec3;
-@property (nonatomic, assign) GLint specularIntensity_f;
-@property (nonatomic, assign) GLint shiniess_f;
+//@property (nonatomic, assign) GLint ambientColor_vec3;
+//@property (nonatomic, assign) GLint specularIntensity_f;
+//@property (nonatomic, assign) GLint shiniess_f;
 @property (nonatomic, assign) GLint attenuation_f;
 @property (nonatomic, assign) GLint spotCosCutoff_f;
 @property (nonatomic, assign) GLint spotExponent_f;

@@ -23,4 +23,20 @@
     _materialType = _transparency >= 1.0 ? CEMaterialSolid : CEMaterialTransparent;
 }
 
+
+- (id)copyWithZone:(NSZone *)zone {
+    CEMaterial *material = [[CEMaterial allocWithZone:zone] init];
+    material.name = _name;
+    material.materialType = _materialType;
+    material.diffuseTexture = _diffuseTexture;
+    material.normalTexture = _normalTexture;
+    material.ambientColor = _ambientColor;
+    material.diffuseColor = _diffuseColor;
+    material.specularColor = _specularColor;
+    material.shininessExponent = _shininessExponent;
+    material.transparency = _transparency;
+    
+    return material;
+}
+
 @end

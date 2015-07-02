@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 
 // calculate in order of y, z, x (yaw, pitch, roll)
@@ -34,6 +35,6 @@ void CompressIndicesData(NSData *originalData, NSData **compressedData, GLsizei 
 #pragma mark - Color To Vector
 
 GLKVector3 CEVec3WithColor(UIColor *color);
-
 GLKVector4 CEVec4WithColor(UIColor *color);
-
+UIColor *CEColorWithVec3(GLKVector3 vec3);
+UIColor *CEColorWithVec4(GLKVector4 vec4);

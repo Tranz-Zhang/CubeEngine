@@ -62,13 +62,6 @@
     _indicesBuffer = _sharedIndicesBuffer;
 }
 
-- (void)setShiniess:(GLint)shiniess {
-    if (_shiniess != shiniess) {
-        _shiniess = shiniess;
-        _lightInfo.shiniess = shiniess;
-    }
-}
-
 - (void)setAttenuation:(GLfloat)attenuation {
     if (_attenuation != attenuation) {
         _attenuation = attenuation;

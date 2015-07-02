@@ -16,7 +16,6 @@
 @property (nonatomic, readonly) CEVertexBuffer *vertexBuffer;
 @property (nonatomic, readonly) CEIndicesBuffer *indicesBuffer;
 @property (nonatomic, readonly) CEIndicesBuffer *wireframeBuffer;
-@property (nonatomic, readonly) GLKVector4 vec3BaseColor;
 
 // textures
 @property (nonatomic, strong) GLKTextureInfo *texture;

@@ -335,9 +335,9 @@
 		2624A6121B0B1943001E3F32 /* Program */ = {
 			isa = PBXGroup;
 			children = (
+				267F4D7E1B0CD26200F25452 /* CEShaders.h */,
 				2624A60F1B0AD234001E3F32 /* CEProgramConfig.h */,
 				2624A6101B0AD234001E3F32 /* CEProgramConfig.m */,
-				267F4D7E1B0CD26200F25452 /* CEShaders.h */,
 				267F4D7F1B0CD81100F25452 /* CEMainProgram.h */,
 				267F4D801B0CD81100F25452 /* CEMainProgram.m */,
 				4CD480921B40E7B40044517C /* CELightUniforms.h */,

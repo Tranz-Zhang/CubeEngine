@@ -61,7 +61,7 @@
         GLKMatrix4 mvpMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
         mvpMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, mvpMatrix);
         [_program setModelViewProjectionMatrix:mvpMatrix];
-        [_program setBaseColor:_lineColorVec4];
+        [_program setDiffuseColor:_lineColorVec4];
         glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);
     }
     [_program endRendering];

@@ -30,8 +30,10 @@
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     _testModel = [CEModel modelWithObjFile:@"sample_scene"];
     _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
-    _testModel.showWireframe = YES;
+//    _testModel.showWireframe = YES;
     _testModel.showAccessoryLine = YES;
+//    _testModel.material.specularColor = GLKVector3Make(1, 1, 1);
+//    _testModel.material.shiniess = 20;
     [self recursiveSetColorForModel:_testModel];
     for (CEModel *model in _testModel.childObjects) {
         if ([model.name isEqualToString:@"leaf"]) {

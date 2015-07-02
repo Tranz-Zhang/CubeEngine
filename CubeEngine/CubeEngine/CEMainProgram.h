@@ -15,7 +15,9 @@
     // basic
     GLint _attribPosition_vec4;
     GLint _uni4MVPMatrix_mtx4;
-    GLint _uniBaseColor_vec4;
+    
+    // material
+    GLint _uniDiffuseColor_vec4;
     
     // lighting
     GLint _attribNormal_vec3;
@@ -23,6 +25,10 @@
     GLint _uniMVMatrix_mtx4;
     GLint _uniNormalMatrix_mtx3;
     GLint _uniEyeDirection_vec3;
+    
+    GLint _uniSpecularColor_vec3;
+    GLint _uniAmbientColor_vec3;
+    GLint _uniShininessExponent_f;
     NSArray *_uniLightInfos;
     
     // texture
@@ -52,7 +58,7 @@
 // basic
 - (BOOL)setPositionAttribute:(CEVBOAttribute *)attribute;
 - (BOOL)setModelViewProjectionMatrix:(GLKMatrix4)mvpMatrix4;
-- (BOOL)setBaseColor:(GLKVector4)colorVec4;
+- (BOOL)setDiffuseColor:(GLKVector4)colorVec4;
 
 // lighting
 - (BOOL)setLightUniformsWithInfo:(CELightInfo *)lightInfos atIndex:(int)index;
@@ -60,6 +66,10 @@
 - (BOOL)setModelViewMatrix:(GLKMatrix4)mvMatrix4;
 - (BOOL)setNormalMatrix:(GLKMatrix3)normalMatrix3;
 - (BOOL)setEyeDirection:(GLKVector3)eyeDirectionVec3;
+
+- (BOOL)setSpecularColor:(GLKVector3)specularColor;
+- (BOOL)setAmbientColor:(GLKVector3)ambientColor;
+- (BOOL)setShininessExponent:(GLfloat)shininessExponent;
 
 // texture
 - (BOOL)setTextureCoordinateAttribute:(CEVBOAttribute *)attribute;
@@ -72,6 +82,8 @@
 
 // transparency
 - (BOOL)setTransparency:(GLfloat)transparency;
+
+
 
 @end
 

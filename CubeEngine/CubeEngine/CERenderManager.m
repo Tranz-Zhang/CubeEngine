@@ -101,43 +101,6 @@
     // 3. load texture for models
     [self loadTextureForModels:allModels];
 
-/*
-    // 4 .sort render objects
-    CEProgramConfig *baseConfig = [CEProgramConfig new];
-    baseConfig.enableShadowMapping = (shadowLight && shadowModels.count);
-    baseConfig.lightCount = (int)scene.allLights.count;
-    
-    NSMutableDictionary *sortedRenderObjectDict = [NSMutableDictionary dictionary];
-    for (CEModel *model in allModels) {
-        CEProgramConfig *modelConfig = baseConfig.copy;
-        modelConfig.renderMode = (int)model.material.materialType;
-        modelConfig.enableTexture = model.material.diffuseTexture.length ? YES : NO;
-        modelConfig.enableNormalMapping = model.material.normalTexture.length ? YES : NO;
-        NSMutableArray *modelsForConfig = sortedRenderObjectDict[modelConfig];
-        if (!modelsForConfig) {
-            modelsForConfig = [NSMutableArray array];
-            sortedRenderObjectDict[modelConfig] = modelsForConfig;
-        }
-        [modelsForConfig addObject:model];
-    }
-    
-    // 5. render models
-    glBindFramebuffer(GL_FRAMEBUFFER, scene.renderCore.defaultFramebuffer);
-    glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    [sortedRenderObjectDict enumerateKeysAndObjectsUsingBlock:^(CEProgramConfig *config, NSArray *models, BOOL *stop) {
-        CEMainRenderer *render = [self rendererWithConfig:config];
-        render.camera = scene.camera;
-        render.lights = scene.allLights;
-        render.shadowLight = shadowLight;
-        [render renderObjects:models];
-    }];
-//*/
-    
-//*
     // 4 .sort render objects
     CEProgramConfig *baseConfig = [CEProgramConfig new];
     baseConfig.enableShadowMapping = (shadowLight && shadowModels.count);
@@ -171,7 +134,6 @@
             [renderer renderObjects:group.renderObjects];
         }
     }
-//*/
     
     // 6. render debug info
     if (scene.enableDebug) {

@@ -30,9 +30,9 @@
 // "Kd" diffuse √
 // "Ks" specular √
 // "Ke" emission √
-
-// "illum" ?
-// "d" ?
+// "Tf" transparency √
+// "illum" 灯光模式
+// "d"  dissolve
 // "Ns" exponent √
 // "sharpness" sharpness √
 // "Ni" index of refraction 折射率
@@ -40,8 +40,10 @@
 // "map_Kd" ... √ used as texture
 // "map_Ks" ...
 // "map_Ns" ...
+// "map_Tr" ...
 // "map_d"  ...
 // "bump" bumb map (normal map) √
+
 
 - (NSArray *)parse {
     NSError *error;
@@ -67,24 +69,24 @@
         }
         if ([lineContent hasPrefix:@"Ka "]) {
             NSString *valueString = [lineContent substringFromIndex:3];
-            currentMaterial.ambient = [self vec3FromString:valueString];
+            currentMaterial.ambientColor = [self vec3FromString:valueString];
             continue;
         }
         if ([lineContent hasPrefix:@"Kd "]) {
             NSString *valueString = [lineContent substringFromIndex:3];
-            currentMaterial.diffuse = [self vec3FromString:valueString];
+            currentMaterial.diffuseColor = [self vec3FromString:valueString];
             continue;
         }
         if ([lineContent hasPrefix:@"Ks "]) {
             NSString *valueString = [lineContent substringFromIndex:3];
-            currentMaterial.specular = [self vec3FromString:valueString];
+            currentMaterial.specularColor = [self vec3FromString:valueString];
             continue;
         }
-        if ([lineContent hasPrefix:@"Ke "]) {
-            NSString *valueString = [lineContent substringFromIndex:3];
-            currentMaterial.emission = [self vec3FromString:valueString];
-            continue;
-        }
+//        if ([lineContent hasPrefix:@"Ke "]) {
+//            NSString *valueString = [lineContent substringFromIndex:3];
+//            currentMaterial.emissionColor = [self vec3FromString:valueString];
+//            continue;
+//        }
         if ([lineContent hasPrefix:@"Tf "]) {
             NSString *valueString = [lineContent substringFromIndex:3];
             GLKVector3 tf = [self vec3FromString:valueString];
@@ -93,14 +95,14 @@
         }
         if ([lineContent hasPrefix:@"Ns "]) {
             NSString *valueString = [lineContent substringFromIndex:3];
-            currentMaterial.exponent = [valueString floatValue];
+            currentMaterial.shininessExponent = [valueString floatValue];
             continue;
         }
-        if ([lineContent hasPrefix:@"sharpness "]) {
-            NSString *valueString = [lineContent substringFromIndex:10];
-            currentMaterial.shiniess = [valueString floatValue];
-            continue;
-        }
+//        if ([lineContent hasPrefix:@"sharpness "]) {
+//            NSString *valueString = [lineContent substringFromIndex:10];
+//            currentMaterial.shininessExponent = [valueString floatValue];
+//            continue;
+//        }
         if ([lineContent hasPrefix:@"map_Kd "]) {
             NSString *valueString = [lineContent substringFromIndex:7];
             currentMaterial.diffuseTexture = valueString;

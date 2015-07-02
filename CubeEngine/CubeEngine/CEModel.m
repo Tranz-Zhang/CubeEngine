@@ -82,11 +82,13 @@
 #pragma mark - Setters & Getters
 
 - (void)setBaseColor:(UIColor *)baseColor {
-    if (_baseColor != baseColor) {
-        _baseColor = [baseColor copy];
-        _vec3BaseColor = CEVec4WithColor(baseColor);
-    }
+    _material.diffuseColor = CEVec3WithColor(baseColor);
 }
+
+- (UIColor *)baseColor {
+    return _material ? CEColorWithVec3(_material.diffuseColor) : nil;
+}
+
 
 #pragma mark - API
 

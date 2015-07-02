@@ -89,7 +89,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         _config = [config copy];
         _attribPosition_vec4 = -1;
         _uni4MVPMatrix_mtx4 = -1;
-        _uniBaseColor_vec4 = -1;
+        _uniDiffuseColor_vec4 = -1;
         
         // lighting
         _uniLightCount_i = -1;
@@ -121,9 +121,9 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     
     BOOL isOK = [self link];
     if (isOK) {
-        _attribPosition_vec4 = [self attributeIndex:@"VertexPosition"];
-        _uni4MVPMatrix_mtx4   = [self uniformIndex:@"MVPMatrix"];
-        _uniBaseColor_vec4   = [self uniformIndex:@"BaseColor"];
+        _attribPosition_vec4    = [self attributeIndex:@"VertexPosition"];
+        _uni4MVPMatrix_mtx4     = [self uniformIndex:@"MVPMatrix"];
+        _uniDiffuseColor_vec4   = [self uniformIndex:@"DiffuseColor"];
         if (_config.lightCount > 0) {
             [self initializeLightUniforms];
             [self use];
@@ -164,11 +164,14 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
 
 #pragma makr - Initialize Uniforms {
 - (void)initializeLightUniforms {
-    _attribNormal_vec3       = [self attributeIndex:@"VertexNormal"];
-    _uniNormalMatrix_mtx3    = [self uniformIndex:@"NormalMatrix"];
-    _uniLightCount_i       = [self uniformIndex:@"LightCount"];
-    _uniMVMatrix_mtx4        = [self uniformIndex:@"MVMatrix"];
-    _uniEyeDirection_vec3    = [self uniformIndex:@"EyeDirection"];
+    _attribNormal_vec3      = [self attributeIndex:@"VertexNormal"];
+    _uniNormalMatrix_mtx3   = [self uniformIndex:@"NormalMatrix"];
+    _uniLightCount_i        = [self uniformIndex:@"LightCount"];
+    _uniMVMatrix_mtx4       = [self uniformIndex:@"MVMatrix"];
+    _uniEyeDirection_vec3   = [self uniformIndex:@"EyeDirection"];
+    _uniSpecularColor_vec3  = [self uniformIndex:@"SpecularColor"];
+    _uniAmbientColor_vec3   = [self uniformIndex:@"AmbientColor"];
+    _uniShininessExponent_f = [self uniformIndex:@"ShininessExponent"];
     
     NSMutableArray *uniformInfos = [NSMutableArray arrayWithCapacity:_config.lightCount];
     for (int i = 0; i < _config.lightCount; i++) {
@@ -187,15 +190,6 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         
         info.lightColor_vec3 = [self uniformIndex:[NSString stringWithFormat:@"Lights[%d].LightColor", i]];
         if (info.lightColor_vec3 < 0) continue;
-        
-        info.ambientColor_vec3 = [self uniformIndex:[NSString stringWithFormat:@"Lights[%d].AmbientColor", i]];
-        if (info.ambientColor_vec3 < 0) continue;
-        
-        info.specularIntensity_f = [self uniformIndex:[NSString stringWithFormat:@"Lights[%d].SpecularIntensity", i]];
-        if (info.specularIntensity_f < 0) continue;
-        
-        info.shiniess_f = [self uniformIndex:[NSString stringWithFormat:@"Lights[%d].Shiniess", i]];
-        if (info.shiniess_f < 0) continue;
         
         info.attenuation_f = [self uniformIndex:[NSString stringWithFormat:@"Lights[%d].Attenuation", i]];
         if (info.attenuation_f < 0) continue;
@@ -268,11 +262,11 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
 }
 
 
-- (BOOL)setBaseColor:(GLKVector4)colorVec4 {
-    if (!_isEditing || _uniBaseColor_vec4 < 0) {
+- (BOOL)setDiffuseColor:(GLKVector4)colorVec4 {
+    if (!_isEditing || _uniDiffuseColor_vec4 < 0) {
         return NO;
     }
-    glUniform4fv(_uniBaseColor_vec4, 1, colorVec4.v);
+    glUniform4fv(_uniDiffuseColor_vec4, 1, colorVec4.v);
     return YES;
 }
 
@@ -289,9 +283,6 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         glUniform4fv(lightUniforms.lightPosition_vec4, 1, lightInfos.lightPosition.v);
         glUniform3fv(lightUniforms.lightDirection_vec3, 1, lightInfos.lightDirection.v);
         glUniform3fv(lightUniforms.lightColor_vec3, 1, lightInfos.lightColor.v);
-        glUniform3fv(lightUniforms.ambientColor_vec3, 1, lightInfos.ambientColor.v);
-        glUniform1f(lightUniforms.specularIntensity_f, lightInfos.specularIntensity);
-        glUniform1f(lightUniforms.shiniess_f, lightInfos.shiniess);
         glUniform1f(lightUniforms.attenuation_f, lightInfos.attenuation);
         glUniform1f(lightUniforms.spotCosCutoff_f, lightInfos.spotCosCutOff);
         glUniform1f(lightUniforms.spotExponent_f, lightInfos.spotExponent);
@@ -356,6 +347,31 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         return NO;
     }
     glUniform3fv(_uniEyeDirection_vec3, 1, eyeDirectionVec3.v);
+    return YES;
+}
+
+
+- (BOOL)setSpecularColor:(GLKVector3)specularColor {
+    if (!_isEditing || _uniSpecularColor_vec3 < 0) {
+        return NO;
+    }
+    glUniform3fv(_uniSpecularColor_vec3, 1, specularColor.v);
+    return YES;
+}
+
+- (BOOL)setAmbientColor:(GLKVector3)ambientColor {
+    if (!_isEditing || _uniAmbientColor_vec3 < 0) {
+        return NO;
+    }
+    glUniform3fv(_uniAmbientColor_vec3, 1, ambientColor.v);
+    return YES;
+}
+
+- (BOOL)setShininessExponent:(GLfloat)shininessExponent {
+    if (!_isEditing || _uniShininessExponent_f < 0) {
+        return NO;
+    }
+    glUniform1f(_uniShininessExponent_f, shininessExponent);
     return YES;
 }
 

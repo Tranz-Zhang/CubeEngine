@@ -19,7 +19,6 @@
 
 @end
 
-
 /**
  !!!: Important Note for CERenderManager
  - response for shadowmap rendering, because it known all the models which enable shadowmap

@@ -14,7 +14,7 @@ typedef NS_ENUM(int, CEMaterialType) {
     CEMaterialTransparent,
 };
 
-@interface CEMaterial : NSObject
+@interface CEMaterial : NSObject<NSCopying>
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, assign) CEMaterialType materialType;
@@ -22,12 +22,10 @@ typedef NS_ENUM(int, CEMaterialType) {
 @property (nonatomic, strong) NSString *diffuseTexture;
 @property (nonatomic, strong) NSString *normalTexture;
 
-@property (nonatomic, assign) GLKVector3 emission;
-@property (nonatomic, assign) GLKVector3 ambient;
-@property (nonatomic, assign) GLKVector3 diffuse;
-@property (nonatomic, assign) GLKVector3 specular;
-@property (nonatomic, assign) float shiniess;
-@property (nonatomic, assign) float exponent;
+@property (nonatomic, assign) GLKVector3 ambientColor;
+@property (nonatomic, assign) GLKVector3 diffuseColor; // base color
+@property (nonatomic, assign) GLKVector3 specularColor;
+@property (nonatomic, assign) float shininessExponent;
 
 @property (nonatomic, assign) float transparency;
 

@@ -80,7 +80,7 @@
 - (IBAction)onColorSegmentChanged:(UISegmentedControl *)segment {
     switch (_colorSegment.selectedSegmentIndex) {
         case 0:
-            [self updateColorSegmentWithColor:_operationLight.ambientColor];
+//            [self updateColorSegmentWithColor:_operationLight.ambientColor];
             break;
         case 1:
             [self updateColorSegmentWithColor:_operationLight.lightColor];
@@ -120,7 +120,7 @@
     UIColor *color = [UIColor colorWithRed:_redSlider.value green:_greenSlider.value blue:_blueSlider.value alpha:1];
     switch (_colorSegment.selectedSegmentIndex) {
         case 0:
-            _operationLight.ambientColor = color;
+//            _operationLight.ambientColor = color;
             break;
         case 1:
             _operationLight.lightColor = color;

@@ -10,7 +10,7 @@
 #import <GLKit/GLKit.h>
 
 /**
- Represting an object in 3D world, which can be points, lines or meshes.
+ Represting an object in 3D world, which can be Model, Camera or Light
  */
 @interface CEObject : NSObject {
     __weak CEObject *_parentObject;

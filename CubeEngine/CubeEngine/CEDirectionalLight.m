@@ -65,14 +65,6 @@
     return _right;
 }
 
-
-- (void)setShiniess:(GLint)shiniess {
-    if (_shiniess != shiniess) {
-        _shiniess = shiniess;
-        _lightInfo.shiniess = shiniess;
-    }
-}
-
 /*
 - (CELightInfos *)generateLightInfoWithCamera:(CECamera *)camera {
     if (!_hasLightChanged && !self.hasChanged && !camera.hasChanged) {

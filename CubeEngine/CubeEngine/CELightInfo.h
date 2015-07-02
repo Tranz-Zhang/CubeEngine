@@ -24,9 +24,6 @@ typedef NS_ENUM(NSInteger, CELightType) {
 @property (nonatomic) GLKVector3 lightDirection;
 @property (nonatomic) GLKVector3 lightColor;
 
-@property (nonatomic) GLKVector3 ambientColor;
-@property (nonatomic) GLfloat specularIntensity;
-@property (nonatomic) GLfloat shiniess;
 @property (nonatomic) GLfloat attenuation;
 @property (nonatomic) GLfloat spotCosCutOff;
 @property (nonatomic) GLfloat spotExponent;

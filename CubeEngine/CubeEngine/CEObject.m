@@ -119,9 +119,8 @@
     [self recursiveSetHasChanged:YES];
 }
 
-// ref:http://mmmovania.blogspot.com/2014/03/making-opengl-object-look-at-another.html
+
 - (void)lookAt:(GLKVector3)targetPosition {
-//*
     if (GLKVector3AllEqualToVector3(targetPosition, _position)) {
         return;
     }
@@ -145,7 +144,6 @@
     CEGetEulerAngles(rotation, &angleY, &angleZ, &angleX);
     // NOTE: the roll rotation is eliminated.
     [self setEulerAngles:GLKVector3Make(0, angleY, angleZ)];
-//*/
 }
 
 
