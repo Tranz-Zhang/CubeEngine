@@ -23,6 +23,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
 @implementation CEMainProgram {
     BOOL _hasEnabledPosition;
     BOOL _hasEnableTexture;
+    BOOL _hasEnableTangent;
     BOOL _hasEnabledNormal;
     GLuint _textureIds[kMaxTextureUnitCount]; // _textureIds[textureUnit] = textureId
 }
@@ -42,6 +43,9 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     NSMutableString *vertexShaderString = [kVertexShader mutableCopy];
     if (config.lightCount > 0) {
         [vertexShaderString insertString:@"#define CE_ENABLE_LIGHTING\n" atIndex:0];
+        if (config.enableNormalMapping) {
+            [vertexShaderString insertString:@"#define CE_ENABLE_NORMAL_MAPPING\n" atIndex:0];
+        }
     }
     if (config.enableShadowMapping > 0) {
         [vertexShaderString insertString:@"#define CE_ENABLE_SHADOW_MAPPING\n" atIndex:0];
@@ -69,6 +73,9 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
                                               withString:[NSString stringWithFormat:@"%d", config.lightCount]
                                                  options:0
                                                    range:NSMakeRange(0, fragmentShaderString.length)];
+        if (config.enableNormalMapping) {
+            [fragmentShaderString insertString:@"#define CE_ENABLE_NORMAL_MAPPING\n" atIndex:0];
+        }
     }
     if (config.enableShadowMapping) {
         [fragmentShaderString insertString:@"#define CE_ENABLE_SHADOW_MAPPING\n" atIndex:0];
@@ -114,6 +121,9 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     [self addAttribute:@"VertexPosition"];
     if (_config.lightCount > 0) {
         [self addAttribute:@"VertexNormal"];
+        if (_config.enableNormalMapping) {
+            [self addAttribute:@"VertexTangent"];
+        }
     }
     if (_config.enableTexture) {
         [self addAttribute:@"TextureCoord"];
@@ -203,6 +213,12 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         [uniformInfos addObject:info];
     }
     _uniLightInfos = [uniformInfos copy];
+    
+    if (_config.enableNormalMapping) {
+        _attribTangent_vec3 = [self attributeIndex:@"VertexTangent"];
+        _uniLightPosition_vec3 = [self uniformIndex:@"LightPosition"];
+        _uniNormalMapTexture_tex = [self uniformIndex:@"NormalMapTexture"];
+    }
 }
 
 
@@ -214,7 +230,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
 
 
 - (void)initializeTextureUniforms {
-    _attriTextureCoord_vec2  = [self attributeIndex:@"TextureCoord"];
+    _attribTextureCoord_vec2  = [self attributeIndex:@"TextureCoord"];
     _uniDiffuseTexture_tex       = [self uniformIndex:@"DiffuseTexture"];
 }
 
@@ -379,12 +395,12 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
 #pragma mark - texture
 - (BOOL)setTextureCoordinateAttribute:(CEVBOAttribute *)attribute {
     if (!_isEditing ||
-        _attriTextureCoord_vec2 < 0) {
+        _attribTextureCoord_vec2 < 0) {
         CEWarning(@"Fail to setup texture attribute");
         return NO;
     }
     if (!attribute) {
-        glDisableVertexAttribArray(_attriTextureCoord_vec2);
+        glDisableVertexAttribArray(_attribTextureCoord_vec2);
         _hasEnableTexture = NO;
         return YES;
         
@@ -396,11 +412,11 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     }
     
     if (!_hasEnableTexture) {
-        glEnableVertexAttribArray(_attriTextureCoord_vec2);
+        glEnableVertexAttribArray(_attribTextureCoord_vec2);
         _hasEnableTexture = YES;
     }
     //    ... setup attribute here
-    glVertexAttribPointer(_attriTextureCoord_vec2,
+    glVertexAttribPointer(_attribTextureCoord_vec2,
                           attribute.primaryCount,
                           attribute.primaryType,
                           GL_FALSE,
@@ -424,6 +440,65 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glUniform1i(_uniDiffuseTexture_tex, CETextureUnitModel);
         _textureIds[CETextureUnitModel] = textureId;
+    }
+    
+    return YES;
+}
+
+
+#pragma mark - normal map
+- (BOOL)setTangentAttribute:(CEVBOAttribute *)attribute {
+    if (!_isEditing ||
+        _attribTangent_vec3 < 0) {
+        CEWarning(@"Fail to setup tangent attribute");
+        return NO;
+    }
+    if (!attribute) {
+        glDisableVertexAttribArray(_attribTangent_vec3);
+        _hasEnableTangent = NO;
+        return YES;
+        
+    } else if (attribute.name != CEVBOAttributeTangent ||
+               attribute.primaryCount <= 0 ||
+               attribute.elementStride <= 0) {
+        CEWarning(@"Fail to setup texture attribute");
+        return NO;
+    }
+    
+    if (!_hasEnableTangent) {
+        glEnableVertexAttribArray(_attribTangent_vec3);
+        _hasEnableTangent = YES;
+    }
+    //    ... setup attribute here
+    glVertexAttribPointer(_attribTangent_vec3,
+                          attribute.primaryCount,
+                          attribute.primaryType,
+                          GL_FALSE,
+                          attribute.elementStride,
+                          CE_BUFFER_OFFSET(attribute.elementOffset));
+    return YES;
+}
+
+
+- (BOOL)setLightPosition:(GLKVector3)lightPosition {
+    if (!_isEditing || _uniLightPosition_vec3 < 0) {
+        return NO;
+    }
+    glUniform3fv(_uniLightPosition_vec3, 1, lightPosition.v);
+    return YES;
+}
+
+
+- (BOOL)setNormalMapTexture:(GLuint)textureId {
+    if (!_isEditing || _uniNormalMapTexture_tex < 0) {
+        return NO;
+    }
+    GLuint currentTextureId = _textureIds[CETextureUnitNormalMap];
+    if (currentTextureId != textureId) {
+        glActiveTexture(GL_TEXTURE0 + CETextureUnitNormalMap);
+        glBindTexture(GL_TEXTURE_2D, textureId);
+        glUniform1i(_uniNormalMapTexture_tex, CETextureUnitNormalMap);
+        _textureIds[CETextureUnitNormalMap] = textureId;
     }
     
     return YES;
@@ -458,7 +533,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         glActiveTexture(GL_TEXTURE0 + CETextureUnitShadowMap);
         glBindTexture(GL_TEXTURE_2D, textureId);
         glUniform1i(_uniShadowMap_tex, CETextureUnitShadowMap);
-        _textureIds[CETextureUnitModel] = textureId;
+        _textureIds[CETextureUnitShadowMap] = textureId;
     }
     
     return YES;

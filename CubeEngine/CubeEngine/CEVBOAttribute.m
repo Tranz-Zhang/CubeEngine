@@ -27,6 +27,8 @@
     switch (name) {
         case CEVBOAttributePosition:
         case CEVBOAttributeNormal:
+        case CEVBOAttributeTangent:
+        case CEVBOAttributeBitangent:
             attribute.primaryCount = 3;
             attribute.primaryType = GL_FLOAT;
             attribute.primarySize = sizeof(GLfloat);

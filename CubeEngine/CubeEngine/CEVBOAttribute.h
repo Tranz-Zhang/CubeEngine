@@ -27,6 +27,8 @@ typedef NS_ENUM(NSInteger, CEVBOAttributeName) {
     CEVBOAttributeTextureCoord,
     CEVBOAttributeNormal,
     CEVBOAttributeColor,
+    CEVBOAttributeTangent,
+    CEVBOAttributeBitangent,
 };
 
 
@@ -40,7 +42,7 @@ typedef NS_ENUM(NSInteger, CEVBOAttributeName) {
 @property (nonatomic, readonly) GLenum primaryType;         // 元数据类型 如：GL_INT, GL_FLOAT
 @property (nonatomic, readonly) GLushort primarySize;       // 元数据大小
 @property (nonatomic, readonly) GLuint elementOffset;       // offset(Bytes) in data element
-@property (nonatomic, readonly) GLuint elementStride;       // total size of element
+@property (nonatomic, readonly) GLuint elementStride;       // total size of element (bytes)
 
 + (instancetype)attributeWithName:(CEVBOAttributeName)name;
 

@@ -254,6 +254,7 @@
 
 - (void)loadTextureForModels:(NSArray *)models {
     for (CEModel *model in models) {
+        // load diffuse texture
         if (model.material.diffuseTexture && !model.texture) {
             CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
             NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:model.material.diffuseTexture];
@@ -266,6 +267,22 @@
             } else {
                 model.texture = texture;
                 CEPrintf("load texture OK duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+            }
+        }
+        
+        // load normal map texture
+        if (model.material.normalTexture && !model.normalMap) {
+            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+            NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:model.material.normalTexture];
+            NSDictionary *options = @{GLKTextureLoaderOriginBottomLeft : @YES};
+            NSError *error;
+            GLKTextureInfo *texture = [GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
+            if (error) {
+                CEWarning(@"Fail to load normal map texture: %@", error);
+                
+            } else {
+                model.normalMap = texture;
+                CEPrintf("load normal map texture OK duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
             }
         }
     }

@@ -32,8 +32,13 @@
     NSArray *_uniLightInfos;
     
     // texture
-    GLint _attriTextureCoord_vec2;
+    GLint _attribTextureCoord_vec2;
     GLint _uniDiffuseTexture_tex;
+    
+    // normal map
+    GLint _attribTangent_vec3;
+    GLint _uniLightPosition_vec3;
+    GLint _uniNormalMapTexture_tex;
     
     // shadow map
     GLint _uniShadowDarkness_f;
@@ -74,6 +79,11 @@
 // texture
 - (BOOL)setTextureCoordinateAttribute:(CEVBOAttribute *)attribute;
 - (BOOL)setDiffuseTexture:(GLuint)textureId;
+
+// normal map
+- (BOOL)setTangentAttribute:(CEVBOAttribute *)attribute;
+- (BOOL)setLightPosition:(GLKVector3)lightPosition;
+- (BOOL)setNormalMapTexture:(GLuint)textureId;
 
 // shadow map
 - (BOOL)setDepthBiasModelViewProjectionMatrix:(GLKMatrix4)depthBiasMVPMatrix4;

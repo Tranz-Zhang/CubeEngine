@@ -57,6 +57,11 @@
 		4C10ED991B4248A80048636C /* sample_scene.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED921B4248A80048636C /* sample_scene.obj */; };
 		4C10ED9D1B4282BA0048636C /* sample_scene_noleaf.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED9B1B4282BA0048636C /* sample_scene_noleaf.mtl */; };
 		4C10ED9E1B4282BA0048636C /* sample_scene_noleaf.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C10ED9C1B4282BA0048636C /* sample_scene_noleaf.obj */; };
+		4C364B0A1B478B180056808D /* tree.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C364B091B478B180056808D /* tree.png */; };
+		4C364B191B4820570056808D /* ram.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C364B151B4820570056808D /* ram.obj */; };
+		4C364B1A1B4820570056808D /* char_ram_nor.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C364B161B4820570056808D /* char_ram_nor.png */; };
+		4C364B1B1B4820570056808D /* char_ram_col.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C364B171B4820570056808D /* char_ram_col.png */; };
+		4C364B1C1B4820570056808D /* ram.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4C364B181B4820570056808D /* ram.mtl */; };
 		4C595AF51AEC7C60006900EF /* DirectionalLightControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C595AF41AEC7C60006900EF /* DirectionalLightControl.m */; };
 		4C595AF71AEC7CCD006900EF /* DirectionalLightControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C595AF61AEC7CCD006900EF /* DirectionalLightControl.xib */; };
 		4C595AFB1AEC835D006900EF /* UINibView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C595AFA1AEC835D006900EF /* UINibView.m */; };
@@ -152,6 +157,11 @@
 		4C10ED921B4248A80048636C /* sample_scene.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_scene.obj; sourceTree = "<group>"; };
 		4C10ED9B1B4282BA0048636C /* sample_scene_noleaf.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_scene_noleaf.mtl; sourceTree = "<group>"; };
 		4C10ED9C1B4282BA0048636C /* sample_scene_noleaf.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample_scene_noleaf.obj; sourceTree = "<group>"; };
+		4C364B091B478B180056808D /* tree.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tree.png; sourceTree = "<group>"; };
+		4C364B151B4820570056808D /* ram.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram.obj; sourceTree = "<group>"; };
+		4C364B161B4820570056808D /* char_ram_nor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = char_ram_nor.png; sourceTree = "<group>"; };
+		4C364B171B4820570056808D /* char_ram_col.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = char_ram_col.png; sourceTree = "<group>"; };
+		4C364B181B4820570056808D /* ram.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram.mtl; sourceTree = "<group>"; };
 		4C595AF31AEC7C60006900EF /* DirectionalLightControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionalLightControl.h; sourceTree = "<group>"; };
 		4C595AF41AEC7C60006900EF /* DirectionalLightControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectionalLightControl.m; sourceTree = "<group>"; };
 		4C595AF61AEC7CCD006900EF /* DirectionalLightControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DirectionalLightControl.xib; sourceTree = "<group>"; };
@@ -271,6 +281,7 @@
 		261CD42E1AD3DE3D00C521CC /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4C364B0C1B481D030056808D /* Ram */,
 				4C10ED791B4237C40048636C /* SampleScene */,
 				26FF85301B0A14F70075B971 /* sponza.mtl */,
 				26FF85311B0A14F70075B971 /* teapot_bump.mtl */,
@@ -303,6 +314,7 @@
 		4C10ED791B4237C40048636C /* SampleScene */ = {
 			isa = PBXGroup;
 			children = (
+				4C364B091B478B180056808D /* tree.png */,
 				4C10ED8C1B4248A80048636C /* background.png */,
 				4C10ED8D1B4248A80048636C /* balloon.png */,
 				4C10ED8E1B4248A80048636C /* grass.png */,
@@ -314,6 +326,17 @@
 				4C10ED9C1B4282BA0048636C /* sample_scene_noleaf.obj */,
 			);
 			path = SampleScene;
+			sourceTree = "<group>";
+		};
+		4C364B0C1B481D030056808D /* Ram */ = {
+			isa = PBXGroup;
+			children = (
+				4C364B151B4820570056808D /* ram.obj */,
+				4C364B181B4820570056808D /* ram.mtl */,
+				4C364B161B4820570056808D /* char_ram_nor.png */,
+				4C364B171B4820570056808D /* char_ram_col.png */,
+			);
+			path = Ram;
 			sourceTree = "<group>";
 		};
 		4C595AF21AEC7C25006900EF /* Accessory */ = {
@@ -438,11 +461,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C364B191B4820570056808D /* ram.obj in Resources */,
 				261CD4331AD3DE8B00C521CC /* cylinder_group.mtl in Resources */,
 				261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */,
 				268CBC6E1ADD466E00795A6D /* teapot.png in Resources */,
 				261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */,
 				26FF85331B0A14F70075B971 /* sponza.mtl in Resources */,
+				4C364B1B1B4820570056808D /* char_ram_col.png in Resources */,
 				44D0CCEE1AED26E8000C137C /* PointLightControl.xib in Resources */,
 				263C8E791AE68738004FDFE8 /* teapot.obj in Resources */,
 				4C10ED951B4248A80048636C /* grass.png in Resources */,
@@ -455,9 +480,11 @@
 				268CBC661ADD412200795A6D /* cube.obj in Resources */,
 				261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */,
 				269249921B02F3CF0069892D /* default.png in Resources */,
+				4C364B0A1B478B180056808D /* tree.png in Resources */,
 				4C10ED991B4248A80048636C /* sample_scene.obj in Resources */,
 				26193F861AA833BF00787C64 /* Main.storyboard in Resources */,
 				44D0CCE81AECA677000C137C /* transition_icon@2x.png in Resources */,
+				4C364B1A1B4820570056808D /* char_ram_nor.png in Resources */,
 				4C10ED941B4248A80048636C /* balloon.png in Resources */,
 				26A00DB61AFB014C00E12B24 /* floor.obj in Resources */,
 				4C595AF71AEC7CCD006900EF /* DirectionalLightControl.xib in Resources */,
@@ -476,6 +503,7 @@
 				4C10ED9E1B4282BA0048636C /* sample_scene_noleaf.obj in Resources */,
 				268CBC681ADD42A900795A6D /* cube_triangle.obj in Resources */,
 				4C10ED931B4248A80048636C /* background.png in Resources */,
+				4C364B1C1B4820570056808D /* ram.mtl in Resources */,
 				4C10ED9D1B4282BA0048636C /* sample_scene_noleaf.mtl in Resources */,
 				4C10ED981B4248A80048636C /* sample_scene.mtl in Resources */,
 				4C595B001AEC90CC006900EF /* hide_icon@2x.png in Resources */,

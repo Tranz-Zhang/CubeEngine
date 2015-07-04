@@ -17,11 +17,26 @@ NSString *const kVertexShader = CE_SHADER_STRING
 
  // lighting
  \n#ifdef CE_ENABLE_LIGHTING\n
-  attribute highp vec3 VertexNormal;
+  attribute lowp vec3 VertexNormal;
  uniform mat4 MVMatrix;
  uniform mat3 NormalMatrix;
- varying vec3 Normal;
+ varying lowp vec3 Normal;
  varying vec4 Position;
+ 
+ // normal mapping
+ \n#ifdef CE_ENABLE_NORMAL_MAPPING\n
+ attribute lowp vec3 VertexTangent;
+ uniform vec3 LightPosition;
+ varying vec3 TestLightDir;
+ varying vec3 TestEyeDir;
+ \n#endif\n // end of normal mapping
+ 
+ \n#endif\n // end of lighting
+ 
+ // texture
+ \n#ifdef CE_ENABLE_TEXTURE\n
+ attribute highp vec2 TextureCoord;
+ varying vec2 TextureCoordOut;
  \n#endif\n
  
  // shadow mapping
@@ -30,27 +45,41 @@ NSString *const kVertexShader = CE_SHADER_STRING
  varying vec4 ShadowCoord;
  \n#endif\n
  
- // texture
- \n#ifdef CE_ENABLE_TEXTURE\n
- attribute highp vec2 TextureCoord;
- varying vec2 TextureCoordOut;
- \n#endif\n
  
  void main () {
      // lighting
      \n#ifdef CE_ENABLE_LIGHTING\n
      Normal = normalize(NormalMatrix * VertexNormal);
      Position = MVMatrix * VertexPosition;
+     
+     // normal mapping
+     \n#ifdef CE_ENABLE_NORMAL_MAPPING\n
+     TestEyeDir = vec3(MVMatrix * VertexPosition);
+     TextureCoordOut = TextureCoord;
+     vec3 n = normalize(NormalMatrix * VertexNormal);
+     vec3 t = normalize(NormalMatrix * VertexTangent);
+     vec3 b = cross(n, t);
+     vec3 v;
+     v.x = dot(LightPosition, t);
+     v.y = dot(LightPosition, b);
+     v.z = dot(LightPosition, n);
+     TestLightDir = normalize(v);
+     v.x = dot(TestEyeDir, t);
+     v.y = dot(TestEyeDir, b);
+     v.z = dot(TestEyeDir, n);
+     TestEyeDir = normalize(v);
+     \n#endif\n // end of normal mapping
+     
+     \n#endif\n // end of lighting
+     
+     // texture
+     \n#ifdef CE_ENABLE_TEXTURE\n
+     TextureCoordOut = TextureCoord;
      \n#endif\n
      
      // shadow mapping
      \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
      ShadowCoord = DepthBiasMVP * VertexPosition;
-     \n#endif\n
-     
-     // texture
-     \n#ifdef CE_ENABLE_TEXTURE\n
-     TextureCoordOut = TextureCoord;
      \n#endif\n
      
      gl_Position = MVPMatrix * VertexPosition;
@@ -64,6 +93,15 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  
  //  material
  uniform vec4 DiffuseColor;
+ 
+ 
+ // texture
+ \n#ifdef CE_ENABLE_TEXTURE\n
+ uniform lowp sampler2D DiffuseTexture;
+ varying vec2 TextureCoordOut;
+ \n#endif\n
+ // end of texture
+ 
  
  // lighting
  \n#ifdef CE_ENABLE_LIGHTING\n
@@ -82,10 +120,17 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
      float SpotExponent;
  };
  uniform LightInfo Lights[CE_LIGHT_COUNT];
- uniform vec3 EyeDirection;
+ uniform lowp vec3 EyeDirection;
  uniform int LightCount;
- varying vec3 Normal;
+ varying lowp vec3 Normal;
  varying vec4 Position;
+ 
+ // normal mapping
+ \n#ifdef CE_ENABLE_NORMAL_MAPPING\n
+ uniform sampler2D NormalMapTexture;
+ varying vec3 TestLightDir;
+ varying vec3 TestEyeDir;
+ \n#endif\n // end of normal mapping
  
  // shadow mapping
 \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
@@ -106,11 +151,21 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
          }
          hasLightEnabled = true;
          
-         vec3 halfVector;
+         lowp vec3 halfVector;
+         
+         \n#ifdef CE_ENABLE_NORMAL_MAPPING\n // normal mapping
+         vec3 lightDirection = TestLightDir;
+         vec3 eyeDirection = TestEyeDir;
+         vec3 normal = texture2D(NormalMapTexture, TextureCoordOut).rgb * 2.0 - 1.0;
+         \n#else\n
          vec3 lightDirection = Lights[i].LightDirection;
+         vec3 eyeDirection = EyeDirection;
+         vec3 normal = Normal;
+         \n#endif\n // end of normal mapping
+         
          float attenuation = 1.0;
          
-         // for locol lights, compute per-fragment direction, halfVector and attenuation
+         // for local lights, compute per-fragment direction, halfVector and attenuation
          if (Lights[i].LightType > 1) {
              lightDirection = vec3(Lights[i].LightPosition) - vec3(Position);
              float lightDistance = length(lightDirection);
@@ -134,8 +189,8 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
          }
          
          // calculate diffuse and specular
-         float diffuse = max(0.0, dot(Normal, lightDirection));
-         float specular = max(0.0, dot(Normal, halfVector));
+         float diffuse = max(0.0, dot(normal, lightDirection));
+         float specular = max(0.0, dot(normal, halfVector));
          
          specular = (diffuse == 0.0 || ShininessExponent == 0.0) ? 0.0 : pow(specular, ShininessExponent);
          scatteredLight += AmbientColor * attenuation + Lights[i].LightColor * diffuse * attenuation;
@@ -156,14 +211,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  
 \n#endif\n
  // end of lighting
- 
- 
-// texture
-\n#ifdef CE_ENABLE_TEXTURE\n
- uniform lowp sampler2D DiffuseTexture;
- varying vec2 TextureCoordOut;
-\n#endif\n
-// end of texture
+
  
  \n#ifdef CE_RENDER_TRANSPARENT_OBJECT\n // TRANSPARENT OBJECT
  uniform float Transparency;

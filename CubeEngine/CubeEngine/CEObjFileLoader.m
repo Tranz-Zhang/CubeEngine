@@ -53,18 +53,35 @@
         if (refGroups.count == 1 && !modelDict[[[refGroups anyObject] description]]) {
             // *** create model object ***
             CEObjMeshInfo *mesh = [refGroups anyObject];
-            CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:mesh.meshData
-                                                                     attributes:mesh.attributes];
+            CEMaterial *material = [materialDict[mesh.materialName] copy];
+            NSData *vertexData = nil;
+            NSArray *attributes = nil;
+            if (material.normalTexture.length) {
+                // add tangent & bitangent vertext
+                vertexData = [self calculateTangentAndBitangentWithData:mesh.meshData attributes:mesh.attributes];
+                NSMutableArray *attributeNames = [NSMutableArray array];
+                for (CEVBOAttribute *attribute in mesh.attributes) {
+                    [attributeNames addObject:@(attribute.name)];
+                }
+                [attributeNames addObject:@(CEVBOAttributeTangent)];
+//                [attributeNames addObject:@(CEVBOAttributeBitangent)];
+                attributes = [CEVBOAttribute attributesWithNames:attributeNames];
+                
+            } else {
+                vertexData = mesh.meshData;
+                attributes = mesh.attributes;
+            }
+            
+            CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:attributes];
             CEModel *model = [[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
             model.name = groupName;
-            model.material = [materialDict[mesh.materialName] copy];
-            if (!model.material) {
-                CEMaterial *defaultMaterial = [CEMaterial new];
-                defaultMaterial.name = @"DefaultMaterial";
-                defaultMaterial.materialType = CEMaterialSolid;
-                defaultMaterial.diffuseColor = GLKVector3Make(1.0, 1.0, 1.0);
-                model.material = defaultMaterial;
+            if (!material) {
+                material = [CEMaterial new];
+                material.name = @"DefaultMaterial";
+                material.materialType = CEMaterialSolid;
+                material.diffuseColor = GLKVector3Make(1.0, 1.0, 1.0);
             }
+            model.material = material;
             modelDict[[mesh description]] = model;
             [topMostModels addObject:model];
             
@@ -93,6 +110,62 @@
     
     
     return [topMostModels copy];
+}
+
+
+- (NSData *)calculateTangentAndBitangentWithData:(NSData *)vertexData attributes:(NSArray *)attributes {
+    CEVBOAttribute *positionAttrib, *textureAttrib;
+    for (CEVBOAttribute *attribute in attributes) {
+        if (attribute.name == CEVBOAttributePosition) {
+            positionAttrib = attribute;
+            continue;
+        }
+        if (attribute.name == CEVBOAttributeTextureCoord) {
+            textureAttrib = attribute;
+            continue;
+        }
+    }
+    int stride = positionAttrib.elementStride;
+    if (!positionAttrib || !textureAttrib || !vertexData.length ||
+        vertexData.length % (stride * 3)) {
+        CEError(@"Fail to calculate tangent and bitangent data.");
+        return nil;
+    }
+    
+    int vertexCount = (int)vertexData.length / stride / 3;
+    int offset = 0;
+    NSMutableData *newVertexData = [NSMutableData data];
+    for (int i = 0; i < vertexCount; i++) {
+        GLKVector3 v[3];
+        GLKVector2 uv[3];
+        for (int idx = 0; idx < 3; idx++) {
+            [vertexData getBytes:v[idx].v range:NSMakeRange(offset + positionAttrib.elementOffset, 12)];
+            [vertexData getBytes:uv[idx].v range:NSMakeRange(offset + textureAttrib.elementOffset, 8)];
+            offset += stride;
+        }
+        
+        GLKVector3 deltaPos1 = GLKVector3Subtract(v[1], v[0]);
+        GLKVector3 deltaPos2 = GLKVector3Subtract(v[2], v[0]);
+        GLKVector2 deltaUV1 = GLKVector2Subtract(uv[1], uv[0]);
+        GLKVector2 deltaUV2 = GLKVector2Subtract(uv[2], uv[0]);
+        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+        // tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y) * r
+        GLKVector3 tangent = GLKVector3MultiplyScalar(GLKVector3Subtract(GLKVector3MultiplyScalar(deltaPos1, deltaUV2.y),
+                                                                         GLKVector3MultiplyScalar(deltaPos2, deltaUV1.y)), r);
+        tangent = GLKVector3Normalize(tangent);
+        // bitangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r
+        GLKVector3 bitangent = GLKVector3MultiplyScalar(GLKVector3Subtract(GLKVector3MultiplyScalar(deltaPos2, deltaUV1.x),
+                                                                           GLKVector3MultiplyScalar(deltaPos1, deltaUV2.x)), r);
+        bitangent = GLKVector3Normalize(tangent);
+        offset -= 3 * stride;
+        for (int idx = 0; idx < 3; idx++) {
+            [newVertexData appendData:[vertexData subdataWithRange:NSMakeRange(offset, stride)]];
+            [newVertexData appendBytes:tangent.v length:sizeof(tangent)];
+//            [newVertexData appendBytes:bitangent.v length:sizeof(bitangent)];
+            offset += stride;
+        }
+    }
+    return newVertexData.copy;
 }
 
 

@@ -23,3 +23,13 @@
  
 
 @end
+
+#ifdef tes
+#else
+#endif
+
+//Normal Map Rendering
+//1. read the book
+//2. prepare the data
+//3. setup the shader
+//4. test

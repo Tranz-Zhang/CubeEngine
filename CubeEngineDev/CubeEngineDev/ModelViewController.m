@@ -22,18 +22,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.scene.camera.position = GLKVector3Make(0, 2, 5);
-    [self.scene.camera lookAt:GLKVector3Make(0, 1, 0)];
+    self.scene.camera.position = GLKVector3Make(0, 20, 20);
+    [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
+
+//    self.scene.camera.position = GLKVector3Make(0, 2, 5);
+//    [self.scene.camera lookAt:GLKVector3Make(0, 1, 0)];
 //    self.scene.camera.nearZ = 0;
 //    self.scene.camera.farZ = 100;
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    _testModel = [CEModel modelWithObjFile:@"sample_scene"];
+    _testModel = [CEModel modelWithObjFile:@"ram"];
     _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
 //    _testModel.showWireframe = YES;
     _testModel.showAccessoryLine = YES;
 //    _testModel.material.specularColor = GLKVector3Make(1, 1, 1);
 //    _testModel.material.shiniess = 20;
+    
+//    _testModel.material.normalTexture = nil;
     [self recursiveSetColorForModel:_testModel];
     for (CEModel *model in _testModel.childObjects) {
         if ([model.name isEqualToString:@"leaf"]) {

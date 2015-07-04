@@ -150,6 +150,14 @@
         normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
         [_program setNormalMatrix:normalMatrix];
         
+        
+        // setup normal mapping
+        if (_config.enableNormalMapping && model.normalMap) {
+            [_program setLightPosition:[(CELight *)_lights[0] position]];
+            [_program setTangentAttribute:[model.vertexBuffer attributeWithName:CEVBOAttributeTangent]];
+            [_program setNormalMapTexture:model.normalMap.name];
+        }
+        
         // setup shadow mapping
         if (_shadowLight) {
             GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,

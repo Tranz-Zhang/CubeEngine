@@ -113,7 +113,8 @@
             currentMaterial.diffuseTexture = valueString;
             continue;
         }
-        if ([lineContent hasPrefix:@"bump "]) {
+        if ([lineContent hasPrefix:@"bump "] ||
+            [lineContent hasPrefix:@"map_Bump "]) {
             NSArray *values = [lineContent componentsSeparatedByString:@" "];
             currentMaterial.normalTexture = values[1];
             continue;

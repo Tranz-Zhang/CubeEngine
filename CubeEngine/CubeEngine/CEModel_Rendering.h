@@ -19,6 +19,7 @@
 
 // textures
 @property (nonatomic, strong) GLKTextureInfo *texture;
+@property (nonatomic, strong) GLKTextureInfo *normalMap;
 
 
 // initialization
