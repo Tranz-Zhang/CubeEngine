@@ -7,4 +7,4 @@ map_Kd char_ram_col.png
 bump char_ram_nor.png -bm -0.112782
 Ni 1.00
 Ks 1.00 1.00 1.00
-Ns 194.12
+Ns 80

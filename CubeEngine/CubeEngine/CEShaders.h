@@ -154,9 +154,10 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
          lowp vec3 halfVector;
          
          \n#ifdef CE_ENABLE_NORMAL_MAPPING\n // normal mapping
-         vec3 lightDirection = TestLightDir;
+         vec3 lightDirection = -TestLightDir;
          vec3 eyeDirection = TestEyeDir;
          vec3 normal = texture2D(NormalMapTexture, TextureCoordOut).rgb * 2.0 - 1.0;
+         normal = -normalize(normal);
          \n#else\n
          vec3 lightDirection = Lights[i].LightDirection;
          vec3 eyeDirection = EyeDirection;
@@ -175,17 +176,17 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
              if (Lights[i].LightType == 3) { // spot light
                  // lightDirection: current position to light position Direction
                  // Lights[i].LightDirection: source light direction, ref as ConeDirection
-                 float spotCos = dot(lightDirection, Lights[i].LightDirection);
+                 float spotCos = dot(lightDirection, lightDirection);
                  if (spotCos < Lights[i].SpotConsCutoff) {
                      attenuation = 0.0;
                  } else {
                      attenuation *= pow(spotCos, Lights[i].SpotExponent);
                  }
              }
-             halfVector = normalize(lightDirection + EyeDirection);
+             halfVector = normalize(lightDirection + eyeDirection);
              
          } else {
-             halfVector = normalize(Lights[i].LightDirection + EyeDirection);
+             halfVector = normalize(lightDirection + eyeDirection);
          }
          
          // calculate diffuse and specular

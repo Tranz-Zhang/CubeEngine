@@ -37,7 +37,7 @@
     _testModel.showAccessoryLine = YES;
 //    _testModel.material.specularColor = GLKVector3Make(1, 1, 1);
 //    _testModel.material.shiniess = 20;
-    
+//    _testModel.material.diffuseTexture = @"gray_texture.png";
 //    _testModel.material.normalTexture = nil;
     [self recursiveSetColorForModel:_testModel];
     for (CEModel *model in _testModel.childObjects) {
@@ -56,7 +56,7 @@
     _operator.operationObject = _testModel;
     
     CEDirectionalLight *directionalLight = [[CEDirectionalLight alloc] init];
-    directionalLight.position = GLKVector3Make(8, 12, 8);
+    directionalLight.position = GLKVector3Make(4, 6, 4);
     directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [directionalLight lookAt:GLKVector3Make(0, 0, 0)];
 //    directionalLight.enableShadow = YES;

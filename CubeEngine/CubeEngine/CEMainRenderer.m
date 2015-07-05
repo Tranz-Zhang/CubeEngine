@@ -14,7 +14,6 @@
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
 
-
 @implementation CEMainRenderer {
     CEMainProgram *_program;
     CEProgramConfig *_config;
