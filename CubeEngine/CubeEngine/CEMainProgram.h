@@ -97,7 +97,6 @@
 
 @end
 
-next: single light? vertex lighting calculation;
 
 
 

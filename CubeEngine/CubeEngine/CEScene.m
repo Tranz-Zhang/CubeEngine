@@ -92,31 +92,6 @@ static CEScene *sCurrentScene;
 }
 
 
-- (void)addModels:(NSArray *)models {
-    if (!models.count) return;
-    NSMutableArray *tmpList = [NSMutableArray arrayWithArray:_models];
-    for (CEModel *model in models) {
-        if ([model isKindOfClass:[CEModel class]] &&
-            ![tmpList containsObject:model]) {
-            [tmpList addObject:model];
-        }
-    }
-    _models = tmpList.copy;
-}
-
-
-- (void)removeModels:(NSArray *)models {
-    if (!models.count) return;
-    NSMutableArray *tmpList = [NSMutableArray arrayWithArray:_models];
-    for (CEModel *model in models) {
-        if ([tmpList containsObject:model]) {
-            [tmpList removeObject:model];
-        }
-    }
-    _models = tmpList.copy;
-}
-
-
 #pragma mark - Light
 - (void)addLight:(CELight *)light {
     if (_lights.count < _maxLightCount &&
