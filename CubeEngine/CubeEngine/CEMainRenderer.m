@@ -133,7 +133,8 @@
     [_program setModelViewProjectionMatrix:modelViewProjectionMatrix];
     
     if (_config.lightCount) {
-        if (![_program setNormalAttribute:[model.vertexBuffer attributeWithName:CEVBOAttributeNormal]]) {
+        CEVBOAttribute *normalAttrib = [model.vertexBuffer attributeWithName:CEVBOAttributeNormal];
+        if (!normalAttrib || ![_program setNormalAttribute:normalAttrib]) {
             CEError(@"Fail to set normal attribute");
             return;
         }
@@ -152,7 +153,7 @@
         
         // setup normal mapping
         if (_config.enableNormalMapping && model.normalMap) {
-            [_program setLightPosition:[(CELight *)_lights[0] position]];
+            [_program setLightPosition:[[(CELight *)_lights[0] lightInfo] lightDirection]];
             [_program setTangentAttribute:[model.vertexBuffer attributeWithName:CEVBOAttributeTangent]];
             [_program setNormalMapTexture:model.normalMap.name];
         }

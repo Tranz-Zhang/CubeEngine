@@ -23,6 +23,10 @@ NSString *const kVertexShader = CE_SHADER_STRING
  varying lowp vec3 Normal;
  varying vec4 Position;
  
+ uniform vec3 LIGHTDIRECTIONINPUT;
+ varying lowp vec3 HALFVECTOR;
+ varying lowp vec3 LIGHTDIRECTION;
+ 
  // normal mapping
  \n#ifdef CE_ENABLE_NORMAL_MAPPING\n
  attribute lowp vec3 VertexTangent;
@@ -52,9 +56,12 @@ NSString *const kVertexShader = CE_SHADER_STRING
      Normal = normalize(NormalMatrix * VertexNormal);
      Position = MVMatrix * VertexPosition;
      
+     LIGHTDIRECTION = LIGHTDIRECTIONINPUT;
+     HALFVECTOR = normalize(LIGHTDIRECTIONINPUT + vec3(0.0, 0.0, 1.0));
+     
      // normal mapping
      \n#ifdef CE_ENABLE_NORMAL_MAPPING\n
-     TestEyeDir = vec3(MVMatrix * VertexPosition);
+     
      TextureCoordOut = TextureCoord;
      vec3 n = normalize(NormalMatrix * VertexNormal);
      vec3 t = normalize(NormalMatrix * VertexTangent);
@@ -64,10 +71,15 @@ NSString *const kVertexShader = CE_SHADER_STRING
      v.y = dot(LightPosition, b);
      v.z = dot(LightPosition, n);
      TestLightDir = normalize(v);
+     
+     TestEyeDir = vec3(0.0, 0.0, 1.0);//vec3(MVMatrix * VertexPosition);
      v.x = dot(TestEyeDir, t);
      v.y = dot(TestEyeDir, b);
      v.z = dot(TestEyeDir, n);
      TestEyeDir = normalize(v);
+     
+     HALFVECTOR = normalize(TestLightDir + vec3(0.0, 0.0, 1.0));
+     
      \n#endif\n // end of normal mapping
      
      \n#endif\n // end of lighting
@@ -125,6 +137,9 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  varying lowp vec3 Normal;
  varying vec4 Position;
  
+ varying lowp vec3 HALFVECTOR;
+ varying lowp vec3 LIGHTDIRECTION;
+ 
  // normal mapping
  \n#ifdef CE_ENABLE_NORMAL_MAPPING\n
  uniform sampler2D NormalMapTexture;
@@ -154,12 +169,12 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
          lowp vec3 halfVector;
          
          \n#ifdef CE_ENABLE_NORMAL_MAPPING\n // normal mapping
-         vec3 lightDirection = -TestLightDir;
+         vec3 lightDirection = TestLightDir;
          vec3 eyeDirection = TestEyeDir;
          vec3 normal = texture2D(NormalMapTexture, TextureCoordOut).rgb * 2.0 - 1.0;
-         normal = -normalize(normal);
+         normal = normalize(normal);
          \n#else\n
-         vec3 lightDirection = Lights[i].LightDirection;
+         vec3 lightDirection = LIGHTDIRECTION;//Lights[i].LightDirection;
          vec3 eyeDirection = EyeDirection;
          vec3 normal = Normal;
          \n#endif\n // end of normal mapping
@@ -186,7 +201,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
              halfVector = normalize(lightDirection + eyeDirection);
              
          } else {
-             halfVector = normalize(lightDirection + eyeDirection);
+             halfVector = HALFVECTOR;//normalize(lightDirection + eyeDirection);
          }
          
          // calculate diffuse and specular

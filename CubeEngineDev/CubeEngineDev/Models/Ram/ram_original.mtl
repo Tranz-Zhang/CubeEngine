@@ -1,0 +1,12 @@
+# Blender MTL File: 'untitled.blend'
+# Material Count: 1
+newmtl ram_char_ram_col.png
+Ns 194.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/rom/Desktop/BOOK/content/SDK/data/chapter5-1/char_ram_col.png
+map_Bump /Users/rom/Desktop/BOOK/content/SDK/data/chapter5-1/char_ram_nor.png

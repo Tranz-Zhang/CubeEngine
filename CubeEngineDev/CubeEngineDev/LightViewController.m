@@ -69,7 +69,7 @@
 //        }
 //    }
     
-    _teapotModel = [CEModel modelWithObjFile:@"teapot_bump"];
+    _teapotModel = [CEModel modelWithObjFile:@"ram"];
     _teapotModel.showAccessoryLine = YES;
     _teapotModel.castShadows = YES;
     _teapotModel.baseColor = [UIColor orangeColor];

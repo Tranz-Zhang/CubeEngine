@@ -9,6 +9,7 @@
 #import "CEMainProgram.h"
 #import "CEShaders.h"
 #import "CELightUniforms.h"
+#import "CEShader_test.h"
 
 #define kMaxTextureUnitCount 8
 
@@ -302,6 +303,11 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         glUniform1f(lightUniforms.attenuation_f, lightInfos.attenuation);
         glUniform1f(lightUniforms.spotCosCutoff_f, lightInfos.spotCosCutOff);
         glUniform1f(lightUniforms.spotExponent_f, lightInfos.spotExponent);
+        
+        GLint uniform = [self uniformIndex:@"LIGHTDIRECTIONINPUT"];
+        if (uniform) {
+            glUniform3fv(uniform, 1, lightInfos.lightDirection.v);
+        }
     }
     return NO;
 }

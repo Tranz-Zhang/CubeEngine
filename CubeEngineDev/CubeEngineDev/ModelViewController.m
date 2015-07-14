@@ -14,6 +14,7 @@
 
 @implementation ModelViewController {
     CEModel *_testModel;
+    CELight *_light;
     ObjectOperator *_operator;
     __weak IBOutlet UISwitch *_wireframeSwitch;
     __weak IBOutlet UISwitch *_accessorySwitch;
@@ -37,7 +38,7 @@
     _testModel.showAccessoryLine = YES;
 //    _testModel.material.specularColor = GLKVector3Make(1, 1, 1);
 //    _testModel.material.shiniess = 20;
-//    _testModel.material.diffuseTexture = @"gray_texture.png";
+//    _testModel.material.diffuseTexture = nil;// @"gray_texture.png";
 //    _testModel.material.normalTexture = nil;
     [self recursiveSetColorForModel:_testModel];
     for (CEModel *model in _testModel.childObjects) {
@@ -61,6 +62,7 @@
     [directionalLight lookAt:GLKVector3Make(0, 0, 0)];
 //    directionalLight.enableShadow = YES;
     [self.scene addLight:directionalLight];
+    _light = directionalLight;
 }
 
 
@@ -73,6 +75,14 @@
     _testModel.showAccessoryLine = switcher.on;
 }
 
+- (IBAction)onLightSwitchChanged:(UISwitch *)switcher {
+    if (switcher.on) {
+        _operator.operationObject = _light;
+        
+    } else {
+        _operator.operationObject = _testModel;
+    }
+}
 
 - (IBAction)onReset:(id)sender {
     _testModel.eulerAngles = GLKVector3Make(0, 0, 0);
