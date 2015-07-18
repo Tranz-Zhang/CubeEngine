@@ -13,11 +13,13 @@
 #import "CEShadowLight_Rendering.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
+#import "CEShadowLight.h"
+
 
 @implementation CEMainRenderer {
     CEMainProgram *_program;
     CEProgramConfig *_config;
-    int _lastUsedTextureIndex;
+    CEShadowLight *_shadowLight;
 }
 
 
@@ -34,13 +36,13 @@
     return self;
 }
 
-
-- (void)setShadowLight:(CEShadowLight *)shadowLight {
-    if (!shadowLight.isEnabled || !shadowLight.enableShadow || !shadowLight.shadowMapBuffer) {
-        _shadowLight = nil;
-        return;
+- (void)setMainLight:(CELight *)mainLight {
+    if (_mainLight != mainLight) {
+        _mainLight = mainLight;
+        if ([_mainLight isKindOfClass:[CEShadowLight class]]) {
+            _shadowLight = (CEShadowLight *)mainLight;
+        }
     }
-    _shadowLight = shadowLight;
 }
 
 
@@ -63,33 +65,30 @@
     if (!_config.lightCount) {
         return;
     }
-    int idx = 0;
-    for (CELight *light in _lights) {
-        if (light.enabled) {
-            // !!!: transfer light position in view space
-            if (light.lightInfo.lightType == CELightTypePoint ||
-                light.lightInfo.lightType == CELightTypeSpot) {
-                GLKVector4 lightPosition = GLKMatrix4MultiplyVector4(light.transformMatrix, GLKVector4Make(0, 0, 0, 1));
-                lightPosition = GLKMatrix4MultiplyVector4(_camera.viewMatrix, lightPosition);
-                light.lightInfo.lightPosition = lightPosition;
-            }
-            
-            // !!!: transfer light direction in view space
-            if (light.lightInfo.lightType == CELightTypeDirectional ||
-                light.lightInfo.lightType == CELightTypeSpot) {
-                GLKVector3 lightDirection = GLKVector3Make(-light.right.x, -light.right.y, -light.right.z);
-                lightDirection = GLKMatrix4MultiplyVector3(_camera.viewMatrix, lightDirection);
-                light.lightInfo.lightDirection = lightDirection;
-            }
+    if (_mainLight.enabled) {
+        // !!!: transfer light position in view space
+        if (_mainLight.lightInfo.lightType == CELightTypePoint ||
+            _mainLight.lightInfo.lightType == CELightTypeSpot) {
+            GLKVector4 lightPosition = GLKMatrix4MultiplyVector4(_mainLight.transformMatrix, GLKVector4Make(0, 0, 0, 1));
+            lightPosition = GLKMatrix4MultiplyVector4(_camera.viewMatrix, lightPosition);
+            _mainLight.lightInfo.lightPosition = lightPosition;
         }
-        [_program setLightUniformsWithInfo:light.lightInfo atIndex:idx];
-        idx++;
+        
+        // !!!: transfer light direction in view space
+        if (_mainLight.lightInfo.lightType == CELightTypeDirectional ||
+            _mainLight.lightInfo.lightType == CELightTypeSpot) {
+            GLKVector3 lightDirection = GLKVector3Make(-_mainLight.right.x, -_mainLight.right.y, -_mainLight.right.z);
+            lightDirection = GLKMatrix4MultiplyVector3(_camera.viewMatrix, lightDirection);
+            _mainLight.lightInfo.lightDirection = lightDirection;
+        }
     }
+    
+    [_program setMainLightUniforms:_mainLight.lightInfo];
     // we use eye space to do the calculation, so the eye direction is always (0, 0, 1)
     [_program setEyeDirection:GLKVector3Make(0.0, 0.0, 1.0)];
     
     // shadow map setting
-    if (_shadowLight) {
+    if (_shadowLight.enableShadow && _shadowLight.shadowMapBuffer) {
         [_program setShadowDarkness:1.0 - _shadowLight.shadowDarkness];
         [_program setShadowMapTexture:_shadowLight.shadowMapBuffer.textureId];
         
@@ -153,13 +152,13 @@
         
         // setup normal mapping
         if (_config.enableNormalMapping && model.normalMap) {
-            [_program setLightPosition:[[(CELight *)_lights[0] lightInfo] lightDirection]];
-            [_program setTangentAttribute:[model.vertexBuffer attributeWithName:CEVBOAttributeTangent]];
-            [_program setNormalMapTexture:model.normalMap.name];
+//            [_program setLightPosition:_mainLight.lightInfo.lightDirection];
+//            [_program setTangentAttribute:[model.vertexBuffer attributeWithName:CEVBOAttributeTangent]];
+//            [_program setNormalMapTexture:model.normalMap.name];
         }
         
         // setup shadow mapping
-        if (_shadowLight) {
+        if (_shadowLight.enableShadow) {
             GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
                                                    0.0, 0.5, 0.0, 0.0,
                                                    0.0, 0.0, 0.5, 0.0,

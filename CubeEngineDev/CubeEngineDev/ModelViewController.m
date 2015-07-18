@@ -61,7 +61,7 @@
     directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [directionalLight lookAt:GLKVector3Make(0, 0, 0)];
 //    directionalLight.enableShadow = YES;
-    [self.scene addLight:directionalLight];
+    self.scene.mainLight = directionalLight;
     _light = directionalLight;
 }
 

@@ -84,27 +84,25 @@
     _directionalLight.position = GLKVector3Make(8, 8, 8);
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [_directionalLight lookAt:GLKVector3Make(0, 0, 0)];
-    _directionalLight.enableShadow = YES;
-    [self.scene addLight:_directionalLight];
+//    _directionalLight.enableShadow = YES;
+//    self.scene.mainLight = _directionalLight;
     
     _pointLight = [CEPointLight new];
     _pointLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     _pointLight.position = GLKVector3Make(-8, 15, 0);
-//    _pointLight.enableShadow = YES;
-    [self.scene addLight:_pointLight];
+//    self.scene.mainLight = _pointLight;
     
     _spotLight = [CESpotLight new];
     _spotLight.position = GLKVector3Make(-8, 15, 0);
     _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
     [_spotLight lookAt:_teapotModel.position];
-//    _spotLight.enableShadow = YES;
-    [self.scene addLight:_spotLight];
+    self.scene.mainLight = _spotLight;
     _objectOperator.operationObject = _teapotModel;
     
     // update light switches
     _directionalLight.enabled = YES;
-    _pointLight.enabled = NO;
-    _spotLight.enabled = NO;
+    _pointLight.enabled = YES;
+    _spotLight.enabled = YES;
     _directionalLightSwitch.on = _directionalLight.isEnabled;
     _pointLightSwitch.on = _pointLight.isEnabled;
     _spotLightSwitch.on = _spotLight.isEnabled;

@@ -10,49 +10,58 @@
 #import "CEProgramConfig.h"
 #import "CEVBOAttribute.h"
 #import "CELightInfo.h"
+#import "CELightUniforms.h"
+
 
 @interface CEMainProgram : CEProgram {
+    /*naming rules:
+     Attributes: _attrib[name]_[type]_V
+     Uniforms:   _uni[name]_[type]_[V|F]
+     
+     V:used for VertexShader
+     F:used for FragmentShader
+     */
+    
     // basic
-    GLint _attribPosition_vec4;
-    GLint _uni4MVPMatrix_mtx4;
+    GLint _attribPosition_vec4_V;
+    GLint _uni4MVPMatrix_mtx4_V;
     
     // material
-    GLint _uniDiffuseColor_vec4;
+    GLint _uniDiffuseColor_vec4_F;
     
     // lighting
-    GLint _attribNormal_vec3;
-    GLint _uniLightCount_i;
-    GLint _uniMVMatrix_mtx4;
-    GLint _uniNormalMatrix_mtx3;
-    GLint _uniEyeDirection_vec3;
+    GLint _attribNormal_vec3_V;
+    GLint _uniMVMatrix_mtx4_V;
+    GLint _uniNormalMatrix_mtx3_V;
     
-    GLint _uniSpecularColor_vec3;
-    GLint _uniAmbientColor_vec3;
-    GLint _uniShininessExponent_f;
-    NSArray *_uniLightInfos;
+    CELightUniforms *_mainLight_F;
+    GLint _uniEyeDirection_vec3_F;
+    GLint _uniSpecularColor_vec3_F;
+    GLint _uniAmbientColor_vec3_F;
+    GLint _uniShininessExponent_f_F;
+//    NSArray *_uniLightInfos;
     
     // texture
-    GLint _attribTextureCoord_vec2;
-    GLint _uniDiffuseTexture_tex;
+    GLint _attribTextureCoord_vec2_V;
+    GLint _uniDiffuseTexture_tex_F;
     
     // normal map
-    GLint _attribTangent_vec3;
-    GLint _uniLightPosition_vec3;
-    GLint _uniNormalMapTexture_tex;
+//    GLint _attribTangent_vec3;
+//    GLint _uniLightPosition_vec3;
+//    GLint _uniNormalMapTexture_tex;
     
     // shadow map
-    GLint _uniShadowDarkness_f;
-    GLint _uniDepthBiasMVP_mtx4;
-    GLint _uniShadowMap_tex;
+    GLint _uniDepthBiasMVP_mtx4_V;
+    GLint _uniShadowDarkness_f_F;
+    GLint _uniShadowMap_tex_F;
     
     // transparency
-    GLint _uniTransparency_f;
+    GLint _uniTransparency_f_F;
 }
 
 
 @property (nonatomic, readonly) CEProgramConfig *config;
 @property (nonatomic, readonly) BOOL isEditing;
-@property (nonatomic, readonly) NSArray *uniLightInfos; // return array of CELightUniformInfo
 
 + (instancetype)programWithConfig:(CEProgramConfig *)config;
 
@@ -66,7 +75,7 @@
 - (BOOL)setDiffuseColor:(GLKVector4)colorVec4;
 
 // lighting
-- (BOOL)setLightUniformsWithInfo:(CELightInfo *)lightInfos atIndex:(int)index;
+- (BOOL)setMainLightUniforms:(CELightInfo *)lightInfo;
 - (BOOL)setNormalAttribute:(CEVBOAttribute *)attribute;
 - (BOOL)setModelViewMatrix:(GLKMatrix4)mvMatrix4;
 - (BOOL)setNormalMatrix:(GLKMatrix3)normalMatrix3;
@@ -81,9 +90,9 @@
 - (BOOL)setDiffuseTexture:(GLuint)textureId;
 
 // normal map
-- (BOOL)setTangentAttribute:(CEVBOAttribute *)attribute;
-- (BOOL)setLightPosition:(GLKVector3)lightPosition;
-- (BOOL)setNormalMapTexture:(GLuint)textureId;
+//- (BOOL)setTangentAttribute:(CEVBOAttribute *)attribute;
+//- (BOOL)setLightPosition:(GLKVector3)lightPosition;
+//- (BOOL)setNormalMapTexture:(GLuint)textureId;
 
 // shadow map
 - (BOOL)setDepthBiasModelViewProjectionMatrix:(GLKMatrix4)depthBiasMVPMatrix4;

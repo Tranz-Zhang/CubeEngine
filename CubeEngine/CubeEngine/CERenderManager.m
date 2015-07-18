@@ -79,13 +79,10 @@
     // 2. check if need render shadow map
     CEShadowLight *shadowLight = nil;
     NSMutableArray *shadowModels = [NSMutableArray array];
-    for (CELight *light in scene.allLights) {
-        if ([light isKindOfClass:[CEShadowLight class]] &&
-            [(CEShadowLight *)light enableShadow] &&
-            [(CEShadowLight *)light isEnabled]) {
-            shadowLight = (CEShadowLight *)light;
-            break;
-        }
+    if ([scene.mainLight isKindOfClass:[CEShadowLight class]] &&
+        [(CEShadowLight *)scene.mainLight enableShadow] &&
+        [(CEShadowLight *)scene.mainLight isEnabled]) {
+        shadowLight = (CEShadowLight *)scene.mainLight;
     }
     for (CEModel *model in allModels) {
         if (model.castShadows) {
@@ -104,7 +101,7 @@
     // 4 .sort render objects
     CEProgramConfig *baseConfig = [CEProgramConfig new];
     baseConfig.enableShadowMapping = (shadowLight && shadowModels.count);
-    baseConfig.lightCount = (int)scene.allLights.count;
+    baseConfig.lightCount = 1;
     NSArray *renderGroups = [self renderGroupsWithObjects:allModels withBaseConfig:baseConfig];
     
     // 5. render models
@@ -115,8 +112,7 @@
     for (CERenderGroup *group in renderGroups) {
         CEMainRenderer *renderer = [self rendererWithConfig:group.renderConfig];
         renderer.camera = scene.camera;
-        renderer.lights = scene.allLights;
-        renderer.shadowLight = shadowLight;
+        renderer.mainLight = scene.mainLight;
         if (group.renderConfig.renderMode == CERenderModeTransparent) {
             // render transparent object with double sided and blend on
             glEnable(GL_BLEND);
@@ -338,8 +334,10 @@
     // render wireframe add assist info
     [[self wireframeRenderer] renderWireframeForObjects:objects];
     [[self assistRender] renderBoundsForObjects:objects];
-    [[self assistRender] renderLights:[CEScene currentScene].allLights];
     [[self assistRender] renderWorldOriginCoordinate];
+    if ([CEScene currentScene].mainLight) {
+        [[self assistRender] renderLights:@[[CEScene currentScene].mainLight]];
+    }
 }
 
 

@@ -11,7 +11,6 @@
 
 @interface CEScene () {
     NSArray *_models;
-    NSArray *_lights;
 }
 
 @end
@@ -64,11 +63,6 @@ static CEScene *sCurrentScene;
     return _models;
 }
 
-
-- (NSArray *)allLights {
-    return _lights;
-}
-
 #pragma mark - Model
 - (void)addModel:(CEModel *)model {
     if ([model isKindOfClass:[CEModel class]] &&
@@ -91,27 +85,6 @@ static CEScene *sCurrentScene;
     }
 }
 
-
-#pragma mark - Light
-- (void)addLight:(CELight *)light {
-    if (_lights.count < _maxLightCount &&
-        [light isKindOfClass:[CELight class]] &&
-        ![_lights containsObject:light]) {
-        
-        NSMutableArray *tmpList = [NSMutableArray arrayWithArray:_lights];
-        [tmpList addObject:light];
-        _lights = tmpList.copy;
-    }
-}
-
-
-- (void)removeLight:(CELight *)light {
-    if ([_lights containsObject:light]) {
-        NSMutableArray *tmpList = [NSMutableArray arrayWithArray:_lights];
-        [tmpList removeObject:light];
-        _lights = tmpList.copy;
-    }
-}
 
 
 @end

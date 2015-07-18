@@ -188,6 +188,7 @@
 		26F7FF8E1ADE45660086D9D7 /* CEAssistRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEAssistRenderer.m; sourceTree = "<group>"; };
 		26FF85361B0A173C0075B971 /* CEMainRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEMainRenderer.h; sourceTree = "<group>"; };
 		26FF85371B0A173C0075B971 /* CEMainRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEMainRenderer.m; sourceTree = "<group>"; };
+		4C05C9371B5A2E2500199887 /* CEShader_Backup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CEShader_Backup.h; sourceTree = "<group>"; };
 		4C43A42E1ADC37C600761CA9 /* CEVertexBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEVertexBuffer.h; sourceTree = "<group>"; };
 		4C43A42F1ADC37C600761CA9 /* CEVertexBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEVertexBuffer.m; sourceTree = "<group>"; };
 		4C43A4311ADC380A00761CA9 /* CEVBOAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEVBOAttribute.h; sourceTree = "<group>"; };
@@ -337,6 +338,7 @@
 			isa = PBXGroup;
 			children = (
 				267F4D7E1B0CD26200F25452 /* CEShaders.h */,
+				4C05C9371B5A2E2500199887 /* CEShader_Backup.h */,
 				4C69C50E1B4D238D00ED44D2 /* CEShader_test.h */,
 				2624A60F1B0AD234001E3F32 /* CEProgramConfig.h */,
 				2624A6101B0AD234001E3F32 /* CEProgramConfig.m */,

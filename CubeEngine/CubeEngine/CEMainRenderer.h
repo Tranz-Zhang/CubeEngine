@@ -9,13 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "CECamera.h"
 #import "CEProgramConfig.h"
-#import "CEShadowLight.h"
+#import "CELight.h"
 
 @interface CEMainRenderer : NSObject
 
-@property (nonatomic, strong) NSArray *lights;
 @property (nonatomic, weak) CECamera *camera;
-@property (nonatomic, weak) CEShadowLight *shadowLight;
+@property (nonatomic, weak) CELight *mainLight;
 
 + (instancetype)rendererWithConfig:(CEProgramConfig *)config;
 
@@ -24,12 +23,4 @@
 
 @end
 
-#ifdef tes
-#else
-#endif
 
-//Normal Map Rendering
-//1. read the book
-//2. prepare the data
-//3. setup the shader
-//4. test

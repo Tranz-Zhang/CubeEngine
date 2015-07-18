@@ -24,21 +24,13 @@
 @interface CEScene : NSObject
 
 @property (nonatomic, readonly) NSArray *allModels;
-@property (nonatomic, readonly) NSArray *allLights;
-@property (nonatomic, readonly) NSInteger maxLightCount;
+@property (nonatomic, retain) CELight *mainLight;
 @property (nonatomic, readonly) CECamera *camera;
 @property (nonatomic, copy) UIColor *backgroundColor;
 
 // Model
 - (void)addModel:(CEModel *)model;
 - (void)removeModel:(CEModel *)model;
-- (void)addModels:(NSArray *)models;
-- (void)removeModels:(NSArray *)models;
-
-
-// Light
-- (void)addLight:(CELight *)light;
-- (void)removeLight:(CELight *)light;
 
 
 @end
