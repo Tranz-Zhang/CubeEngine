@@ -74,6 +74,7 @@
 		4C69C4FE1B4D131500ED44D2 /* ram_blinn.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C69C4FC1B4D131500ED44D2 /* ram_blinn.obj */; };
 		4C93CA8D1B4A14790017648B /* ram.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C93CA8B1B4A14790017648B /* ram.obj */; };
 		4C93CA8E1B4A14790017648B /* ram.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4C93CA8C1B4A14790017648B /* ram.mtl */; };
+		4CCD81741B68CFBD008041AB /* floor_max.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD81731B68CFBD008041AB /* floor_max.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +185,7 @@
 		4C69C4FC1B4D131500ED44D2 /* ram_blinn.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram_blinn.obj; sourceTree = "<group>"; };
 		4C93CA8B1B4A14790017648B /* ram.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram.obj; sourceTree = "<group>"; };
 		4C93CA8C1B4A14790017648B /* ram.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram.mtl; sourceTree = "<group>"; };
+		4CCD81731B68CFBD008041AB /* floor_max.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor_max.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -309,6 +311,7 @@
 				2692498E1B02F3CF0069892D /* teapot_texture.obj */,
 				2692498F1B02F3CF0069892D /* default.png */,
 				26A00DB51AFB014C00E12B24 /* floor.obj */,
+				4CCD81731B68CFBD008041AB /* floor_max.obj */,
 				263C8E761AE68738004FDFE8 /* teapot_smooth.obj */,
 				263C8E771AE68738004FDFE8 /* teapot.obj */,
 				268CBC691ADD466E00795A6D /* teapot.mtl */,
@@ -481,6 +484,7 @@
 			files = (
 				261CD4331AD3DE8B00C521CC /* cylinder_group.mtl in Resources */,
 				261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */,
+				4CCD81741B68CFBD008041AB /* floor_max.obj in Resources */,
 				268CBC6E1ADD466E00795A6D /* teapot.png in Resources */,
 				261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */,
 				268898A81B48D46D00F757E5 /* white_texture.png in Resources */,
