@@ -35,7 +35,7 @@
     GLint _uniNormalMatrix_mtx3_V;
     
     CELightUniforms *_mainLight_F;
-    GLint _uniEyeDirection_vec3_F;
+    GLint _uniEyeDirection_vec3_V;
     GLint _uniSpecularColor_vec3_F;
     GLint _uniAmbientColor_vec3_F;
     GLint _uniShininessExponent_f_F;

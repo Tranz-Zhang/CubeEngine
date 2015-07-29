@@ -98,7 +98,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         _attribNormal_vec3_V = -1;
         _uniMVMatrix_mtx4_V = -1;
         _uniNormalMatrix_mtx3_V = -1;
-        _uniEyeDirection_vec3_F = -1;
+        _uniEyeDirection_vec3_V = -1;
         
         // shadow map
         _uniDepthBiasMVP_mtx4_V = -1;
@@ -170,7 +170,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     _attribNormal_vec3_V      = [self attributeIndex:@"VertexNormal"];
     _uniNormalMatrix_mtx3_V   = [self uniformIndex:@"NormalMatrix"];
     _uniMVMatrix_mtx4_V       = [self uniformIndex:@"MVMatrix"];
-    _uniEyeDirection_vec3_F   = [self uniformIndex:@"EyeDirection"];
+    _uniEyeDirection_vec3_V   = [self uniformIndex:@"EyeDirection"];
     _uniSpecularColor_vec3_F  = [self uniformIndex:@"SpecularColor"];
     _uniAmbientColor_vec3_F   = [self uniformIndex:@"AmbientColor"];
     _uniShininessExponent_f_F = [self uniformIndex:@"ShininessExponent"];
@@ -332,10 +332,10 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
 
 
 - (BOOL)setEyeDirection:(GLKVector3)eyeDirectionVec3 {
-    if (!_isEditing || _uniEyeDirection_vec3_F < 0) {
+    if (!_isEditing || _uniEyeDirection_vec3_V < 0) {
         return NO;
     }
-    glUniform3fv(_uniEyeDirection_vec3_F, 1, eyeDirectionVec3.v);
+    glUniform3fv(_uniEyeDirection_vec3_V, 1, eyeDirectionVec3.v);
     return YES;
 }
 

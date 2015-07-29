@@ -32,7 +32,7 @@
 //    self.scene.camera.farZ = 100;
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    _testModel = [CEModel modelWithObjFile:@"ram"];
+    _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
     _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
 //    _testModel.showWireframe = YES;
     _testModel.showAccessoryLine = YES;
@@ -99,6 +99,7 @@
 #pragma mark - Others
 - (void)recursiveSetColorForModel:(CEModel *)model {
     model.baseColor = [self randomColor];
+    model.castShadows = YES;
     for (CEModel *child in model.childObjects) {
         [self recursiveSetColorForModel:child];
     }

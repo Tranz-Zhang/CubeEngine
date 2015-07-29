@@ -69,14 +69,16 @@
 //        }
 //    }
     
-    _teapotModel = [CEModel modelWithObjFile:@"ram"];
+    _teapotModel = [CEModel modelWithObjFile:@"teapot_smooth"];
     _teapotModel.showAccessoryLine = YES;
     _teapotModel.castShadows = YES;
     _teapotModel.baseColor = [UIColor orangeColor];
+    _teapotModel.material.shininessExponent = 20;
+    _teapotModel.material.specularColor = GLKVector3Make(0.9, 0.9, 0.9);
     [self.scene addModel:_teapotModel];
     
     _floorModel = [CEModel modelWithObjFile:@"floor"];
-    _floorModel.baseColor = [UIColor lightGrayColor];
+    _floorModel.baseColor = [UIColor grayColor];
 //    _floorModel.castShadows = YES;
     [self.scene addModel:_floorModel];
     
@@ -85,7 +87,7 @@
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [_directionalLight lookAt:GLKVector3Make(0, 0, 0)];
 //    _directionalLight.enableShadow = YES;
-//    self.scene.mainLight = _directionalLight;
+    self.scene.mainLight = _directionalLight;
     
     _pointLight = [CEPointLight new];
     _pointLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
@@ -96,9 +98,9 @@
     _spotLight.position = GLKVector3Make(-8, 15, 0);
     _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
     [_spotLight lookAt:_teapotModel.position];
-    self.scene.mainLight = _spotLight;
+//    self.scene.mainLight = _spotLight;
     _objectOperator.operationObject = _teapotModel;
-    
+
     // update light switches
     _directionalLight.enabled = YES;
     _pointLight.enabled = YES;

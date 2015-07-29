@@ -16,12 +16,28 @@ NSString *const kVertexShader = CE_SHADER_STRING
  attribute highp vec4 VertexPosition;
  
  // lighting
- \n#ifdef CE_ENABLE_LIGHTING\n
  attribute highp vec3 VertexNormal;
  uniform mat4 MVMatrix;
  uniform mat3 NormalMatrix;
  varying vec3 Normal;
- varying vec4 Position;
+ 
+ \n#ifdef CE_ENABLE_LIGHTING\n
+ struct LightInfo {
+     bool IsEnabled;
+     mediump int LightType; // 0:none 1:directional 2:point 3:spot
+     mediump vec4 LightPosition;  // in eys space
+     mediump vec3 LightDirection; // in eye space
+     mediump vec3 LightColor;
+     mediump float Attenuation;
+     mediump float SpotConsCutoff;
+     mediump float SpotExponent;
+ };
+ uniform LightInfo MainLight;
+ uniform vec3 EyeDirection;
+// varying vec4 Position;
+ varying vec3 LightDirection;
+ varying vec3 HalfVector;
+ varying float Attenuation;
  \n#endif\n
  
  // shadow mapping
@@ -40,7 +56,33 @@ NSString *const kVertexShader = CE_SHADER_STRING
      // lighting
      \n#ifdef CE_ENABLE_LIGHTING\n
      Normal = normalize(NormalMatrix * VertexNormal);
-     Position = MVMatrix * VertexPosition;
+//     Position = MVMatrix * VertexPosition;
+     
+     // for locol lights, compute per-fragment direction, halfVector and attenuation
+     if (MainLight.LightType > 1) {
+         LightDirection = vec3(MainLight.LightPosition) - vec3(MVMatrix * VertexPosition);
+         float lightDistance = length(LightDirection);
+         LightDirection = LightDirection / lightDistance; // normalize light direction
+         
+         Attenuation = 1.0 / (1.0 + MainLight.Attenuation * lightDistance + MainLight.Attenuation * lightDistance * lightDistance);
+         if (MainLight.LightType == 3) { // spot light
+             // lightDirection: current position to light position Direction
+             // MainLight.LightDirection: source light direction, ref as ConeDirection
+             float spotCos = dot(LightDirection, MainLight.LightDirection);
+             if (spotCos < MainLight.SpotConsCutoff) {
+                 Attenuation = 0.0;
+             } else {
+                 Attenuation *= pow(spotCos, MainLight.SpotExponent);
+             }
+         }
+         HalfVector = normalize(LightDirection + EyeDirection);
+         
+     } else { // directional light
+         LightDirection = MainLight.LightDirection;
+         HalfVector = normalize(MainLight.LightDirection + EyeDirection);
+         Attenuation = 1.0;
+     }
+     
      \n#endif\n
      
      // shadow mapping
@@ -73,19 +115,20 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  
  struct LightInfo {
      bool IsEnabled;
-     int LightType; // 0:none 1:directional 2:point 3:spot
-     vec4 LightPosition;
-     vec3 LightDirection;
-     vec3 LightColor;
-     float Attenuation;
-     float SpotConsCutoff;
-     float SpotExponent;
+     mediump int LightType; // 0:none 1:directional 2:point 3:spot
+     mediump vec4 LightPosition;  // in eys space
+     mediump vec3 LightDirection; // in eye space
+     mediump vec3 LightColor;
+     mediump float Attenuation;
+     mediump float SpotConsCutoff;
+     mediump float SpotExponent;
  };
  uniform LightInfo MainLight;
- uniform vec3 EyeDirection;
- uniform int LightCount;
  varying vec3 Normal;
- varying vec4 Position;
+// varying vec4 Position;
+ varying vec3 LightDirection;
+ varying vec3 HalfVector;
+ varying float Attenuation;
  
  // shadow mapping
  \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
@@ -95,43 +138,13 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  \n#endif\n
  
  vec3 ApplyLightingEffect(vec3 inputColor) {
-     vec3 scatteredLight = vec3(0.0);
-     vec3 reflectedLight = vec3(0.0);
-     
-     // loop over all light and calculate light effect
-     vec3 halfVector;
-     vec3 lightDirection = MainLight.LightDirection;
-     float attenuation = 1.0;
-     
-     // for locol lights, compute per-fragment direction, halfVector and attenuation
-     if (MainLight.LightType > 1) {
-         lightDirection = vec3(MainLight.LightPosition) - vec3(Position);
-         float lightDistance = length(lightDirection);
-         lightDirection = lightDirection / lightDistance; // normalize light direction
-         
-         attenuation = 1.0 / (1.0 + MainLight.Attenuation * lightDistance + MainLight.Attenuation * lightDistance * lightDistance);
-         if (MainLight.LightType == 3) { // spot light
-             // lightDirection: current position to light position Direction
-             // MainLight.LightDirection: source light direction, ref as ConeDirection
-             float spotCos = dot(lightDirection, MainLight.LightDirection);
-             if (spotCos < MainLight.SpotConsCutoff) {
-                 attenuation = 0.0;
-             } else {
-                 attenuation *= pow(spotCos, MainLight.SpotExponent);
-             }
-         }
-         halfVector = normalize(lightDirection + EyeDirection);
-         
-     } else {
-         halfVector = normalize(MainLight.LightDirection + EyeDirection);
-     }
      // calculate diffuse and specular
-     float diffuse = max(0.0, dot(Normal, lightDirection));
-     float specular = max(0.0, dot(Normal, halfVector));
+     float diffuse = max(0.0, dot(Normal, LightDirection));
+     float specular = max(0.0, dot(Normal, HalfVector));
      
      specular = (diffuse == 0.0 || ShininessExponent == 0.0) ? 0.0 : pow(specular, ShininessExponent);
-     scatteredLight += AmbientColor * attenuation + MainLight.LightColor * diffuse * attenuation;
-     reflectedLight += SpecularColor * specular * attenuation;
+     vec3 scatteredLight = AmbientColor * Attenuation + MainLight.LightColor * diffuse * Attenuation;
+     vec3 reflectedLight = SpecularColor * specular * Attenuation;
      
      // apply shadow mapping
      \n#ifdef CE_ENABLE_SHADOW_MAPPING\n

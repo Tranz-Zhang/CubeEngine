@@ -293,7 +293,7 @@
     [EAGLContext setCurrentContext:_context];
     CEProgramConfig *config = [CEProgramConfig new];
     CEMainProgram *program = [CEMainProgram programWithConfig:config];
-    config.lightCount = 2;
+    config.lightCount = 1;
     program = [CEMainProgram programWithConfig:config];
     config.enableTexture = YES;
     program = [CEMainProgram programWithConfig:config];

@@ -91,7 +91,7 @@
         // update local transfrom matrix
         GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(_position.x, _position.y, _position.z);
         tranformMatrix = GLKMatrix4Multiply(tranformMatrix, GLKMatrix4MakeWithQuaternion(_rotation));
-        tranformMatrix = GLKMatrix4ScaleWithVector3(tranformMatrix, _scale);
+//        tranformMatrix = GLKMatrix4ScaleWithVector3(tranformMatrix, _scale);
         _localTransfromMatrix = tranformMatrix;
         if (_parentObject) {
             _transformMatrix = GLKMatrix4Invert(GLKMatrix4Multiply(_parentObject.transformMatrix, tranformMatrix), NULL);
