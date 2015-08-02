@@ -39,7 +39,6 @@
     GLint _uniSpecularColor_vec3_F;
     GLint _uniAmbientColor_vec3_F;
     GLint _uniShininessExponent_f_F;
-//    NSArray *_uniLightInfos;
     
     // texture
     GLint _attribTextureCoord_vec2_V;

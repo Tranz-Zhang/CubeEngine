@@ -15,13 +15,7 @@ NSString *const kVertexShader = CE_SHADER_STRING
  uniform mat4 MVPMatrix;
  attribute highp vec4 VertexPosition;
  
- // lighting
- attribute highp vec3 VertexNormal;
- uniform mat4 MVMatrix;
- uniform mat3 NormalMatrix;
- varying vec3 Normal;
- 
- \n#ifdef CE_ENABLE_LIGHTING\n
+ \n#ifdef CE_ENABLE_LIGHTING\n //                                               >> lighting
  struct LightInfo {
      bool IsEnabled;
      mediump int LightType; // 0:none 1:directional 2:point 3:spot
@@ -33,32 +27,51 @@ NSString *const kVertexShader = CE_SHADER_STRING
      mediump float SpotExponent;
  };
  uniform LightInfo MainLight;
+
+ \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                         >> normal mapping
+ attribute highp vec3 VertexNormal;
+ attribute lowp vec3 VertexTangent;
  uniform vec3 EyeDirection;
-// varying vec4 Position;
+ uniform mat3 NormalMatrix;
+ 
+ varying vec3 TestLightDir;
+ varying vec3 TestEyeDir;
+
+ \n#else\n //                                                                   >> classic lighting
+ attribute highp vec3 VertexNormal;
+ uniform mat4 MVMatrix;
+ uniform mat3 NormalMatrix;
+ uniform vec3 EyeDirection;
+ varying vec3 Normal;
  varying vec3 LightDirection;
  varying vec3 HalfVector;
  varying float Attenuation;
- \n#endif\n
+ 
+  \n#endif\n //                                                                  << normal mapping & classic lighting
+ 
  
  // shadow mapping
- \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
+ \n#ifdef CE_ENABLE_SHADOW_MAPPING\n //                                         >> shadow mapping
  uniform mat4 DepthBiasMVP;
  varying vec4 ShadowCoord;
- \n#endif\n
+ \n#endif\n //                                                                  << shadow mapping
  
+ \n#endif\n //                                                                  << lighting
+  
  // texture
- \n#ifdef CE_ENABLE_TEXTURE\n
+ \n#ifdef CE_ENABLE_TEXTURE\n //                                                >> texture
  attribute highp vec2 TextureCoord;
  varying vec2 TextureCoordOut;
- \n#endif\n
+ \n#endif\n //                                                                  << texture
  
  void main () {
      // lighting
-     \n#ifdef CE_ENABLE_LIGHTING\n
-     Normal = normalize(NormalMatrix * VertexNormal);
-//     Position = MVMatrix * VertexPosition;
+     \n#ifdef CE_ENABLE_LIGHTING\n //                                           >> lighting
+     \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                     >> normal mapping
      
-     // for locol lights, compute per-fragment direction, halfVector and attenuation
+     \n#else\n //                                                               >> classic lighting
+     Normal = normalize(NormalMatrix * VertexNormal);
+     // for locol lights, compute per fragment direction, halfVector and attenuation
      if (MainLight.LightType > 1) {
          LightDirection = vec3(MainLight.LightPosition) - vec3(MVMatrix * VertexPosition);
          float lightDistance = length(LightDirection);
@@ -82,22 +95,24 @@ NSString *const kVertexShader = CE_SHADER_STRING
          HalfVector = normalize(MainLight.LightDirection + EyeDirection);
          Attenuation = 1.0;
      }
+     \n#endif\n //                                                              << normal mapping & classic lighting
      
-     \n#endif\n
-     
+         
      // shadow mapping
-     \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
+     \n#ifdef CE_ENABLE_SHADOW_MAPPING\n //                                     >> shadow mapping
      ShadowCoord = DepthBiasMVP * VertexPosition;
-     \n#endif\n
+     \n#endif\n //                                                              << shadow mapping
+     
+     \n#endif\n //                                                              << lighting
      
      // texture
-     \n#ifdef CE_ENABLE_TEXTURE\n
+     \n#ifdef CE_ENABLE_TEXTURE\n //                                            >> texture
      TextureCoordOut = TextureCoord;
-     \n#endif\n
+     \n#endif\n //                                                              << texture
      
      gl_Position = MVPMatrix * VertexPosition;
  }
- );
+);
 
 
 NSString *const kFragmentSahder = CE_SHADER_STRING
@@ -108,7 +123,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  uniform vec4 DiffuseColor;
  
  // lighting
- \n#ifdef CE_ENABLE_LIGHTING\n
+ \n#ifdef CE_ENABLE_LIGHTING\n //                                               >> lighting
  uniform vec3 SpecularColor;
  uniform vec3 AmbientColor;
  uniform float ShininessExponent;
@@ -124,85 +139,94 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
      mediump float SpotExponent;
  };
  uniform LightInfo MainLight;
+
+ 
+
+ \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                         >> normal mapping
+ 
+ \n#else\n //                                                                   >> classic lighting
  varying vec3 Normal;
-// varying vec4 Position;
  varying vec3 LightDirection;
  varying vec3 HalfVector;
  varying float Attenuation;
  
+ \n#endif\n //                                                                  << normal mapping & classic lighting
+ 
  // shadow mapping
- \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
+ \n#ifdef CE_ENABLE_SHADOW_MAPPING\n //                                         >> shadow mapping
  uniform float ShadowDarkness;
  uniform sampler2D ShadowMapTexture;
  varying vec4 ShadowCoord;
- \n#endif\n
+ \n#endif\n //                                                                  << shadow mapping
  
  vec3 ApplyLightingEffect(vec3 inputColor) {
-     // calculate diffuse and specular
+     \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                     >> normal mapping
+     
+     \n#else\n //                                                               >> classic lighting
      float diffuse = max(0.0, dot(Normal, LightDirection));
      float specular = max(0.0, dot(Normal, HalfVector));
-     
      specular = (diffuse == 0.0 || ShininessExponent == 0.0) ? 0.0 : pow(specular, ShininessExponent);
      vec3 scatteredLight = AmbientColor * Attenuation + MainLight.LightColor * diffuse * Attenuation;
      vec3 reflectedLight = SpecularColor * specular * Attenuation;
      
+     \n#endif\n //                                                              << normal mapping & classic lighting
+     
      // apply shadow mapping
-     \n#ifdef CE_ENABLE_SHADOW_MAPPING\n
+     \n#ifdef CE_ENABLE_SHADOW_MAPPING\n //                                     >> shadow mapping
      float depthValue = texture2D(ShadowMapTexture, vec2(ShadowCoord.x/ShadowCoord.w, ShadowCoord.y/ShadowCoord.w)).z;
      if (depthValue != 1.0 && depthValue < (ShadowCoord.z / ShadowCoord.w) - 0.005) {
          scatteredLight *= ShadowDarkness;
          reflectedLight *= ShadowDarkness;
      }
-     \n#endif\n
+     \n#endif\n //                                                              << shadow mapping
      
      return min(inputColor * scatteredLight + reflectedLight, vec3(1.0));
  }
  
- \n#endif\n
- // end of lighting
+ \n#endif\n //                                                                  << lighting
  
  
  // texture
- \n#ifdef CE_ENABLE_TEXTURE\n
+ \n#ifdef CE_ENABLE_TEXTURE\n //                                                >> texture
  uniform lowp sampler2D DiffuseTexture;
  varying vec2 TextureCoordOut;
- \n#endif\n
- // end of texture
+ \n#endif\n //                                                                  << texture
  
- \n#ifdef CE_RENDER_TRANSPARENT_OBJECT\n // TRANSPARENT OBJECT
+ 
+ \n#ifdef CE_RENDER_TRANSPARENT_OBJECT\n //                                     >> transparent
  uniform float Transparency;
- \n#endif\n
+ \n#endif\n //                                                                  << transparent
  
  void main() {
-     //---------------------- input color ----------------------
+     // input color
      vec4 inputColor;
-     \n#ifdef CE_ENABLE_TEXTURE\n
+     \n#ifdef CE_ENABLE_TEXTURE\n //                                            >> texture
      inputColor = texture2D(DiffuseTexture, TextureCoordOut);
      \n#else\n
          inputColor = DiffuseColor;
-     \n#endif\n
+     \n#endif\n //                                                              << texture
      
-     \n#ifdef CE_RENDER_ALPHA_TESTED_OBJECT\n // ALPHA TESTED OBJECT
+     \n#ifdef CE_RENDER_ALPHA_TESTED_OBJECT\n //                                >> alpha test
      if (inputColor.a < 0.5) discard;
-     \n#endif\n
+     \n#endif\n //                                                              << alpha test
      
-     //--------------------- process color ---------------------
+     // process color
      vec4 processedColor;
-     \n#ifdef CE_ENABLE_LIGHTING\n
+     \n#ifdef CE_ENABLE_LIGHTING\n //                                           << lighting
      vec3 lightingColor = ApplyLightingEffect(inputColor.rgb);
      processedColor = vec4(lightingColor.rgb, inputColor.a);
      \n#else\n
          processedColor = inputColor;
-     \n#endif\n
+     \n#endif\n //                                                              >> lighting
      
-     //--------------------- final blending ---------------------
-     \n#ifdef CE_RENDER_TRANSPARENT_OBJECT\n // TRANSPARENT OBJECT
+     // final blending
+     \n#ifdef CE_RENDER_TRANSPARENT_OBJECT\n //                                 >> transparent
      processedColor.a = Transparency;
-     \n#endif\n
+     \n#endif\n //                                                              << transparent
      
      gl_FragColor = processedColor;
  }
- );
+);
 
 
 #endif

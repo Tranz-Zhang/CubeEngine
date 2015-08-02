@@ -32,7 +32,7 @@
 //    self.scene.camera.farZ = 100;
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
+    _testModel = [CEModel modelWithObjFile:@"test_scene"];
     _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
 //    _testModel.showWireframe = YES;
     _testModel.showAccessoryLine = YES;
@@ -60,8 +60,11 @@
     directionalLight.position = GLKVector3Make(4, 6, 4);
     directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [directionalLight lookAt:GLKVector3Make(0, 0, 0)];
-//    directionalLight.enableShadow = YES;
+    directionalLight.enableShadow = YES;
     self.scene.mainLight = directionalLight;
+    
+    
+    
     _light = directionalLight;
 }
 

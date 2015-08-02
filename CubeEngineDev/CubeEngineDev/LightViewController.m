@@ -79,7 +79,6 @@
     
     _floorModel = [CEModel modelWithObjFile:@"floor_max"];
     _floorModel.baseColor = [UIColor grayColor];
-    _floorModel.material = _teapotModel.material;
 //    _floorModel.castShadows = YES;
     [self.scene addModel:_floorModel];
     
@@ -93,13 +92,13 @@
     _pointLight = [CEPointLight new];
     _pointLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     _pointLight.position = GLKVector3Make(-8, 15, 0);
-    self.scene.mainLight = _pointLight;
+//    self.scene.mainLight = _pointLight;
     
     _spotLight = [CESpotLight new];
     _spotLight.position = GLKVector3Make(-8, 15, 0);
     _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
     [_spotLight lookAt:_teapotModel.position];
-    self.scene.mainLight = _spotLight;
+//    self.scene.mainLight = _spotLight;
     
     _objectOperator.operationObject = _teapotModel;
 

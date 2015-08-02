@@ -101,7 +101,7 @@
     // 4 .sort render objects
     CEProgramConfig *baseConfig = [CEProgramConfig new];
     baseConfig.enableShadowMapping = (shadowLight && shadowModels.count);
-    baseConfig.lightCount = 1;
+    baseConfig.lightCount = scene.mainLight ? 1 : 0;
     NSArray *renderGroups = [self renderGroupsWithObjects:allModels withBaseConfig:baseConfig];
     
     // 5. render models
@@ -288,6 +288,7 @@
 #pragma mark - Test Renderer
 
 - (void)testProgramGeneration {
+    return;
     printf("testProgramGeneration... ");
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     [EAGLContext setCurrentContext:_context];

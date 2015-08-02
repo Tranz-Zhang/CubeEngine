@@ -25,3 +25,4 @@ typedef NS_ENUM(int, CERenderMode) {
 - (BOOL)isEqualToConfig:(CEProgramConfig *)config;
 
 @end
+

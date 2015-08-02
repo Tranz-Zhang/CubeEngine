@@ -81,9 +81,10 @@
             lightDirection = GLKMatrix4MultiplyVector3(_camera.viewMatrix, lightDirection);
             _mainLight.lightInfo.lightDirection = lightDirection;
         }
+        
+        [_program setMainLightUniforms:_mainLight.lightInfo];
     }
     
-    [_program setMainLightUniforms:_mainLight.lightInfo];
     // we use eye space to do the calculation, so the eye direction is always (0, 0, 1)
     [_program setEyeDirection:GLKVector3Make(0.0, 0.0, 1.0)];
     
@@ -137,7 +138,14 @@
             CEError(@"Fail to set normal attribute");
             return;
         }
-        [_program setModelViewMatrix:modelViewMatrix];
+        
+        // setup model view matrix for specify lights
+        if (_mainLight.lightInfo.lightType == CELightTypePoint ||
+            _mainLight.lightInfo.lightType == CELightTypeSpot) {
+            [_program setModelViewMatrix:modelViewMatrix];
+        }
+        
+        // setup material
         if (model.material) {
             [_program setSpecularColor:model.material.specularColor];
             [_program setAmbientColor:model.material.ambientColor];
@@ -148,7 +156,6 @@
         GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(modelViewMatrix);
         normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
         [_program setNormalMatrix:normalMatrix];
-        
         
         // setup normal mapping
         if (_config.enableNormalMapping && model.normalMap) {
