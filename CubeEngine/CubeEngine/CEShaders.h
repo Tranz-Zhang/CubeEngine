@@ -19,7 +19,7 @@ NSString *const kVertexShader = CE_SHADER_STRING
  struct LightInfo {
      bool IsEnabled;
      mediump int LightType; // 0:none 1:directional 2:point 3:spot
-     mediump vec4 LightPosition;  // in eys space
+     mediump vec4 LightPosition;  // in eye space
      mediump vec3 LightDirection; // in eye space
      mediump vec3 LightColor;
      mediump float Attenuation;
@@ -31,11 +31,12 @@ NSString *const kVertexShader = CE_SHADER_STRING
  \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                         >> normal mapping
  attribute highp vec3 VertexNormal;
  attribute lowp vec3 VertexTangent;
- uniform vec3 EyeDirection;
+ uniform vec3 EyeDirection; // in eye space
  uniform mat3 NormalMatrix;
  
- varying vec3 TestLightDir;
- varying vec3 TestEyeDir;
+ varying vec3 LightDirection;
+ varying vec3 HalfVector;
+ varying float Attenuation;
 
  \n#else\n //                                                                   >> classic lighting
  attribute highp vec3 VertexNormal;
@@ -68,6 +69,14 @@ NSString *const kVertexShader = CE_SHADER_STRING
      // lighting
      \n#ifdef CE_ENABLE_LIGHTING\n //                                           >> lighting
      \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                     >> normal mapping
+     vec3 n = normalize(NormalMatrix * VertexNormal);
+     vec3 t = normalize(NormalMatrix * VertexTangent);
+     vec3 b = cross(n, t);
+     mat3 tbn = mat3(t, b, n);
+     LightDirection = normalize(tbn * MainLight.LightDirection);
+     vec3 eyeDirection_tangentSpace = normalize(tbn * EyeDirection);
+     HalfVector = normalize(LightDirection + eyeDirection_tangentSpace);
+     Attenuation = 1.0;
      
      \n#else\n //                                                               >> classic lighting
      Normal = normalize(NormalMatrix * VertexNormal);
@@ -122,6 +131,14 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  //  material
  uniform vec4 DiffuseColor;
  
+ 
+ // texture
+ \n#ifdef CE_ENABLE_TEXTURE\n //                                                >> texture
+ uniform lowp sampler2D DiffuseTexture;
+ varying vec2 TextureCoordOut;
+ \n#endif\n //                                                                  << texture
+ 
+ 
  // lighting
  \n#ifdef CE_ENABLE_LIGHTING\n //                                               >> lighting
  uniform vec3 SpecularColor;
@@ -140,9 +157,11 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  };
  uniform LightInfo MainLight;
 
- 
-
  \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                         >> normal mapping
+ uniform sampler2D NormalMapTexture;
+ varying vec3 LightDirection;
+ varying vec3 HalfVector;
+ varying float Attenuation;
  
  \n#else\n //                                                                   >> classic lighting
  varying vec3 Normal;
@@ -151,6 +170,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  varying float Attenuation;
  
  \n#endif\n //                                                                  << normal mapping & classic lighting
+ 
  
  // shadow mapping
  \n#ifdef CE_ENABLE_SHADOW_MAPPING\n //                                         >> shadow mapping
@@ -161,6 +181,13 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  
  vec3 ApplyLightingEffect(vec3 inputColor) {
      \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                     >> normal mapping
+     
+     vec3 normal = texture2D(NormalMapTexture, TextureCoordOut).rgb * 2.0 - 1.0;
+     float diffuse = max(0.0, dot(normal, LightDirection));
+     float specular = max(0.0, dot(normal, HalfVector));
+     specular = (diffuse == 0.0 || ShininessExponent == 0.0) ? 0.0 : pow(specular, ShininessExponent);
+     vec3 scatteredLight = AmbientColor * Attenuation + MainLight.LightColor * diffuse * Attenuation;
+     vec3 reflectedLight = SpecularColor * specular * Attenuation;
      
      \n#else\n //                                                               >> classic lighting
      float diffuse = max(0.0, dot(Normal, LightDirection));
@@ -184,14 +211,6 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  }
  
  \n#endif\n //                                                                  << lighting
- 
- 
- // texture
- \n#ifdef CE_ENABLE_TEXTURE\n //                                                >> texture
- uniform lowp sampler2D DiffuseTexture;
- varying vec2 TextureCoordOut;
- \n#endif\n //                                                                  << texture
- 
  
  \n#ifdef CE_RENDER_TRANSPARENT_OBJECT\n //                                     >> transparent
  uniform float Transparency;

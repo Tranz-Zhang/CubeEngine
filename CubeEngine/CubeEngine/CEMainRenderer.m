@@ -159,9 +159,8 @@
         
         // setup normal mapping
         if (_config.enableNormalMapping && model.normalMap) {
-//            [_program setLightPosition:_mainLight.lightInfo.lightDirection];
-//            [_program setTangentAttribute:[model.vertexBuffer attributeWithName:CEVBOAttributeTangent]];
-//            [_program setNormalMapTexture:model.normalMap.name];
+            [_program setTangentAttribute:[model.vertexBuffer attributeWithName:CEVBOAttributeTangent]];
+            [_program setNormalMapTexture:model.normalMap.name];
         }
         
         // setup shadow mapping

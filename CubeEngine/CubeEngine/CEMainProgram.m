@@ -188,9 +188,8 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     _mainLight_F = info;
     
     if (_config.enableNormalMapping) {
-//        _attribTangent_vec3 = [self attributeIndex:@"VertexTangent"];
-//        _uniLightPosition_vec3 = [self uniformIndex:@"LightPosition"];
-//        _uniNormalMapTexture_tex = [self uniformIndex:@"NormalMapTexture"];
+        _attribTangent_vec3 = [self attributeIndex:@"VertexTangent"];
+        _uniNormalMapTexture_tex = [self uniformIndex:@"NormalMapTexture"];
     }
 }
 
@@ -420,7 +419,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
 
 
 #pragma mark - normal map
-/*
+//*
 - (BOOL)setTangentAttribute:(CEVBOAttribute *)attribute {
     if (!_isEditing ||
         _attribTangent_vec3 < 0) {
@@ -455,13 +454,13 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
 }
 
 
-- (BOOL)setLightPosition:(GLKVector3)lightPosition {
-    if (!_isEditing || _uniLightPosition_vec3 < 0) {
-        return NO;
-    }
-    glUniform3fv(_uniLightPosition_vec3, 1, lightPosition.v);
-    return YES;
-}
+//- (BOOL)setLightPosition:(GLKVector3)lightPosition {
+//    if (!_isEditing || _uniLightPosition_vec3 < 0) {
+//        return NO;
+//    }
+//    glUniform3fv(_uniLightPosition_vec3, 1, lightPosition.v);
+//    return YES;
+//}
 
 
 - (BOOL)setNormalMapTexture:(GLuint)textureId {

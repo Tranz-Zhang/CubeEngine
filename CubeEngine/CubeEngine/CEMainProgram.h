@@ -45,9 +45,8 @@
     GLint _uniDiffuseTexture_tex_F;
     
     // normal map
-//    GLint _attribTangent_vec3;
-//    GLint _uniLightPosition_vec3;
-//    GLint _uniNormalMapTexture_tex;
+    GLint _attribTangent_vec3;
+    GLint _uniNormalMapTexture_tex;
     
     // shadow map
     GLint _uniDepthBiasMVP_mtx4_V;
@@ -89,9 +88,8 @@
 - (BOOL)setDiffuseTexture:(GLuint)textureId;
 
 // normal map
-//- (BOOL)setTangentAttribute:(CEVBOAttribute *)attribute;
-//- (BOOL)setLightPosition:(GLKVector3)lightPosition;
-//- (BOOL)setNormalMapTexture:(GLuint)textureId;
+- (BOOL)setTangentAttribute:(CEVBOAttribute *)attribute;
+- (BOOL)setNormalMapTexture:(GLuint)textureId;
 
 // shadow map
 - (BOOL)setDepthBiasModelViewProjectionMatrix:(GLKMatrix4)depthBiasMVPMatrix4;
