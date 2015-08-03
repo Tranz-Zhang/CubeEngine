@@ -33,7 +33,6 @@ NSString *const kVertexShader = CE_SHADER_STRING
  attribute lowp vec3 VertexTangent;
  uniform vec3 EyeDirection; // in eye space
  uniform mat3 NormalMatrix;
- 
  varying vec3 LightDirection;
  varying vec3 HalfVector;
  varying float Attenuation;
@@ -48,7 +47,7 @@ NSString *const kVertexShader = CE_SHADER_STRING
  varying vec3 HalfVector;
  varying float Attenuation;
  
-  \n#endif\n //                                                                  << normal mapping & classic lighting
+ \n#endif\n //                                                                  << normal mapping & classic lighting
  
  
  // shadow mapping
@@ -72,9 +71,17 @@ NSString *const kVertexShader = CE_SHADER_STRING
      vec3 n = normalize(NormalMatrix * VertexNormal);
      vec3 t = normalize(NormalMatrix * VertexTangent);
      vec3 b = cross(n, t);
-     mat3 tbn = mat3(t, b, n);
-     LightDirection = normalize(tbn * MainLight.LightDirection);
-     vec3 eyeDirection_tangentSpace = normalize(tbn * EyeDirection);
+     vec3 tempVec;
+     
+     tempVec.x = dot(MainLight.LightDirection, t);
+     tempVec.y = dot(MainLight.LightDirection, b);
+     tempVec.z = dot(MainLight.LightDirection, n);
+     LightDirection = normalize(tempVec);
+     
+     tempVec.x = dot(EyeDirection, t);
+     tempVec.y = dot(EyeDirection, b);
+     tempVec.z = dot(EyeDirection, n);
+     vec3 eyeDirection_tangentSpace = normalize(tempVec);
      HalfVector = normalize(LightDirection + eyeDirection_tangentSpace);
      Attenuation = 1.0;
      

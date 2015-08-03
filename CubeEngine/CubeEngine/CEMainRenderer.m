@@ -139,6 +139,11 @@
             return;
         }
         
+        // setup normal matrix
+        GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(modelViewMatrix);
+        normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
+        [_program setNormalMatrix:normalMatrix];
+        
         // setup model view matrix for specify lights
         if (_mainLight.lightInfo.lightType == CELightTypePoint ||
             _mainLight.lightInfo.lightType == CELightTypeSpot) {
@@ -151,11 +156,6 @@
             [_program setAmbientColor:model.material.ambientColor];
             [_program setShininessExponent:model.material.shininessExponent];
         }
-        
-        // setup normal matrix
-        GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(modelViewMatrix);
-        normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
-        [_program setNormalMatrix:normalMatrix];
         
         // setup normal mapping
         if (_config.enableNormalMapping && model.normalMap) {
