@@ -69,7 +69,7 @@
 //        }
 //    }
     
-    _teapotModel = [CEModel modelWithObjFile:@"teapot_smooth"];
+    _teapotModel = [CEModel modelWithObjFile:@"ram"];
     _teapotModel.showAccessoryLine = YES;
 //    _teapotModel.castShadows = YES;
     _teapotModel.baseColor = [UIColor orangeColor];
@@ -79,6 +79,7 @@
     
     _floorModel = [CEModel modelWithObjFile:@"floor_max"];
     _floorModel.baseColor = [UIColor grayColor];
+    _floorModel.position = GLKVector3Make(0, -3, 0);
 //    _floorModel.castShadows = YES;
     [self.scene addModel:_floorModel];
     
@@ -106,10 +107,9 @@
     _directionalLight.enabled = YES;
     _pointLight.enabled = YES;
     _spotLight.enabled = YES;
-    _directionalLightSwitch.on = _directionalLight.isEnabled;
-    _pointLightSwitch.on = _pointLight.isEnabled;
-    _spotLightSwitch.on = _spotLight.isEnabled;
-
+    _directionalLightSwitch.on = (self.scene.mainLight == _directionalLight);
+    _pointLightSwitch.on = (self.scene.mainLight == _pointLight);
+    _spotLightSwitch.on = (self.scene.mainLight == _spotLight);
 }
 
 
@@ -151,20 +151,35 @@
 
 
 - (IBAction)onDirectionalLightSwitch:(UISwitch *)switcher {
-    _directionalLight.enabled = switcher.on;
+    if (switcher.on && self.scene.mainLight != _directionalLight) {
+        self.scene.mainLight = _directionalLight;
+        
+    } else if (!switcher.on && self.scene.mainLight == _directionalLight) {
+        self.scene.mainLight = nil;
+    }
 }
 
 - (IBAction)onPointLightSwitch:(UISwitch *)switcher {
-    _pointLight.enabled = switcher.on;
+    if (switcher.on && self.scene.mainLight != _pointLight) {
+        self.scene.mainLight = _pointLight;
+        
+    } else if (!switcher.on && self.scene.mainLight == _pointLight) {
+        self.scene.mainLight = nil;
+    }
 }
 
 - (IBAction)onSpotLightSwitch:(UISwitch *)switcher {
-    _spotLight.enabled = switcher.on;
+    if (switcher.on && self.scene.mainLight != _spotLight) {
+        self.scene.mainLight = _spotLight;
+        
+    } else if (!switcher.on && self.scene.mainLight == _spotLight) {
+        self.scene.mainLight = nil;
+    }
 }
 
 
 - (IBAction)onLookAt:(id)sender {
-    [_directionalLight lookAt:_teapotModel.position];
+    [self.scene.mainLight lookAt:_teapotModel.position];
 //    static int lookAtCount = 0;
 //    switch (lookAtCount % 6) {
 //        case 0:

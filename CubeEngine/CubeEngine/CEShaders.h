@@ -28,27 +28,21 @@ NSString *const kVertexShader = CE_SHADER_STRING
  };
  uniform LightInfo MainLight;
 
- \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                         >> normal mapping
+ // common properties from classic ligting and normal mapping
  attribute highp vec3 VertexNormal;
- attribute lowp vec3 VertexTangent;
- uniform vec3 EyeDirection; // in eye space
  uniform mat3 NormalMatrix;
- varying vec3 LightDirection;
- varying vec3 HalfVector;
- varying float Attenuation;
-
- \n#else\n //                                                                   >> classic lighting
- attribute highp vec3 VertexNormal;
  uniform mat4 MVMatrix;
- uniform mat3 NormalMatrix;
- uniform vec3 EyeDirection;
- varying vec3 Normal;
+ uniform vec3 EyeDirection; // in eye space
  varying vec3 LightDirection;
  varying vec3 HalfVector;
  varying float Attenuation;
  
+ // properties different from classic lighting and normal mapping
+ \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                         >> normal mapping
+ attribute lowp vec3 VertexTangent;
+ \n#else\n //                                                                   >> classic lighting
+ varying vec3 Normal;
  \n#endif\n //                                                                  << normal mapping & classic lighting
- 
  
  // shadow mapping
  \n#ifdef CE_ENABLE_SHADOW_MAPPING\n //                                         >> shadow mapping
@@ -67,26 +61,6 @@ NSString *const kVertexShader = CE_SHADER_STRING
  void main () {
      // lighting
      \n#ifdef CE_ENABLE_LIGHTING\n //                                           >> lighting
-     \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                     >> normal mapping
-     vec3 n = normalize(NormalMatrix * VertexNormal);
-     vec3 t = normalize(NormalMatrix * VertexTangent);
-     vec3 b = cross(n, t);
-     vec3 tempVec;
-     
-     tempVec.x = dot(MainLight.LightDirection, t);
-     tempVec.y = dot(MainLight.LightDirection, b);
-     tempVec.z = dot(MainLight.LightDirection, n);
-     LightDirection = normalize(tempVec);
-     
-     tempVec.x = dot(EyeDirection, t);
-     tempVec.y = dot(EyeDirection, b);
-     tempVec.z = dot(EyeDirection, n);
-     vec3 eyeDirection_tangentSpace = normalize(tempVec);
-     HalfVector = normalize(LightDirection + eyeDirection_tangentSpace);
-     Attenuation = 1.0;
-     
-     \n#else\n //                                                               >> classic lighting
-     Normal = normalize(NormalMatrix * VertexNormal);
      // for locol lights, compute per fragment direction, halfVector and attenuation
      if (MainLight.LightType > 1) {
          LightDirection = vec3(MainLight.LightPosition) - vec3(MVMatrix * VertexPosition);
@@ -104,13 +78,33 @@ NSString *const kVertexShader = CE_SHADER_STRING
                  Attenuation *= pow(spotCos, MainLight.SpotExponent);
              }
          }
-         HalfVector = normalize(LightDirection + EyeDirection);
          
      } else { // directional light
          LightDirection = MainLight.LightDirection;
-         HalfVector = normalize(MainLight.LightDirection + EyeDirection);
          Attenuation = 1.0;
      }
+     
+     \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                     >> normal mapping
+     vec3 n = normalize(NormalMatrix * VertexNormal);
+     vec3 t = normalize(NormalMatrix * VertexTangent);
+     vec3 b = cross(n, t);
+     vec3 tempVec;
+     
+     tempVec.x = dot(LightDirection, t);
+     tempVec.y = dot(LightDirection, b);
+     tempVec.z = dot(LightDirection, n);
+     LightDirection = normalize(tempVec);
+     
+     tempVec.x = dot(EyeDirection, t);
+     tempVec.y = dot(EyeDirection, b);
+     tempVec.z = dot(EyeDirection, n);
+     vec3 eyeDirection_tangentSpace = normalize(tempVec);
+     HalfVector = normalize(LightDirection + eyeDirection_tangentSpace);
+     
+     \n#else\n //                                                               >> classic lighting
+         
+     HalfVector = normalize(LightDirection + EyeDirection);
+     Normal = normalize(NormalMatrix * VertexNormal);
      \n#endif\n //                                                              << normal mapping & classic lighting
      
          

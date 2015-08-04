@@ -117,6 +117,7 @@ static bool isHorizontalPan;
     }
 }
 
+
 - (void)onRotationGesture:(UIRotationGestureRecognizer *)rotationGesture {
     if (rotationGesture.state == UIGestureRecognizerStateBegan) {
         
@@ -132,6 +133,7 @@ static bool isHorizontalPan;
         [self updateCameraPositionInfo];
     }
 }
+
 
 @end
 
