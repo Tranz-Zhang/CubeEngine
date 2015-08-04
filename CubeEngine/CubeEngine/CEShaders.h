@@ -34,7 +34,7 @@ NSString *const kVertexShader = CE_SHADER_STRING
  uniform lowp mat4 MVMatrix;
  uniform lowp vec3 EyeDirection; // in eye space
  varying lowp vec3 LightDirection;
- varying lowp vec3 HalfVector;
+ varying lowp vec3 EyeDirectionOut;
  varying lowp float Attenuation;
  
  // properties different from classic lighting and normal mapping
@@ -54,7 +54,7 @@ NSString *const kVertexShader = CE_SHADER_STRING
   
  // texture
  \n#if defined(CE_ENABLE_TEXTURE) || defined(CE_ENABLE_NORMAL_MAPPING)\n //     >> texture
- attribute vec2 TextureCoord;
+ attribute lowp vec2 TextureCoord;
  varying vec2 TextureCoordOut;
  \n#endif\n //                                                                  << texture
  
@@ -85,8 +85,8 @@ NSString *const kVertexShader = CE_SHADER_STRING
      }
      
      \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                     >> normal mapping
-     vec3 n = normalize(NormalMatrix * VertexNormal);
-     vec3 t = normalize(NormalMatrix * VertexTangent);
+     vec3 n = NormalMatrix * VertexNormal;
+     vec3 t = NormalMatrix * VertexTangent;
      vec3 b = cross(n, t);
      mediump vec3 tempVec;
      
@@ -98,12 +98,10 @@ NSString *const kVertexShader = CE_SHADER_STRING
      tempVec.x = dot(EyeDirection, t);
      tempVec.y = dot(EyeDirection, b);
      tempVec.z = dot(EyeDirection, n);
-     vec3 eyeDirection_tangentSpace = normalize(tempVec);
-     HalfVector = normalize(LightDirection + eyeDirection_tangentSpace);
+     EyeDirectionOut = normalize(tempVec);
      
      \n#else\n //                                                               >> classic lighting
-     
-     HalfVector = normalize(LightDirection + EyeDirection);
+     EyeDirectionOut = EyeDirection;
      Normal = normalize(NormalMatrix * VertexNormal);
      \n#endif\n //                                                              << normal mapping & classic lighting
      
@@ -157,9 +155,8 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  };
  uniform LightInfo MainLight;
 
- 
  varying lowp vec3 LightDirection;
- varying lowp vec3 HalfVector;
+ varying lowp vec3 EyeDirectionOut;
  varying lowp float Attenuation;
  
  \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                         >> normal mapping
@@ -177,24 +174,20 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  \n#endif\n //                                                                  << shadow mapping
  
  vec3 ApplyLightingEffect(vec3 inputColor) {
+     lowp vec3 normal;
      \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                     >> normal mapping
-     
-     vec3 normal = texture2D(NormalMapTexture, TextureCoordOut).rgb * 2.0 - 1.0;
+     normal = texture2D(NormalMapTexture, TextureCoordOut).rgb * 2.0 - 1.0;
      normal = normalize(normal);
-     float diffuse = max(0.0, dot(normal, LightDirection));
-     float specular = max(0.0, dot(normal, HalfVector));
-     specular = (diffuse == 0.0 || ShininessExponent == 0.0) ? 0.0 : pow(specular, ShininessExponent);
-     vec3 scatteredLight = AmbientColor * Attenuation + MainLight.LightColor * diffuse * Attenuation;
-     vec3 reflectedLight = SpecularColor * specular * Attenuation;
-     
      \n#else\n //                                                               >> classic lighting
-     float diffuse = max(0.0, dot(Normal, LightDirection));
-     float specular = max(0.0, dot(Normal, HalfVector));
+     normal = Normal;
+     \n#endif\n //                                                              << normal mapping & classic lighting
+     
+     lowp vec3 reflectDir = normalize(-reflect(LightDirection, normal));
+     float diffuse = max(0.0, dot(normal, LightDirection));
+     float specular = max(0.0, dot(reflectDir, EyeDirectionOut));
      specular = (diffuse == 0.0 || ShininessExponent == 0.0) ? 0.0 : pow(specular, ShininessExponent);
      vec3 scatteredLight = AmbientColor * Attenuation + MainLight.LightColor * diffuse * Attenuation;
      vec3 reflectedLight = SpecularColor * specular * Attenuation;
-     
-     \n#endif\n //                                                              << normal mapping & classic lighting
      
      // apply shadow mapping
      \n#ifdef CE_ENABLE_SHADOW_MAPPING\n //                                     >> shadow mapping

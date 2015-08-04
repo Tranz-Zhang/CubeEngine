@@ -386,6 +386,13 @@
                                     <action selector="onLookAt:" destination="R24-Ww-GUK" eventType="touchUpInside" id="Gxd-1p-8t9"/>
                                 </connections>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="Q1i-NB-QBu">
+                                <rect key="frame" x="21" y="440" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <connections>
+                                    <action selector="onMaterialSwitch:" destination="R24-Ww-GUK" eventType="valueChanged" id="WZO-ya-Nmn"/>
+                                </connections>
+                            </switch>
                         </subviews>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>

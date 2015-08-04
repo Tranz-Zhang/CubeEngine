@@ -23,7 +23,7 @@
     NSMutableArray *_segmentViews;
     ObjectOperator *_objectOperator;
     
-    CEModel *_teapotModel;
+    CEModel *_testModel;
     CEModel *_floorModel;
     CEDirectionalLight *_directionalLight;
     CEPointLight *_pointLight;
@@ -69,14 +69,16 @@
 //        }
 //    }
     
-    _teapotModel = [CEModel modelWithObjFile:@"ram"];
-    _teapotModel.showAccessoryLine = YES;
+    _testModel = [CEModel modelWithObjFile:@"ram"];
+    _testModel.showAccessoryLine = YES;
 //    _teapotModel.castShadows = YES;
-    _teapotModel.baseColor = [UIColor orangeColor];
-    _teapotModel.material.shininessExponent = 120;
-    _teapotModel.material.specularColor = GLKVector3Make(0.9, 0.9, 0.9);
+    _testModel.baseColor = [UIColor orangeColor];
+    _testModel.material.shininessExponent = 20;
+    _testModel.material.specularColor = GLKVector3Make(0.9, 0.9, 0.9);
+    _testModel.scale = GLKVector3Make(1.5, 1.5, 1.5);
 //    _teapotModel.material.diffuseTexture = nil;
-    [self.scene addModel:_teapotModel];
+//    _teapotModel.material.normalTexture = nil;
+    [self.scene addModel:_testModel];
     
     _floorModel = [CEModel modelWithObjFile:@"floor_max"];
     _floorModel.baseColor = [UIColor grayColor];
@@ -99,10 +101,10 @@
     _spotLight = [CESpotLight new];
     _spotLight.position = GLKVector3Make(-8, 15, 0);
     _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
-    [_spotLight lookAt:_teapotModel.position];
+    [_spotLight lookAt:_testModel.position];
 //    self.scene.mainLight = _spotLight;
     
-    _objectOperator.operationObject = _teapotModel;
+    _objectOperator.operationObject = _testModel;
 
     // update light switches
     _directionalLight.enabled = YES;
@@ -115,9 +117,9 @@
 
 
 - (IBAction)onReset:(id)sender {
-    _teapotModel.position = GLKVector3Make(0, 0, 0);
-    _teapotModel.eulerAngles = GLKVector3Make(0, 0, 0);
-    _teapotModel.scale = GLKVector3Make(1, 1, 1);
+    _testModel.position = GLKVector3Make(0, 0, 0);
+    _testModel.eulerAngles = GLKVector3Make(0, 0, 0);
+    _testModel.scale = GLKVector3Make(1, 1, 1);
     
     _directionalLight.position = GLKVector3Make(8, 0, 15);
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
@@ -131,7 +133,7 @@
 - (IBAction)onObjectSegmentChanged:(UISegmentedControl *)segment {
     switch (segment.selectedSegmentIndex) {
         case 0:
-            _objectOperator.operationObject = _teapotModel;
+            _objectOperator.operationObject = _testModel;
             break;
         case 1:
             _objectOperator.operationObject = _directionalLight;
@@ -180,7 +182,7 @@
 
 
 - (IBAction)onLookAt:(id)sender {
-    [self.scene.mainLight lookAt:_teapotModel.position];
+    [self.scene.mainLight lookAt:_testModel.position];
 //    static int lookAtCount = 0;
 //    switch (lookAtCount % 6) {
 //        case 0:
@@ -206,6 +208,18 @@
 //            break;
 //    }
 //    lookAtCount++;
+}
+
+
+- (IBAction)onMaterialSwitch:(UISwitch *)sender {
+    if (sender.on) {
+        _testModel.material.diffuseTexture = @"char_ram_col.png";
+        _testModel.material.normalTexture = @"char_ram_nor.png";
+        
+    } else {
+        _testModel.material.normalTexture = nil;
+        _testModel.material.diffuseTexture = nil;
+    }
 }
 
 

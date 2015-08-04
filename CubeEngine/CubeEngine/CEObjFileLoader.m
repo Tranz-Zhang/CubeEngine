@@ -144,24 +144,24 @@
             offset += stride;
         }
         
-        GLKVector3 deltaPos1 = GLKVector3Subtract(v[1], v[0]);
-        GLKVector3 deltaPos2 = GLKVector3Subtract(v[2], v[0]);
+        GLKVector3 deltaPos1 = GLKVector3Subtract(v[0], v[1]);
+        GLKVector3 deltaPos2 = GLKVector3Subtract(v[0], v[2]);
         GLKVector2 deltaUV1 = GLKVector2Subtract(uv[1], uv[0]);
         GLKVector2 deltaUV2 = GLKVector2Subtract(uv[2], uv[0]);
         float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
         // tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y) * r
-        GLKVector3 tangent = GLKVector3MultiplyScalar(GLKVector3Subtract(GLKVector3MultiplyScalar(deltaPos1, deltaUV2.y),
-                                                                         GLKVector3MultiplyScalar(deltaPos2, deltaUV1.y)), r);
+//        GLKVector3 tangent = GLKVector3MultiplyScalar(GLKVector3Subtract(GLKVector3MultiplyScalar(deltaPos1, deltaUV2.y),
+//                                                                         GLKVector3MultiplyScalar(deltaPos2, deltaUV1.y)), r);
+        GLKVector3 tangent;
+        tangent.x = (deltaPos1.x * deltaUV2.y + deltaPos2.x * deltaUV1.y) * r;
+        tangent.y = (deltaPos1.y * deltaUV2.y + deltaPos2.y * deltaUV1.y) * r;
+        tangent.z = (deltaPos1.z * deltaUV2.y + deltaPos2.z * deltaUV1.y) * r;
         tangent = GLKVector3Normalize(tangent);
-        // bitangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r
-        GLKVector3 bitangent = GLKVector3MultiplyScalar(GLKVector3Subtract(GLKVector3MultiplyScalar(deltaPos2, deltaUV1.x),
-                                                                           GLKVector3MultiplyScalar(deltaPos1, deltaUV2.x)), r);
-        bitangent = GLKVector3Normalize(tangent);
+
         offset -= 3 * stride;
         for (int idx = 0; idx < 3; idx++) {
             [newVertexData appendData:[vertexData subdataWithRange:NSMakeRange(offset, stride)]];
             [newVertexData appendBytes:tangent.v length:sizeof(tangent)];
-//            [newVertexData appendBytes:bitangent.v length:sizeof(bitangent)];
             offset += stride;
         }
     }
