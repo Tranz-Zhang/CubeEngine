@@ -190,6 +190,7 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
      \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                     >> normal mapping
      
      vec3 normal = texture2D(NormalMapTexture, TextureCoordOut).rgb * 2.0 - 1.0;
+     normal = normalize(normal);
      float diffuse = max(0.0, dot(normal, LightDirection));
      float specular = max(0.0, dot(normal, HalfVector));
      specular = (diffuse == 0.0 || ShininessExponent == 0.0) ? 0.0 : pow(specular, ShininessExponent);

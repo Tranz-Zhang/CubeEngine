@@ -34,6 +34,7 @@
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     _testModel = [CEModel modelWithObjFile:@"ram"];
     _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
+    _testModel.material.shininessExponent = 120;
 //    _testModel.showWireframe = YES;
     _testModel.showAccessoryLine = YES;
 //    _testModel.material.specularColor = GLKVector3Make(1, 1, 1);
