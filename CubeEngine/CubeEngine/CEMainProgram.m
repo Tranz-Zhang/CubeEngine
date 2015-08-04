@@ -90,21 +90,6 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
                         fragmentShaderString:fShaderString];
     if (self) {
         _config = [config copy];
-        _attribPosition_vec4_V = -1;
-        _uni4MVPMatrix_mtx4_V = -1;
-        _uniDiffuseColor_vec4_F = -1;
-        
-        // lighting
-        _attribNormal_vec3_V = -1;
-        _uniMVMatrix_mtx4_V = -1;
-        _uniNormalMatrix_mtx3_V = -1;
-        _uniEyeDirection_vec3_V = -1;
-        
-        // shadow map
-        _uniDepthBiasMVP_mtx4_V = -1;
-        _uniShadowDarkness_f_F = -1;
-        _uniShadowMap_tex_F = -1;
-        
         memset(_textureIds, 0, sizeof(_textureIds));
         [self setupProgram];
     }
@@ -120,7 +105,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
             [self addAttribute:@"VertexTangent"];
         }
     }
-    if (_config.enableTexture) {
+    if (_config.enableTexture || _config.enableNormalMapping) {
         [self addAttribute:@"TextureCoord"];
     }
     
@@ -129,18 +114,41 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         _attribPosition_vec4_V    = [self attributeIndex:@"VertexPosition"];
         _uni4MVPMatrix_mtx4_V     = [self uniformIndex:@"MVPMatrix"];
         _uniDiffuseColor_vec4_F   = [self uniformIndex:@"DiffuseColor"];
-        if (_config.lightCount > 0) {
-            [self initializeLightUniforms];
-        }
-        if (_config.enableShadowMapping) {
-            [self initializeShadowMapUniforms];
-        }
-        if (_config.enableTexture) {
-            [self initializeTextureUniforms];
-        }
-        if (_config.renderMode == CERenderModeTransparent) {
-            _uniTransparency_f_F = [self uniformIndex:@"Transparency"];
-        }
+        
+        // initialize light uniforms
+        _attribNormal_vec3_V      = [self attributeIndex:@"VertexNormal"];
+        _uniNormalMatrix_mtx3_V   = [self uniformIndex:@"NormalMatrix"];
+        _uniMVMatrix_mtx4_V       = [self uniformIndex:@"MVMatrix"];
+        _uniEyeDirection_vec3_V   = [self uniformIndex:@"EyeDirection"];
+        _uniSpecularColor_vec3_F  = [self uniformIndex:@"SpecularColor"];
+        _uniAmbientColor_vec3_F   = [self uniformIndex:@"AmbientColor"];
+        _uniShininessExponent_f_F = [self uniformIndex:@"ShininessExponent"];
+        // main light
+        CELightUniforms *info = [CELightUniforms new];
+        info.lightType_i =          [self uniformIndex:@"MainLight.LightType"];
+        info.isEnabled_b =          [self uniformIndex:@"MainLight.IsEnabled"];
+        info.lightPosition_vec4 =   [self uniformIndex:@"MainLight.LightPosition"];
+        info.lightDirection_vec3 =  [self uniformIndex:@"MainLight.LightDirection"];
+        info.lightColor_vec3 =      [self uniformIndex:@"MainLight.LightColor"];
+        info.attenuation_f =        [self uniformIndex:@"MainLight.Attenuation"];
+        info.spotCosCutoff_f =      [self uniformIndex:@"MainLight.SpotConsCutoff"];
+        info.spotExponent_f =       [self uniformIndex:@"MainLight.SpotExponent"];
+        _mainLight_F = info;
+        // normal mapping
+        _attribTangent_vec3 = [self attributeIndex:@"VertexTangent"];
+        _uniNormalMapTexture_tex = [self uniformIndex:@"NormalMapTexture"];
+
+        // shadow mapping
+        _uniDepthBiasMVP_mtx4_V = [self uniformIndex:@"DepthBiasMVP"];
+        _uniShadowDarkness_f_F  = [self uniformIndex:@"ShadowDarkness"];
+        _uniShadowMap_tex_F     = [self uniformIndex:@"ShadowMapTexture"];
+        
+        // texture
+        _attribTextureCoord_vec2_V  = [self attributeIndex:@"TextureCoord"];
+        _uniDiffuseTexture_tex_F    = [self uniformIndex:@"DiffuseTexture"];
+        
+        // transparent
+        _uniTransparency_f_F = [self uniformIndex:@"Transparency"];
         
     } else {
         // print error info
@@ -162,48 +170,6 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
 
 - (void)endRendering {
     _isEditing = NO;
-}
-
-
-#pragma makr - Initialize Uniforms {
-- (void)initializeLightUniforms {
-    _attribNormal_vec3_V      = [self attributeIndex:@"VertexNormal"];
-    _uniNormalMatrix_mtx3_V   = [self uniformIndex:@"NormalMatrix"];
-    _uniMVMatrix_mtx4_V       = [self uniformIndex:@"MVMatrix"];
-    _uniEyeDirection_vec3_V   = [self uniformIndex:@"EyeDirection"];
-    _uniSpecularColor_vec3_F  = [self uniformIndex:@"SpecularColor"];
-    _uniAmbientColor_vec3_F   = [self uniformIndex:@"AmbientColor"];
-    _uniShininessExponent_f_F = [self uniformIndex:@"ShininessExponent"];
-    
-    // MainLight Uniforms
-    CELightUniforms *info = [CELightUniforms new];
-    info.lightType_i =          [self uniformIndex:@"MainLight.LightType"];
-    info.isEnabled_b =          [self uniformIndex:@"MainLight.IsEnabled"];
-    info.lightPosition_vec4 =   [self uniformIndex:@"MainLight.LightPosition"];
-    info.lightDirection_vec3 =  [self uniformIndex:@"MainLight.LightDirection"];
-    info.lightColor_vec3 =      [self uniformIndex:@"MainLight.LightColor"];
-    info.attenuation_f =        [self uniformIndex:@"MainLight.Attenuation"];
-    info.spotCosCutoff_f =      [self uniformIndex:@"MainLight.SpotConsCutoff"];
-    info.spotExponent_f =       [self uniformIndex:@"MainLight.SpotExponent"];
-    _mainLight_F = info;
-    
-    if (_config.enableNormalMapping) {
-        _attribTangent_vec3 = [self attributeIndex:@"VertexTangent"];
-        _uniNormalMapTexture_tex = [self uniformIndex:@"NormalMapTexture"];
-    }
-}
-
-
-- (void)initializeShadowMapUniforms {
-    _uniDepthBiasMVP_mtx4_V = [self uniformIndex:@"DepthBiasMVP"];
-    _uniShadowDarkness_f_F  = [self uniformIndex:@"ShadowDarkness"];
-    _uniShadowMap_tex_F     = [self uniformIndex:@"ShadowMapTexture"];
-}
-
-
-- (void)initializeTextureUniforms {
-    _attribTextureCoord_vec2_V  = [self attributeIndex:@"TextureCoord"];
-    _uniDiffuseTexture_tex_F    = [self uniformIndex:@"DiffuseTexture"];
 }
 
 
@@ -452,15 +418,6 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
                           CE_BUFFER_OFFSET(attribute.elementOffset));
     return YES;
 }
-
-
-//- (BOOL)setLightPosition:(GLKVector3)lightPosition {
-//    if (!_isEditing || _uniLightPosition_vec3 < 0) {
-//        return NO;
-//    }
-//    glUniform3fv(_uniLightPosition_vec3, 1, lightPosition.v);
-//    return YES;
-//}
 
 
 - (BOOL)setNormalMapTexture:(GLuint)textureId {

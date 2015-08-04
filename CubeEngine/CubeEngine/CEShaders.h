@@ -18,9 +18,9 @@ NSString *const kVertexShader = CE_SHADER_STRING
  \n#ifdef CE_ENABLE_LIGHTING\n //                                               >> lighting
  struct LightInfo {
      bool IsEnabled;
-     mediump int LightType; // 0:none 1:directional 2:point 3:spot
+     lowp int LightType; // 0:none 1:directional 2:point 3:spot
      mediump vec4 LightPosition;  // in eye space
-     mediump vec3 LightDirection; // in eye space
+     lowp vec3 LightDirection; // in eye space
      mediump vec3 LightColor;
      mediump float Attenuation;
      mediump float SpotConsCutoff;
@@ -29,19 +29,19 @@ NSString *const kVertexShader = CE_SHADER_STRING
  uniform LightInfo MainLight;
 
  // common properties from classic ligting and normal mapping
- attribute highp vec3 VertexNormal;
- uniform mat3 NormalMatrix;
- uniform mat4 MVMatrix;
- uniform vec3 EyeDirection; // in eye space
- varying vec3 LightDirection;
- varying vec3 HalfVector;
- varying float Attenuation;
+ attribute lowp vec3 VertexNormal;
+ uniform lowp mat3 NormalMatrix;
+ uniform lowp mat4 MVMatrix;
+ uniform lowp vec3 EyeDirection; // in eye space
+ varying lowp vec3 LightDirection;
+ varying lowp vec3 HalfVector;
+ varying lowp float Attenuation;
  
  // properties different from classic lighting and normal mapping
  \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                         >> normal mapping
  attribute lowp vec3 VertexTangent;
  \n#else\n //                                                                   >> classic lighting
- varying vec3 Normal;
+ varying lowp vec3 Normal;
  \n#endif\n //                                                                  << normal mapping & classic lighting
  
  // shadow mapping
@@ -53,8 +53,8 @@ NSString *const kVertexShader = CE_SHADER_STRING
  \n#endif\n //                                                                  << lighting
   
  // texture
- \n#ifdef CE_ENABLE_TEXTURE\n //                                                >> texture
- attribute highp vec2 TextureCoord;
+ \n#if defined(CE_ENABLE_TEXTURE) || defined(CE_ENABLE_NORMAL_MAPPING)\n //     >> texture
+ attribute vec2 TextureCoord;
  varying vec2 TextureCoordOut;
  \n#endif\n //                                                                  << texture
  
@@ -88,7 +88,7 @@ NSString *const kVertexShader = CE_SHADER_STRING
      vec3 n = normalize(NormalMatrix * VertexNormal);
      vec3 t = normalize(NormalMatrix * VertexTangent);
      vec3 b = cross(n, t);
-     vec3 tempVec;
+     mediump vec3 tempVec;
      
      tempVec.x = dot(LightDirection, t);
      tempVec.y = dot(LightDirection, b);
@@ -102,12 +102,11 @@ NSString *const kVertexShader = CE_SHADER_STRING
      HalfVector = normalize(LightDirection + eyeDirection_tangentSpace);
      
      \n#else\n //                                                               >> classic lighting
-         
+     
      HalfVector = normalize(LightDirection + EyeDirection);
      Normal = normalize(NormalMatrix * VertexNormal);
      \n#endif\n //                                                              << normal mapping & classic lighting
      
-         
      // shadow mapping
      \n#ifdef CE_ENABLE_SHADOW_MAPPING\n //                                     >> shadow mapping
      ShadowCoord = DepthBiasMVP * VertexPosition;
@@ -116,7 +115,7 @@ NSString *const kVertexShader = CE_SHADER_STRING
      \n#endif\n //                                                              << lighting
      
      // texture
-     \n#ifdef CE_ENABLE_TEXTURE\n //                                            >> texture
+     \n#if defined(CE_ENABLE_TEXTURE) || defined(CE_ENABLE_NORMAL_MAPPING)\n // >> texture
      TextureCoordOut = TextureCoord;
      \n#endif\n //                                                              << texture
      
@@ -132,13 +131,13 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  //  material
  uniform vec4 DiffuseColor;
  
- 
  // texture
  \n#ifdef CE_ENABLE_TEXTURE\n //                                                >> texture
- uniform lowp sampler2D DiffuseTexture;
+  uniform lowp sampler2D DiffuseTexture;
+ \n#endif\n //
+ \n#if defined(CE_ENABLE_TEXTURE) || defined(CE_ENABLE_NORMAL_MAPPING)\n
  varying vec2 TextureCoordOut;
  \n#endif\n //                                                                  << texture
- 
  
  // lighting
  \n#ifdef CE_ENABLE_LIGHTING\n //                                               >> lighting
@@ -148,9 +147,9 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  
  struct LightInfo {
      bool IsEnabled;
-     mediump int LightType; // 0:none 1:directional 2:point 3:spot
+     lowp int LightType; // 0:none 1:directional 2:point 3:spot
      mediump vec4 LightPosition;  // in eys space
-     mediump vec3 LightDirection; // in eye space
+     lowp vec3 LightDirection; // in eye space
      mediump vec3 LightColor;
      mediump float Attenuation;
      mediump float SpotConsCutoff;
@@ -158,18 +157,15 @@ NSString *const kFragmentSahder = CE_SHADER_STRING
  };
  uniform LightInfo MainLight;
 
+ 
+ varying lowp vec3 LightDirection;
+ varying lowp vec3 HalfVector;
+ varying lowp float Attenuation;
+ 
  \n#ifdef CE_ENABLE_NORMAL_MAPPING\n //                                         >> normal mapping
  uniform sampler2D NormalMapTexture;
- varying vec3 LightDirection;
- varying vec3 HalfVector;
- varying float Attenuation;
- 
  \n#else\n //                                                                   >> classic lighting
- varying vec3 Normal;
- varying vec3 LightDirection;
- varying vec3 HalfVector;
- varying float Attenuation;
- 
+ varying lowp vec3 Normal;
  \n#endif\n //                                                                  << normal mapping & classic lighting
  
  

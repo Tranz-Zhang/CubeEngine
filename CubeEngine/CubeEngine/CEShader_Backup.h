@@ -13,13 +13,13 @@ NSString *const kVertexShader = CE_SHADER_STRING
 (
  // basic info
  uniform mat4 MVPMatrix;
- attribute highp vec4 VertexPosition;
+ attribute vec4 VertexPosition;
  
  // lighting
  \n#ifdef CE_ENABLE_LIGHTING\n
  attribute lowp vec3 VertexNormal;
- uniform mat4 MVMatrix;
- uniform mat3 NormalMatrix;
+ uniform lowp mat4 MVMatrix;
+ uniform lowp mat3 NormalMatrix;
  varying lowp vec3 Normal;
  varying vec4 Position;
  

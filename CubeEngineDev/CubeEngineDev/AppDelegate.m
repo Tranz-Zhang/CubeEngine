@@ -10,6 +10,9 @@
 
 #import "AppDelegate.h"
 
+//#define A
+//#define B
+
 @interface AppDelegate ()
 
 @end
@@ -20,6 +23,10 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+#if defined(A) || defined(B)
+    printf("Hello");
+#endif
     
 #if 0
     NSString *test = TESTSTRING(

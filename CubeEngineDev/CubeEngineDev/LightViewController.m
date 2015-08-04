@@ -73,15 +73,16 @@
     _teapotModel.showAccessoryLine = YES;
 //    _teapotModel.castShadows = YES;
     _teapotModel.baseColor = [UIColor orangeColor];
-    _teapotModel.material.shininessExponent = 20;
+    _teapotModel.material.shininessExponent = 120;
     _teapotModel.material.specularColor = GLKVector3Make(0.9, 0.9, 0.9);
+//    _teapotModel.material.diffuseTexture = nil;
     [self.scene addModel:_teapotModel];
     
     _floorModel = [CEModel modelWithObjFile:@"floor_max"];
     _floorModel.baseColor = [UIColor grayColor];
     _floorModel.position = GLKVector3Make(0, -3, 0);
 //    _floorModel.castShadows = YES;
-    [self.scene addModel:_floorModel];
+//    [self.scene addModel:_floorModel];
     
     _directionalLight = [[CEDirectionalLight alloc] init];
     _directionalLight.position = GLKVector3Make(8, 8, 8);
