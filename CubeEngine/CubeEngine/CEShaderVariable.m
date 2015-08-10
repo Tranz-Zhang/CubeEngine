@@ -22,7 +22,7 @@
 }
 
 - (NSString *)declarationString {
-    // !!!: Must implemented by subclass
+    NSAssert(false, @"Must implemented by subclass");
     return nil;
 }
 

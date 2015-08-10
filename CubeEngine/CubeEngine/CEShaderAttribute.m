@@ -13,6 +13,20 @@
     BOOL _enabled;
 }
 
+
+- (instancetype)initWithName:(NSString *)name
+                   precision:(CEShaderDataPrecision)precision
+               variableCount:(GLint)variableCount {
+    self = [super initWithName:name precision:precision];
+    if (self) {
+        if (variableCount < 1 || variableCount > 4) {
+            NSAssert(false, @"wrong variable count for attribute");
+        }
+        _variableCount = variableCount;
+    }
+    return self;
+}
+
 - (void)setAttribute:(CEVBOAttribute *)attribute {
     if ([_attribute isEqualToAttribute:attribute]) {
         return;
@@ -49,5 +63,13 @@
 }
 
 
+- (NSString *)declarationString {
+    NSString *type = _variableCount == 1 ? @"float" : [NSString stringWithFormat:@"vec%d", _variableCount];
+    return [NSString stringWithFormat:@"attribute %@ %@ %@", [self precisionString], type, self.name];
+}
+
+
 @end
+
+
 

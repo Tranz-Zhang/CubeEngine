@@ -18,4 +18,8 @@
     glUniformMatrix4fv(_index, 1, GL_FALSE, matrix4.m);
 }
 
+- (NSString *)declarationString {
+    return [NSString stringWithFormat:@"uniform %@ mat4 %@", [self precisionString], self.name];
+}
+
 @end

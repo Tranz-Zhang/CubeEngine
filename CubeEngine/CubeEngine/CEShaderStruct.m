@@ -7,24 +7,39 @@
 //
 
 #import "CEShaderStruct.h"
+#import "CEShaderStruct_privates.h"
 
 @implementation CEShaderStruct
 
-+ (instancetype)structWithName:(NSString *)name variables:(NSArray *)variables {
-    if (!name.length || !variables.count) {
++ (instancetype)structWithName:(NSString *)name {
+    if (!name.length) {
         return nil;
     }
-    return [[CEShaderStruct alloc] initWithName:name variables:variables];
+    return [[CEShaderStruct alloc] initWithName:name];
 }
 
 
-- (instancetype)initWithName:(NSString *)name variables:(NSArray *)variables {
+- (instancetype)initWithName:(NSString *)name {
     self = [super init];
     if (self) {
         _name = [name copy];
-        _variables = [variables copy];
     }
     return self;
 }
 
+
+- (NSString *)structName {
+    NSAssert(false, @"Must implemented by subclass");
+    return nil;
+}
+
+
+- (NSString *)declarationString {
+    NSAssert(false, @"Must implemented by subclass");
+    return nil;
+}
+
 @end
+
+
+

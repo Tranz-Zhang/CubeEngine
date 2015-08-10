@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CEShaderVariableDefines.h"
 
-@interface CEShaderStruct : NSObject
+@interface CEShaderStruct : NSObject {
+    NSString *_name;
+}
 
-@property (nonatomic, readonly) NSString *name;
-@property (nonatomic, readonly) NSArray *variables;
-
-+ (instancetype)structWithName:(NSString *)name variables:(NSArray *)variables;
++ (instancetype)structWithName:(NSString *)name;
 
 @end

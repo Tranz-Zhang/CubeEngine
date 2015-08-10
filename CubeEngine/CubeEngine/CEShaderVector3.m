@@ -18,4 +18,8 @@
     glUniform3fv(_index, 1, vector3.v);
 }
 
+- (NSString *)declarationString {
+    return [NSString stringWithFormat:@"uniform %@ vector3 %@", [self precisionString], self.name];
+}
+
 @end

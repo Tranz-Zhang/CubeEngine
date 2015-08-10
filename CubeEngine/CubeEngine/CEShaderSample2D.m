@@ -31,6 +31,10 @@
 }
 
 
+- (NSString *)declarationString {
+    return [NSString stringWithFormat:@"uniform %@ sampler2D %@", [self precisionString], self.name];
+}
+
 
 @end
 

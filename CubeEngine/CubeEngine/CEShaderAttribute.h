@@ -11,6 +11,12 @@
 
 @interface CEShaderAttribute : CEShaderVariable
 
+@property (nonatomic, readonly) GLuint variableCount;
 @property (nonatomic, strong) CEVBOAttribute *attribute;
+
+- (instancetype)initWithName:(NSString *)name
+                   precision:(CEShaderDataPrecision)precision
+               variableCount:(GLint)variableCount;
+
 
 @end
