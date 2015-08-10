@@ -7,6 +7,7 @@
 //
 
 #import "CEShaderMatrix3.h"
+#import "CEShaderVariable_privates.h"
 
 @implementation CEShaderMatrix3
 

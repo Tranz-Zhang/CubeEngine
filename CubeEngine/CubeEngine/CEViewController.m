@@ -13,6 +13,7 @@
 
 // test headers
 #import "CEShaderBool.h"
+#import "CEShaderMatrix3.h"
 #import "CEShaderStruct.h"
 
 #define kDefaultFramesPerSecond 30
@@ -73,9 +74,11 @@
 //    CEShaderVariable *enabled = [CEShaderVariable variableWithName:@"Enabled" type:CEGLSL_bool precision:CEGLSL_lowp];
 //    CEShaderStruct *lightInfo = [CEShaderStruct structWithName:@"LightInfo" variables:@[lightDirection, enabled]];
     CEShaderBool *enableLight = [[CEShaderBool alloc] initWithName:@"Enabled" precision:CELowp];
-    [enableLight setBool:YES];
     enableLight.boolValue = YES;
-    lightDirection.vector4 = GLKVector4Make(0, 0, 0, 0);
+    
+    CEShaderMatrix3 *mvMatrix = [[CEShaderMatrix3 alloc] initWithName:@"MVMatrix" precision:CEHighp];
+    mvMatrix.matrix3 = GLKMatrix3Identity;
+    
 }
 
 

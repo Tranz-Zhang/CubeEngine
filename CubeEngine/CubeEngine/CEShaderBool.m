@@ -7,6 +7,7 @@
 //
 
 #import "CEShaderBool.h"
+#import "CEShaderVariable_privates.h"
 
 @implementation CEShaderBool
 
@@ -15,6 +16,10 @@
     
     if (_index < 0) return;
     glUniform1i(_index, boolValue ? 1 : 0);
+}
+
+- (NSString *)declarationString {
+    return [NSString stringWithFormat:@"uniform %@ bool %@", [self precisionString], self.name];
 }
 
 @end

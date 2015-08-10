@@ -51,5 +51,9 @@ typedef NS_ENUM(NSInteger, CEVBOAttributeName) {
  */
 + (NSArray *)attributesWithNames:(NSArray *)names;
 
+
+- (BOOL)isEqualToAttribute:(CEVBOAttribute *)attribute;
+- (BOOL)isEqual:(id)object;
+
 @end
 

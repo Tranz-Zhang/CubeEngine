@@ -7,21 +7,33 @@
 //
 
 #import "CEShaderSample2D.h"
+#import "CEShaderVariable_privates.h"
 
 @implementation CEShaderSample2D {
     int _textureIndex;
-    GLuint textureID;
 }
 
+
 - (void)setTextureID:(GLuint)textureID {
-    _textureID = textureID;
-    
-    if (_index < 0) return;
-    
+    if (_textureID != textureID) {
+        _textureID = textureID;
+        
+        if (_index < 0) return;
+        glActiveTexture(GL_TEXTURE0 + _textureIndex);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glUniform1i(_index, _textureIndex);
+    }
 }
+
 
 - (void)setTextureIndex:(int)textureIndex {
     _textureIndex = textureIndex;
 }
 
+
+
 @end
+
+
+
+

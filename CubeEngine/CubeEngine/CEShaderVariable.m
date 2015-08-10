@@ -21,4 +21,25 @@
     return self;
 }
 
+- (NSString *)declarationString {
+    // !!!: Must implemented by subclass
+    return nil;
+}
+
+#pragma mark - for subclass
+
+- (NSString *)precisionString {
+    switch (_precision) {
+        case CELowp:
+            return @"lowp";
+        case CEMediump:
+            return @"mediump";
+        case CEHighp:
+            return @"highp";
+        default:
+            break;
+    }
+    return @"";
+}
+
 @end

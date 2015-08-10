@@ -75,4 +75,17 @@
 
 
 
+- (BOOL)isEqualToAttribute:(CEVBOAttribute *)attribute {
+    return _name == attribute.name &&
+    _primarySize == attribute.primarySize &&
+    _elementStride == attribute.elementStride &&
+    _elementOffset == attribute.elementOffset;
+}
+
+
+- (BOOL)isEqual:(id)object {
+    return [self isEqualToAttribute:object];
+}
+
+
 @end

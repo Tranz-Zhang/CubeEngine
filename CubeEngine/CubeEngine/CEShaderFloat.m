@@ -7,6 +7,7 @@
 //
 
 #import "CEShaderFloat.h"
+#import "CEShaderVariable_privates.h"
 
 @implementation CEShaderFloat
 

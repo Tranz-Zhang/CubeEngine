@@ -7,6 +7,7 @@
 //
 
 #import "CEShaderInteger.h"
+#import "CEShaderVariable_privates.h"
 
 @implementation CEShaderInteger
 

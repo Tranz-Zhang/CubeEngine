@@ -7,6 +7,7 @@
 //
 
 #import "CEShaderVector4.h"
+#import "CEShaderVariable_privates.h"
 
 @implementation CEShaderVector4
 
