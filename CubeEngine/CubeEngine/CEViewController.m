@@ -11,7 +11,9 @@
 #import "CEScene_Rendering.h"
 #import "CERenderManager.h"
 
-#import "CEVBOAttribute.h" // test
+// test headers
+#import "CEShaderBool.h"
+#import "CEShaderStruct.h"
 
 #define kDefaultFramesPerSecond 30
 #define kDefaultMaxLightCount 4
@@ -61,6 +63,19 @@
     _displayLink.frameInterval = MAX(1, (60 / [self preferredFramesPerSecond]));
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     self.paused = NO;
+    
+    [self onTestShaders];
+}
+
+
+- (void)onTestShaders {
+//    CEShaderVariable *lightDirection = [CEShaderVariable variableWithName:@"LightDirection" type:CEGLSL_vec4 precision:CEGLSL_lowp];
+//    CEShaderVariable *enabled = [CEShaderVariable variableWithName:@"Enabled" type:CEGLSL_bool precision:CEGLSL_lowp];
+//    CEShaderStruct *lightInfo = [CEShaderStruct structWithName:@"LightInfo" variables:@[lightDirection, enabled]];
+    CEShaderBool *enableLight = [[CEShaderBool alloc] initWithName:@"Enabled" precision:CELowp];
+    [enableLight setBool:YES];
+    enableLight.boolValue = YES;
+    lightDirection.vector4 = GLKVector4Make(0, 0, 0, 0);
 }
 
 
