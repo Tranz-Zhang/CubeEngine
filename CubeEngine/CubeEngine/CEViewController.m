@@ -14,7 +14,10 @@
 // test headers
 #import "CEShaderBool.h"
 #import "CEShaderMatrix3.h"
-#import "CEShaderStruct.h"
+#import "CEShaderLightInfo.h"
+#import "CEShaderVariable_privates.h"
+#import "CEShaderStruct_privates.h"
+#import "CEShaderAttribute.h"
 
 #define kDefaultFramesPerSecond 30
 #define kDefaultMaxLightCount 4
@@ -78,6 +81,13 @@
     
     CEShaderMatrix3 *mvMatrix = [[CEShaderMatrix3 alloc] initWithName:@"MVMatrix" precision:CEHighp];
     mvMatrix.matrix3 = GLKMatrix3Identity;
+    
+    CEShaderLightInfo *mainLight = [[CEShaderLightInfo alloc] initWithName:@"MainLight"];
+    NSLog(@"%@\nuniform %@", [CEShaderLightInfo structDeclaration], [mainLight declaration]);
+    
+    
+    CEShaderAttribute *positionAttr = [[CEShaderAttribute alloc] initWithName:@"VertexPosition" precision:CEMediump variableCount:4];
+    NSLog(@"%@", [positionAttr declaration]);
     
 }
 

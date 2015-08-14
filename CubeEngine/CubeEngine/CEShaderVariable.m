@@ -21,7 +21,7 @@
     return self;
 }
 
-- (NSString *)declarationString {
+- (NSString *)declaration {
     NSAssert(false, @"Must implemented by subclass");
     return nil;
 }

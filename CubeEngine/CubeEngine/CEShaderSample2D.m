@@ -31,8 +31,8 @@
 }
 
 
-- (NSString *)declarationString {
-    return [NSString stringWithFormat:@"uniform %@ sampler2D %@", [self precisionString], self.name];
+- (NSString *)declaration {
+    return [NSString stringWithFormat:@"%@ sampler2D %@;", [self precisionString], self.name];
 }
 
 

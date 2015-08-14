@@ -76,21 +76,21 @@
     _testModel.material.shininessExponent = 20;
     _testModel.material.specularColor = GLKVector3Make(0.9, 0.9, 0.9);
     _testModel.scale = GLKVector3Make(1.5, 1.5, 1.5);
+    _testModel.castShadows = YES;
 //    _teapotModel.material.diffuseTexture = nil;
 //    _teapotModel.material.normalTexture = nil;
     [self.scene addModel:_testModel];
     
     _floorModel = [CEModel modelWithObjFile:@"floor_max"];
     _floorModel.baseColor = [UIColor grayColor];
-    _floorModel.position = GLKVector3Make(0, -3, 0);
-//    _floorModel.castShadows = YES;
-//    [self.scene addModel:_floorModel];
+    _floorModel.castShadows = YES;
+    [self.scene addModel:_floorModel];
     
     _directionalLight = [[CEDirectionalLight alloc] init];
     _directionalLight.position = GLKVector3Make(8, 8, 8);
     _directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [_directionalLight lookAt:GLKVector3Make(0, 0, 0)];
-//    _directionalLight.enableShadow = YES;
+    _directionalLight.enableShadow = YES;
     self.scene.mainLight = _directionalLight;
     
     _pointLight = [CEPointLight new];

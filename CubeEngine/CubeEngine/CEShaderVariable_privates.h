@@ -14,7 +14,7 @@
 @property (nonatomic, assign) GLint index;
 
 /* declaration string in shader for current variable */
-- (NSString *)declarationString;
+- (NSString *)declaration;
 
 
 #pragma mark - for subclass

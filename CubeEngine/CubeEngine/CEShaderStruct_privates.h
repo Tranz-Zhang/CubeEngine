@@ -10,11 +10,16 @@
 
 @interface CEShaderStruct ()
 
-/* name of the stuct declared in shader, MUST IMPLEMENTED BY SUBCLASS*/
-- (NSString *)structName;
+/* struct instance declaration in shader, implement by super class */
+- (NSString *)declaration;
 
-/* declaration string in shader for current struct, MUST IMPLEMENTED BY SUBCLASS */
-- (NSString *)declarationString;
+
+/* struct name in shader, MUST IMPLEMENTED BY SUBCLASS*/
++ (NSString *)structName;
+
+
+/* struct declaration in shader, MUST IMPLEMENTED BY SUBCLASS */
++ (NSString *)structDeclaration;
 
 
 @end

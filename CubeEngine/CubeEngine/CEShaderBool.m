@@ -18,8 +18,8 @@
     glUniform1i(_index, boolValue ? 1 : 0);
 }
 
-- (NSString *)declarationString {
-    return [NSString stringWithFormat:@"uniform %@ bool %@", [self precisionString], self.name];
+- (NSString *)declaration {
+    return [NSString stringWithFormat:@"bool %@;", self.name];
 }
 
 @end

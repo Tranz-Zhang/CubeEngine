@@ -18,8 +18,8 @@
     glUniform1i(_index, intValue);
 }
 
-- (NSString *)declarationString {
-    return [NSString stringWithFormat:@"uniform %@ int %@", [self precisionString], self.name];
+- (NSString *)declaration {
+    return [NSString stringWithFormat:@"%@ int %@;", [self precisionString], self.name];
 }
 
 @end

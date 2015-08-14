@@ -21,3 +21,4 @@
 @property (nonatomic, readonly) CEShaderFloat *spotExponent;
 
 @end
+

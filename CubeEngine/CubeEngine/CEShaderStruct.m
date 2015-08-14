@@ -11,12 +11,12 @@
 
 @implementation CEShaderStruct
 
-+ (instancetype)structWithName:(NSString *)name {
-    if (!name.length) {
-        return nil;
-    }
-    return [[CEShaderStruct alloc] initWithName:name];
-}
+//+ (instancetype)structWithName:(NSString *)name {
+//    if (!name.length) {
+//        return nil;
+//    }
+//    return [[[self class] alloc] initWithName:name];
+//}
 
 
 - (instancetype)initWithName:(NSString *)name {
@@ -28,16 +28,21 @@
 }
 
 
-- (NSString *)structName {
+- (NSString *)declaration {
+    return [NSString stringWithFormat:@"%@ %@;", [[self class] structName], _name];
+}
+
+
++ (NSString *)structName {
     NSAssert(false, @"Must implemented by subclass");
     return nil;
 }
 
-
-- (NSString *)declarationString {
++ (NSString *)structDeclaration {
     NSAssert(false, @"Must implemented by subclass");
     return nil;
 }
+
 
 @end
 

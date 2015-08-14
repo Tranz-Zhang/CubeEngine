@@ -63,9 +63,9 @@
 }
 
 
-- (NSString *)declarationString {
+- (NSString *)declaration {
     NSString *type = _variableCount == 1 ? @"float" : [NSString stringWithFormat:@"vec%d", _variableCount];
-    return [NSString stringWithFormat:@"attribute %@ %@ %@", [self precisionString], type, self.name];
+    return [NSString stringWithFormat:@"attribute %@ %@ %@;", [self precisionString], type, self.name];
 }
 
 

@@ -13,6 +13,6 @@
     NSString *_name;
 }
 
-+ (instancetype)structWithName:(NSString *)name;
+- (instancetype)initWithName:(NSString *)name;
 
 @end

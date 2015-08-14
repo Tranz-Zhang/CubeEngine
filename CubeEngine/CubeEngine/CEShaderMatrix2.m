@@ -18,8 +18,8 @@
     glUniformMatrix2fv(_index, 1, GL_FALSE, matrix2.m);
 }
 
-- (NSString *)declarationString {
-    return [NSString stringWithFormat:@"uniform %@ mat2 %@", [self precisionString], self.name];
+- (NSString *)declaration {
+    return [NSString stringWithFormat:@"%@ mat2 %@;", [self precisionString], self.name];
 }
 
 @end
