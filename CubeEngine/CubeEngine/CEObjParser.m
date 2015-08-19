@@ -171,21 +171,23 @@
     [indies enumerateObjectsUsingBlock:^(NSString *indexString, NSUInteger idx, BOOL *stop) {
         if (indexString.length) {
             NSInteger index = [indexString integerValue] - 1;
-            switch (idx) {
-                case 0: // vertex
-                    [elementData appendData:_vertices[index]];
-                    break;
-                    
-                case 1: // texture coordinate
-                    [elementData appendData:_textureCoordinates[index]];
-                    break;
-                    
-                case 2: // normal
-                    [elementData appendData:_normals[index]];
-                    break;
-                    
-                default:
-                    break;
+            if (index >= 0) {
+                switch (idx) {
+                    case 0: // vertex
+                        [elementData appendData:_vertices[index]];
+                        break;
+                        
+                    case 1: // texture coordinate
+                        [elementData appendData:_textureCoordinates[index]];
+                        break;
+                        
+                    case 2: // normal
+                        [elementData appendData:_normals[index]];
+                        break;
+                        
+                    default:
+                        break;
+                }
             }
         }
     }];

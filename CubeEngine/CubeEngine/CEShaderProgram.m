@@ -8,6 +8,16 @@
 
 #import "CEShaderProgram.h"
 
-@implementation CEShaderProgram
+@implementation CEShaderProgram {
+    CEProgram *program;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        
+    }
+    return self;
+}
 
 @end

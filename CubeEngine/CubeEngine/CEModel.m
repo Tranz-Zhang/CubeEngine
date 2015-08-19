@@ -46,7 +46,7 @@
     // vertex info
     CEVBOAttribute *positionInfo = [vertexBuffer attributeWithName:CEVBOAttributePosition];
     if (!positionInfo) {
-        CEError(@"Fail to parse mess info");
+        CEError(@"Fail to parse vertex info");
         return;
     }
 

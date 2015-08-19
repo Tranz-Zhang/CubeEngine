@@ -147,7 +147,7 @@
 }
 
 
-- (GLKVector3)positionInWorldCoordinate {
+- (GLKVector3)positionInWorldSpace {
     GLKVector3 position = _position;
     CEObject *parent = _parentObject;
     while (parent) {

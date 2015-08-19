@@ -93,7 +93,7 @@
         [_program setShadowDarkness:1.0 - _shadowLight.shadowDarkness];
         [_program setShadowMapTexture:_shadowLight.shadowMapBuffer.textureId];
         
-    } else if (_config.enableShadowMapping) {
+    } else {
         [_program setShadowMapTexture:0.0];
         [_program setShadowDarkness:1.0];
     }

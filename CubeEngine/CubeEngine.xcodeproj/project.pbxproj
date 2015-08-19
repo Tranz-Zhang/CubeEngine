@@ -57,6 +57,10 @@
 		26F7B75B1AEE6AD900BEDB01 /* CESpotLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26F7B7581AEE31C400BEDB01 /* CESpotLight.h */; };
 		26F7FF8F1ADE45660086D9D7 /* CEAssistRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F7FF8E1ADE45660086D9D7 /* CEAssistRenderer.m */; };
 		26FF85381B0A173C0075B971 /* CEMainRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 26FF85371B0A173C0075B971 /* CEMainRenderer.m */; };
+		4C1351A51B832967008EA484 /* CEShaderCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1351A41B832967008EA484 /* CEShaderCode.m */; };
+		4C1351A81B8329B9008EA484 /* CEShaderCodeBaseLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1351A71B8329B9008EA484 /* CEShaderCodeBaseLight.m */; };
+		4C1352151B83638B008EA484 /* BuildToolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1352141B83638B008EA484 /* BuildToolManager.m */; };
+		4C1352171B8364B2008EA484 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1352161B8364B2008EA484 /* main.m */; };
 		4C43A4301ADC37C600761CA9 /* CEVertexBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C43A42F1ADC37C600761CA9 /* CEVertexBuffer.m */; };
 		4C43A4331ADC380A00761CA9 /* CEVBOAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C43A4321ADC380A00761CA9 /* CEVBOAttribute.m */; };
 		4CB763321B7999B200CC33F1 /* CEShaderRoutine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB763311B7999B200CC33F1 /* CEShaderRoutine.m */; };
@@ -64,10 +68,10 @@
 		4CBD44271B72453500D72831 /* CEShaderStruct.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBD44261B72453500D72831 /* CEShaderStruct.m */; };
 		4CC93EE91B7B394C00B7093A /* CEShaderProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC93EE81B7B394C00B7093A /* CEShaderProgram.m */; };
 		4CD480941B40E7B40044517C /* CELightUniforms.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD480931B40E7B40044517C /* CELightUniforms.m */; };
+		4CD6D8751B80859C0071A354 /* CEProgramBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD6D8741B80859C0071A354 /* CEProgramBuilder.m */; };
 		4CD9EB951B3BF7D400C6FCB5 /* CEShadowLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9EB941B3BF7D400C6FCB5 /* CEShadowLight.m */; };
 		4CD9EB971B3BFD2B00C6FCB5 /* CEShadowLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CD9EB931B3BF7D400C6FCB5 /* CEShadowLight.h */; };
 		4CDF3E231B7D85FF008FC5BB /* CEShaderRoutineLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF3E221B7D85FF008FC5BB /* CEShaderRoutineLight.m */; };
-		4CDF3E281B7D871A008FC5BB /* CEShaderRoutineDirectionalLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF3E271B7D871A008FC5BB /* CEShaderRoutineDirectionalLight.m */; };
 		4CDF3E2E1B7DD1B0008FC5BB /* CEShaderRoutineBaseLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF3E2D1B7DD1B0008FC5BB /* CEShaderRoutineBaseLight.m */; };
 		4CF403711B73853300C02BAE /* CEShaderBool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403701B73853300C02BAE /* CEShaderBool.m */; };
 		4CF403751B73862900C02BAE /* CEShaderVector2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403741B73862900C02BAE /* CEShaderVector2.m */; };
@@ -107,6 +111,15 @@
 				2690E8551AEA3AC9000BDD8F /* CEPointLight.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C1352041B835CEF008EA484 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -212,6 +225,14 @@
 		26FF85361B0A173C0075B971 /* CEMainRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEMainRenderer.h; sourceTree = "<group>"; };
 		26FF85371B0A173C0075B971 /* CEMainRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEMainRenderer.m; sourceTree = "<group>"; };
 		4C05C9371B5A2E2500199887 /* CEShader_Backup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CEShader_Backup.h; sourceTree = "<group>"; };
+		4C1351A31B832967008EA484 /* CEShaderCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderCode.h; sourceTree = "<group>"; };
+		4C1351A41B832967008EA484 /* CEShaderCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderCode.m; sourceTree = "<group>"; };
+		4C1351A61B8329B9008EA484 /* CEShaderCodeBaseLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderCodeBaseLight.h; sourceTree = "<group>"; };
+		4C1351A71B8329B9008EA484 /* CEShaderCodeBaseLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderCodeBaseLight.m; sourceTree = "<group>"; };
+		4C1352061B835CEF008EA484 /* BuildTool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BuildTool; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C1352131B83638B008EA484 /* BuildToolManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildToolManager.h; sourceTree = "<group>"; };
+		4C1352141B83638B008EA484 /* BuildToolManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildToolManager.m; sourceTree = "<group>"; };
+		4C1352161B8364B2008EA484 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4C43A42E1ADC37C600761CA9 /* CEVertexBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEVertexBuffer.h; sourceTree = "<group>"; };
 		4C43A42F1ADC37C600761CA9 /* CEVertexBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEVertexBuffer.m; sourceTree = "<group>"; };
 		4C43A4311ADC380A00761CA9 /* CEVBOAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEVBOAttribute.h; sourceTree = "<group>"; };
@@ -228,13 +249,13 @@
 		4CC93EE81B7B394C00B7093A /* CEShaderProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderProgram.m; sourceTree = "<group>"; };
 		4CD480921B40E7B40044517C /* CELightUniforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CELightUniforms.h; sourceTree = "<group>"; };
 		4CD480931B40E7B40044517C /* CELightUniforms.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CELightUniforms.m; sourceTree = "<group>"; };
+		4CD6D8731B80859C0071A354 /* CEProgramBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEProgramBuilder.h; sourceTree = "<group>"; };
+		4CD6D8741B80859C0071A354 /* CEProgramBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEProgramBuilder.m; sourceTree = "<group>"; };
 		4CD9EB931B3BF7D400C6FCB5 /* CEShadowLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowLight.h; sourceTree = "<group>"; };
 		4CD9EB941B3BF7D400C6FCB5 /* CEShadowLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShadowLight.m; sourceTree = "<group>"; };
 		4CD9EB961B3BF81D00C6FCB5 /* CEShadowLight_Rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowLight_Rendering.h; sourceTree = "<group>"; };
 		4CDF3E211B7D85FF008FC5BB /* CEShaderRoutineLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderRoutineLight.h; sourceTree = "<group>"; };
 		4CDF3E221B7D85FF008FC5BB /* CEShaderRoutineLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderRoutineLight.m; sourceTree = "<group>"; };
-		4CDF3E261B7D871A008FC5BB /* CEShaderRoutineDirectionalLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderRoutineDirectionalLight.h; sourceTree = "<group>"; };
-		4CDF3E271B7D871A008FC5BB /* CEShaderRoutineDirectionalLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderRoutineDirectionalLight.m; sourceTree = "<group>"; };
 		4CDF3E2C1B7DD1B0008FC5BB /* CEShaderRoutineBaseLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderRoutineBaseLight.h; sourceTree = "<group>"; };
 		4CDF3E2D1B7DD1B0008FC5BB /* CEShaderRoutineBaseLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderRoutineBaseLight.m; sourceTree = "<group>"; };
 		4CF4036F1B73853300C02BAE /* CEShaderBool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderBool.h; sourceTree = "<group>"; };
@@ -272,6 +293,13 @@
 				26193F691AA832EB00787C64 /* QuartzCore.framework in Frameworks */,
 				26193F671AA832E700787C64 /* GLKit.framework in Frameworks */,
 				26193F651AA832E400787C64 /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C1352031B835CEF008EA484 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +391,7 @@
 			isa = PBXGroup;
 			children = (
 				26193F4A1AA8324600787C64 /* CubeEngine */,
+				4C1352071B835CEF008EA484 /* BuildTool */,
 				26193F621AA8326900787C64 /* Frameworks */,
 				26193F491AA8324600787C64 /* Products */,
 			);
@@ -372,6 +401,7 @@
 			isa = PBXGroup;
 			children = (
 				26193F481AA8324600787C64 /* libCubeEngine.a */,
+				4C1352061B835CEF008EA484 /* BuildTool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -487,6 +517,35 @@
 			name = Deprecated;
 			sourceTree = "<group>";
 		};
+		4C1351A21B832951008EA484 /* CEShaderCode */ = {
+			isa = PBXGroup;
+			children = (
+				4C1351A31B832967008EA484 /* CEShaderCode.h */,
+				4C1351A41B832967008EA484 /* CEShaderCode.m */,
+				4C1351A61B8329B9008EA484 /* CEShaderCodeBaseLight.h */,
+				4C1351A71B8329B9008EA484 /* CEShaderCodeBaseLight.m */,
+			);
+			name = CEShaderCode;
+			sourceTree = "<group>";
+		};
+		4C1352071B835CEF008EA484 /* BuildTool */ = {
+			isa = PBXGroup;
+			children = (
+				4C1352121B8362B0008EA484 /* source */,
+			);
+			path = BuildTool;
+			sourceTree = "<group>";
+		};
+		4C1352121B8362B0008EA484 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				4C1352161B8364B2008EA484 /* main.m */,
+				4C1352131B83638B008EA484 /* BuildToolManager.h */,
+				4C1352141B83638B008EA484 /* BuildToolManager.m */,
+			);
+			path = source;
+			sourceTree = "<group>";
+		};
 		4C3992191B2AD6F500AC4B53 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -517,8 +576,11 @@
 				4CF403721B73853900C02BAE /* ShaderVariables */,
 				2608E2351B78FAF700E9F601 /* ShaderStructs */,
 				4CB763331B79A0D600CC33F1 /* ShaderRoutine */,
+				4C1351A21B832951008EA484 /* CEShaderCode */,
 				4CC93EE71B7B394C00B7093A /* CEShaderProgram.h */,
 				4CC93EE81B7B394C00B7093A /* CEShaderProgram.m */,
+				4CD6D8731B80859C0071A354 /* CEProgramBuilder.h */,
+				4CD6D8741B80859C0071A354 /* CEProgramBuilder.m */,
 			);
 			name = Shader;
 			sourceTree = "<group>";
@@ -528,8 +590,6 @@
 			children = (
 				4CDF3E211B7D85FF008FC5BB /* CEShaderRoutineLight.h */,
 				4CDF3E221B7D85FF008FC5BB /* CEShaderRoutineLight.m */,
-				4CDF3E261B7D871A008FC5BB /* CEShaderRoutineDirectionalLight.h */,
-				4CDF3E271B7D871A008FC5BB /* CEShaderRoutineDirectionalLight.m */,
 				4CDF3E2C1B7DD1B0008FC5BB /* CEShaderRoutineBaseLight.h */,
 				4CDF3E2D1B7DD1B0008FC5BB /* CEShaderRoutineBaseLight.m */,
 			);
@@ -589,6 +649,24 @@
 			productReference = 26193F481AA8324600787C64 /* libCubeEngine.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		4C1352051B835CEF008EA484 /* BuildTool */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C13520C1B835CEF008EA484 /* Build configuration list for PBXNativeTarget "BuildTool" */;
+			buildPhases = (
+				4C1352021B835CEF008EA484 /* Sources */,
+				4C1352031B835CEF008EA484 /* Frameworks */,
+				4C1352041B835CEF008EA484 /* CopyFiles */,
+				4C13520E1B836022008EA484 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BuildTool;
+			productName = BuildTool;
+			productReference = 4C1352061B835CEF008EA484 /* BuildTool */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -600,6 +678,9 @@
 				TargetAttributes = {
 					26193F471AA8324600787C64 = {
 						CreatedOnToolsVersion = 6.1;
+					};
+					4C1352051B835CEF008EA484 = {
+						CreatedOnToolsVersion = 6.3.2;
 					};
 				};
 			};
@@ -616,9 +697,26 @@
 			projectRoot = "";
 			targets = (
 				26193F471AA8324600787C64 /* CubeEngine */,
+				4C1352051B835CEF008EA484 /* BuildTool */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4C13520E1B836022008EA484 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Copy BuildTool to CubeEngine/BuildTool/\nBUNDLE_DIR=${PROJECT_DIR}/BuildTool/BuildTool\n\nif [ -d \"$BUNDLE_DIR\" ]\nthen\necho \"Remove last BuildTool\"\nrm -rf \"$BUNDLE_DIR\"\nfi\n\ncp -fr ${BUILT_PRODUCTS_DIR}/BuildTool BuildTool";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		26193F441AA8324600787C64 /* Sources */ = {
@@ -652,11 +750,11 @@
 				4CF4038A1B7386C200C02BAE /* CEShaderMatrix4.m in Sources */,
 				26193F4E1AA8324600787C64 /* CubeEngine.m in Sources */,
 				4CF403871B7386BA00C02BAE /* CEShaderMatrix3.m in Sources */,
+				4C1351A51B832967008EA484 /* CEShaderCode.m in Sources */,
 				4CF403781B73864900C02BAE /* CEShaderInteger.m in Sources */,
 				263C8E5E1AE5F546004FDFE8 /* CELight.m in Sources */,
 				2625B8C01AE7D340002FD478 /* CEDirectionalLight.m in Sources */,
 				26193FBF1AA85F3F00787C64 /* CEProgram.m in Sources */,
-				4CDF3E281B7D871A008FC5BB /* CEShaderRoutineDirectionalLight.m in Sources */,
 				4CBD44271B72453500D72831 /* CEShaderStruct.m in Sources */,
 				265ACD591AB2D406000277F2 /* CEObject.m in Sources */,
 				4CC93EE91B7B394C00B7093A /* CEShaderProgram.m in Sources */,
@@ -678,7 +776,18 @@
 				263BBBE11AB91A3600F88F65 /* CEUtils.m in Sources */,
 				26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */,
 				260949131B05981600F7465B /* CEObjMeshInfo.m in Sources */,
+				4CD6D8751B80859C0071A354 /* CEProgramBuilder.m in Sources */,
 				269608ED1AF85E750045FB03 /* CEView.m in Sources */,
+				4C1351A81B8329B9008EA484 /* CEShaderCodeBaseLight.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C1352021B835CEF008EA484 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C1352171B8364B2008EA484 /* main.m in Sources */,
+				4C1352151B83638B008EA484 /* BuildToolManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -789,6 +898,33 @@
 			};
 			name = Release;
 		};
+		4C13520A1B835CEF008EA484 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		4C13520B1B835CEF008EA484 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -809,6 +945,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		4C13520C1B835CEF008EA484 /* Build configuration list for PBXNativeTarget "BuildTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C13520A1B835CEF008EA484 /* Debug */,
+				4C13520B1B835CEF008EA484 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

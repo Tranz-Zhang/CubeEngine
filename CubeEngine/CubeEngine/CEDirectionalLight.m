@@ -110,12 +110,13 @@
     // update light projection matrix
     GLfloat maxX = 0, maxY = 0, maxZ = 0, minX = MAXFLOAT, minY = MAXFLOAT, minZ = MAXFLOAT;
     for (CEModel *model in models) {
-        GLfloat modelMaxX = model.position.x + model.offsetFromOrigin.x + model.bounds.x / 2;
-        GLfloat modelMaxY = model.position.y + model.offsetFromOrigin.y + model.bounds.y / 2;
-        GLfloat modelMaxZ = model.position.z + model.offsetFromOrigin.z + model.bounds.z / 2;
-        GLfloat modelMinX = model.position.x + model.offsetFromOrigin.x - model.bounds.x / 2;
-        GLfloat modelMinY = model.position.y + model.offsetFromOrigin.y - model.bounds.y / 2;
-        GLfloat modelMinZ = model.position.z + model.offsetFromOrigin.z - model.bounds.z / 2;
+        GLKVector3 position = model.positionInWorldSpace;
+        GLfloat modelMaxX = position.x + model.offsetFromOrigin.x + model.bounds.x / 2;
+        GLfloat modelMaxY = position.y + model.offsetFromOrigin.y + model.bounds.y / 2;
+        GLfloat modelMaxZ = position.z + model.offsetFromOrigin.z + model.bounds.z / 2;
+        GLfloat modelMinX = position.x + model.offsetFromOrigin.x - model.bounds.x / 2;
+        GLfloat modelMinY = position.y + model.offsetFromOrigin.y - model.bounds.y / 2;
+        GLfloat modelMinZ = position.z + model.offsetFromOrigin.z - model.bounds.z / 2;
         if (maxX < modelMaxX) maxX = modelMaxX;
         if (maxY < modelMaxY) maxY = modelMaxY;
         if (maxZ < modelMaxZ) maxZ = modelMaxZ;

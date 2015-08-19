@@ -428,6 +428,10 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     if (currentTextureId != textureId) {
         glActiveTexture(GL_TEXTURE0 + CETextureUnitNormalMap);
         glBindTexture(GL_TEXTURE_2D, textureId);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glUniform1i(_uniNormalMapTexture_tex, CETextureUnitNormalMap);
         _textureIds[CETextureUnitNormalMap] = textureId;
     }
@@ -459,13 +463,16 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
     if (!_isEditing || _uniShadowMap_tex_F < 0) {
         return NO;
     }
+#warning texture management
     GLuint currentTextureId = _textureIds[CETextureUnitShadowMap];
-    if (currentTextureId != textureId) {
-        glActiveTexture(GL_TEXTURE0 + CETextureUnitShadowMap);
-        glBindTexture(GL_TEXTURE_2D, textureId);
-        glUniform1i(_uniShadowMap_tex_F, CETextureUnitShadowMap);
-        _textureIds[CETextureUnitShadowMap] = textureId;
-    }
+    glActiveTexture(GL_TEXTURE0 + CETextureUnitShadowMap);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glUniform1i(_uniShadowMap_tex_F, CETextureUnitShadowMap);
+    _textureIds[CETextureUnitShadowMap] = textureId;
     
     return YES;
 }

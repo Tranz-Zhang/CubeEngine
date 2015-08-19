@@ -96,7 +96,11 @@
     }
     
     // 3. load texture for models
-    [self loadTextureForModels:allModels];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self loadTextureForModels:allModels];
+    });
+    
 
     // 4 .sort render objects
     CEProgramConfig *baseConfig = [CEProgramConfig new];
@@ -147,8 +151,8 @@
     for (CEModel *model in models) {
         CEProgramConfig *modelConfig = baseConfig.copy;
         modelConfig.renderMode = (int)model.material.materialType;
-        modelConfig.enableTexture = model.material.diffuseTexture.length ? YES : NO;
-        modelConfig.enableNormalMapping = model.material.normalTexture.length ? YES : NO;
+        modelConfig.enableTexture = model.texture ? YES : NO;
+        modelConfig.enableNormalMapping = model.normalMap ? YES : NO;
         CERenderGroup *group = sortedRenderObjectDict[modelConfig];
         if (!group) {
             group = [CERenderGroup new];
@@ -169,10 +173,10 @@
 //    for (CERenderGroup *group in renderGroups) {
 //        BOOL isAccending = group.renderConfig.renderMode == CERenderModeTransparent ? NO : YES;
 //        group.renderObjects = [group.renderObjects sortedArrayUsingComparator:^NSComparisonResult(CEModel *model1, CEModel *model2) {
-//            float distance1 = GLKVector3Distance([model1 positionInWorldCoordinate],
-//                                                 [camera positionInWorldCoordinate]);
-//            float distance2 = GLKVector3Distance([model2 positionInWorldCoordinate],
-//                                                 [camera positionInWorldCoordinate]);
+//            float distance1 = GLKVector3Distance([model1 positionInWorldSpace],
+//                                                 [camera positionInWorldSpace]);
+//            float distance2 = GLKVector3Distance([model2 positionInWorldSpace],
+//                                                 [camera positionInWorldSpace]);
 //            return isAccending ? distance1 - distance2 : distance2 - distance1;
 //        }];
 //    }

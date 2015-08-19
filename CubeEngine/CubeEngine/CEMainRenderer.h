@@ -19,7 +19,6 @@
 + (instancetype)rendererWithConfig:(CEProgramConfig *)config;
 
 - (void)renderObjects:(NSArray *)objects;
- 
 
 @end
 

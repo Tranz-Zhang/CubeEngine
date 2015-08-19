@@ -67,8 +67,6 @@
     _displayLink.frameInterval = MAX(1, (60 / [self preferredFramesPerSecond]));
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     self.paused = NO;
-    
-    [self onTestShaders];
 }
 
 

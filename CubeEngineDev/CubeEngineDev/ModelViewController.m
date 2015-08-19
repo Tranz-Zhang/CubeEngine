@@ -32,13 +32,12 @@
 //    self.scene.camera.farZ = 100;
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    _testModel = [CEModel modelWithObjFile:@"ram"];
-    _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
-    _testModel.material.shininessExponent = 120;
+    _testModel = [CEModel modelWithObjFile:@"sonic"];
+//    _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
 //    _testModel.showWireframe = YES;
     _testModel.showAccessoryLine = YES;
-//    _testModel.material.specularColor = GLKVector3Make(1, 1, 1);
-//    _testModel.material.shiniess = 20;
+    _testModel.material.specularColor = GLKVector3Make(1, 1, 1);
+    _testModel.material.shininessExponent = 20;
 //    _testModel.material.diffuseTexture = nil;// @"gray_texture.png";
 //    _testModel.material.normalTexture = nil;
     [self recursiveSetColorForModel:_testModel];
@@ -51,6 +50,14 @@
     printf("model loading duration: %.4f\n", CFAbsoluteTimeGetCurrent() - start);
     [self.scene addModel:_testModel];
     
+    
+#if 1
+    CEModel *floorModel = [CEModel modelWithObjFile:@"floor_max"];
+    floorModel.baseColor = [UIColor grayColor];
+//    floorModel.castShadows = YES;
+    [self.scene addModel:floorModel];
+#endif
+    
     _wireframeSwitch.on = _testModel.showWireframe;
     _accessorySwitch.on = _testModel.showAccessoryLine;
     
@@ -61,9 +68,8 @@
     directionalLight.position = GLKVector3Make(4, 6, 4);
     directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [directionalLight lookAt:GLKVector3Make(0, 0, 0)];
-//    directionalLight.enableShadow = YES;
+    directionalLight.enableShadow = YES;
     self.scene.mainLight = directionalLight;
-    
     
     
     _light = directionalLight;
@@ -88,15 +94,24 @@
     }
 }
 
+- (IBAction)_onCameraSwitchChanged:(UISwitch *)switcher {
+    if (switcher.on) {
+        _operator.operationObject = self.scene.camera;
+        
+    } else {
+        _operator.operationObject = _testModel;
+    }
+}
+
+
 - (IBAction)onReset:(id)sender {
     _testModel.eulerAngles = GLKVector3Make(0, 0, 0);
     _testModel.scale = GLKVector3Make(1, 1, 1);
 }
 
 
-- (IBAction)onSliderChanged:(UISlider *)sender {
-    CEModel *test = [_testModel childWithName:@"monkey"];
-    test.material.transparency = sender.value;
+- (IBAction)onShadowSwitchChanged:(UISwitch *)sender {
+    [(CEDirectionalLight *)self.scene.mainLight setEnableShadow:sender.on];
 }
 
 
@@ -104,6 +119,10 @@
 - (void)recursiveSetColorForModel:(CEModel *)model {
     model.baseColor = [self randomColor];
     model.castShadows = YES;
+    model.material.shininessExponent = 20;
+    model.material.specularColor = GLKVector3Make(0.5, 0.5, 0.5);
+//    model.material.diffuseTexture = nil;
+//    model.material.normalTexture = nil;
     for (CEModel *child in model.childObjects) {
         [self recursiveSetColorForModel:child];
     }

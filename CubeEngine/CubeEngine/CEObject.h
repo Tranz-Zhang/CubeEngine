@@ -83,7 +83,7 @@
 - (void)lookAt:(GLKVector3)targetPosition;
 
 /** return object position in world coordinate */
-- (GLKVector3)positionInWorldCoordinate;
+- (GLKVector3)positionInWorldSpace;
 
 
 #pragma mark - Object Hierarchy

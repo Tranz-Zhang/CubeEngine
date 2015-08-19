@@ -17,6 +17,6 @@
 
 - (NSSet *)parseCEShaderVariables;
 
-//- (NSString *)
+- (NSString *)
 
 @end

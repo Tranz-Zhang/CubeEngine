@@ -7,16 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CEShaderRoutine.h"
+#import "CEProgram.h"
 
 @interface CEShaderProgram : NSObject
 
-
-// ... include properties
-
-- (void)addProcess:(CEShaderRoutine *)process;
-
-- (NSString *)vertexShaderString;
-- (NSString *)fragmentShaderString;
+- (instancetype)initWithProgram:(CEProgram *)program;
 
 @end

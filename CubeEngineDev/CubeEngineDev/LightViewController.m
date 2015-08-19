@@ -74,7 +74,8 @@
 //    _teapotModel.castShadows = YES;
     _testModel.baseColor = [UIColor orangeColor];
     _testModel.material.shininessExponent = 20;
-    _testModel.material.specularColor = GLKVector3Make(0.9, 0.9, 0.9);
+    _testModel.material.specularColor = GLKVector3Make(0.7, 0.7, 0.7);
+    _testModel.material.ambientColor = GLKVector3Make(0.3, 0.3, 0.3);
     _testModel.scale = GLKVector3Make(1.5, 1.5, 1.5);
     _testModel.castShadows = YES;
 //    _teapotModel.material.diffuseTexture = nil;
