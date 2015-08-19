@@ -1,0 +1,69 @@
+newmtl leonmesh_01SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd pl0014.tga
+bump pl0014_n.tga -bm 1
+Ni 1.00
+Ks 0.28 0.28 0.28
+newmtl leonmesh_02SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd pl0012.tga
+bump pl0012_n.tga -bm 1
+Ni 1.00
+Ks 0.23 0.23 0.23
+newmtl leonmesh_03SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd pl0005.tga
+bump pl0005_n.tga -bm 1
+Ni 1.00
+Ks 0.25 0.25 0.25
+newmtl leonmesh_04SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd leon_tex.tga
+Ni 1.00
+Ks 0.16 0.16 0.16
+newmtl leonmesh_05SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd pl0004.tga
+bump pl0004_n.tga -bm 1
+Ni 1.00
+Ks 0.42 0.42 0.42
+newmtl leonmesh_06SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd pl0011.tga
+bump pl0011_n.tga -bm 1
+Ni 1.00
+Ks 0.32 0.32 0.32
+newmtl leonmesh_07SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd leon_kami_n.tga
+Ni 1.00
+Ks 0.23 0.23 0.23
+newmtl leonmesh_08SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd pl0013.tga
+Ni 1.00
+Ks 0.24 0.24 0.24
