@@ -197,7 +197,7 @@
     if (!sFunctionNameRegex) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            sFunctionNameRegex = [NSRegularExpression regularExpressionWithPattern:@"void\\s*\\w*\\(.*\\)" options:0 error:nil];
+            sFunctionNameRegex = [NSRegularExpression regularExpressionWithPattern:@"void\\s*\\w*\\s*\\(.*\\)" options:0 error:nil];
         });
     }
     NSArray *results = [sFunctionNameRegex matchesInString:shaderString options:0 range:NSMakeRange(0, shaderString.length)];
@@ -217,8 +217,13 @@
                 } else {
                     bracketCount--;
                 }
-                searchRange.location = NSMaxRange(resultRange);
-                searchRange.length = shaderString.length - NSMaxRange(resultRange);
+                if (bracketCount >= 0) {
+                    searchRange.location = NSMaxRange(resultRange);
+                    searchRange.length = shaderString.length - NSMaxRange(resultRange);
+                    
+                } else {
+                   searchRange.location = NSNotFound;
+                }
                 
             } else {
                 searchRange.location = NSNotFound;
@@ -242,7 +247,34 @@
     
     // parse function declarations to CEShaderFunctionInfo
     for (NSString *functionContent in functionDeclarations) {
-        // parse function id
+        // get function name
+        __block NSString *functionName;
+        [functionContent enumerateSubstringsInRange:NSMakeRange(0, 100) options:NSStringEnumerationByWords usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+            if (![substring isEqualToString:@"void"]) {
+                functionName = substring;
+                *stop = YES;
+            }
+        }];
+        // get function params
+        NSRange startBracketRange = [functionContent rangeOfString:@"("];
+        NSRange endBracketRange = [functionContent rangeOfString:@")"];
+        NSString *paramString = [functionContent substringWithRange:NSMakeRange(NSMaxRange(startBracketRange), endBracketRange.location - NSMaxRange(startBracketRange))];
+        NSArray *params = [paramString componentsSeparatedByString:@","];
+        for (NSString *paramDeclaration in params) {
+            NSArray *words = [paramDeclaration componentsSeparatedByString:@" "];
+            NSString *paramType;
+            NSString *paramName;
+            for (NSString *word in words) {
+                if (word.length && !paramType) {
+                    paramType = word;
+                    
+                } else if (word.length && paramType && !paramName) {
+                    paramName = word;
+                }
+            }
+            NSLog(@"%@ %@", paramType, paramName);
+        }
+        
         
     }
     
