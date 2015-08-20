@@ -18,6 +18,7 @@
 #import "CEShaderVariable_privates.h"
 #import "CEShaderStruct_privates.h"
 #import "CEShaderAttribute.h"
+#import "CEShaderFileParser.h"
 
 #define kDefaultFramesPerSecond 30
 #define kDefaultMaxLightCount 4
@@ -67,6 +68,8 @@
     _displayLink.frameInterval = MAX(1, (60 / [self preferredFramesPerSecond]));
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     self.paused = NO;
+    
+    [self testShaderFileParser];
 }
 
 
@@ -86,6 +89,13 @@
     
     CEShaderAttribute *positionAttr = [[CEShaderAttribute alloc] initWithName:@"VertexPosition" precision:CEMediump variableCount:4];
     NSLog(@"%@", [positionAttr declaration]);
+    
+}
+
+
+- (void)testShaderFileParser {
+    CEShaderFileParser *parser = [[CEShaderFileParser alloc] initWithShaderName:@"BaseLightEffect"];
+    [parser parse];
     
 }
 

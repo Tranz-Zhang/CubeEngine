@@ -9,7 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "BuildToolManager.h"
 
-// BuildTool -app CubeEngineDev -d ${BUILT_PRODUCTS_DIR}
+/**
+ BuildTool
+ - copy shader resources
+ - convert and copy models & textures
+ */
+
+
+// commandLine: BuildTool -app CubeEngineDev -d ${BUILT_PRODUCTS_DIR}
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // get engine dir

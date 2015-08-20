@@ -7,7 +7,38 @@
 //
 
 #import "CEUtils.h"
+#import "CEDirectoryDefines.h"
 
+#pragma mark - System Tools
+
+// engine directory in bundle
+NSString * CEEngineDirectory() {
+    static NSString *sEngineDirectory = nil;
+    if (!sEngineDirectory) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+            sEngineDirectory = [bundlePath stringByAppendingPathComponent:kEngineDirectory];
+        });
+    }
+    return sEngineDirectory;
+}
+
+// Engine/Shaders
+NSString *CEShaderDirectory() {
+    static NSString *sShaderDirectory = nil;
+    if (!sShaderDirectory) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+            sShaderDirectory = [bundlePath stringByAppendingPathComponent:kShaderDirectory];
+        });
+    }
+    return sShaderDirectory;
+}
+
+
+#pragma mark - Math Tools
 
 // ref: http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/
 GLKQuaternion CEQuaternionWithEulerAngles(float y, float z, float x) {

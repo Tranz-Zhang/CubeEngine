@@ -10,6 +10,13 @@
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 
+#pragma mark - System Tools
+
+NSString *CEEngineDirectory(); // engine directory in bundle
+NSString *CEShaderDirectory(); // Engine/Shaders
+
+#pragma mark - Math Tools
+
 // calculate in order of y, z, x (yaw, pitch, roll)
 GLKQuaternion CEQuaternionWithEulerAngles(float y, float z, float x);
 

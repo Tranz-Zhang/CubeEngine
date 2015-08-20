@@ -7,8 +7,7 @@
 //
 
 #import "BuildToolManager.h"
-
-#define ShaderResourceDir @"/CubeEngine/ShaderResources"
+#import "CEDirectoryDefines.h"
 
 @implementation BuildToolManager {
     NSFileManager *_fileManager;
@@ -44,7 +43,7 @@
 
 
 - (BOOL)createEngineDirectoryInApp {
-    _engineDir = [_appPath stringByAppendingPathComponent:@"Engine"];
+    _engineDir = [_appPath stringByAppendingPathComponent:kEngineDirectory];
     printf(">> checkEngineDirectoryInApp: %s\n", [_engineDir UTF8String]);
     if (![_fileManager fileExistsAtPath:_engineDir isDirectory:nil]) {
         BOOL isOK = [_fileManager createDirectoryAtPath:_engineDir
@@ -63,7 +62,7 @@
 - (void)copyShaderResources {
     printf(">> copying shader resources...\n");
     // check shader directory in app
-    NSString *toDir = [_engineDir stringByAppendingPathComponent:@"Shaders"];
+    NSString *toDir = [_appPath stringByAppendingPathComponent:kShaderDirectory];
     if (![_fileManager fileExistsAtPath:toDir isDirectory:nil]) {
         BOOL isOK = [_fileManager createDirectoryAtPath:toDir
                                               withIntermediateDirectories:YES
@@ -90,7 +89,6 @@
             printf("skip file: %s\n", [fileName UTF8String]);
             continue;
         }
-        
         printf("copy %s", [fileName UTF8String]);
         NSString *fromPath = [fromDir stringByAppendingPathComponent:fileName];
         NSString *toPath = [toDir stringByAppendingPathComponent:fileName];
