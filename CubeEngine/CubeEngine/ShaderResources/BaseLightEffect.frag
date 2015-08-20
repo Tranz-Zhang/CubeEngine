@@ -25,11 +25,32 @@ void  CEFrag_ApplyBaseLightEffect(vec4 inputColor, float Attenuation) {
     float diffuse = max(0.0, dot(normal, LightDirection));
     float specular = max(0.0, dot(reflectDir, EyeDirectionOut));
     specular = (diffuse == 0.0 || ShininessExponent == 0.0) ? 0.0 : pow(specular, ShininessExponent);
-    vec3 scatteredLight = AmbientColor * Attenuation + MainLight.LightColor * diffuse * Attenuation;
+    vec3 scatteredLight [3] = AmbientColor * Attenuation + MainLight.LightColor * diffuse * Attenuation;
     vec3 reflectedLight = SpecularColor * specular * Attenuation;
     {xxxx}
-#link CEFrag_ApplyShadowEffect(scatteredLight, reflectedLight);
+#link CEFrag_ApplyShadowEffect(scatteredLight, reflectedLight );
     
     inputColor = min(inputColor * scatteredLight + reflectedLight, vec4(1.0));
+}
+
+
+
+attribute lowp vec3 VertexNormal;
+uniform lowp mat3 NormalMatrix;
+uniform lowp vec3 EyeDirection; // in eye space
+
+varying lowp vec3 LightDirection;
+varying lowp vec3 EyeDirectionOut;
+varying lowp float Attenuation;
+varying lowp vec3 Normal;
+
+void CEVertex_ApplyBaseLightEffect() {
+    // one of these methods should be executed
+#link CEVertex_DirectionLightCalculation(LightDirection, Attenuation);
+#link CEVertex_PointLightCalculation(LightDirection, Attenuation);
+#link CEVertex_SpotLightCalculation(LightDirection, Attenuation);
+    
+    EyeDirectionOut = EyeDirection;
+    Normal = normalize(NormalMatrix * VertexNormal);
 }
 

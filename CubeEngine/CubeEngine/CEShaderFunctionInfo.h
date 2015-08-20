@@ -10,8 +10,8 @@
 
 @interface CEShaderFunctionInfo : NSObject
 
-@property (nonatomic, readonly, strong) NSString *functionID;
-@property (nonatomic, readonly, strong) NSString *functionContent;
-@property (nonatomic, readonly, strong) NSDictionary *linkFunctionDict; // {@"functionID" : @"rangeString"}
+@property (nonatomic, strong) NSString *functionID;
+@property (nonatomic, strong) NSString *functionContent;
+@property (nonatomic, strong) NSDictionary *linkFunctionDict; // {@"functionID" : @"rangeString"}
 
 @end

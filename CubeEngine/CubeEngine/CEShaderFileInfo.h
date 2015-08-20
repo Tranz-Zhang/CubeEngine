@@ -10,10 +10,10 @@
 
 @interface CEShaderFileInfo : NSObject
 
-@property (nonatomic, readonly, strong) NSSet *vertexShaderVariables;
-@property (nonatomic, readonly, strong) NSString *vertexShaderContent;
+@property (nonatomic, strong) NSSet *vertexShaderVariables;
+@property (nonatomic, strong) NSString *vertexShaderContent;
 
-@property (nonatomic, readonly, strong) NSSet *fragmentShaderVariables;
-@property (nonatomic, readonly, strong) NSString *fragmentShaderContent;
+@property (nonatomic, strong) NSSet *fragmentShaderVariables;
+@property (nonatomic, strong) NSString *fragmentShaderContent;
 
 @end
