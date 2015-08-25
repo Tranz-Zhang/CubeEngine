@@ -15,32 +15,50 @@
  - convert and copy models & textures
  */
 
+#define ENABLE_DEBUG 1
 
-// commandLine: BuildTool -app CubeEngineDev -d ${BUILT_PRODUCTS_DIR}
+// commandLine: BuildTool -app ${PRODUCT_NAME} -buildDirectory ${BUILT_PRODUCTS_DIR} -engineDirectory ${SRCROOT}/../CubeEngine
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        // get engine dir
-        NSString *engineDir = [NSString stringWithUTF8String:argv[0]];
-        engineDir = [engineDir substringToIndex:engineDir.length - [@"/BuildTool/BuildTool" length]];
-        engineDir = [[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingPathComponent:engineDir];
-        
-        NSString *appName;
-        NSString *productDir;
+        NSMutableArray *appNameComponents = [NSMutableArray array];
+        NSMutableArray *buildDirComponents = [NSMutableArray array];
+        NSMutableArray *engineDirComponents = [NSMutableArray array];
+        int paramType = 0;
         for (int i = 1; i < argc; i++) {
             NSString *argString = [NSString stringWithUTF8String:argv[i]];
-            if ([argString isEqualToString:@"-app"] && i + 1 < argc) {
-                appName = [NSString stringWithUTF8String:argv[i + 1]];
+            if ([argString hasPrefix:@"-"]) {
+                if ([argString isEqualToString:@"-app"] && i + 1 < argc) {
+                    paramType = 1;
+                } else if ([argString isEqualToString:@"-buildDirectory"] && i + 1 < argc) {
+                    paramType = 2;
+                } else if ([argString isEqualToString:@"-engineDirectory"] && i + 1 < argc) {
+                    paramType = 3;
+                } else {
+                    paramType = 0;
+                }
+                continue;
             }
-            if ([argString isEqualToString:@"-d"] && i + 1 < argc) {
-                productDir = [NSString stringWithUTF8String:argv[i + 1]];
+            
+            switch (paramType) {
+                case 1:
+                    [appNameComponents addObject:argString];
+                    break;
+                case 2:
+                    [buildDirComponents addObject:argString];
+                    break;
+                case 3:
+                    [engineDirComponents addObject:argString];
+                    break;
+                default:
+                    break;
             }
         }
         
-        if (appName.length && productDir.length) {
+        if (appNameComponents.count && buildDirComponents.count && engineDirComponents.count) {
             BuildToolManager *manager =  [BuildToolManager new];
-            manager.appName = appName;
-            manager.productDir = productDir;
-            manager.engineSourceDir = engineDir.stringByStandardizingPath;
+            manager.appName = [appNameComponents componentsJoinedByString:@" "];
+            manager.buildProductDir = [[buildDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
+            manager.engineProjectDir = [[engineDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
             [manager run];
             
         } else {
@@ -49,3 +67,7 @@ int main(int argc, const char * argv[]) {
     }
     return 0;
 }
+
+
+
+

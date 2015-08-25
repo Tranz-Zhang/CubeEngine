@@ -15,7 +15,7 @@
 @property (nonatomic, strong) CEVBOAttribute *attribute;
 
 - (instancetype)initWithName:(NSString *)name
-                   precision:(CEShaderDataPrecision)precision
+                   precision:(NSString *)precision
                variableCount:(GLint)variableCount;
 
 

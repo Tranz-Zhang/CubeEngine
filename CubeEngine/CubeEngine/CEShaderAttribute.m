@@ -15,7 +15,7 @@
 
 
 - (instancetype)initWithName:(NSString *)name
-                   precision:(CEShaderDataPrecision)precision
+                   precision:(NSString *)precision
                variableCount:(GLint)variableCount {
     self = [super initWithName:name precision:precision];
     if (self) {
@@ -65,7 +65,7 @@
 
 - (NSString *)declaration {
     NSString *type = _variableCount == 1 ? @"float" : [NSString stringWithFormat:@"vec%d", _variableCount];
-    return [NSString stringWithFormat:@"attribute %@ %@ %@;", [self precisionString], type, self.name];
+    return [NSString stringWithFormat:@"attribute %@ %@ %@;", self.precision, type, self.name];
 }
 
 

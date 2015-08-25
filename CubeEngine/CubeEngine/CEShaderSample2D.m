@@ -32,7 +32,7 @@
 
 
 - (NSString *)declaration {
-    return [NSString stringWithFormat:@"%@ sampler2D %@;", [self precisionString], self.name];
+    return [NSString stringWithFormat:@"%@ sampler2D %@;", self.precision, self.name];
 }
 
 

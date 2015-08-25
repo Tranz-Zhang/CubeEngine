@@ -9,21 +9,19 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 
-typedef NS_ENUM(int, CEShaderDataPrecision) {
-    CELowp,
-    CEMediump,
-    CEHighp,
-};
-
+#define kCEPrecisionLowp        @"lowp"
+#define kCEPrecisionMediump     @"mediump"
+#define kCEPrecisionHighp       @"highp"
+#define kCEPrecisionDefault     kCEPrecisionMediump
 
 @interface CEShaderVariable : NSObject {
     GLint _index;
 }
 
 @property (nonatomic, readonly) NSString *name;
-@property (nonatomic, readonly) CEShaderDataPrecision precision;
+@property (nonatomic, readonly) NSString *precision;
 
-- (instancetype)initWithName:(NSString *)name precision:(CEShaderDataPrecision)precision;
+- (instancetype)initWithName:(NSString *)name precision:(NSString *)precision;
 
 @end
 

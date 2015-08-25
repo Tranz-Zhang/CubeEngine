@@ -11,7 +11,7 @@
 
 @implementation CEShaderVariable
 
-- (instancetype)initWithName:(NSString *)name precision:(CEShaderDataPrecision)precision {
+- (instancetype)initWithName:(NSString *)name precision:(NSString *)precision {
     self = [super init];
     if (self) {
         _name = [name copy];
@@ -26,20 +26,5 @@
     return nil;
 }
 
-#pragma mark - for subclass
-
-- (NSString *)precisionString {
-    switch (_precision) {
-        case CELowp:
-            return @"lowp";
-        case CEMediump:
-            return @"mediump";
-        case CEHighp:
-            return @"highp";
-        default:
-            break;
-    }
-    return @"";
-}
 
 @end

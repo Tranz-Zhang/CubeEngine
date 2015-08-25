@@ -16,14 +16,14 @@
 - (instancetype)initWithName:(NSString *)name {
     self = [super initWithName:name];
     if (self) {
-        _isEnabled =        [[CEShaderBool alloc] initWithName:@"IsEnabled"         precision:CELowp];
-        _lightType =        [[CEShaderInteger alloc] initWithName:@"LightType"      precision:CELowp];
-        _lightPosition =    [[CEShaderVector4 alloc] initWithName:@"LightPosition"  precision:CEMediump];
-        _lightDirection =   [[CEShaderVector3 alloc] initWithName:@"LightDirection" precision:CELowp];
-        _lightColor =       [[CEShaderVector3 alloc] initWithName:@"LightColor"     precision:CEMediump];
-        _attenuation =      [[CEShaderFloat alloc] initWithName:@"Attenuation"      precision:CEMediump];
-        _spotConsCutOff =   [[CEShaderFloat alloc] initWithName:@"SpotConsCutoff"   precision:CEMediump];
-        _spotExponent =     [[CEShaderFloat alloc] initWithName:@"SpotExponent"     precision:CEMediump];
+        _isEnabled =        [[CEShaderBool alloc] initWithName:@"IsEnabled"         precision:kCEPrecisionLowp];
+        _lightType =        [[CEShaderInteger alloc] initWithName:@"LightType"      precision:kCEPrecisionLowp];
+        _lightPosition =    [[CEShaderVector4 alloc] initWithName:@"LightPosition"  precision:kCEPrecisionMediump];
+        _lightDirection =   [[CEShaderVector3 alloc] initWithName:@"LightDirection" precision:kCEPrecisionLowp];
+        _lightColor =       [[CEShaderVector3 alloc] initWithName:@"LightColor"     precision:kCEPrecisionMediump];
+        _attenuation =      [[CEShaderFloat alloc] initWithName:@"Attenuation"      precision:kCEPrecisionMediump];
+        _spotConsCutOff =   [[CEShaderFloat alloc] initWithName:@"SpotConsCutoff"   precision:kCEPrecisionMediump];
+        _spotExponent =     [[CEShaderFloat alloc] initWithName:@"SpotExponent"     precision:kCEPrecisionMediump];
     }
     return self;
 }

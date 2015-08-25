@@ -16,8 +16,4 @@
 /* declaration string in shader for current variable */
 - (NSString *)declaration;
 
-
-#pragma mark - for subclass
-- (NSString *)precisionString;
-
 @end

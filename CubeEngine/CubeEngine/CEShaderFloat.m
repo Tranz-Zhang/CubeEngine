@@ -19,7 +19,7 @@
 }
 
 - (NSString *)declaration {
-    return [NSString stringWithFormat:@"%@ float %@;", [self precisionString], self.name];
+    return [NSString stringWithFormat:@"%@ float %@;", self.precision, self.name];
 }
 
 @end

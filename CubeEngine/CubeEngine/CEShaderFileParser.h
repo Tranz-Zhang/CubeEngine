@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "CEShaderFileInfo.h"
 #import "CEShaderFunctionInfo.h"
+#import "CEShaderVariableInfo.h"
+
 
 /**
  CEShaderFileParser
@@ -22,7 +24,8 @@
  */
 @interface CEShaderFileParser : NSObject
 
-- (instancetype)initWithShaderName:(NSString *)shaderName;
-- (CEShaderFileInfo *)parse;
+- (CEShaderFileInfo *)parseWithVertexShader:(NSString *)vertexShaderString
+                             fragmentShader:(NSString *)fragmentShaderString;
 
 @end
+

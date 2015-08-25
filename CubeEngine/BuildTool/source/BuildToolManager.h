@@ -11,8 +11,8 @@
 @interface BuildToolManager : NSObject
 
 @property (nonatomic, strong) NSString *appName;
-@property (nonatomic, strong) NSString *engineSourceDir;
-@property (nonatomic, strong) NSString *productDir;
+@property (nonatomic, strong) NSString *engineProjectDir;
+@property (nonatomic, strong) NSString *buildProductDir;
 
 - (void)run;
 

@@ -167,6 +167,13 @@
 			remoteGlobalIDString = 4C1352061B835CEF008EA484;
 			remoteInfo = BuildTool;
 		};
+		4C51F1241B8B405D0052511E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 26193FA31AA839AC00787C64 /* CubeEngine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C1352051B835CEF008EA484;
+			remoteInfo = BuildTool;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -631,6 +638,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4C51F1251B8B405D0052511E /* PBXTargetDependency */,
 				26193FB31AA853AA00787C64 /* PBXTargetDependency */,
 			);
 			name = CubeEngineDev;
@@ -859,7 +867,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "../CubeEngine/BuildTool/BuildTool -app ${PRODUCT_NAME} -d ${BUILT_PRODUCTS_DIR}";
+			shellScript = "../CubeEngine/BuildTool/BuildTool -app ${PRODUCT_NAME} -buildDirectory ${BUILT_PRODUCTS_DIR} -engineDirectory ${SRCROOT}/../CubeEngine";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -904,6 +912,11 @@
 			isa = PBXTargetDependency;
 			name = CubeEngine;
 			targetProxy = 26193FB21AA853AA00787C64 /* PBXContainerItemProxy */;
+		};
+		4C51F1251B8B405D0052511E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = BuildTool;
+			targetProxy = 4C51F1241B8B405D0052511E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

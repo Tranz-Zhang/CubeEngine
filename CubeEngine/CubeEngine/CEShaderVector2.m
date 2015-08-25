@@ -19,7 +19,7 @@
 }
 
 - (NSString *)declaration {
-    return [NSString stringWithFormat:@"%@ vec2 %@;", [self precisionString], self.name];
+    return [NSString stringWithFormat:@"%@ vec2 %@;", self.precision, self.name];
 }
 
 @end

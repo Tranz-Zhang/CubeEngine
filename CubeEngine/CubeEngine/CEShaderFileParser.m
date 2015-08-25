@@ -7,86 +7,40 @@
 //
 
 #import "CEShaderFileParser.h"
-#import "CEUtils.h"
+#import "CEShaderVariable.h"
 
-@implementation CEShaderFileParser {
-    NSString *_vertexShaderPath;
-    NSString *_fragmentShaderPath;
-}
+@implementation CEShaderFileParser
 
-
-- (instancetype)initWithShaderName:(NSString *)shaderName {
-    self = [super init];
-    if (self) {
-        _vertexShaderPath = [CEShaderDirectory() stringByAppendingFormat:@"/%@.vert", shaderName];
-        _fragmentShaderPath = [CEShaderDirectory() stringByAppendingFormat:@"/%@.frag", shaderName];
-    }
-    return self;
-}
-
-
-- (CEShaderFileInfo *)parse {
+- (CEShaderFileInfo *)parseWithVertexShader:(NSString *)vertexShaderString
+                             fragmentShader:(NSString *)fragmentShaderString {
+    
     CEShaderFileInfo *shaderInfo = [CEShaderFileInfo new];
-    [self parseVertexShaderForInfo:shaderInfo];
-    [self parseFragmentShaderForInfo:shaderInfo];
     
-    return nil;
-}
-
-
-- (void)parseVertexShaderForInfo:(CEShaderFileInfo *)shaderInfo {
-    NSString *vertexShader = [NSString stringWithContentsOfFile:_vertexShaderPath
-                                                       encoding:NSUTF8StringEncoding
-                                                          error:nil];
-    if (!vertexShader.length) {
-        return;
+    // parse vertex shader
+    if (vertexShaderString.length) {
+        NSMutableArray *vertexVariables = [NSMutableArray array];
+        [vertexVariables addObjectsFromArray:[self parseAttributesInShader:vertexShaderString]];
+        [vertexVariables addObjectsFromArray:[self parseUnifromsInShader:vertexShaderString]];
+        [vertexVariables addObjectsFromArray:[self parseVaryingsInShader:vertexShaderString]];
+        shaderInfo.vertexShaderVariables = vertexVariables.copy;
+        shaderInfo.vertexShaderStructs = [self parseStructDeclarationInShader:vertexShaderString];
+        shaderInfo.vertexShaderFunctions = [self parseFunctionsInShader:vertexShaderString];
     }
     
-    
-}
-
-
-- (void)parseFragmentShaderForInfo:(CEShaderFileInfo *)shaderInfo {
-    NSString *fragmentShader = [NSString stringWithContentsOfFile:_fragmentShaderPath
-                                                       encoding:NSUTF8StringEncoding
-                                                          error:nil];
-    if (!fragmentShader.length) {
-        return;
+    // parse fragment shader
+    if (fragmentShaderString) {
+        NSMutableArray *fragmentVariables = [NSMutableArray array];
+        [fragmentVariables addObjectsFromArray:[self parseAttributesInShader:fragmentShaderString]];
+        [fragmentVariables addObjectsFromArray:[self parseUnifromsInShader:fragmentShaderString]];
+        [fragmentVariables addObjectsFromArray:[self parseVaryingsInShader:fragmentShaderString]];
+        shaderInfo.fragmentShaderVariables = fragmentVariables.copy;
+        shaderInfo.fragmentShaderStructs = [self parseStructDeclarationInShader:fragmentShaderString];
+        shaderInfo.fragmentShaderFunctions = [self parseFunctionsInShader:fragmentShaderString];
     }
     
-    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    [self parseUnifromsInShader:fragmentShader];
-//    printf("duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
-    
-//    startTime = CFAbsoluteTimeGetCurrent();
-    [self parseAttributesInShader:fragmentShader];
-//    printf("duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
-    
-//    startTime = CFAbsoluteTimeGetCurrent();
-    [self parseVaryingsInShader:fragmentShader];
-//    printf("duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
-    
-//    startTime = CFAbsoluteTimeGetCurrent();
-    [self parseStructDeclarationInShader:fragmentShader];
-//    printf("duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
-    
-//    startTime = CFAbsoluteTimeGetCurrent();
-    [self parseFunctionsInShader:fragmentShader];
-    printf("duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
-    
-    
-    
+    return shaderInfo;
 }
 
-
-- (NSString *)searchString:(NSString *)content forVariableDeclaration:(NSString *)keyword {
-    NSRange keywordRange = [content rangeOfString:keyword];
-    if (keywordRange.location != NSNotFound) {
-        NSRange endMarkRange = [content rangeOfString:@";"];
-        return [content substringWithRange:NSMakeRange(keywordRange.location, endMarkRange.location)];
-    }
-    return nil;
-}
 
 #pragma mark - parse
 
@@ -101,10 +55,16 @@
     NSArray *results = [sUniformRegex matchesInString:shaderString options:0 range:NSMakeRange(0, shaderString.length)];
     if (!results.count) return nil;
     
+    NSMutableArray *uniforms = [NSMutableArray arrayWithCapacity:results.count];
     for (NSTextCheckingResult *result in results) {
-        NSLog(@"%@", [shaderString substringWithRange:result.range]);
+        NSString *declaration = [shaderString substringWithRange:NSMakeRange(result.range.location, result.range.length - 1)];
+        CEShaderVariableInfo *variable = [self variableInfoWithDeclaration:declaration];
+        if (variable) {
+            variable.usage = CEShaderVariableUsageUniform;
+            [uniforms addObject:variable];
+        }
     }
-    return nil;
+    return uniforms.copy;
 }
 
 
@@ -119,11 +79,18 @@
     NSArray *results = [sAttributeRegex matchesInString:shaderString options:0 range:NSMakeRange(0, shaderString.length)];
     if (!results.count) return nil;
     
+    NSMutableArray *attributes = [NSMutableArray arrayWithCapacity:results.count];
     for (NSTextCheckingResult *result in results) {
-        NSLog(@"%@", [shaderString substringWithRange:result.range]);
+        NSString *declaration = [shaderString substringWithRange:NSMakeRange(result.range.location, result.range.length - 1)];
+        CEShaderVariableInfo *variable = [self variableInfoWithDeclaration:declaration];
+        if (variable) {
+            variable.usage = CEShaderVariableUsageAttribute;
+            [attributes addObject:variable];
+        }
     }
-    return nil;
+    return attributes.copy;
 }
+
 
 - (NSArray *)parseVaryingsInShader:(NSString *)shaderString {
     static NSRegularExpression *sVaryingRegex = nil;
@@ -136,10 +103,38 @@
     NSArray *results = [sVaryingRegex matchesInString:shaderString options:0 range:NSMakeRange(0, shaderString.length)];
     if (!results.count) return nil;
     
+    NSMutableArray *varyings = [NSMutableArray arrayWithCapacity:results.count];
     for (NSTextCheckingResult *result in results) {
-        NSLog(@"%@", [shaderString substringWithRange:result.range]);
+        NSString *declaration = [shaderString substringWithRange:NSMakeRange(result.range.location, result.range.length - 1)];
+        CEShaderVariableInfo *variable = [self variableInfoWithDeclaration:declaration];
+        if (variable) {
+            variable.usage = CEShaderVariableUsageVarying;
+            [varyings addObject:variable];
+        }
     }
-    return nil;
+    return varyings.copy;
+}
+
+
+// @"attribute lowp vec3 VertexNormal" -> CEShaderVariableInfo
+- (CEShaderVariableInfo *)variableInfoWithDeclaration:(NSString *)declarationString {
+    NSMutableArray *components = [[declarationString componentsSeparatedByString:@" "] mutableCopy];
+    [components removeObject:@""];
+    if (components.count < 3) {
+        return nil;
+    }
+    CEShaderVariableInfo *variableInfo = [CEShaderVariableInfo new];
+    if (components.count == 3) {
+        variableInfo.precision = kCEPrecisionDefault;
+        variableInfo.type = components[1];
+        variableInfo.name = components[2];
+        
+    } else {
+        variableInfo.precision = components[1];
+        variableInfo.type = components[2];
+        variableInfo.name = components[3];
+    }
+    return variableInfo;
 }
 
 
@@ -325,6 +320,10 @@
 
 
 - (NSString *)getParamID:(NSString *)paramDeclaration {
+    if (!paramDeclaration.length) {
+        return nil;
+    }
+    
     NSArray *words = [paramDeclaration componentsSeparatedByString:@" "];
     NSString *paramType;
     NSString *paramName;
@@ -352,6 +351,8 @@
         return [NSString stringWithFormat:@"%@", paramType];
     }
 }
+
+
 
 
 @end

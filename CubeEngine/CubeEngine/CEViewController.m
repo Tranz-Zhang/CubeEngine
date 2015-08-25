@@ -19,6 +19,10 @@
 #import "CEShaderStruct_privates.h"
 #import "CEShaderAttribute.h"
 #import "CEShaderFileParser.h"
+#import "CEUtils.h"
+#import "CEShaderFileParser.h"
+#import "CEShaderFunctionInfo.h"
+#import "CEShaderFileInfo.h"
 
 #define kDefaultFramesPerSecond 30
 #define kDefaultMaxLightCount 4
@@ -69,7 +73,7 @@
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     self.paused = NO;
     
-    [self testShaderFileParser];
+    [self onTestShaders];
 }
 
 
@@ -77,26 +81,50 @@
 //    CEShaderVariable *lightDirection = [CEShaderVariable variableWithName:@"LightDirection" type:CEGLSL_vec4 precision:CEGLSL_lowp];
 //    CEShaderVariable *enabled = [CEShaderVariable variableWithName:@"Enabled" type:CEGLSL_bool precision:CEGLSL_lowp];
 //    CEShaderStruct *lightInfo = [CEShaderStruct structWithName:@"LightInfo" variables:@[lightDirection, enabled]];
-    CEShaderBool *enableLight = [[CEShaderBool alloc] initWithName:@"Enabled" precision:CELowp];
+    CEShaderBool *enableLight = [[CEShaderBool alloc] initWithName:@"Enabled" precision:kCEPrecisionLowp];
     enableLight.boolValue = YES;
     
-    CEShaderMatrix3 *mvMatrix = [[CEShaderMatrix3 alloc] initWithName:@"MVMatrix" precision:CEHighp];
+    CEShaderMatrix3 *mvMatrix = [[CEShaderMatrix3 alloc] initWithName:@"MVMatrix" precision:kCEPrecisionHighp];
     mvMatrix.matrix3 = GLKMatrix3Identity;
     
     CEShaderLightInfo *mainLight = [[CEShaderLightInfo alloc] initWithName:@"MainLight"];
     NSLog(@"%@\nuniform %@", [CEShaderLightInfo structDeclaration], [mainLight declaration]);
     
-    
-    CEShaderAttribute *positionAttr = [[CEShaderAttribute alloc] initWithName:@"VertexPosition" precision:CEMediump variableCount:4];
+    CEShaderAttribute *positionAttr = [[CEShaderAttribute alloc] initWithName:@"VertexPosition" precision:kCEPrecisionMediump variableCount:4];
     NSLog(@"%@", [positionAttr declaration]);
+    
+//    CFAbsoluteTime startTime1 = CFAbsoluteTimeGetCurrent();
+//    [self testParser];
+//    NSLog(@"parse: %.5f", CFAbsoluteTimeGetCurrent() - startTime1);
+    
+    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+    NSData *jsonData = [NSData dataWithContentsOfFile:[CEShaderDirectory() stringByAppendingPathComponent:@"BaseLightEffect.ceshader"]];
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:nil];
+    CEShaderFileInfo *test = [[CEShaderFileInfo alloc] initWithJsonDict:jsonDict];
+    NSLog(@"load shader: %.5f", CFAbsoluteTimeGetCurrent() - startTime);
     
 }
 
 
-- (void)testShaderFileParser {
-    CEShaderFileParser *parser = [[CEShaderFileParser alloc] initWithShaderName:@"BaseLightEffect"];
-    [parser parse];
+- (void)testParser {
+    CEShaderFileParser *parser = [CEShaderFileParser new];
+    NSString *vertexShader = [NSString stringWithContentsOfFile:[CEShaderDirectory() stringByAppendingPathComponent:@"BaseLightEffect.vert"]
+                                                       encoding:NSUTF8StringEncoding error:nil];
+    NSString *fragmentShader = [NSString stringWithContentsOfFile:[CEShaderDirectory() stringByAppendingPathComponent:@"BaseLightEffect.frag"]
+                                                         encoding:NSUTF8StringEncoding error:nil];
     
+    CEShaderFileInfo *fileInfo = [parser parseWithVertexShader:vertexShader fragmentShader:fragmentShader];
+    CEShaderFunctionInfo *testFunction = [fileInfo.vertexShaderFunctions lastObject];
+    NSDictionary *jsonDict = [testFunction jsonDict];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:jsonDict options:0 error:nil];
+    BOOL isOK = [data writeToFile:[self testFilePath] atomically:YES];
+    NSLog(isOK ? @"write ok" : @"write fail");
+}
+
+
+- (NSString *)testFilePath {
+    NSString *dir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    return [dir stringByAppendingPathComponent:@"test_ios"];
 }
 
 

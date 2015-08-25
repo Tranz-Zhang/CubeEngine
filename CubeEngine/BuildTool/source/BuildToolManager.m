@@ -8,6 +8,11 @@
 
 #import "BuildToolManager.h"
 #import "CEDirectoryDefines.h"
+#import "CEShaderFileParser.h"
+#import "CEShaderFunctionInfo.h"
+#import "CEShaderFileInfo.h"
+
+#define kShaderResourceDir @"CubeEngine/ShaderResources"
 
 @implementation BuildToolManager {
     NSFileManager *_fileManager;
@@ -25,20 +30,20 @@
 
 
 - (void)run {
-    if (!_appName.length || !_productDir.length) {
+    if (!_appName.length || !_buildProductDir.length) {
         return;
     }
-    _appPath = [_productDir stringByAppendingFormat:@"/%@.app", _appName];
-    if (![_fileManager fileExistsAtPath:_appPath isDirectory:nil]) {
-        printf("App doesn't exist at path: %s\n", [_appPath UTF8String]);
-        return;
-    }
+    _appPath = [_buildProductDir stringByAppendingFormat:@"/%@.app", _appName];
+//    if (![_fileManager fileExistsAtPath:_appPath isDirectory:nil]) {
+//        printf("App doesn't exist at path: %s\n", [_appPath UTF8String]);
+//        return;
+//    }
     
     if (![self createEngineDirectoryInApp]) {
         return;
     }
     
-    [self copyShaderResources];
+    [self processShaderResources];
 }
 
 
@@ -55,6 +60,56 @@
         
     } else {
         return YES;
+    }
+}
+
+
+- (void)processShaderResources {
+    printf(">> process shader resources...\n");
+    
+    // check shader directory in app
+    NSString *toDir = [_appPath stringByAppendingPathComponent:kShaderDirectory];
+    if (![_fileManager fileExistsAtPath:toDir isDirectory:nil]) {
+        BOOL isOK = [_fileManager createDirectoryAtPath:toDir
+                            withIntermediateDirectories:YES
+                                             attributes:nil
+                                                  error:nil];
+        printf(isOK ? "Create shader directory\n" : "Fail to create engine directory\n");
+        if (!isOK) return;
+    }
+    // remove existed shaders
+    NSArray *lastShaderFiles = [_fileManager contentsOfDirectoryAtPath:toDir error:nil];
+    for (NSString *fileName in lastShaderFiles) {
+        NSString *filePath = [toDir stringByAppendingPathComponent:fileName];
+        [_fileManager removeItemAtPath:filePath error:nil];
+    }
+    
+    NSString *fromDir = [_engineProjectDir stringByAppendingPathComponent:kShaderResourceDir];
+    NSArray * currentShaderFiles = [_fileManager contentsOfDirectoryAtPath:fromDir error:nil];
+    NSMutableSet *shaderNames = [NSMutableSet set];
+    for (NSString *fileName in currentShaderFiles) {
+        if ([fileName hasSuffix:@".vert"] || [fileName hasSuffix:@".frag"]) {
+            [shaderNames addObject:[fileName substringToIndex:fileName.length - 5]];
+        }
+    }
+    if (!shaderNames.count) {
+        printf("WARNING: process no shaders in Path:%s\n", [fromDir UTF8String]);
+        return;
+    }
+    
+    CEShaderFileParser *shaderFileParser = [CEShaderFileParser new];
+    for (NSString *shaderName in shaderNames) {
+        NSString *vertexFilePath = [fromDir stringByAppendingFormat:@"/%@.vert", shaderName];
+        NSString *vertexString = [NSString stringWithContentsOfFile:vertexFilePath encoding:NSUTF8StringEncoding error:nil];
+        NSString *fragmentFilePath = [fromDir stringByAppendingFormat:@"/%@.frag", shaderName];
+        NSString *fragmentString = [NSString stringWithContentsOfFile:fragmentFilePath encoding:NSUTF8StringEncoding error:nil];
+        
+        CEShaderFileInfo *fileInfo = [shaderFileParser parseWithVertexShader:vertexString
+                                                              fragmentShader:fragmentString];
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[fileInfo jsonDict]
+                                                           options:0 error:nil];
+        BOOL isOK = [jsonData writeToFile:[toDir stringByAppendingFormat:@"/%@.ceshader", shaderName] atomically:YES];
+        printf("process shader %s %s\n", [shaderName UTF8String], isOK ? "OK" : "Fail");
     }
 }
 
@@ -78,7 +133,7 @@
         [_fileManager removeItemAtPath:filePath error:nil];
     }
     
-    NSString *fromDir = [_engineSourceDir stringByAppendingString:ShaderResourceDir];
+    NSString *fromDir = [_engineProjectDir stringByAppendingPathComponent:kShaderResourceDir];
     NSArray * currentShaderFiles = [_fileManager contentsOfDirectoryAtPath:fromDir error:nil];
     if (!currentShaderFiles.count) {
         printf("WARNING: Copy no shaders in Path:%s\n", [fromDir UTF8String]);
