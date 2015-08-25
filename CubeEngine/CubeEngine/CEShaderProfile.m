@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderFileInfo.h"
+#import "CEShaderProfile.h"
 
 #define kCEJsonObjectKey_VTX_structs    @"vertexShaderStructs"
 #define kCEJsonObjectKey_VTX_variables  @"vertexShaderVariables"
@@ -17,7 +17,7 @@
 #define kCEJsonObjectKey_FRG_functions  @"fragmentShaderFunctions"
 
 
-@implementation CEShaderFileInfo
+@implementation CEShaderProfile
 
 - (instancetype)initWithJsonDict:(NSDictionary *)jsonDict {
     self = [super init];

@@ -1,20 +1,20 @@
 //
-//  CEShaderFileParser.m
+//  CEShaderProfileParser.m
 //  CubeEngine
 //
 //  Created by chance on 8/19/15.
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderFileParser.h"
+#import "CEShaderProfileParser.h"
 #import "CEShaderVariable.h"
 
-@implementation CEShaderFileParser
+@implementation CEShaderProfileParser
 
-- (CEShaderFileInfo *)parseWithVertexShader:(NSString *)vertexShaderString
+- (CEShaderProfile *)parseWithVertexShader:(NSString *)vertexShaderString
                              fragmentShader:(NSString *)fragmentShaderString {
     
-    CEShaderFileInfo *shaderInfo = [CEShaderFileInfo new];
+    CEShaderProfile *shaderInfo = [CEShaderProfile new];
     
     // parse vertex shader
     if (vertexShaderString.length) {

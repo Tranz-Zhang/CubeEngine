@@ -8,9 +8,9 @@
 
 #import "BuildToolManager.h"
 #import "CEDirectoryDefines.h"
-#import "CEShaderFileParser.h"
+#import "CEShaderProfileParser.h"
 #import "CEShaderFunctionInfo.h"
-#import "CEShaderFileInfo.h"
+#import "CEShaderProfile.h"
 
 #define kShaderResourceDir @"CubeEngine/ShaderResources"
 
@@ -97,14 +97,14 @@
         return;
     }
     
-    CEShaderFileParser *shaderFileParser = [CEShaderFileParser new];
+    CEShaderProfileParser *shaderFileParser = [CEShaderProfileParser new];
     for (NSString *shaderName in shaderNames) {
         NSString *vertexFilePath = [fromDir stringByAppendingFormat:@"/%@.vert", shaderName];
         NSString *vertexString = [NSString stringWithContentsOfFile:vertexFilePath encoding:NSUTF8StringEncoding error:nil];
         NSString *fragmentFilePath = [fromDir stringByAppendingFormat:@"/%@.frag", shaderName];
         NSString *fragmentString = [NSString stringWithContentsOfFile:fragmentFilePath encoding:NSUTF8StringEncoding error:nil];
         
-        CEShaderFileInfo *fileInfo = [shaderFileParser parseWithVertexShader:vertexString
+        CEShaderProfile *fileInfo = [shaderFileParser parseWithVertexShader:vertexString
                                                               fragmentShader:fragmentString];
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[fileInfo jsonDict]
                                                            options:0 error:nil];

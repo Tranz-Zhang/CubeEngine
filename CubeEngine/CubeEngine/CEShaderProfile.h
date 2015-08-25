@@ -1,5 +1,5 @@
 //
-//  TestCodingGroup.h
+//  CEShaderProfile.h
 //  CubeEngine
 //
 //  Created by chance on 8/24/15.
@@ -11,7 +11,7 @@
 #import "CEShaderFunctionInfo.h"
 #import "CEShaderVariableInfo.h"
 
-@interface CEShaderFileInfo : NSObject <CEJsonCoding>
+@interface CEShaderProfile : NSObject <CEJsonCoding>
 
 @property (nonatomic, strong) NSArray *vertexShaderStructs;     // struct declarations
 @property (nonatomic, strong) NSArray *vertexShaderVariables;   // list of CEShaderVariableInfo

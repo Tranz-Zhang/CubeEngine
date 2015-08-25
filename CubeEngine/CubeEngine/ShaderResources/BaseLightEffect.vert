@@ -16,5 +16,7 @@ void CEVertex_ApplyBaseLightEffect() {
     
     EyeDirectionOut = EyeDirection;
     Normal = normalize(NormalMatrix * VertexNormal);
+    
+#link CEFrag_ApplyShadowEffect();
 }
 

@@ -20,7 +20,7 @@ varying lowp vec3 EyeDirectionOut;
 varying lowp float Attenuation;
 varying lowp vec3 Normal;
 
-void  CEFrag_ApplyBaseLightEffect(vec4 inputColor, float Attenuation) {
+void  CEFrag_ApplyBaseLightEffect(vec4 inputColor) {
     lowp vec3 reflectDir = normalize(-reflect(LightDirection, normal));
     float diffuse = max(0.0, dot(normal, LightDirection));
     float specular = max(0.0, dot(reflectDir, EyeDirectionOut));

@@ -1,5 +1,5 @@
 //
-//  CEShaderFileParser.h
+//  CEShaderProfileParser.h
 //  CubeEngine
 //
 //  Created by chance on 8/19/15.
@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CEShaderFileInfo.h"
+#import "CEShaderProfile.h"
 #import "CEShaderFunctionInfo.h"
 #import "CEShaderVariableInfo.h"
 
 
 /**
- CEShaderFileParser
+ CEShaderProfileParser
  
  This parser will search the shader resources directory and find the the files that
  match {shaderName}.vert and {shaderName}.frag.
@@ -22,9 +22,9 @@
  shader files. The parse result store in CEShaderFileInfo.
  
  */
-@interface CEShaderFileParser : NSObject
+@interface CEShaderProfileParser : NSObject
 
-- (CEShaderFileInfo *)parseWithVertexShader:(NSString *)vertexShaderString
+- (CEShaderProfile *)parseWithVertexShader:(NSString *)vertexShaderString
                              fragmentShader:(NSString *)fragmentShaderString;
 
 @end

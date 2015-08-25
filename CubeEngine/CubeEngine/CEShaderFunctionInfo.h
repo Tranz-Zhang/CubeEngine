@@ -1,5 +1,5 @@
 //
-//  TestCodingObj.h
+//  CEShaderFunctionInfo.h
 //  CubeEngine
 //
 //  Created by chance on 8/24/15.

@@ -10,4 +10,10 @@
 
 @interface CEShaderBuildResult : NSObject
 
+@property (nonatomic, strong) NSDictionary *uniformDict;
+@property (nonatomic, strong) NSDictionary *attributeDict;
+
+@property (nonatomic, strong) NSString *vertexShader;
+@property (nonatomic, strong) NSString *fragmentShader;
+
 @end
