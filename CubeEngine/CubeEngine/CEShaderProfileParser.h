@@ -24,8 +24,7 @@
  */
 @interface CEShaderProfileParser : NSObject
 
-- (CEShaderProfile *)parseWithVertexShader:(NSString *)vertexShaderString
-                             fragmentShader:(NSString *)fragmentShaderString;
+- (CEShaderProfile *)parseShaderString:(NSString *)shaderString;
 
 @end
 

@@ -69,6 +69,7 @@
 
 - (void)onTestShaders {
     CEShaderBuilder *shaderBuilder = [CEShaderBuilder new];
+    [shaderBuilder startBuildingNewShader];
     [shaderBuilder build];
     
 }

@@ -8,13 +8,9 @@
 
 #import "CEShaderProfile.h"
 
-#define kCEJsonObjectKey_VTX_structs    @"vertexShaderStructs"
-#define kCEJsonObjectKey_VTX_variables  @"vertexShaderVariables"
-#define kCEJsonObjectKey_VTX_functions  @"vertexShaderFunctions"
-
-#define kCEJsonObjectKey_FRG_structs    @"fragmentShaderStructs"
-#define kCEJsonObjectKey_FRG_variables  @"fragmentShaderVariables"
-#define kCEJsonObjectKey_FRG_functions  @"fragmentShaderFunctions"
+#define kCEJsonObjectKey_structs    @"structs"
+#define kCEJsonObjectKey_variables  @"variables"
+#define kCEJsonObjectKey_function  @"function"
 
 
 @implementation CEShaderProfile
@@ -22,14 +18,9 @@
 - (instancetype)initWithJsonDict:(NSDictionary *)jsonDict {
     self = [super init];
     if (self) {
-        _vertexShaderStructs = jsonDict[kCEJsonObjectKey_VTX_structs];
-        _vertexShaderVariables = [self shaderVariablesFromJsonArray:jsonDict[kCEJsonObjectKey_VTX_variables]];
-        _vertexShaderFunctions = [self shaderFunctionsFromJsonArray:jsonDict[kCEJsonObjectKey_VTX_functions]];
-        
-        _fragmentShaderStructs = jsonDict[kCEJsonObjectKey_FRG_structs];
-        _fragmentShaderVariables = [self shaderVariablesFromJsonArray:jsonDict[kCEJsonObjectKey_FRG_variables]];
-        _fragmentShaderFunctions = [self shaderFunctionsFromJsonArray:jsonDict[kCEJsonObjectKey_FRG_functions]];
-        
+        _structs = jsonDict[kCEJsonObjectKey_structs];
+        _variables = [self shaderVariablesFromJsonArray:jsonDict[kCEJsonObjectKey_variables]];
+        _function = [[CEShaderFunctionInfo alloc] initWithJsonDict:jsonDict[kCEJsonObjectKey_function]];
     }
     return self;
 }
@@ -37,29 +28,20 @@
 
 - (NSDictionary *)jsonDict {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    if (_vertexShaderStructs.count) {
-        dict[kCEJsonObjectKey_VTX_structs] = _vertexShaderStructs;
+    if (_structs.count) {
+        dict[kCEJsonObjectKey_structs] = _structs;
     }
-    if (_vertexShaderVariables.count) {
-        dict[kCEJsonObjectKey_VTX_variables] = [self jsonArrayFromShaderVariables:_vertexShaderVariables];
+    if (_variables.count) {
+        dict[kCEJsonObjectKey_variables] = [self jsonArrayFromShaderVariables:_variables];
     }
-    if (_vertexShaderFunctions.count) {
-        dict[kCEJsonObjectKey_VTX_functions] = [self jsonArrayFromShaderFunctions:_vertexShaderFunctions];
-    }
-    
-    if (_fragmentShaderStructs.count) {
-        dict[kCEJsonObjectKey_FRG_structs] = _fragmentShaderStructs;
-    }
-    if (_fragmentShaderVariables.count) {
-        dict[kCEJsonObjectKey_FRG_variables] = [self jsonArrayFromShaderVariables:_fragmentShaderVariables];
-    }
-    if (_fragmentShaderFunctions.count) {
-        dict[kCEJsonObjectKey_FRG_functions] = [self jsonArrayFromShaderFunctions:_fragmentShaderFunctions];
+    if (_function) {
+        dict[kCEJsonObjectKey_function] = [_function jsonDict];
     }
     return [dict copy];
 }
 
 
+/*
 #pragma mark - parse CEShaderFunctionInfo
 - (NSArray *)shaderFunctionsFromJsonArray:(NSArray *)jsonArray {
     if (!jsonArray.count) return nil;
@@ -83,6 +65,7 @@
     }
     return [jsonArray copy];
 }
+//*/
 
 
 #pragma mark - parse CEShaderVariableInfo

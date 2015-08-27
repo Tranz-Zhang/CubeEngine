@@ -17,9 +17,12 @@
 
 #define ENABLE_DEBUG 1
 
+#define CE_SHADER_STRING(text) @ #text
+
+
 // commandLine: BuildTool -app ${PRODUCT_NAME} -buildDirectory ${BUILT_PRODUCTS_DIR} -engineDirectory ${SRCROOT}/../CubeEngine
 int main(int argc, const char * argv[]) {
-    @autoreleasepool {
+    @autoreleasepool {        
         NSMutableArray *appNameComponents = [NSMutableArray array];
         NSMutableArray *buildDirComponents = [NSMutableArray array];
         NSMutableArray *engineDirComponents = [NSMutableArray array];
@@ -53,17 +56,25 @@ int main(int argc, const char * argv[]) {
                     break;
             }
         }
-        
+        printf("\n============== BuildTool ==============\n");
         if (appNameComponents.count && buildDirComponents.count && engineDirComponents.count) {
+            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+            
             BuildToolManager *manager =  [BuildToolManager new];
             manager.appName = [appNameComponents componentsJoinedByString:@" "];
             manager.buildProductDir = [[buildDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
             manager.engineProjectDir = [[engineDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
             [manager run];
             
+            printf("BuildTool finish with duration: %.2fs\n", CFAbsoluteTimeGetCurrent() - startTime);
+            
         } else {
-            printf("ERROR: Fail to run BuildTool\n");
+            printf("ERROR: Fail to run BuildTool, checking params:\nappName: %s\nbuildDirectory: %s\nengineDirectory: %s\n",
+                   appNameComponents.count ? "OK" : "Fail",
+                   buildDirComponents.count ? "OK" : "Fail",
+                   engineDirComponents.count ? "OK" : "Fail");
         }
+        printf("\n====================================\n");
     }
     return 0;
 }

@@ -44,5 +44,19 @@
 }
 
 
+- (BOOL)isEqual:(CEShaderVariableInfo *)object {
+    return (self == object &&
+            [_name isEqualToString:object.name] &&
+            [_type isEqualToString:object.type] &&
+            [_precision isEqualToString:object.precision] &&
+            _usage == object.usage);
+}
+
+
+- (NSUInteger)hash {
+    return [[NSString stringWithFormat:@"%@%@%@%d", _name, _type, _precision, _usage] hash];
+}
+
+
 @end
 

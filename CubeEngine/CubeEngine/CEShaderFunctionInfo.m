@@ -10,6 +10,8 @@
 
 #define kCEJsonObjectKey_functionID @"functionID"
 #define kCEJsonObjectKey_functionContent @"functionContent"
+#define kCEJsonObjectKey_paramNames @"paramNames"
+#define kCEJsonObjectKey_paramLocations @"paramLocations"
 #define kCEJsonObjectKey_linkFunctionDict @"linkFunctionDict"
 
 
@@ -20,7 +22,18 @@
     if (self) {
         _functionID = jsonDict[kCEJsonObjectKey_functionID];
         _functionContent = jsonDict[kCEJsonObjectKey_functionContent];
-        _linkFunctionDict = jsonDict[kCEJsonObjectKey_linkFunctionDict];
+        _paramNames = jsonDict[kCEJsonObjectKey_paramNames];
+        _paramLocations = jsonDict[kCEJsonObjectKey_paramLocations];
+        
+        NSMutableDictionary *tempDict = [NSMutableDictionary dictionary];
+        NSDictionary *linkFunctionDict = jsonDict[kCEJsonObjectKey_linkFunctionDict];
+        [linkFunctionDict enumerateKeysAndObjectsUsingBlock:^(NSString *functionID, NSDictionary *dict, BOOL *stop) {
+            CEShaderLinkFunctionInfo *linkFunction = [[CEShaderLinkFunctionInfo alloc] initWithJsonDict:dict];
+            tempDict[functionID] = linkFunction;
+        }];
+        if (tempDict.count) {
+            _linkFunctionDict = tempDict.copy;
+        }
     }
     return self;
 }
@@ -34,9 +47,20 @@
     if (_functionContent.length) {
         dict[kCEJsonObjectKey_functionContent] = _functionContent;
     }
-    if (_linkFunctionDict.count) {
-        dict[kCEJsonObjectKey_linkFunctionDict] = _linkFunctionDict;
+    if (_paramNames.count) {
+        dict[kCEJsonObjectKey_paramNames] = _paramNames;
     }
+    if (_paramLocations.count) {
+        dict[kCEJsonObjectKey_paramLocations] = _paramLocations;
+    }
+    if (_linkFunctionDict.count) {
+        NSMutableDictionary *tempDict = [NSMutableDictionary dictionary];
+        [_linkFunctionDict enumerateKeysAndObjectsUsingBlock:^(NSString *functionID, CEShaderLinkFunctionInfo *linkFunction, BOOL *stop) {
+            tempDict[functionID] = [linkFunction jsonDict];
+        }];
+        dict[kCEJsonObjectKey_linkFunctionDict] = tempDict.copy;
+    }
+    
     return [dict copy];
 }
 

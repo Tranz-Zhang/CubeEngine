@@ -72,7 +72,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "${BUILT_PRODUCTS_DIR}"
+            argument = "${SRCROOT}/BuildTool/"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

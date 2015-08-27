@@ -24,5 +24,8 @@ typedef NS_ENUM(int, CEShaderVariableUsage) {
 @property (nonatomic, strong) NSString *precision;
 @property (nonatomic, assign) CEShaderVariableUsage usage;
 
+- (BOOL)isEqual:(CEShaderVariableInfo *)object;
+- (NSUInteger)hash;
+
 @end
 

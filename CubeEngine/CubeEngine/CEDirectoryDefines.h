@@ -10,7 +10,7 @@
 #define CubeEngine_CEEngineDirectoryDefines_h
 
 #define kEngineDirectory  @"Engine"
-#define kShaderDirectory  @"Engine/Shaders"
+#define kShaderDirectory  @"Engine/ShaderProfiles"
 #define kModelDirectory   @"Engine/Models"
 
 
