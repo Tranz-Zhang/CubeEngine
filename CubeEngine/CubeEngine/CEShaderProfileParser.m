@@ -59,8 +59,16 @@
         NSString *declaration = [shaderString substringWithRange:NSMakeRange(result.range.location, result.range.length - 1)];
         CEShaderVariableInfo *variable = [self variableInfoWithDeclaration:declaration];
         if (variable) {
-            variable.usage = CEShaderVariableUsageAttribute;
-            [attributes addObject:variable];
+            if (variable.type == CEShaderVariableFloat ||
+                variable.type == CEShaderVariableVector2 ||
+                variable.type == CEShaderVariableVector3 ||
+                variable.type == CEShaderVariableVector4) {
+                variable.usage = CEShaderVariableUsageAttribute;
+                [attributes addObject:variable];
+                
+            } else {
+                printf("WARNING: Unsupported attribute: %s\n", [declaration UTF8String]);
+            }
         }
     }
     return attributes.copy;
@@ -95,14 +103,20 @@
     CEShaderVariableInfo *variableInfo = [CEShaderVariableInfo new];
     if (components.count == 3) {
         variableInfo.precision = kCEPrecisionDefault;
-        variableInfo.type = components[1];
+        variableInfo.type = CEShaderVariableTypeFromString(components[1]);
         variableInfo.name = components[2];
         
     } else {
         variableInfo.precision = components[1];
-        variableInfo.type = components[2];
+        variableInfo.type = CEShaderVariableTypeFromString(components[2]);
         variableInfo.name = components[3];
     }
+    
+    if (variableInfo.type == CEShaderVariableUnknown) {
+        printf("WARNING: Unknown variable type for declaration: %s\n", [declarationString UTF8String]);
+        return nil;
+    }
+    
     return variableInfo;
 }
 

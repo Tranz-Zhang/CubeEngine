@@ -8,6 +8,7 @@
 
 #import "CEShaderAttribute.h"
 #import "CEShaderVariable_privates.h"
+#import "CEDefines.h"
 
 @implementation CEShaderAttribute {
     BOOL _enabled;
@@ -33,7 +34,7 @@
     }
     
     if (_index < 0) {
-        CEWarning(@"Fail to setup tangent attribute");
+        NSLog(@"Fail to setup tangent attribute");
         return;
     }
     if (!attribute) {
@@ -44,7 +45,7 @@
     } else if (attribute.name != CEVBOAttributeTangent ||
                attribute.primaryCount <= 0 ||
                attribute.elementStride <= 0) {
-        CEWarning(@"Fail to setup texture attribute");
+        NSLog(@"Fail to setup texture attribute");
         return;
     }
     

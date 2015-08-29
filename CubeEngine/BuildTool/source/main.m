@@ -22,7 +22,13 @@
 
 // commandLine: BuildTool -app ${PRODUCT_NAME} -buildDirectory ${BUILT_PRODUCTS_DIR} -engineDirectory ${SRCROOT}/../CubeEngine
 int main(int argc, const char * argv[]) {
-    @autoreleasepool {        
+    @autoreleasepool {
+        NSString *test1 = [NSString stringWithFormat:@"%@_%@", [NSString stringWithFormat:@"1"], @"2"];
+        NSString *test2 = [NSString stringWithFormat:@"%@_%@", [NSString stringWithFormat:@"1"], @"2"];
+        if (test1.hash == test2.hash) {
+            NSLog(@"");
+        }
+        
         NSMutableArray *appNameComponents = [NSMutableArray array];
         NSMutableArray *buildDirComponents = [NSMutableArray array];
         NSMutableArray *engineDirComponents = [NSMutableArray array];

@@ -8,6 +8,7 @@
 
 #import "CEShaderBuilder.h"
 #import "CEShaderProfile.h"
+#import "CEShaderVariable_privates.h"
 
 #if TARGET_OS_IPHONE
 #import "CEUtils.h"
@@ -77,8 +78,43 @@ NSString *CEShaderDirectory() {
                                                attributes:attributes
                                                  uniforms:uniforms
                                                  varyings:varyings];
+    
+    
+    NSMutableString *variablesString = [NSMutableString string];
+    if (attributes.count) {
+        [variablesString appendFormat:@"// attributes\n"];
+        [self processVariableInfos:attributes toShaderString:variablesString];
+    }
+    if (uniforms.count) {
+        [variablesString appendFormat:@"\n// uniforms\n"];
+        [self processVariableInfos:uniforms toShaderString:variablesString];
+    }
+    if (varyings.count) {
+        [variablesString appendFormat:@"\n// varyings\n"];
+        [self processVariableInfos:varyings toShaderString:variablesString];
+    }
+    
+    printf("variablesString:\n%s\n", [variablesString UTF8String]);
     printf("Resut:\n%s\n\nbuild duration: %.5f\n", [vertexShader UTF8String], CFAbsoluteTimeGetCurrent() - startTime);
+    
     return nil;
+}
+
+
+- (NSArray *)processVariableInfos:(NSArray *)variableInfos toShaderString:(NSMutableString *)shaderString {
+    NSMutableSet *tempSet = [NSMutableSet set]; // used for removing duplicated variable
+    NSMutableArray *variables = [NSMutableArray arrayWithCapacity:variableInfos.count];
+    for (CEShaderVariableInfo *variableInfo in variableInfos) {
+        if ([tempSet containsObject:@(variableInfo.hash)]) continue;
+        [tempSet addObject:@(variableInfo.hash)];
+        
+        // append variableDeclaration to shaderString
+        CEShaderVariable *shaderVariable = [variableInfo toShaderVariable];
+#error Error declaration for varying variables
+        [shaderString appendFormat:@"%@\n", [shaderVariable declaration]];
+        [variables addObject:shaderVariable];
+    }
+    return variables.copy;
 }
 
 
