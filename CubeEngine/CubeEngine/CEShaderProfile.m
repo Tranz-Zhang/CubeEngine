@@ -7,6 +7,7 @@
 //
 
 #import "CEShaderProfile.h"
+#import "CEShaderProfile__setter.h"
 
 #define kCEJsonObjectKey_structs    @"structs"
 #define kCEJsonObjectKey_variables  @"variables"
@@ -18,8 +19,26 @@
 - (instancetype)initWithJsonDict:(NSDictionary *)jsonDict {
     self = [super init];
     if (self) {
-        _structs = jsonDict[kCEJsonObjectKey_structs];
-        _variables = [self shaderVariablesFromJsonArray:jsonDict[kCEJsonObjectKey_variables]];
+        NSArray *jsonArray = jsonDict[kCEJsonObjectKey_structs];
+        if (jsonArray.count) {
+            NSMutableArray *structs = [NSMutableArray arrayWithCapacity:jsonArray.count];
+            for (NSDictionary *structDict in jsonArray) {
+                CEShaderStructInfo *structInfo = [[CEShaderStructInfo alloc] initWithJsonDict:structDict];
+                [structs addObject:structInfo];
+            }
+            _structs = structs.copy;
+        }
+        
+        jsonArray = jsonDict[kCEJsonObjectKey_variables];
+        if (jsonArray.count) {
+            NSMutableArray *variables = [NSMutableArray arrayWithCapacity:jsonArray.count];
+            for (NSDictionary *variableDict in jsonArray) {
+                CEShaderVariableInfo *variableInfo = [[CEShaderVariableInfo alloc] initWithJsonDict:variableDict];
+                [variables addObject:variableInfo];
+            }
+            _variables = variables.copy;
+        }
+        
         _function = [[CEShaderFunctionInfo alloc] initWithJsonDict:jsonDict[kCEJsonObjectKey_function]];
     }
     return self;
@@ -29,17 +48,37 @@
 - (NSDictionary *)jsonDict {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     if (_structs.count) {
-        dict[kCEJsonObjectKey_structs] = _structs;
+        NSMutableArray *jsonArray = [NSMutableArray arrayWithCapacity:_structs.count];
+        for (CEShaderStructInfo *structInfo in _structs) {
+            NSDictionary *jsonDict = [structInfo jsonDict];
+            if (jsonDict) {
+                [jsonArray addObject:jsonDict];
+            }
+        }
+        dict[kCEJsonObjectKey_structs] = jsonArray.copy;
     }
+    
     if (_variables.count) {
-        dict[kCEJsonObjectKey_variables] = [self jsonArrayFromShaderVariables:_variables];
+        NSMutableArray *jsonArray = [NSMutableArray arrayWithCapacity:_variables.count];
+        for (CEShaderVariableInfo *variableInfo in _variables) {
+            NSDictionary *jsonDict = [variableInfo jsonDict];
+            if (jsonDict) {
+                [jsonArray addObject:jsonDict];
+            }
+        }
+        dict[kCEJsonObjectKey_variables] = jsonArray.copy;
     }
+    
     if (_function) {
         dict[kCEJsonObjectKey_function] = [_function jsonDict];
     }
     return [dict copy];
 }
 
+
+- (NSString *)description {
+    return [[self jsonDict] description];
+}
 
 /*
 #pragma mark - parse CEShaderFunctionInfo
@@ -65,7 +104,7 @@
     }
     return [jsonArray copy];
 }
-//*/
+
 
 
 #pragma mark - parse CEShaderVariableInfo
@@ -91,6 +130,6 @@
     }
     return [jsonArray copy];
 }
-
+//*/
 
 @end

@@ -8,6 +8,11 @@
 
 #import "CEShaderProfileParser.h"
 #import "CEShaderVariable.h"
+#import "CEShaderVariableInfo_setter.h"
+#import "CEShaderStructInfo_setter.h"
+#import "CEShaderProfile__setter.h"
+#import "CEShaderFunctionInfo_setter.h"
+#import "CEShaderLinkFunctionInfo_setter.h"
 
 @implementation CEShaderProfileParser
 
@@ -41,7 +46,7 @@
         NSString *declaration = [shaderString substringWithRange:NSMakeRange(result.range.location, result.range.length - 1)];
         CEShaderVariableInfo *variable = [self variableInfoWithDeclaration:declaration];
         if (variable) {
-            variable.usage = CEShaderVariableUsageUniform;
+//            variable.usage = CEShaderVariableUsageUniform;
             [uniforms addObject:variable];
         }
     }
@@ -59,11 +64,11 @@
         NSString *declaration = [shaderString substringWithRange:NSMakeRange(result.range.location, result.range.length - 1)];
         CEShaderVariableInfo *variable = [self variableInfoWithDeclaration:declaration];
         if (variable) {
-            if (variable.type == CEShaderVariableFloat ||
-                variable.type == CEShaderVariableVector2 ||
-                variable.type == CEShaderVariableVector3 ||
-                variable.type == CEShaderVariableVector4) {
-                variable.usage = CEShaderVariableUsageAttribute;
+            if ([variable.type isEqualToString:@"float"] ||
+                [variable.type isEqualToString:@"vec2"] ||
+                [variable.type isEqualToString:@"vec3"] ||
+                [variable.type isEqualToString:@"vec4"]) {
+//                variable.usage = CEShaderVariableUsageAttribute;
                 [attributes addObject:variable];
                 
             } else {
@@ -85,39 +90,11 @@
         NSString *declaration = [shaderString substringWithRange:NSMakeRange(result.range.location, result.range.length - 1)];
         CEShaderVariableInfo *variable = [self variableInfoWithDeclaration:declaration];
         if (variable) {
-            variable.usage = CEShaderVariableUsageVarying;
+//            variable.usage = CEShaderVariableUsageVarying;
             [varyings addObject:variable];
         }
     }
     return varyings.copy;
-}
-
-
-// @"attribute lowp vec3 VertexNormal" -> CEShaderVariableInfo
-- (CEShaderVariableInfo *)variableInfoWithDeclaration:(NSString *)declarationString {
-    NSMutableArray *components = [[declarationString componentsSeparatedByString:@" "] mutableCopy];
-    [components removeObject:@""];
-    if (components.count < 3) {
-        return nil;
-    }
-    CEShaderVariableInfo *variableInfo = [CEShaderVariableInfo new];
-    if (components.count == 3) {
-        variableInfo.precision = kCEPrecisionDefault;
-        variableInfo.type = CEShaderVariableTypeFromString(components[1]);
-        variableInfo.name = components[2];
-        
-    } else {
-        variableInfo.precision = components[1];
-        variableInfo.type = CEShaderVariableTypeFromString(components[2]);
-        variableInfo.name = components[3];
-    }
-    
-    if (variableInfo.type == CEShaderVariableUnknown) {
-        printf("WARNING: Unknown variable type for declaration: %s\n", [declarationString UTF8String]);
-        return nil;
-    }
-    
-    return variableInfo;
 }
 
 
@@ -126,7 +103,7 @@
     NSArray *results = [regex matchesInString:shaderString options:0 range:NSMakeRange(0, shaderString.length)];
     if (!results.count) return nil;
     
-    NSMutableArray *structDeclarations = [NSMutableArray arrayWithCapacity:results.count];
+    NSMutableDictionary *structDict = [NSMutableDictionary dictionaryWithCapacity:results.count];
     for (NSTextCheckingResult *result in results) {
         NSRange searchRange = NSMakeRange(NSMaxRange(result.range), shaderString.length - NSMaxRange(result.range));
         NSRange resultRange = [shaderString rangeOfString:@"}" options:0 range:searchRange];
@@ -135,12 +112,46 @@
                                               NSMaxRange(resultRange) - result.range.location);
             if (NSMaxRange(structRange) <= shaderString.length) {
                 NSString *structString = [shaderString substringWithRange:structRange];
-                [structDeclarations addObject:[structString stringByAppendingString:@";"]];
+                // get sturct name
+                NSString *structHeader = [shaderString substringWithRange:result.range];
+                NSArray *headerComponents = [structHeader componentsSeparatedByString:@" "];
+                NSString *structName = headerComponents.lastObject;
+                if (structString.length && structName.length) {
+                    structDict[structName] = [structString stringByAppendingString:@";"];
+                }
             }
         }
     }
     
-    return structDeclarations.copy;
+    // parse struct decaration to CEShaderStructInfo
+    NSMutableArray *structInfos = [NSMutableArray arrayWithCapacity:structDict.count];
+    [structDict enumerateKeysAndObjectsUsingBlock:^(NSString *structName, NSString *structString, BOOL *stop) {
+        // parse struct variables
+        NSRegularExpression *regex = [self structVariableRegex];
+        NSArray *results = [regex matchesInString:structString options:0 range:NSMakeRange(0, structString.length)];
+        NSMutableArray *variableInfos = [NSMutableArray arrayWithCapacity:results.count];
+        for (NSTextCheckingResult *result in results) {
+            NSString *variableDeclaration = [structString substringWithRange:NSMakeRange(result.range.location, result.range.length - 1)];
+            CEShaderVariableInfo *info = [self variableInfoWithDeclaration:variableDeclaration];
+            if (info) {
+                [variableInfos addObject:info];
+            }
+        }
+        
+        CEShaderStructInfo *structInfo = [CEShaderStructInfo new];
+        structInfo.name = structName;
+        structInfo.variables = variableInfos.copy;
+        // calculate hash value
+        NSMutableString *hashString = [NSMutableString stringWithFormat:@"%@:", structName];
+        for (CEShaderVariableInfo *variableInfo in variableInfos) {
+            [hashString appendFormat:@"%d_%@_%@_%@;", (int)variableInfo.usage, variableInfo.precision,
+             variableInfo.type, variableInfo.name];
+        }
+        structInfo.structID = [hashString hash];
+        [structInfos addObject:structInfo];
+    }];
+    
+    return structInfos.copy;
 }
 
 
@@ -216,18 +227,21 @@
             *stop = YES;
         }
     }];
+    
     // get functionID
-    NSMutableString *functionID = functionName.mutableCopy;
     NSRange startBracketRange = [functionString rangeOfString:@"("];
     NSRange endBracketRange = [functionString rangeOfString:@")"];
     NSString *paramString = [functionString substringWithRange:NSMakeRange(NSMaxRange(startBracketRange), endBracketRange.location - NSMaxRange(startBracketRange))];
     NSArray *params = [paramString componentsSeparatedByString:@","];
+    NSMutableArray *paramIDs = [NSMutableArray arrayWithCapacity:params.count];
     for (NSString *paramDeclaration in params) {
         NSString *paramID = [self getParamID:paramDeclaration];
         if (paramID.length) {
-            [functionID appendFormat:@"_%@", paramID];
+            [paramIDs addObject:paramID];
         }
     }
+    NSMutableString *functionID = functionName.mutableCopy;
+    [functionID appendFormat:@"(%@)", [paramIDs componentsJoinedByString:@","]];
     functionInfo.functionID = functionID.copy;
     
     // get function paramNames
@@ -275,16 +289,16 @@
         // get function name
         NSRange startBracketRange = [linkDecleration rangeOfString:@"("];
         if (startBracketRange.location == NSNotFound) continue;
-        NSString *functionName = [linkDecleration substringWithRange:NSMakeRange(5, startBracketRange.location - 5)];
-        functionName = [functionName stringByReplacingOccurrencesOfString:@" " withString:@""];
+        NSString *linkFunctionName = [linkDecleration substringWithRange:NSMakeRange(5, startBracketRange.location - 5)];
+        linkFunctionName = [linkFunctionName stringByReplacingOccurrencesOfString:@" " withString:@""];
         
         // get function params
-        NSMutableString *linkFunctionID = [functionName mutableCopy];
         NSRange endBracketRange = [linkDecleration rangeOfString:@")" options:NSBackwardsSearch];
         if (endBracketRange.location == NSNotFound) continue;
         NSString *paramContent = [linkDecleration substringWithRange:NSMakeRange(NSMaxRange(startBracketRange), endBracketRange.location - NSMaxRange(startBracketRange))];
         paramContent = [paramContent stringByReplacingOccurrencesOfString:@" " withString:@""];
         NSArray *params = [paramContent componentsSeparatedByString:@","];
+        NSMutableArray *paramIDs = [NSMutableArray arrayWithCapacity:params.count];
         for (NSString *param in params) {
             if (!param.length) continue;
             NSString *regexPattern = [NSString stringWithFormat:@"\\w+\\s+%@(\\s*\\[\\w\\]|)", param];
@@ -294,15 +308,17 @@
                 NSString *paramDeclaration = [shaderString substringWithRange:result.range];
                 NSString *paramID = [self getParamID:paramDeclaration];
                 if (paramID.length) {
-                    [linkFunctionID appendFormat:@"_%@", paramID];
+                    [paramIDs addObject:paramID];
                 }
             }
         }
+        NSMutableString *linkFunctionID = linkFunctionName.mutableCopy;
+        [linkFunctionID appendFormat:@"(%@)", [paramIDs componentsJoinedByString:@","]];
         CEShaderLinkFunctionInfo *linkFunctionInfo = [CEShaderLinkFunctionInfo new];
-        linkFunctionInfo.functionID = linkFunctionID;
+        linkFunctionInfo.functionID = linkFunctionID.copy;
         linkFunctionInfo.paramNames = params;
         linkFunctionInfo.linkRange = result.range;
-        linkFunctionDict[linkFunctionID] = linkFunctionInfo;
+        linkFunctionDict[linkFunctionInfo.functionID] = linkFunctionInfo;
     }
     functionInfo.linkFunctionDict = linkFunctionDict.copy;
     
@@ -360,6 +376,59 @@
 }
 
 
+// @"attribute lowp vec3 VertexNormal" -> CEShaderVariableInfo
+- (CEShaderVariableInfo *)variableInfoWithDeclaration:(NSString *)declarationString {
+    NSMutableArray *components = [[declarationString componentsSeparatedByString:@" "] mutableCopy];
+    [components removeObject:@""];
+    
+    CEShaderVariableUsage usage = CEShaderVariableUsageFromString(components[0]);
+    if ((usage == CEShaderVariableUsageNone && components.count < 2) ||
+        (usage != CEShaderVariableUsageNone && components.count < 3)) {
+        return nil;
+    }
+    
+    CEShaderVariableInfo *variableInfo = [CEShaderVariableInfo new];
+    variableInfo.usage = usage;
+    
+    if (usage != CEShaderVariableUsageNone) {
+        // attribute uniform varying variables
+        if (components.count == 3) {
+            variableInfo.precision = kCEPrecisionDefault;
+            variableInfo.type = components[1];
+            variableInfo.name = components[2];
+            
+        } else {
+            variableInfo.precision = components[1];
+            variableInfo.type = components[2];
+            variableInfo.name = components[3];
+        }
+        
+    } else {
+        // normal variable
+        if (components.count == 2) {
+            variableInfo.precision = kCEPrecisionDefault;
+            variableInfo.type = components[0];
+            variableInfo.name = components[1];
+            
+        } else {
+            variableInfo.precision = components[0];
+            variableInfo.type = components[1];
+            variableInfo.name = components[2];
+        }
+    }
+    if ([variableInfo.type isEqualToString:@"void"] ||
+        [variableInfo.type isEqualToString:@"bool"] ||
+        [variableInfo.type isEqualToString:@"sampler2D"] ||
+        [variableInfo.type isEqualToString:@"samplerCube"]) {
+        variableInfo.precision = nil;
+    }
+    variableInfo.variableID = [[NSString stringWithFormat:@"%d_%@_%@_%@",
+                               (int)variableInfo.usage, variableInfo.precision,
+                               variableInfo.type, variableInfo.name] hash];
+    return variableInfo;
+}
+
+
 #pragma mark - Regex
 
 - (NSRegularExpression *)uniformRegex {
@@ -367,7 +436,7 @@
     if (!sUniformRegex) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            sUniformRegex = [NSRegularExpression regularExpressionWithPattern:@"uniform\\s*(\\w*\\s*){1,2}\\w*;" options:0 error:nil];
+            sUniformRegex = [NSRegularExpression regularExpressionWithPattern:@"uniform\\s+(\\w+\\s+){1,2}\\w+;" options:0 error:nil];
         });
     }
     return sUniformRegex;
@@ -379,7 +448,7 @@
     if (!sAttributeRegex) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            sAttributeRegex = [NSRegularExpression regularExpressionWithPattern:@"attribute\\s*(\\w*\\s*){1,2}\\w*;" options:0 error:nil];
+            sAttributeRegex = [NSRegularExpression regularExpressionWithPattern:@"attribute\\s+(\\w+\\s+){1,2}\\w+;" options:0 error:nil];
         });
     }
     return sAttributeRegex;
@@ -391,7 +460,7 @@
     if (!sVaryingRegex) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            sVaryingRegex = [NSRegularExpression regularExpressionWithPattern:@"varying\\s*(\\w*\\s*){1,2}\\w*;" options:0 error:nil];
+            sVaryingRegex = [NSRegularExpression regularExpressionWithPattern:@"varying\\s+(\\w+\\s+){1,2}\\w+;" options:0 error:nil];
         });
     }
     return sVaryingRegex;
@@ -410,12 +479,24 @@
 }
 
 
+- (NSRegularExpression *)structVariableRegex {
+    static NSRegularExpression *sStructVariableRegex = nil;
+    if (!sStructVariableRegex) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            sStructVariableRegex = [NSRegularExpression regularExpressionWithPattern:@"(\\w+\\s+)?(vec\\d|float|mat\\d|int|bool)\\s\\w+;" options:0 error:nil];
+        });
+    }
+    return sStructVariableRegex;
+}
+
+
 - (NSRegularExpression *)functionNameRegex {
     static NSRegularExpression *sFunctionNameRegex = nil;
     if (!sFunctionNameRegex) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            sFunctionNameRegex = [NSRegularExpression regularExpressionWithPattern:@"void\\s*\\w*\\s*\\(.*\\)" options:0 error:nil];
+            sFunctionNameRegex = [NSRegularExpression regularExpressionWithPattern:@"void\\s+\\w+\\s*\\(.*\\)" options:0 error:nil];
         });
     }
     return sFunctionNameRegex;
@@ -427,7 +508,7 @@
     if (!sLinkFunctionRegex) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            sLinkFunctionRegex = [NSRegularExpression regularExpressionWithPattern:@"#link\\s\\w*\\(.*\\)(;|)" options:0 error:nil];
+            sLinkFunctionRegex = [NSRegularExpression regularExpressionWithPattern:@"#link\\s+\\w+\\(.*\\)(;|)" options:0 error:nil];
         });
     }
     return sLinkFunctionRegex;

@@ -9,12 +9,11 @@
 #import "CEShaderBuilder.h"
 #import "CEShaderProfile.h"
 #import "CEShaderVariable_privates.h"
+#import "CEShaderBuildProfileResult.h"
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 #import "CEUtils.h"
-#endif
-
-#if TARGET_OS_MAC
+#else
 NSString *CEShaderDirectory() {
     return @"/Users/chance/My Development/cube-engine/CubeEngine/BuildTool/Debug.app/Engine/ShaderProfiles";
 }
@@ -41,16 +40,6 @@ NSString *CEShaderDirectory() {
     [_vertexProfileDict removeAllObjects];
     [_fragmentProfileDict removeAllObjects];
     
-    // add main profile
-    CEShaderProfile *mainVertexProfile = [self shaderProfileWithName:@"Main.vert.profile"];
-    if (mainVertexProfile) {
-        _vertexProfileDict[mainVertexProfile.function.functionID] = mainVertexProfile;
-    }
-    CEShaderProfile *mainFragmentProfile = [self shaderProfileWithName:@"Main.frag.profile"];
-    if (mainFragmentProfile) {
-        _fragmentProfileDict[mainFragmentProfile.function.functionID] = mainFragmentProfile;
-    }
-    
     // add test function profile and test
     CEShaderProfile *test1 = [self shaderProfileWithName:@"TestFunction1.vert.profile"];
     _vertexProfileDict[test1.function.functionID] = test1;
@@ -63,78 +52,94 @@ NSString *CEShaderDirectory() {
 
 - (CEShaderBuildResult *)build {
     
+    CEShaderProfile *mainVertexProfile = [self shaderProfileWithName:@"Main.vert.profile"];
+    CEShaderProfile *mainFragmentProfile = [self shaderProfileWithName:@"Main.frag.profile"];
+    if (!mainVertexProfile || !mainFragmentProfile) {
+        return nil;
+    }
+    
+    NSMutableSet *outputVariables = [NSMutableSet set];
+    
+    // build vertex shader
     NSDictionary *vertexProfilePool = [_vertexProfileDict copy];
-    CEShaderProfile *vertexMainProfile = vertexProfilePool[@"main"];
+    CEShaderBuildProfileResult *vertexResult = [CEShaderBuildProfileResult new];
+    [self buildProfile:mainVertexProfile withProfilePool:vertexProfilePool result:vertexResult];
+    NSString *vertexVariableDeclaration = [self variableDeclarationStringWithProfileResult:vertexResult];
+    NSString *vertexShaderString = [NSString stringWithFormat:@"%@void main() %@", vertexVariableDeclaration, vertexResult.shaderString];
+    [outputVariables addObjectsFromArray:vertexResult.attributes];
+    [outputVariables addObjectsFromArray:vertexResult.uniforms];
     
-    NSMutableArray *attributes = [NSMutableArray array];
-    NSMutableArray *uniforms = [NSMutableArray array];
-    NSMutableArray *varyings = [NSMutableArray array];
-    NSMutableArray *structs = [NSMutableArray array];
+    // build fragment shader
+    NSDictionary *fragmentProfilePool = [_fragmentProfileDict copy];
+    CEShaderBuildProfileResult *fragmentResult = [CEShaderBuildProfileResult new];
+    [self buildProfile:mainFragmentProfile withProfilePool:fragmentProfilePool result:fragmentResult];
+    NSString *fragmentVariableDeclaration = [self variableDeclarationStringWithProfileResult:fragmentResult];
+    NSString *fragmentShaderString = [NSString stringWithFormat:@"%@void main() %@", fragmentVariableDeclaration, fragmentResult.shaderString];
+    [outputVariables addObjectsFromArray:fragmentResult.attributes];
+    [outputVariables addObjectsFromArray:fragmentResult.uniforms];
     
-    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    NSString *vertexShader = [self buildShaderWithProfile:vertexMainProfile
-                                              profilePool:vertexProfilePool
-                                                  structs:structs
-                                               attributes:attributes
-                                                 uniforms:uniforms
-                                                 varyings:varyings];
-    
-    
-    NSMutableString *variablesString = [NSMutableString string];
-    if (attributes.count) {
-        [variablesString appendFormat:@"// attributes\n"];
-        [self processVariableInfos:attributes toShaderString:variablesString];
-    }
-    if (uniforms.count) {
-        [variablesString appendFormat:@"\n// uniforms\n"];
-        [self processVariableInfos:uniforms toShaderString:variablesString];
-    }
-    if (varyings.count) {
-        [variablesString appendFormat:@"\n// varyings\n"];
-        [self processVariableInfos:varyings toShaderString:variablesString];
-    }
-    
-    printf("variablesString:\n%s\n", [variablesString UTF8String]);
-    printf("Resut:\n%s\n\nbuild duration: %.5f\n", [vertexShader UTF8String], CFAbsoluteTimeGetCurrent() - startTime);
+    printf("================ vertexShader ================\n%s\n", [vertexShaderString UTF8String]);
+    printf("================ fragmentShader ================\n%s\n", [fragmentShaderString UTF8String]);
     
     return nil;
 }
 
 
-- (NSArray *)processVariableInfos:(NSArray *)variableInfos toShaderString:(NSMutableString *)shaderString {
-    NSMutableSet *tempSet = [NSMutableSet set]; // used for removing duplicated variable
-    NSMutableArray *variables = [NSMutableArray arrayWithCapacity:variableInfos.count];
-    for (CEShaderVariableInfo *variableInfo in variableInfos) {
-        if ([tempSet containsObject:@(variableInfo.hash)]) continue;
-        [tempSet addObject:@(variableInfo.hash)];
-        
-        // append variableDeclaration to shaderString
-        CEShaderVariable *shaderVariable = [variableInfo toShaderVariable];
-#error Error declaration for varying variables
-        [shaderString appendFormat:@"%@\n", [shaderVariable declaration]];
-        [variables addObject:shaderVariable];
+
+#pragma mark - build variables
+
+- (NSString *)variableDeclarationStringWithProfileResult:(CEShaderBuildProfileResult *)result {
+    NSArray *declarationList = @[result.structs, result.attributes, result.uniforms, result.varyings];
+    NSArray *comments = @[@"structs", @"attritutes", @"uniforms", @"varyings"];
+    NSMutableString *shaderString = [NSMutableString string];
+    for (int i = 0; i < declarationList.count; i++) {
+        NSArray *declarations = declarationList[i];
+        if (declarations.count) {
+            [shaderString appendFormat:@"// %@\n", comments[i]];
+        } else {
+            continue;
+        }
+        NSMutableSet *identifies = [NSMutableSet set];
+        for (id<CEShaderDeclarationProtocol> declaration in declarations) {
+            // remove duplicated variable declarations
+            if ([identifies containsObject:declaration]) {
+                continue;
+            }
+            [identifies addObject:declaration];
+            [shaderString appendFormat:@"%@\n", [declaration declarationString]];
+        }
+        [shaderString appendString:@"\n"];
     }
-    return variables.copy;
+    return shaderString.copy;
 }
 
 
-- (NSString *)buildShaderWithProfile:(CEShaderProfile *)profile
-                         profilePool:(NSDictionary *)profilePool
-                             structs:(NSMutableArray *)structs
-                          attributes:(NSMutableArray *)attributes
-                            uniforms:(NSMutableArray *)uniforms
-                            varyings:(NSMutableArray *)varyings {
+- (CEShaderVariable *)uniformWithInfo:(CEShaderVariableInfo *)info {
+    return nil;
+}
+
+
+- (CEShaderVariable *)attributeWithInfo:(CEShaderVariableInfo *)info {
+    return nil;
+}
+
+
+#pragma mark - build function
+
+- (void)buildProfile:(CEShaderProfile *)profile
+     withProfilePool:(NSDictionary *)profilePool
+              result:(CEShaderBuildProfileResult *)result {
     // sort variables
     for (CEShaderVariableInfo *variableInfo in profile.variables) {
         switch (variableInfo.usage) {
             case CEShaderVariableUsageAttribute:
-                [attributes addObject:variableInfo];
+                [result.attributes addObject:variableInfo];
                 break;
             case CEShaderVariableUsageUniform:
-                [uniforms addObject:variableInfo];
+                [result.uniforms addObject:variableInfo];
                 break;
             case CEShaderVariableUsageVarying:
-                [varyings addObject:variableInfo];
+                [result.varyings addObject:variableInfo];
                 break;
             case CEShaderVariableUsageNone:
             default:
@@ -142,7 +147,7 @@ NSString *CEShaderDirectory() {
         }
     }
     // add struct
-    [structs addObjectsFromArray:profile.structs];
+    [result.structs addObjectsFromArray:profile.structs];
     
     if (profile.function.linkFunctionDict.count) {
         // sort link functionIDs by their range in descend
@@ -159,12 +164,9 @@ NSString *CEShaderDirectory() {
             CEShaderProfile *linkProfile = profilePool[functionID];
             CEShaderLinkFunctionInfo *linkInfo = profile.function.linkFunctionDict[functionID];
             if (linkProfile && linkProfile.function.paramNames.count == linkInfo.paramNames.count) {
-                NSString *shaderString = [self buildShaderWithProfile:linkProfile
-                                                          profilePool:profilePool
-                                                              structs:structs
-                                                           attributes:attributes
-                                                             uniforms:uniforms
-                                                             varyings:varyings];
+                // recursive build profile
+                [self buildProfile:linkProfile withProfilePool:profilePool result:result];
+                NSString *shaderString = result.shaderString;
                 // check param name to keep the function context consistent
                 NSMutableDictionary *replaceLocationDict = [NSMutableDictionary dictionary];
                 for (int i = 0; i < linkInfo.paramNames.count; i++) {
@@ -199,16 +201,17 @@ NSString *CEShaderDirectory() {
                 // remove link mark
                 [functionContent replaceCharactersInRange:NSMakeRange(linkInfo.linkRange.location, 1)
                                                withString:@"//removed-"];
-//                [functionContent deleteCharactersInRange:linkRange];
             }
         }
-        
-        return [functionContent copy];
-        
+        result.shaderString = functionContent;
+
     } else {
-        return profile.function.functionContent;
+        result.shaderString = profile.function.functionContent;
     }
 }
+
+
+#pragma mark - Tools
 
 
 - (CEShaderProfile *)shaderProfileWithName:(NSString *)profileName {
@@ -231,6 +234,8 @@ NSString *CEShaderDirectory() {
     }
     return profile;
 }
+
+
 
 
 

@@ -7,6 +7,7 @@
 //
 
 #import "CEShaderLinkFunctionInfo.h"
+#import "CEShaderLinkFunctionInfo_setter.h"
 
 #define kCEJsonObjectKey_functionID @"functionID"
 #define kCEJsonObjectKey_paramNames @"paramNames"

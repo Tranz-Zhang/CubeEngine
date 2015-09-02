@@ -12,10 +12,10 @@
 
 @interface CEShaderFunctionInfo : NSObject <CEJsonCoding>
 
-@property (nonatomic, strong) NSString *functionID;
-@property (nonatomic, strong) NSString *functionContent;
-@property (nonatomic, strong) NSArray *paramNames;      // name of function param in order
-@property (nonatomic, strong) NSArray *paramLocations;  // NSArray of NSArray to store params location in functionContent
-@property (nonatomic, strong) NSDictionary *linkFunctionDict; // {@"functionID" : CEShaderLinkFunctionInfo}
+@property (nonatomic, readonly) NSString *functionID;
+@property (nonatomic, readonly) NSString *functionContent;
+@property (nonatomic, readonly) NSArray *paramNames;      // name of function param in order
+@property (nonatomic, readonly) NSArray *paramLocations;  // NSArray of NSArray to store params location in functionContent
+@property (nonatomic, readonly) NSDictionary *linkFunctionDict; // {@"functionID" : CEShaderLinkFunctionInfo}
 
 @end

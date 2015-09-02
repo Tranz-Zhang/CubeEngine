@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CEJsonCoding.h"
-#import "CEShaderVariable.h"
+#import "CEShaderDeclarationProtocol.h"
 
 typedef NS_ENUM(int, CEShaderVariableUsage) {
     CEShaderVariableUsageNone = 0,
@@ -17,6 +17,10 @@ typedef NS_ENUM(int, CEShaderVariableUsage) {
     CEShaderVariableUsageVarying,
 };
 
+NSString *CEShaderVariableUsageString(CEShaderVariableUsage usage);
+CEShaderVariableUsage CEShaderVariableUsageFromString(NSString *usageString);
+
+/*
 typedef NS_ENUM(int, CEShaderVariableType) {
     CEShaderVariableUnknown = -1,
     CEShaderVariableVoid = 0,
@@ -33,18 +37,19 @@ typedef NS_ENUM(int, CEShaderVariableType) {
 };
 
 CEShaderVariableType CEShaderVariableTypeFromString(NSString *typeString);
+NSString *CEShaderVariableTypeStringWithType(CEShaderVariableType type);
+//*/
 
-@interface CEShaderVariableInfo : NSObject <CEJsonCoding>
+@interface CEShaderVariableInfo : NSObject <CEJsonCoding, CEShaderDeclarationProtocol>
 
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, assign) CEShaderVariableType type;
-@property (nonatomic, strong) NSString *precision;
-@property (nonatomic, assign) CEShaderVariableUsage usage;
+@property (nonatomic, readonly) NSUInteger variableID;
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *type;
+@property (nonatomic, readonly) NSString *precision;
+@property (nonatomic, readonly) CEShaderVariableUsage usage;
 
 - (BOOL)isEqual:(CEShaderVariableInfo *)object;
 - (NSUInteger)hash;
-
-- (CEShaderVariable *)toShaderVariable;
 
 @end
 

@@ -11,8 +11,8 @@
 
 @interface CEShaderLinkFunctionInfo : NSObject <CEJsonCoding>
 
-@property (nonatomic, strong) NSString *functionID;
-@property (nonatomic, strong) NSArray *paramNames;
-@property (nonatomic, assign) NSRange linkRange;
+@property (nonatomic, readonly) NSString *functionID;
+@property (nonatomic, readonly) NSArray *paramNames;
+@property (nonatomic, readonly) NSRange linkRange;
 
 @end

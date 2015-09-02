@@ -10,11 +10,12 @@
 #import "CEJsonCoding.h"
 #import "CEShaderFunctionInfo.h"
 #import "CEShaderVariableInfo.h"
+#import "CEShaderStructInfo.h"
 
 @interface CEShaderProfile : NSObject <CEJsonCoding>
 
-@property (nonatomic, strong) NSArray *structs;     // struct declarations
-@property (nonatomic, strong) NSArray *variables;   // list of CEShaderVariableInfo
-@property (nonatomic, strong) CEShaderFunctionInfo *function;
+@property (nonatomic, readonly) NSArray *structs;     // array of CEShaderStructInfo
+@property (nonatomic, readonly) NSArray *variables;   // array of CEShaderVariableInfo
+@property (nonatomic, readonly) CEShaderFunctionInfo *function;
 
 @end

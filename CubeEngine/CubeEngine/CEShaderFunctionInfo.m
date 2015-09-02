@@ -7,6 +7,7 @@
 //
 
 #import "CEShaderFunctionInfo.h"
+#import "CEShaderFunctionInfo_setter.h"
 
 #define kCEJsonObjectKey_functionID @"functionID"
 #define kCEJsonObjectKey_functionContent @"functionContent"
