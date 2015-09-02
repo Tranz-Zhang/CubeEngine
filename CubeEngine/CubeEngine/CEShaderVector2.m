@@ -18,8 +18,4 @@
     glUniform2fv(_index, 1, vector2.v);
 }
 
-- (NSString *)declaration {
-    return [NSString stringWithFormat:@"%@ vec2 %@;", self.precision, self.name];
-}
-
 @end

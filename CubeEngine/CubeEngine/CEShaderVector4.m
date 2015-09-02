@@ -18,8 +18,5 @@
     glUniform4fv(_index, 1, vector4.v);
 }
 
-- (NSString *)declaration {
-    return [NSString stringWithFormat:@"%@ vec4 %@;", self.precision, self.name];
-}
 
 @end

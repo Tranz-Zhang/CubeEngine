@@ -18,8 +18,4 @@
     glUniform1i(_index, boolValue ? 1 : 0);
 }
 
-- (NSString *)declaration {
-    return [NSString stringWithFormat:@"bool %@;", self.name];
-}
-
 @end

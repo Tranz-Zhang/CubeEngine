@@ -41,19 +41,28 @@ NSString *CEShaderDirectory() {
     [_fragmentProfileDict removeAllObjects];
     
     // add test function profile and test
-    CEShaderProfile *test1 = [self shaderProfileWithName:@"TestFunction1.vert.profile"];
-    _vertexProfileDict[test1.function.functionID] = test1;
-    CEShaderProfile *test2 = [self shaderProfileWithName:@"TestFunction2.vert.profile"];
-    _vertexProfileDict[test2.function.functionID] = test2;
-    CEShaderProfile *test3 = [self shaderProfileWithName:@"TestFunction3.vert.profile"];
-    _vertexProfileDict[test3.function.functionID] = test3;
+    CEShaderProfile *profile = [self shaderProfileWithName:@"BaseLightEffect.vert"];
+    _vertexProfileDict[profile.function.functionID] = profile;
+    profile = [self shaderProfileWithName:@"PointLightFunciton.vert"];
+    _vertexProfileDict[profile.function.functionID] = profile;
+    
+    profile = [self shaderProfileWithName:@"BaseLightEffect.frag"];
+    _fragmentProfileDict[profile.function.functionID] = profile;
+    
+    profile = [self shaderProfileWithName:@"TestFunction1.vert"];
+    _vertexProfileDict[profile.function.functionID] = profile;
+    profile = [self shaderProfileWithName:@"TestFunction2.vert"];
+    _vertexProfileDict[profile.function.functionID] = profile;
+    profile = [self shaderProfileWithName:@"TestFunction3.vert"];
+    _vertexProfileDict[profile.function.functionID] = profile;
 }
 
 
 - (CEShaderBuildResult *)build {
+    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     
-    CEShaderProfile *mainVertexProfile = [self shaderProfileWithName:@"Main.vert.profile"];
-    CEShaderProfile *mainFragmentProfile = [self shaderProfileWithName:@"Main.frag.profile"];
+    CEShaderProfile *mainVertexProfile = [self shaderProfileWithName:@"Main.vert"];
+    CEShaderProfile *mainFragmentProfile = [self shaderProfileWithName:@"Main.frag"];
     if (!mainVertexProfile || !mainFragmentProfile) {
         return nil;
     }
@@ -80,6 +89,7 @@ NSString *CEShaderDirectory() {
     
     printf("================ vertexShader ================\n%s\n", [vertexShaderString UTF8String]);
     printf("================ fragmentShader ================\n%s\n", [fragmentShaderString UTF8String]);
+    printf("shader build duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
     
     return nil;
 }
@@ -90,23 +100,27 @@ NSString *CEShaderDirectory() {
 
 - (NSString *)variableDeclarationStringWithProfileResult:(CEShaderBuildProfileResult *)result {
     NSArray *declarationList = @[result.structs, result.attributes, result.uniforms, result.varyings];
-    NSArray *comments = @[@"structs", @"attritutes", @"uniforms", @"varyings"];
     NSMutableString *shaderString = [NSMutableString string];
     for (int i = 0; i < declarationList.count; i++) {
         NSArray *declarations = declarationList[i];
-        if (declarations.count) {
-            [shaderString appendFormat:@"// %@\n", comments[i]];
-        } else {
+        if (!declarations.count) {
             continue;
         }
         NSMutableSet *identifies = [NSMutableSet set];
-        for (id<CEShaderDeclarationProtocol> declaration in declarations) {
+        NSMutableSet *variableNames = [NSMutableSet set];
+        for (CEShaderVariableInfo *info in declarations) {
             // remove duplicated variable declarations
-            if ([identifies containsObject:declaration]) {
+            BOOL duplicatedID = [identifies containsObject:info];
+            BOOL duplicatedName = [variableNames containsObject:info.name];
+            if (duplicatedID && duplicatedName) {
                 continue;
+            } else if (!duplicatedID && duplicatedName) {
+                NSAssert(false, @"Duplicated variable declaration for: %@ ", info.name);
             }
-            [identifies addObject:declaration];
-            [shaderString appendFormat:@"%@\n", [declaration declarationString]];
+            
+            [identifies addObject:info];
+            [variableNames addObject:info.name];
+            [shaderString appendFormat:@"%@\n", [info declarationString]];
         }
         [shaderString appendString:@"\n"];
     }
@@ -193,18 +207,19 @@ NSString *CEShaderDirectory() {
                     shaderString = tempContent.copy;
                 }
                 
-                NSString *replaceContent = [NSString stringWithFormat:@"//Link: %@\n%@", functionID, shaderString];
+                NSString *replaceContent = [NSString stringWithFormat:@"//%@\n%@", [functionContent substringWithRange:linkInfo.linkRange], shaderString];
                 [functionContent replaceCharactersInRange:linkInfo.linkRange
                                                withString:replaceContent];
                 
             } else {
                 // remove link mark
-                [functionContent replaceCharactersInRange:NSMakeRange(linkInfo.linkRange.location, 1)
-                                               withString:@"//removed-"];
+                [functionContent deleteCharactersInRange:NSMakeRange(linkInfo.linkRange.location, linkInfo.linkRange.length + 1)];
+//                [functionContent replaceCharactersInRange:NSMakeRange(linkInfo.linkRange.location, 1)
+//                                               withString:@"//removed-"];
             }
         }
         result.shaderString = functionContent;
-
+        
     } else {
         result.shaderString = profile.function.functionContent;
     }
@@ -226,7 +241,7 @@ NSString *CEShaderDirectory() {
     if (profile) return profile;
     
     // load from disk
-    NSData *jsonData = [NSData dataWithContentsOfFile:[CEShaderDirectory() stringByAppendingPathComponent:profileName]];
+    NSData *jsonData = [NSData dataWithContentsOfFile:[CEShaderDirectory() stringByAppendingFormat:@"/%@.profile", profileName]];
     if (jsonData.length) {
         NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:nil];
         profile = [[CEShaderProfile alloc] initWithJsonDict:jsonDict];

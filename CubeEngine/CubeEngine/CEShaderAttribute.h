@@ -18,5 +18,4 @@
                    precision:(NSString *)precision
                variableCount:(GLint)variableCount;
 
-
 @end

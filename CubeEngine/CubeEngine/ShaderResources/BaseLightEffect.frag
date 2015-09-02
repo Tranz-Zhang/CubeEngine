@@ -22,7 +22,7 @@ varying lowp vec3 Normal;
 
 void  CEFrag_ApplyBaseLightEffect(vec4 inputColor) {
     lowp vec3 reflectDir = normalize(-reflect(LightDirection, normal));
-    float diffuse = max(0.0, dot(normal, LightDirection));
+    float diffuse = max(0.0, dot(Normal, LightDirection));
     float specular = max(0.0, dot(reflectDir, EyeDirectionOut));
     specular = (diffuse == 0.0 || ShininessExponent == 0.0) ? 0.0 : pow(specular, ShininessExponent);
     vec3 scatteredLight [3] = AmbientColor * Attenuation + MainLight.LightColor * diffuse * Attenuation;

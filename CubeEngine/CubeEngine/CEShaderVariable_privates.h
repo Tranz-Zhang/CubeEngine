@@ -13,7 +13,4 @@
 // index retrive from glProgram
 @property (nonatomic, assign) GLint index;
 
-/* declaration string in shader for current variable */
-- (NSString *)declaration;
-
 @end

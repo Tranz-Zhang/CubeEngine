@@ -18,8 +18,4 @@
     glUniform1f(_index, floatValue);
 }
 
-- (NSString *)declaration {
-    return [NSString stringWithFormat:@"%@ float %@;", self.precision, self.name];
-}
-
 @end

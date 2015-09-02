@@ -13,9 +13,9 @@ struct LightInfo {
 
 uniform LightInfo mainLight;
 uniform highp vec4 test3_value1;
-uniform mediump mat3 test_common;、
+uniform mediump mat3 test_common;
 
-varying lowp vec4 LightDirection;
+varying lowp vec3  LightDirection;
 varying lowp vec3 EyeDirectionOut;
 varying lowp float Attenuation;
 varying lowp vec3 Normal;

@@ -21,14 +21,19 @@
         return nil;
     }
     
+    // remove comment
+    NSString *shaderContent = [self removeCommentLinesInString:shaderString];
+    // remove empty lines
+    shaderContent = [self removeEmptyLinesInString:shaderContent];
+    
     CEShaderProfile *shaderInfo = [CEShaderProfile new];
     NSMutableArray *vertexVariables = [NSMutableArray array];
-    [vertexVariables addObjectsFromArray:[self parseAttributesInShader:shaderString]];
-    [vertexVariables addObjectsFromArray:[self parseUnifromsInShader:shaderString]];
-    [vertexVariables addObjectsFromArray:[self parseVaryingsInShader:shaderString]];
+    [vertexVariables addObjectsFromArray:[self parseAttributesInShader:shaderContent]];
+    [vertexVariables addObjectsFromArray:[self parseUnifromsInShader:shaderContent]];
+    [vertexVariables addObjectsFromArray:[self parseVaryingsInShader:shaderContent]];
     shaderInfo.variables = vertexVariables.copy;
-    shaderInfo.structs = [self parseStructDeclarationInShader:shaderString];
-    NSArray *functions = [self parseFunctionsInShader:shaderString];
+    shaderInfo.structs = [self parseStructDeclarationInShader:shaderContent];
+    NSArray *functions = [self parseFunctionsInShader:shaderContent];
     shaderInfo.function = functions.count > 0 ? functions[0] : nil;
     return shaderInfo;
 }
@@ -293,11 +298,13 @@
         linkFunctionName = [linkFunctionName stringByReplacingOccurrencesOfString:@" " withString:@""];
         
         // get function params
+        printf("%s\n", [linkFunctionName UTF8String]);
         NSRange endBracketRange = [linkDecleration rangeOfString:@")" options:NSBackwardsSearch];
         if (endBracketRange.location == NSNotFound) continue;
         NSString *paramContent = [linkDecleration substringWithRange:NSMakeRange(NSMaxRange(startBracketRange), endBracketRange.location - NSMaxRange(startBracketRange))];
         paramContent = [paramContent stringByReplacingOccurrencesOfString:@" " withString:@""];
-        NSArray *params = [paramContent componentsSeparatedByString:@","];
+        NSMutableArray *params = [[paramContent componentsSeparatedByString:@","] mutableCopy];
+        [params removeObject:@""];
         NSMutableArray *paramIDs = [NSMutableArray arrayWithCapacity:params.count];
         for (NSString *param in params) {
             if (!param.length) continue;
@@ -312,11 +319,12 @@
                 }
             }
         }
+        
         NSMutableString *linkFunctionID = linkFunctionName.mutableCopy;
         [linkFunctionID appendFormat:@"(%@)", [paramIDs componentsJoinedByString:@","]];
         CEShaderLinkFunctionInfo *linkFunctionInfo = [CEShaderLinkFunctionInfo new];
         linkFunctionInfo.functionID = linkFunctionID.copy;
-        linkFunctionInfo.paramNames = params;
+        linkFunctionInfo.paramNames = params.count ? params : nil;
         linkFunctionInfo.linkRange = result.range;
         linkFunctionDict[linkFunctionInfo.functionID] = linkFunctionInfo;
     }
@@ -416,16 +424,42 @@
             variableInfo.name = components[2];
         }
     }
-    if ([variableInfo.type isEqualToString:@"void"] ||
-        [variableInfo.type isEqualToString:@"bool"] ||
-        [variableInfo.type isEqualToString:@"sampler2D"] ||
-        [variableInfo.type isEqualToString:@"samplerCube"]) {
+    if (![variableInfo.type hasPrefix:@"int"] &&
+        ![variableInfo.type hasPrefix:@"float"] &&
+        ![variableInfo.type hasPrefix:@"vec"] &&
+        ![variableInfo.type hasPrefix:@"mat"]) {
         variableInfo.precision = nil;
     }
     variableInfo.variableID = [[NSString stringWithFormat:@"%d_%@_%@_%@",
                                (int)variableInfo.usage, variableInfo.precision,
                                variableInfo.type, variableInfo.name] hash];
     return variableInfo;
+}
+
+
+
+- (NSString *)removeEmptyLinesInString:(NSString *)string {
+    NSRegularExpression *regex = [self emptyLineRegex];
+    NSArray *results = [regex matchesInString:string options:0 range:NSMakeRange(0, string.length)];
+    NSMutableString *mutableContent = string.mutableCopy;
+    [results enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSTextCheckingResult *result, NSUInteger idx, BOOL *stop) {
+        [mutableContent replaceCharactersInRange:result.range withString:@"\n"];
+    }];
+    if ([mutableContent hasPrefix:@"\n"]) {
+        [mutableContent deleteCharactersInRange:NSMakeRange(0, [@"\n" length])];
+    }
+    return mutableContent.copy;
+}
+
+
+- (NSString *)removeCommentLinesInString:(NSString *)string {
+    NSRegularExpression *regex = [self commentRegex];
+    NSArray *results = [regex matchesInString:string options:0 range:NSMakeRange(0, string.length)];
+    NSMutableString *mutableContent = string.mutableCopy;
+    [results enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSTextCheckingResult *result, NSUInteger idx, BOOL *stop) {
+        [mutableContent deleteCharactersInRange:result.range];
+    }];
+    return mutableContent.copy;
 }
 
 
@@ -512,6 +546,30 @@
         });
     }
     return sLinkFunctionRegex;
+}
+
+
+- (NSRegularExpression *)emptyLineRegex {
+    static NSRegularExpression *sEmptyLineRegex = nil;
+    if (!sEmptyLineRegex) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            sEmptyLineRegex = [NSRegularExpression regularExpressionWithPattern:@"\\n\\s*\\n" options:0 error:nil];
+        });
+    }
+    return sEmptyLineRegex;
+}
+
+
+- (NSRegularExpression *)commentRegex {
+    static NSRegularExpression *sCommentRegex = nil;
+    if (!sCommentRegex) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            sCommentRegex = [NSRegularExpression regularExpressionWithPattern:@"(\\/\\/[^\\n]*)|(\\/\\*(\\s|.)*?\\*\\/)" options:0 error:nil];
+        });
+    }
+    return sCommentRegex;
 }
 
 

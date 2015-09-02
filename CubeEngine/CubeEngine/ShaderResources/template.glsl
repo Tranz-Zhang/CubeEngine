@@ -1,4 +1,4 @@
-// structs
+// ================ vertexShader ================
 struct LightInfo {
     bool IsEnabled;
     lowp int LightType;
@@ -10,70 +10,72 @@ struct LightInfo {
     mediump float SpotExponent;
 };
 
-// attributes
-highp vec4 VertexPosition;
-highp vec4 test2_value1;
-lowp vec3 test1_value1;
+attribute highp vec4 VertexPosition;
+attribute lowp vec3 VertexNormal;
 
-// uniforms
-mediump mat4 MVPMatrix;
-mediump LightInfo mainLight;
-highp vec4 test3_value1;
-mediump mat3 test_common;
-lowp mat3 test2_value2;
-lowp mat3 test1_value2;
+uniform mediump mat4 MVPMatrix;
+uniform lowp mat3 NormalMatrix;
+uniform lowp vec3 EyeDirection;
+uniform LightInfo MainLight;
+uniform lowp mat4 MVMatrix;
 
-// varyings
-lowp vec3 LightDirection;
-lowp vec3 EyeDirectionOut;
-lowp float Attenuation;
-lowp vec3 Normal;
+varying lowp vec3 LightDirection;
+varying lowp vec3 EyeDirectionOut;
+varying lowp float Attenuation;
+varying lowp vec3 Normal;
 
 void main() {
-    vec4 inputColor;
-    //Link: CEVertex_TestFunction1(vec4)
+    //#link CEVertex_ApplyBaseLightEffect();
     {
-        // one of these methods should be executed
-        vec3 inputColor_test2 = vec3(inputColor);
-        //Link: CEVertex_TestFunction3(vec3)
+        //#link CEVertex_PointLightCalculation(LightDirection, Attenuation);
         {
-            // start coding for test2
-            vec3 myColor = inputColor_test2;
-            myColor = nil;....
-            MyinputColor);
-            (inputColor_test2);
-            inputColor_test2+1 = 2;
-            XXXXXXXXXXXXXXXXXXXXXXX
-            AAAAAAAAAAAAAAAAAAAAAAA
+            LightDirection = vec3(MainLight.LightPosition) - vec3(MVMatrix * VertexPosition);
+            float lightDistance = length(LightDirection);
+            LightDirection = LightDirection / lightDistance;
+            Attenuation = 1.0 / (1.0 + MainLight.Attenuation * lightDistance + MainLight.Attenuation * lightDistance * lightDistance);
         }
-        
-        some code here for test 1;
-        
-        //removed-link CEFrag_ApplyShadowEffect();
+        EyeDirectionOut = EyeDirection;
+        Normal = normalize(NormalMatrix * VertexNormal);
     }
-    
-    //Link: CEVertex_TestFunction2(vec4)
-    {
-        // start coding for test2
-        vec3 myColor = vec3(1.0);
-        myColor = nil;....
-        adsfjadsfopasdf
-        asdfjoasdfj
-        some code here for test 2;
-    }
-    
-    vec3 inputColorXX = vec3(inputColor);
-    //Link: CEVertex_TestFunction3(vec3)
-    {
-        // start coding for test2
-        vec3 myColor = inputColorXX;
-        myColor = nil;....
-        MyinputColor);
-        (inputColorXX);
-        inputColorXX+1 = 2;
-        XXXXXXXXXXXXXXXXXXXXXXX
-        AAAAAAAAAAAAAAAAAAAAAAA
-    }
-    
     gl_Position = MVPMatrix * VertexPosition;
+}
+
+
+
+// ================ fragmentShader ================
+struct LightInfo {
+    bool IsEnabled;
+    lowp int LightType;
+    mediump vec4 LightPosition;
+    lowp vec3 LightDirection;
+    mediump vec3 LightColor;
+    mediump float Attenuation;
+    mediump float SpotConsCutoff;
+    mediump float SpotExponent;
+};
+
+uniform mediump vec4 DiffuseColor;
+uniform mediump vec3 SpecularColor;
+uniform mediump vec3 AmbientColor;
+uniform mediump float ShininessExponent;
+uniform LightInfo MainLight;
+
+varying lowp vec3 LightDirection;
+varying lowp vec3 EyeDirectionOut;
+varying lowp float Attenuation;
+varying lowp vec3 Normal;
+
+void main() {
+    vec4 inputColor = DiffuseColor;
+    //#link CEFrag_ApplyBaseLightEffect(inputColor);
+    {
+        lowp vec3 reflectDir = normalize(-reflect(LightDirection, normal));
+        float diffuse = max(0.0, dot(Normal, LightDirection));
+        float specular = max(0.0, dot(reflectDir, EyeDirectionOut));
+        specular = (diffuse == 0.0 || ShininessExponent == 0.0) ? 0.0 : pow(specular, ShininessExponent);
+        vec3 scatteredLight [3] = AmbientColor * Attenuation + MainLight.LightColor * diffuse * Attenuation;
+        vec3 reflectedLight = SpecularColor * specular * Attenuation;
+        inputColor = min(inputColor * scatteredLight + reflectedLight, vec4(1.0));
+    }
+    gl_FragColor = inputColor;
 }

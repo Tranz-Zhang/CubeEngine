@@ -8,15 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import "CEJsonCoding.h"
-#import "CEShaderDeclarationProtocol.h"
 #import "CEShaderVariableInfo.h"
 
 
-@interface CEShaderStructInfo : NSObject <CEJsonCoding, CEShaderDeclarationProtocol>
+@interface CEShaderStructInfo : NSObject <CEJsonCoding>
 
 @property (nonatomic, readonly) NSUInteger structID;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSArray *variables;
+
+- (NSString *)declarationString;
 
 - (BOOL)isEqual:(CEShaderStructInfo *)object;
 - (NSUInteger)hash;

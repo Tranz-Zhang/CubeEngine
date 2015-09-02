@@ -148,6 +148,20 @@ NSString *CEShaderVariableTypeStringWithType(CEShaderVariableType type) {
         return _declarationString;
     }
     NSMutableString *declaration = [NSMutableString string];
+    switch (_usage) {
+        case CEShaderVariableUsageUniform:
+            [declaration appendString:@"uniform "];
+            break;
+        case CEShaderVariableUsageAttribute:
+            [declaration appendString:@"attribute "];
+            break;
+        case CEShaderVariableUsageVarying:
+            [declaration appendString:@"varying "];
+            break;
+        case CEShaderVariableUsageNone:
+        default:
+            break;
+    }
     if (_precision) {
         [declaration appendFormat:@"%@ ", _precision];
     }
@@ -171,95 +185,6 @@ NSString *CEShaderVariableTypeStringWithType(CEShaderVariableType type) {
 - (NSUInteger)hash {
     return _variableID;
 }
-
-
-/*
-- (BOOL)isEqual:(CEShaderVariableInfo *)object
-{
-    if (object == self) {
-        return YES;
-    } else if (![super isEqual:object]) {
-        return NO;
-    } else {
-        return (self == object &&
-                [_name isEqualToString:object.name] &&
-                _type == object.type &&
-                [_precision isEqualToString:object.precision] &&
-                _usage == object.usage);
-    }
-}
-
-
-- (NSUInteger)hash {
-    NSString *hashString = [NSString stringWithFormat:@"%@%d%@%d", _name, _type, _precision, _usage];
-    printf("%s:%lu\n", [_name UTF8String], (unsigned long)hashString.hash);
-    return [[NSString stringWithFormat:@"%@%d%@%d", _name, _type, _precision, _usage] hash];
-}
-
-
-- (CEShaderVariable *)toShaderVariable {
-    NSString *precision = _precision ?: kCEPrecisionDefault;
-    
-    if (_usage == CEShaderVariableUsageAttribute) {
-        int variableCount = -1;
-        switch (_type) {
-            case CEShaderVariableFloat:
-                variableCount = 1;
-                break;
-            case CEShaderVariableVector2:
-                variableCount = 2;
-                break;
-            case CEShaderVariableVector3:
-                variableCount = 3;
-                break;
-                
-            case CEShaderVariableVector4:
-                variableCount = 4;
-                break;
-            default:
-                break;
-        }
-        if (variableCount > 0) {
-            return [[CEShaderAttribute alloc] initWithName:_name precision:precision variableCount:variableCount];
-        } else {
-            return nil;
-        }
-    }
-    
-    // uniforms
-    switch (_type) {
-        case CEShaderVariableFloat:
-            return [[CEShaderFloat alloc] initWithName:_name precision:precision];
-        case CEShaderVariableInt:
-            return [[CEShaderInteger alloc] initWithName:_name precision:precision];
-        case CEShaderVariableBool:
-            return [[CEShaderBool alloc] initWithName:_name precision:precision];
-            
-        case CEShaderVariableVector2:
-            return [[CEShaderVector2 alloc] initWithName:_name precision:precision];
-        case CEShaderVariableVector3:
-            return [[CEShaderVector3 alloc] initWithName:_name precision:precision];
-        case CEShaderVariableVector4:
-            return [[CEShaderVector4 alloc] initWithName:_name precision:precision];
-            
-        case CEShaderVariableMatrix2:
-            return [[CEShaderMatrix2 alloc] initWithName:_name precision:precision];
-        case CEShaderVariableMatrix3:
-            return [[CEShaderMatrix3 alloc] initWithName:_name precision:precision];
-        case CEShaderVariableMatrix4:
-            return [[CEShaderMatrix3 alloc] initWithName:_name precision:precision];
-            
-        case CEShaderVariableSampler2D:
-            return [[CEShaderSample2D alloc] initWithName:_name precision:precision];
-            
-        case CEShaderVariableUnknown:
-        case CEShaderVariableVoid:
-        default:
-            return nil;
-    }
-}
-//*/
-
 
 
 @end

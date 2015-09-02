@@ -10,12 +10,25 @@ varying lowp vec3 Normal;
 
 void CEVertex_ApplyBaseLightEffect() {
     // one of these methods should be executed
+    //
+    
+    /* adsfpjasdfpoasdofasdof
+     */
+    
+    /* adsfpjasdfpoasdofasdof */
+    
 #link CEVertex_DirectionLightCalculation(LightDirection, Attenuation);
 #link CEVertex_PointLightCalculation(LightDirection, Attenuation);
 #link CEVertex_SpotLightCalculation(LightDirection, Attenuation);
     
     EyeDirectionOut = EyeDirection;
     Normal = normalize(NormalMatrix * VertexNormal);
+    
+    /**
+     sdfgjsdjfgposjdfgiojsopdfjg
+     sdjfgopsdjfgojsdfopjg
+     sdjfgosdjfgosdfpg
+     */
     
 #link CEFrag_ApplyShadowEffect();
 }
