@@ -1,5 +1,5 @@
 //
-//  CEShaderMatrix4.h
+//  CEShaderVec2.h
 //  CubeEngine
 //
 //  Created by chance on 8/6/15.
@@ -8,8 +8,9 @@
 
 #import "CEShaderVariable.h"
 
-@interface CEShaderMatrix4 : CEShaderVariable
 
-@property (nonatomic, assign) GLKMatrix4 matrix4;
+@interface CEUniformVector2 : CEShaderVariable
+
+@property (nonatomic, assign) GLKVector2 vector2;
 
 @end

@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderBool.h"
+#import "CEUniformBool.h"
 #import "CEShaderVariable_privates.h"
 
-@implementation CEShaderBool
+@implementation CEUniformBool
 
 - (void)setBoolValue:(BOOL)boolValue {
     _boolValue = boolValue;
@@ -17,5 +17,10 @@
     if (_index < 0) return;
     glUniform1i(_index, boolValue ? 1 : 0);
 }
+
+- (NSString *)dataType {
+    return @"bool";
+}
+
 
 @end

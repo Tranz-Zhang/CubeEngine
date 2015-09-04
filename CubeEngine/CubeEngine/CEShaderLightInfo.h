@@ -6,19 +6,19 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderStruct.h"
+#import "CEShaderVariable.h"
 
 // Light Info Struct
-@interface CEShaderLightInfo : CEShaderStruct
+@interface CEShaderLightInfo : CEShaderVariable
 
-@property (nonatomic, readonly) CEShaderBool *isEnabled;
-@property (nonatomic, readonly) CEShaderInteger *lightType;
-@property (nonatomic, readonly) CEShaderVector4 *lightPosition;
-@property (nonatomic, readonly) CEShaderVector3 *lightDirection;
-@property (nonatomic, readonly) CEShaderVector3 *lightColor;
-@property (nonatomic, readonly) CEShaderFloat *attenuation;
-@property (nonatomic, readonly) CEShaderFloat *spotConsCutOff;
-@property (nonatomic, readonly) CEShaderFloat *spotExponent;
+@property (nonatomic, readonly) CEUniformBool *isEnabled;
+@property (nonatomic, readonly) CEUniformInteger *lightType;
+@property (nonatomic, readonly) CEUniformVector4 *lightPosition;
+@property (nonatomic, readonly) CEUniformVector3 *lightDirection;
+@property (nonatomic, readonly) CEUniformVector3 *lightColor;
+@property (nonatomic, readonly) CEUniformFloat *attenuation;
+@property (nonatomic, readonly) CEUniformFloat *spotConsCutOff;
+@property (nonatomic, readonly) CEUniformFloat *spotExponent;
 
 @end
 

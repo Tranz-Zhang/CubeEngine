@@ -1,5 +1,5 @@
 //
-//  CEShaderVec2.h
+//  CEShaderFloat.h
 //  CubeEngine
 //
 //  Created by chance on 8/6/15.
@@ -8,9 +8,8 @@
 
 #import "CEShaderVariable.h"
 
+@interface CEUniformFloat : CEShaderVariable
 
-@interface CEShaderVector2 : CEShaderVariable
-
-@property (nonatomic, assign) GLKVector2 vector2;
+@property (nonatomic, assign) GLfloat floatValue;
 
 @end

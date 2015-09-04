@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderSample2D.h"
+#import "CEUniformSample2D.h"
 #import "CEShaderVariable_privates.h"
 
-@implementation CEShaderSample2D {
+@implementation CEUniformSample2D {
     int _textureIndex;
 }
 
@@ -31,9 +31,11 @@
 }
 
 
+- (NSString *)dataType {
+    return @"sampler2D";
+}
+
 
 @end
-
-
 
 

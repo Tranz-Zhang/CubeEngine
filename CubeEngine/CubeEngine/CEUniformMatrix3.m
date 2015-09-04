@@ -6,16 +6,21 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderMatrix3.h"
+#import "CEUniformMatrix3.h"
 #import "CEShaderVariable_privates.h"
 
-@implementation CEShaderMatrix3
+@implementation CEUniformMatrix3
 
 - (void)setMatrix3:(GLKMatrix3)matrix3 {
     _matrix3 = matrix3;
     
     if (_index < 0) return;
     glUniformMatrix3fv(_index, 1, GL_FALSE, matrix3.m);
+}
+
+
+- (NSString *)dataType {
+    return @"mat3";
 }
 
 @end

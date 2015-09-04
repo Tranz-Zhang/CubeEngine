@@ -7,29 +7,31 @@
 //
 
 #import "CEShaderLightInfo.h"
-#import "CEShaderStruct_privates.h"
-#import "CEShaderVariable_privates.h"
+#import "CEUniformBool.h"
+#import "CEUniformInteger.h"
+#import "CEUniformFloat.h"
+#import "CEUniformVector3.h"
+#import "CEUniformVector4.h"
 
 @implementation CEShaderLightInfo
-
 
 - (instancetype)initWithName:(NSString *)name {
     self = [super initWithName:name];
     if (self) {
-        _isEnabled =        [[CEShaderBool alloc] initWithName:@"IsEnabled"         precision:kCEPrecisionLowp];
-        _lightType =        [[CEShaderInteger alloc] initWithName:@"LightType"      precision:kCEPrecisionLowp];
-        _lightPosition =    [[CEShaderVector4 alloc] initWithName:@"LightPosition"  precision:kCEPrecisionMediump];
-        _lightDirection =   [[CEShaderVector3 alloc] initWithName:@"LightDirection" precision:kCEPrecisionLowp];
-        _lightColor =       [[CEShaderVector3 alloc] initWithName:@"LightColor"     precision:kCEPrecisionMediump];
-        _attenuation =      [[CEShaderFloat alloc] initWithName:@"Attenuation"      precision:kCEPrecisionMediump];
-        _spotConsCutOff =   [[CEShaderFloat alloc] initWithName:@"SpotConsCutoff"   precision:kCEPrecisionMediump];
-        _spotExponent =     [[CEShaderFloat alloc] initWithName:@"SpotExponent"     precision:kCEPrecisionMediump];
+        _isEnabled =        [[CEUniformBool alloc]initWithName:@"IsEnabled"];
+        _lightType =        [[CEUniformInteger alloc] initWithName:@"LightType"];
+        _lightPosition =    [[CEUniformVector4 alloc] initWithName:@"LightPosition"];
+        _lightDirection =   [[CEUniformVector3 alloc] initWithName:@"LightDirection"];
+        _lightColor =       [[CEUniformVector3 alloc] initWithName:@"LightColor"];
+        _attenuation =      [[CEUniformFloat alloc] initWithName:@"Attenuation"];
+        _spotConsCutOff =   [[CEUniformFloat alloc] initWithName:@"SpotConsCutoff"];
+        _spotExponent =     [[CEUniformFloat alloc] initWithName:@"SpotExponent"];
     }
     return self;
 }
 
 
-+ (NSString *)structName {
+- (NSString *)dataType {
     return @"LightInfo";
 }
 

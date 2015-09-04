@@ -1,5 +1,5 @@
 //
-//  CEShaderBool.h
+//  CEShaderVector3.h
 //  CubeEngine
 //
 //  Created by chance on 8/6/15.
@@ -8,8 +8,8 @@
 
 #import "CEShaderVariable.h"
 
-@interface CEShaderBool : CEShaderVariable
+@interface CEUniformVector3 : CEShaderVariable
 
-@property (nonatomic, assign) BOOL boolValue;
+@property (nonatomic, assign) GLKVector3 vector3;
 
 @end

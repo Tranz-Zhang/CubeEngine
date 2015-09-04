@@ -8,7 +8,7 @@
 
 #import "CEShaderVariable.h"
 
-@interface CEShaderMatrix3 : CEShaderVariable
+@interface CEUniformMatrix3 : CEShaderVariable
 
 @property (nonatomic, assign) GLKMatrix3 matrix3;
 

@@ -6,16 +6,21 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderVector3.h"
+#import "CEUniformVector3.h"
 #import "CEShaderVariable_privates.h"
 
-@implementation CEShaderVector3
+@implementation CEUniformVector3
 
 - (void)setVector3:(GLKVector3)vector3 {
     _vector3 = vector3;
     
     if (_index < 0) return;
     glUniform3fv(_index, 1, vector3.v);
+}
+
+
+- (NSString *)dataType {
+    return @"vec3";
 }
 
 @end

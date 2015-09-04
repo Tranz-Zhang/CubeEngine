@@ -1,5 +1,5 @@
 //
-//  CEShaderFloat.h
+//  CEShaderBool.h
 //  CubeEngine
 //
 //  Created by chance on 8/6/15.
@@ -8,8 +8,8 @@
 
 #import "CEShaderVariable.h"
 
-@interface CEShaderFloat : CEShaderVariable
+@interface CEUniformBool : CEShaderVariable
 
-@property (nonatomic, assign) GLfloat floatValue;
+@property (nonatomic, assign) BOOL boolValue;
 
 @end

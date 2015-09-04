@@ -8,7 +8,7 @@
 
 #import "CEShaderVariable.h"
 
-@interface CEShaderSample2D : CEShaderVariable
+@interface CEUniformSample2D : CEShaderVariable
 
 @property (nonatomic, assign) GLuint textureID;
 

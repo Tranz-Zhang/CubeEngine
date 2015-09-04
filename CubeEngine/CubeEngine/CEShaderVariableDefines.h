@@ -9,21 +9,25 @@
 #ifndef CubeEngine_CEShaderVariableDefines_h
 #define CubeEngine_CEShaderVariableDefines_h
 
-#import "CEShaderBool.h"
-#import "CEShaderInteger.h"
-#import "CEShaderFloat.h"
+#define kCEPrecisionDefault @"mediump"
 
-#import "CEShaderVector2.h"
-#import "CEShaderVector3.h"
-#import "CEShaderVector4.h"
+#import "CEUniformBool.h"
+#import "CEUniformInteger.h"
+#import "CEUniformFloat.h"
 
-#import "CEShaderMatrix2.h"
-#import "CEShaderMatrix3.h"
-#import "CEShaderMatrix4.h"
+#import "CEUniformVector2.h"
+#import "CEUniformVector3.h"
+#import "CEUniformVector4.h"
 
-#import "CEShaderSample2D.h"
-#import "CEShaderAttribute.h"
+#import "CEUniformMatrix2.h"
+#import "CEUniformMatrix3.h"
+#import "CEUniformMatrix4.h"
 
-#import "CEShaderStruct.h"
+#import "CEUniformSample2D.h"
+#import "CEAttribute.h"
+
+#import "CEShaderLightInfo.h"
+
+
 
 #endif

@@ -11,17 +11,16 @@
 
 @implementation CEShaderVariable
 
-- (instancetype)initWithName:(NSString *)name precision:(NSString *)precision {
+- (instancetype)initWithName:(NSString *)name{
     self = [super init];
     if (self) {
         _name = [name copy];
-        _precision = precision;
         _index = -1;
     }
     return self;
 }
 
-- (NSString *)declaration {
+- (NSString *)dataType {
     NSAssert(false, @"Must implemented by subclass");
     return nil;
 }

@@ -6,30 +6,30 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderAttribute.h"
+#import "CEAttribute.h"
 #import "CEShaderVariable_privates.h"
 #import "CEDefines.h"
 
-@implementation CEShaderAttribute {
+@implementation CEAttribute {
     BOOL _enabled;
 }
 
 
-- (instancetype)initWithName:(NSString *)name
-                   precision:(NSString *)precision
-               variableCount:(GLint)variableCount {
-    self = [super initWithName:name precision:precision];
+- (instancetype)initWithName:(NSString *)name type:(CEAttributeType)type {
+    self = [super initWithName:name];
     if (self) {
-        if (variableCount < 1 || variableCount > 4) {
+        if (type < 1 || type > 4) {
             NSAssert(false, @"wrong variable count for attribute");
         }
-        _variableCount = variableCount;
+        _type = type;
     }
     return self;
 }
 
+
 - (void)setAttribute:(CEVBOAttribute *)attribute {
-    if ([_attribute isEqualToAttribute:attribute]) {
+    if ([_attribute isEqualToAttribute:attribute] ||
+        attribute.primaryCount != _type) {
         return;
     }
     

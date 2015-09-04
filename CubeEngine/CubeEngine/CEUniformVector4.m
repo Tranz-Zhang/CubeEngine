@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderVector4.h"
+#import "CEUniformVector4.h"
 #import "CEShaderVariable_privates.h"
 
-@implementation CEShaderVector4
+@implementation CEUniformVector4
 
 - (void)setVector4:(GLKVector4)vector4 {
     _vector4 = vector4;
@@ -18,5 +18,9 @@
     glUniform4fv(_index, 1, vector4.v);
 }
 
+
+- (NSString *)dataType {
+    return @"vec4";
+}
 
 @end

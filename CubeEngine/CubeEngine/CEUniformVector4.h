@@ -1,5 +1,5 @@
 //
-//  CEShaderInteger.h
+//  CEShaderVector4.h
 //  CubeEngine
 //
 //  Created by chance on 8/6/15.
@@ -8,8 +8,8 @@
 
 #import "CEShaderVariable.h"
 
-@interface CEShaderInteger : CEShaderVariable
+@interface CEUniformVector4 : CEShaderVariable
 
-@property (nonatomic, assign) GLint intValue;
+@property (nonatomic, assign) GLKVector4 vector4;
 
 @end
