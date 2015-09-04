@@ -6,8 +6,9 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderBuildResult.h"
+#import "CEShaderInfo.h"
+#import "CEShaderInfo_setter.h"
 
-@implementation CEShaderBuildResult
+@implementation CEShaderInfo
 
 @end

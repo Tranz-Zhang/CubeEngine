@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CEShaderBuildResult.h"
+#import "CEShaderInfo.h"
 
 typedef NS_ENUM(int, CEShaderRenderType) {
     CEShaderRenderTypeSolid = 0,
@@ -26,6 +26,6 @@ typedef NS_ENUM(int, CEShaderRenderType) {
 - (void)enableNormalMap:(BOOL)enabled;
 - (void)enableShadowMap:(BOOL)enabled;
 
-- (CEShaderBuildResult *)build;
+- (CEShaderInfo *)build;
 
 @end

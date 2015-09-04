@@ -7,6 +7,11 @@
 //
 
 #import "CEShaderVariable.h"
+#import "CEUniformBool.h"
+#import "CEUniformInteger.h"
+#import "CEUniformFloat.h"
+#import "CEUniformVector3.h"
+#import "CEUniformVector4.h"
 
 // Light Info Struct
 @interface CEShaderLightInfo : CEShaderVariable

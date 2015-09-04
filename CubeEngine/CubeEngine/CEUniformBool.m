@@ -18,6 +18,7 @@
     glUniform1i(_index, boolValue ? 1 : 0);
 }
 
+
 - (NSString *)dataType {
     return @"bool";
 }

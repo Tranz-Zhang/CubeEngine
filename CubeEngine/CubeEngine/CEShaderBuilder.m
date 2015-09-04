@@ -58,7 +58,7 @@ NSString *CEShaderDirectory() {
 }
 
 
-- (CEShaderBuildResult *)build {
+- (CEShaderInfo *)build {
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     
     CEShaderProfile *mainVertexProfile = [self shaderProfileWithName:@"Main.vert"];

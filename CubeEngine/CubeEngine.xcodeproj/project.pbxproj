@@ -73,10 +73,10 @@
 		4CC7F9601B969EF70078F441 /* CEShaderBuildProfileResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC7F95F1B969EF70078F441 /* CEShaderBuildProfileResult.m */; };
 		4CC7F9611B96A1730078F441 /* CEShaderBuildProfileResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC7F95F1B969EF70078F441 /* CEShaderBuildProfileResult.m */; };
 		4CCBB3F91B842A0E00200C4E /* CEShaderBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3F81B842A0E00200C4E /* CEShaderBuilder.m */; };
-		4CCBB3FC1B842A8400200C4E /* CEShaderBuildResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3FB1B842A8400200C4E /* CEShaderBuildResult.m */; };
+		4CCBB3FC1B842A8400200C4E /* CEShaderInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3FB1B842A8400200C4E /* CEShaderInfo.m */; };
 		4CD480941B40E7B40044517C /* CELightUniforms.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD480931B40E7B40044517C /* CELightUniforms.m */; };
 		4CD7F1381B91BA9900C118D7 /* CEShaderBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3F81B842A0E00200C4E /* CEShaderBuilder.m */; };
-		4CD7F1391B91BA9900C118D7 /* CEShaderBuildResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3FB1B842A8400200C4E /* CEShaderBuildResult.m */; };
+		4CD7F1391B91BA9900C118D7 /* CEShaderInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3FB1B842A8400200C4E /* CEShaderInfo.m */; };
 		4CD7F13A1B91BABF00C118D7 /* CEShaderVariable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBD44231B723AB600D72831 /* CEShaderVariable.m */; };
 		4CD7F13B1B91BABF00C118D7 /* CEUniformBool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403701B73853300C02BAE /* CEUniformBool.m */; };
 		4CD7F13C1B91BABF00C118D7 /* CEUniformInteger.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403771B73864900C02BAE /* CEUniformInteger.m */; };
@@ -96,6 +96,7 @@
 		4CD9CAAA1B8AF9E500FDE357 /* CECodingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CAA31B8AC1FB00FDE357 /* CECodingObject.m */; };
 		4CD9EB951B3BF7D400C6FCB5 /* CEShadowLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9EB941B3BF7D400C6FCB5 /* CEShadowLight.m */; };
 		4CD9EB971B3BFD2B00C6FCB5 /* CEShadowLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CD9EB931B3BF7D400C6FCB5 /* CEShadowLight.h */; };
+		4CF3E96C1B99E3E400D42515 /* CEShaderProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3E96B1B99E3E400D42515 /* CEShaderProgram.m */; };
 		4CF403711B73853300C02BAE /* CEUniformBool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403701B73853300C02BAE /* CEUniformBool.m */; };
 		4CF403751B73862900C02BAE /* CEUniformVector2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403741B73862900C02BAE /* CEUniformVector2.m */; };
 		4CF403781B73864900C02BAE /* CEUniformInteger.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403771B73864900C02BAE /* CEUniformInteger.m */; };
@@ -276,8 +277,8 @@
 		4CC7F95F1B969EF70078F441 /* CEShaderBuildProfileResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderBuildProfileResult.m; sourceTree = "<group>"; };
 		4CCBB3F71B842A0E00200C4E /* CEShaderBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderBuilder.h; sourceTree = "<group>"; };
 		4CCBB3F81B842A0E00200C4E /* CEShaderBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderBuilder.m; sourceTree = "<group>"; };
-		4CCBB3FA1B842A8400200C4E /* CEShaderBuildResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderBuildResult.h; sourceTree = "<group>"; };
-		4CCBB3FB1B842A8400200C4E /* CEShaderBuildResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderBuildResult.m; sourceTree = "<group>"; };
+		4CCBB3FA1B842A8400200C4E /* CEShaderInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderInfo.h; sourceTree = "<group>"; };
+		4CCBB3FB1B842A8400200C4E /* CEShaderInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderInfo.m; sourceTree = "<group>"; };
 		4CCBB3FE1B842F3100200C4E /* CEShaderProfileParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderProfileParser.h; sourceTree = "<group>"; };
 		4CCBB3FF1B842F3100200C4E /* CEShaderProfileParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderProfileParser.m; sourceTree = "<group>"; };
 		4CD480921B40E7B40044517C /* CELightUniforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CELightUniforms.h; sourceTree = "<group>"; };
@@ -292,6 +293,9 @@
 		4CF306B31B8DB0A0009544DC /* TestFunction1.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TestFunction1.vert; sourceTree = "<group>"; };
 		4CF306B41B8DB17C009544DC /* TestFunction2.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TestFunction2.vert; sourceTree = "<group>"; };
 		4CF306B51B8DB290009544DC /* TestFunction3.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TestFunction3.vert; sourceTree = "<group>"; };
+		4CF3E96A1B99E3E400D42515 /* CEShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderProgram.h; sourceTree = "<group>"; };
+		4CF3E96B1B99E3E400D42515 /* CEShaderProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderProgram.m; sourceTree = "<group>"; };
+		4CF3E96D1B99E4C100D42515 /* CEShaderInfo_setter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderInfo_setter.h; sourceTree = "<group>"; };
 		4CF4036F1B73853300C02BAE /* CEUniformBool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEUniformBool.h; sourceTree = "<group>"; };
 		4CF403701B73853300C02BAE /* CEUniformBool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEUniformBool.m; sourceTree = "<group>"; };
 		4CF403731B73862900C02BAE /* CEUniformVector2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEUniformVector2.h; sourceTree = "<group>"; };
@@ -481,6 +485,8 @@
 		2624A6121B0B1943001E3F32 /* Program */ = {
 			isa = PBXGroup;
 			children = (
+				4CF3E96A1B99E3E400D42515 /* CEShaderProgram.h */,
+				4CF3E96B1B99E3E400D42515 /* CEShaderProgram.m */,
 				267F4D7E1B0CD26200F25452 /* CEShaders.h */,
 				4C05C9371B5A2E2500199887 /* CEShader_Backup.h */,
 				4C69C50E1B4D238D00ED44D2 /* CEShader_test.h */,
@@ -597,8 +603,8 @@
 			children = (
 				4CF403721B73853900C02BAE /* Variables */,
 				4CCBB3F21B8425C800200C4E /* Resources */,
-				4CF5CCA61B8C65FA0048E833 /* Parser */,
 				4CCBB3FD1B842EB300200C4E /* Builder */,
+				4CF5CCA61B8C65FA0048E833 /* Parser */,
 			);
 			name = Shader;
 			sourceTree = "<group>";
@@ -627,8 +633,9 @@
 			children = (
 				4CCBB3F71B842A0E00200C4E /* CEShaderBuilder.h */,
 				4CCBB3F81B842A0E00200C4E /* CEShaderBuilder.m */,
-				4CCBB3FA1B842A8400200C4E /* CEShaderBuildResult.h */,
-				4CCBB3FB1B842A8400200C4E /* CEShaderBuildResult.m */,
+				4CCBB3FA1B842A8400200C4E /* CEShaderInfo.h */,
+				4CCBB3FB1B842A8400200C4E /* CEShaderInfo.m */,
+				4CF3E96D1B99E4C100D42515 /* CEShaderInfo_setter.h */,
 				4CC7F95E1B969EF70078F441 /* CEShaderBuildProfileResult.h */,
 				4CC7F95F1B969EF70078F441 /* CEShaderBuildProfileResult.m */,
 			);
@@ -822,7 +829,7 @@
 				4C51F1221B8B20DD0052511E /* CEShaderProfile.m in Sources */,
 				26F7B75A1AEE31C400BEDB01 /* CESpotLight.m in Sources */,
 				4CCBB3F91B842A0E00200C4E /* CEShaderBuilder.m in Sources */,
-				4CCBB3FC1B842A8400200C4E /* CEShaderBuildResult.m in Sources */,
+				4CCBB3FC1B842A8400200C4E /* CEShaderInfo.m in Sources */,
 				261089691AAD31C60041E142 /* CECamera.m in Sources */,
 				4C9D75941B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m in Sources */,
 				4C51F11E1B8B1ECB0052511E /* CEShaderFunctionInfo.m in Sources */,
@@ -846,6 +853,7 @@
 				4CBD44241B723AB600D72831 /* CEShaderVariable.m in Sources */,
 				260949191B0598EE00F7465B /* CEObjParser.m in Sources */,
 				2624ABAC1AD6A85500FC863C /* CERenderManager.m in Sources */,
+				4CF3E96C1B99E3E400D42515 /* CEShaderProgram.m in Sources */,
 				260949161B0598E000F7465B /* CEMtlParser.m in Sources */,
 				2624A6111B0AD234001E3F32 /* CEProgramConfig.m in Sources */,
 				26A9A8D71AF7744200394A4C /* CERenderCore.m in Sources */,
@@ -882,7 +890,7 @@
 				4C9D75951B8F009600AEA174 /* CEShaderLinkFunctionInfo.m in Sources */,
 				4CD7F1381B91BA9900C118D7 /* CEShaderBuilder.m in Sources */,
 				4CD7F1441B91BABF00C118D7 /* CEUniformSample2D.m in Sources */,
-				4CD7F1391B91BA9900C118D7 /* CEShaderBuildResult.m in Sources */,
+				4CD7F1391B91BA9900C118D7 /* CEShaderInfo.m in Sources */,
 				4CD9CAAA1B8AF9E500FDE357 /* CECodingObject.m in Sources */,
 				4C1352171B8364B2008EA484 /* main.m in Sources */,
 				4CD9CAA51B8AC39900FDE357 /* CEShaderProfileParser.m in Sources */,
