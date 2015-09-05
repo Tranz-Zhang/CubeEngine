@@ -19,16 +19,15 @@
     }
     
     if ([program link]) {
-        printf("compile OK\n");
+        fetch indexes...
         
     } else {
         // print error info
-        NSString *progLog = [program programLog];
-        CEError(@"Program link log: %@", progLog);
-        NSString *fragLog = [program fragmentShaderLog];
-        CEError(@"Fragment shader compile log: %@", fragLog);
-        NSString *vertLog = [program vertexShaderLog];
-        CEError(@"Vertex shader compile log: %@", vertLog);
+        CELog("================ vertexShader ================\n%s\n", [vertexShaderString UTF8String]);
+        CELog("================ fragmentShader ================\n%s\n", [fragmentShaderString UTF8String]);
+        CEError(@"Program link log: %@", [program programLog]);
+        CEError(@"Fragment shader compile log: %@", [program fragmentShaderLog]);
+        CEError(@"Vertex shader compile log: %@", [program vertexShaderLog]);
         NSAssert(0, @"Fail to Compile Program");
     }
     
