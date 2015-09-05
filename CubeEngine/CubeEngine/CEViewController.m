@@ -13,6 +13,7 @@
 
 // test headers
 #import "CEShaderBuilder.h"
+#import "CEShaderProgram.h"
 
 #define kDefaultFramesPerSecond 30
 #define kDefaultMaxLightCount 4
@@ -70,7 +71,10 @@
 - (void)onTestShaders {
     CEShaderBuilder *shaderBuilder = [CEShaderBuilder new];
     [shaderBuilder startBuildingNewShader];
-    [shaderBuilder build];
+    CEShaderInfo *shaderInfo = [shaderBuilder build];
+    
+    [EAGLContext setCurrentContext:_context];
+    CEShaderProgram *program = [CEShaderProgram buildProgramWithShaderInfo:shaderInfo];
     
 }
 

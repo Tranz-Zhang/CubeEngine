@@ -15,5 +15,6 @@
 @property (nonatomic, assign, readwrite) NSString *type;
 @property (nonatomic, strong, readwrite) NSString *precision;
 @property (nonatomic, assign, readwrite) CEShaderVariableUsage usage;
+@property (nonatomic, assign, readwrite) int arrayItemCount;
 
 @end

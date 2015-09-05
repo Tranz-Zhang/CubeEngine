@@ -10,9 +10,9 @@
 
 @interface CEShaderInfo ()
 
-@property (nonatomic, copy, readwrite) NSDictionary *variableInfos;
-
-@property (nonatomic, copy, readwrite) NSString *vertexShader;
-@property (nonatomic, copy, readwrite) NSString *fragmentShader;
+@property (nonatomic, strong, readwrite) NSDictionary *attributeDict;
+@property (nonatomic, strong, readwrite) NSDictionary *uniformsDict;
+@property (nonatomic, strong, readwrite) NSString *vertexShader;
+@property (nonatomic, strong, readwrite) NSString *fragmentShader;
 
 @end

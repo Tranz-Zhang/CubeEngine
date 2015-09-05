@@ -7,7 +7,6 @@
 //
 
 #import "BuildToolManager.h"
-#import "CEDirectoryDefines.h"
 #import "CEShaderProfileParser.h"
 #import "CEShaderFunctionInfo.h"
 #import "CEShaderProfile.h"
@@ -34,7 +33,7 @@
     if (!_appName.length || !_buildProductDir.length) {
         return;
     }
-    _appPath = [_buildProductDir stringByAppendingFormat:@"/%@.app", _appName];
+    _appPath = [kAppPath copy];
     if (![_fileManager fileExistsAtPath:_appPath isDirectory:nil]) {
         printf("App doesn't exist at path: %s\n", [_appPath UTF8String]);
         return;

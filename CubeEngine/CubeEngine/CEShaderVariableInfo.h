@@ -27,6 +27,9 @@ CEShaderVariableUsage CEShaderVariableUsageFromString(NSString *usageString);
 @property (nonatomic, readonly) NSString *precision;
 @property (nonatomic, readonly) CEShaderVariableUsage usage;
 
+// default is 1. larger than 1 mean array variable
+@property (nonatomic, readonly) int arrayItemCount;
+
 - (NSString *)declarationString;
 
 - (BOOL)isEqual:(CEShaderVariableInfo *)object;

@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "BuildToolManager.h"
 
+NSString *kAppPath = nil;
+
 /**
  BuildTool
  - copy shader resources
@@ -62,6 +64,14 @@ int main(int argc, const char * argv[]) {
                     break;
             }
         }
+        
+        // setup app path
+        if (!kAppPath && buildDirComponents.count && appNameComponents.count) {
+            NSString *appName = [appNameComponents componentsJoinedByString:@" "];
+            NSString *productPath = [[buildDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
+            kAppPath = [productPath stringByAppendingFormat:@"/%@.app", appName];
+        }
+        
         printf("\n============== BuildTool ==============\n");
         if (appNameComponents.count && buildDirComponents.count && engineDirComponents.count) {
             CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();

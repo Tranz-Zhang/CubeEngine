@@ -12,6 +12,7 @@
 #define kCEJsonObjectKey_structs    @"structs"
 #define kCEJsonObjectKey_variables  @"variables"
 #define kCEJsonObjectKey_function  @"function"
+#define kCEJsonObjectKey_defaultPrecision  @"defaultPrecision"
 
 
 @implementation CEShaderProfile
@@ -40,6 +41,7 @@
         }
         
         _function = [[CEShaderFunctionInfo alloc] initWithJsonDict:jsonDict[kCEJsonObjectKey_function]];
+        _defaultPrecision = jsonDict[kCEJsonObjectKey_defaultPrecision];
     }
     return self;
 }
@@ -71,6 +73,9 @@
     
     if (_function) {
         dict[kCEJsonObjectKey_function] = [_function jsonDict];
+    }
+    if (_defaultPrecision.length) {
+        dict[kCEJsonObjectKey_defaultPrecision] = _defaultPrecision;
     }
     return [dict copy];
 }

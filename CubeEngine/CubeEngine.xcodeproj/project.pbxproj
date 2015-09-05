@@ -225,6 +225,9 @@
 		269608FC1AF8C1990045FB03 /* CEScene_Rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEScene_Rendering.h; sourceTree = "<group>"; };
 		269762671AE0AF52005E95DA /* CERenderer_Dev.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer_Dev.h; sourceTree = "<group>"; };
 		269762681AE0AF52005E95DA /* CERenderer_Dev.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERenderer_Dev.m; sourceTree = "<group>"; };
+		269D96011B9AB4EF00D0556A /* BuildTool-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BuildTool-Prefix.pch"; sourceTree = "<group>"; };
+		269D96021B9AC64900D0556A /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		269D96031B9AD01200D0556A /* CEShaderProgram_privates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderProgram_privates.h; sourceTree = "<group>"; };
 		269F47681B0089030030CD55 /* CEShadowMapBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowMapBuffer.h; sourceTree = "<group>"; };
 		269F47691B0089030030CD55 /* CEShadowMapBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShadowMapBuffer.m; sourceTree = "<group>"; };
 		269F476B1B00893D0030CD55 /* CEShadowMapRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowMapRenderer.h; sourceTree = "<group>"; };
@@ -487,6 +490,7 @@
 			children = (
 				4CF3E96A1B99E3E400D42515 /* CEShaderProgram.h */,
 				4CF3E96B1B99E3E400D42515 /* CEShaderProgram.m */,
+				269D96031B9AD01200D0556A /* CEShaderProgram_privates.h */,
 				267F4D7E1B0CD26200F25452 /* CEShaders.h */,
 				4C05C9371B5A2E2500199887 /* CEShader_Backup.h */,
 				4C69C50E1B4D238D00ED44D2 /* CEShader_test.h */,
@@ -577,6 +581,8 @@
 				4C1352161B8364B2008EA484 /* main.m */,
 				4C1352131B83638B008EA484 /* BuildToolManager.h */,
 				4C1352141B83638B008EA484 /* BuildToolManager.m */,
+				269D96011B9AB4EF00D0556A /* BuildTool-Prefix.pch */,
+				269D96021B9AC64900D0556A /* Common.h */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -1014,6 +1020,7 @@
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREFIX_HEADER = "BuildTool/source/BuildTool-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1030,6 +1037,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREFIX_HEADER = "BuildTool/source/BuildTool-Prefix.pch";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;

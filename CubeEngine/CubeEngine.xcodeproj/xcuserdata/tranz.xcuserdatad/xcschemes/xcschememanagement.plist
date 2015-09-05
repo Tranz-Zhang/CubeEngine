@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>BuildTool.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>CubeEngine.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -18,6 +23,11 @@
 			<true/>
 		</dict>
 		<key>26193F521AA8324600787C64</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4C1352051B835CEF008EA484</key>
 		<dict>
 			<key>primary</key>
 			<true/>

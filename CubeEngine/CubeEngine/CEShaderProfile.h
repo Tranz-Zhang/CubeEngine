@@ -17,5 +17,6 @@
 @property (nonatomic, readonly) NSArray *structs;     // array of CEShaderStructInfo
 @property (nonatomic, readonly) NSArray *variables;   // array of CEShaderVariableInfo
 @property (nonatomic, readonly) CEShaderFunctionInfo *function;
+@property (nonatomic, readonly) NSString *defaultPrecision;
 
 @end

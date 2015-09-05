@@ -108,6 +108,7 @@ NSString *CEShaderVariableTypeStringWithType(CEShaderVariableType type) {
 #define kCEJsonObjectKey_type @"type"
 #define kCEJsonObjectKey_precision @"precision"
 #define kCEJsonObjectKey_usage @"usage"
+#define kCEJsonObjectKey_arrayItemCount @"arrayItemCount"
 
 @implementation CEShaderVariableInfo {
     NSString *_declarationString;
@@ -121,6 +122,16 @@ NSString *CEShaderVariableTypeStringWithType(CEShaderVariableType type) {
         _type = jsonDict[kCEJsonObjectKey_type];
         _precision = jsonDict[kCEJsonObjectKey_precision];
         _usage = [jsonDict[kCEJsonObjectKey_usage] intValue];
+        _arrayItemCount = [jsonDict[kCEJsonObjectKey_arrayItemCount] intValue];
+    }
+    return self;
+}
+
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _arrayItemCount = 1;
     }
     return self;
 }
@@ -139,6 +150,7 @@ NSString *CEShaderVariableTypeStringWithType(CEShaderVariableType type) {
         dict[kCEJsonObjectKey_precision] = _precision;
     }
     dict[kCEJsonObjectKey_usage] = @(_usage);
+    dict[kCEJsonObjectKey_arrayItemCount] = @(_arrayItemCount);
     return [dict copy];
 }
 
@@ -166,7 +178,11 @@ NSString *CEShaderVariableTypeStringWithType(CEShaderVariableType type) {
         [declaration appendFormat:@"%@ ", _precision];
     }
     [declaration appendFormat:@"%@ ", _type];
-    [declaration appendFormat:@"%@;", _name];
+    [declaration appendFormat:@"%@", _name];
+    if (_arrayItemCount > 1) {
+        [declaration appendFormat:@"[%d]", _arrayItemCount];
+    }
+    [declaration appendString:@";"];
     _declarationString = declaration.copy;
     return _declarationString;
 }

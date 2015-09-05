@@ -1,6 +1,6 @@
 
 
-attribute lowp vec3 test1_value1;
+attribute lowp vec3 test1_value1[2];
 uniform lowp mat3 test1_value2;
 uniform mediump mat3 test_common;
 
@@ -9,7 +9,7 @@ varying lowp vec3 EyeDirectionOut;
 varying lowp float Attenuation;
 varying lowp vec3 Normal;
 
-void CEVertex_TestFunction1(vec4 inputColor, float AAA) {
+void CEVertex_TestFunction1(vec4 inputColor, float AAA[3]) {
     // one of these methods should be executed
     //
     

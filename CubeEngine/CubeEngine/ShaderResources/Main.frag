@@ -1,4 +1,6 @@
 
+precision mediump float;
+
 uniform mediump vec4 DiffuseColor;
 
 void main() {

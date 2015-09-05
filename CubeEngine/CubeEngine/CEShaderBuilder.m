@@ -10,15 +10,15 @@
 #import "CEShaderProfile.h"
 #import "CEShaderVariable_privates.h"
 #import "CEShaderBuildProfileResult.h"
+#import "CEShaderInfo_setter.h"
 
 #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 #import "CEUtils.h"
 #else
 NSString *CEShaderDirectory() {
-    return @"/Users/chance/My Development/cube-engine/CubeEngine/BuildTool/Debug.app/Engine/ShaderProfiles";
+    return [kAppPath stringByAppendingPathComponent:kShaderDirectory];
 }
 #endif
-
 
 @implementation CEShaderBuilder {
     NSMutableDictionary *_vertexProfileDict;
@@ -84,14 +84,34 @@ NSString *CEShaderDirectory() {
     [self buildProfile:mainFragmentProfile withProfilePool:fragmentProfilePool result:fragmentResult];
     NSString *fragmentVariableDeclaration = [self variableDeclarationStringWithProfileResult:fragmentResult];
     NSString *fragmentShaderString = [NSString stringWithFormat:@"%@void main() %@", fragmentVariableDeclaration, fragmentResult.shaderString];
+    if (mainFragmentProfile.defaultPrecision.length) {
+        fragmentShaderString = [NSString stringWithFormat:@"precision %@ float;\n\n%@", mainFragmentProfile.defaultPrecision, fragmentShaderString];
+    }
     [outputVariables addObjectsFromArray:fragmentResult.attributes];
     [outputVariables addObjectsFromArray:fragmentResult.uniforms];
     
     printf("================ vertexShader ================\n%s\n", [vertexShaderString UTF8String]);
-    printf("================ fragmentShader ================\n%s\n", [fragmentShaderString UTF8String]);
+//    printf("================ fragmentShader ================\n%s\n", [fragmentShaderString UTF8String]);
     printf("shader build duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
     
-    return nil;
+    // sort variables
+    NSMutableDictionary *uniformDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *attributeDict = [NSMutableDictionary dictionary];
+    for (CEShaderVariableInfo *variableInfo in outputVariables) {
+        if (variableInfo.usage == CEShaderVariableUsageAttribute) {
+            attributeDict[variableInfo.name] = variableInfo;
+            
+        } else if (variableInfo.usage == CEShaderVariableUsageUniform) {
+            uniformDict[variableInfo.name] = variableInfo;
+        }
+    }
+    
+    CEShaderInfo *shaderInfo = [CEShaderInfo new];
+    shaderInfo.attributeDict = attributeDict.copy;
+    shaderInfo.uniformsDict = uniformDict.copy;
+    shaderInfo.vertexShader = vertexShaderString.copy;
+    shaderInfo.fragmentShader = fragmentShaderString.copy;
+    return shaderInfo;
 }
 
 
@@ -125,16 +145,6 @@ NSString *CEShaderDirectory() {
         [shaderString appendString:@"\n"];
     }
     return shaderString.copy;
-}
-
-
-- (CEShaderVariable *)uniformWithInfo:(CEShaderVariableInfo *)info {
-    return nil;
-}
-
-
-- (CEShaderVariable *)attributeWithInfo:(CEShaderVariableInfo *)info {
-    return nil;
 }
 
 
@@ -241,7 +251,8 @@ NSString *CEShaderDirectory() {
     if (profile) return profile;
     
     // load from disk
-    NSData *jsonData = [NSData dataWithContentsOfFile:[CEShaderDirectory() stringByAppendingFormat:@"/%@.profile", profileName]];
+    NSString *profilePath = [CEShaderDirectory() stringByAppendingFormat:@"/%@.profile", profileName];
+    NSData *jsonData = [NSData dataWithContentsOfFile:profilePath];
     if (jsonData.length) {
         NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:nil];
         profile = [[CEShaderProfile alloc] initWithJsonDict:jsonDict];

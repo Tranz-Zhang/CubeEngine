@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CEShaderVariableInfo.h"
 
 @interface CEShaderInfo : NSObject
 
-@property (nonatomic, readonly) NSDictionary *variableInfos;
+@property (nonatomic, readonly) NSDictionary *attributeDict; // @{"Name" : CEShaderVariableInfo};
+@property (nonatomic, readonly) NSDictionary *uniformsDict;  // @{"Name" : CEShaderVariableInfo};
 @property (nonatomic, readonly) NSString *vertexShader;
 @property (nonatomic, readonly) NSString *fragmentShader;
 

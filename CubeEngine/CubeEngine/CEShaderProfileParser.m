@@ -37,11 +37,24 @@
     shaderInfo.structs = [self parseStructDeclarationInShader:shaderContent];
     NSArray *functions = [self parseFunctionsInShader:shaderContent];
     shaderInfo.function = functions.count > 0 ? functions[0] : nil;
+    shaderInfo.defaultPrecision = [self parseDefaultPrecision:shaderContent];
     return shaderInfo;
 }
 
 
 #pragma mark - parse
+- (NSString *)parseDefaultPrecision:(NSString *)shaderString {
+    NSRegularExpression *regex = [self uniformRegex];
+    NSTextCheckingResult *result = [regex firstMatchInString:shaderString options:0 range:NSMakeRange(0, shaderString.length)];
+    if (!result) {
+        return nil;
+    }
+    NSString *precisionString = [shaderString substringWithRange:result.range];
+    NSMutableArray *components = [[precisionString componentsSeparatedByString:@" "] mutableCopy];
+    [components removeObject:@""];
+    return components.count > 2 ? components[1] : nil;
+}
+
 
 - (NSArray *)parseUnifromsInShader:(NSString *)shaderString {
     NSRegularExpression *regex = [self uniformRegex];
@@ -151,8 +164,8 @@
         // calculate hash value
         NSMutableString *hashString = [NSMutableString stringWithFormat:@"%@:", structName];
         for (CEShaderVariableInfo *variableInfo in variableInfos) {
-            [hashString appendFormat:@"%d_%@_%@_%@;", (int)variableInfo.usage, variableInfo.precision,
-             variableInfo.type, variableInfo.name];
+            [hashString appendFormat:@"%d_%@_%@_%@_%d;", (int)variableInfo.usage, variableInfo.precision,
+             variableInfo.type, variableInfo.name, variableInfo.arrayItemCount];
         }
         structInfo.structID = [hashString hash];
         [structInfos addObject:structInfo];
@@ -300,7 +313,6 @@
         linkFunctionName = [linkFunctionName stringByReplacingOccurrencesOfString:@" " withString:@""];
         
         // get function params
-        printf("%s\n", [linkFunctionName UTF8String]);
         NSRange endBracketRange = [linkDecleration rangeOfString:@")" options:NSBackwardsSearch];
         if (endBracketRange.location == NSNotFound) continue;
         NSString *paramContent = [linkDecleration substringWithRange:NSMakeRange(NSMaxRange(startBracketRange), endBracketRange.location - NSMaxRange(startBracketRange))];
@@ -310,7 +322,7 @@
         NSMutableArray *paramIDs = [NSMutableArray arrayWithCapacity:params.count];
         for (NSString *param in params) {
             if (!param.length) continue;
-            NSString *regexPattern = [NSString stringWithFormat:@"\\w+\\s+%@(\\s*\\[\\w\\]|)", param];
+            NSString *regexPattern = [NSString stringWithFormat:@"\\w+\\s+\\b%@\\b(\\s*\\[\\d\\]|)", param];
             NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexPattern options:0 error:nil];
             NSTextCheckingResult *result = [regex firstMatchInString:shaderString options:0 range:NSMakeRange(0, shaderString.length)];
             if (result && result.range.location != NSNotFound) {
@@ -388,7 +400,28 @@
 
 // @"attribute lowp vec3 VertexNormal" -> CEShaderVariableInfo
 - (CEShaderVariableInfo *)variableInfoWithDeclaration:(NSString *)declarationString {
-    NSMutableArray *components = [[declarationString componentsSeparatedByString:@" "] mutableCopy];
+    if (!declarationString.length) return nil;
+    
+    // check '[' and ']'
+    NSRange startBracketRange = [declarationString rangeOfString:@"["];
+    NSRange endBracketRange = [declarationString rangeOfString:@"]"];
+    NSAssert((startBracketRange.location == NSNotFound && endBracketRange.location == NSNotFound) ||
+             (startBracketRange.location != NSNotFound && endBracketRange.location != NSNotFound),
+             @"Wrong bracket match");
+    int arrayItemCount = 1;
+    NSString *parsingString = declarationString;
+    if (startBracketRange.location != NSNotFound &&
+        endBracketRange.location != NSNotFound) {
+        NSString *countString = [declarationString substringWithRange:NSMakeRange(NSMaxRange(startBracketRange), endBracketRange.location - NSMaxRange(startBracketRange))];
+        arrayItemCount = countString.intValue;
+        NSAssert(arrayItemCount >= 1, @"Error array item count");
+        parsingString = [declarationString substringToIndex:startBracketRange.location];
+    
+    } else if ([parsingString hasSuffix:@";"]) {
+        parsingString = [parsingString substringToIndex:parsingString.length - 1];
+    }
+    
+    NSMutableArray *components = [[parsingString componentsSeparatedByString:@" "] mutableCopy];
     [components removeObject:@""];
     
     CEShaderVariableUsage usage = CEShaderVariableUsageFromString(components[0]);
@@ -435,6 +468,7 @@
     variableInfo.variableID = [[NSString stringWithFormat:@"%d_%@_%@_%@",
                                (int)variableInfo.usage, variableInfo.precision,
                                variableInfo.type, variableInfo.name] hash];
+    variableInfo.arrayItemCount = arrayItemCount;
     return variableInfo;
 }
 
@@ -472,7 +506,7 @@
     if (!sUniformRegex) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            sUniformRegex = [NSRegularExpression regularExpressionWithPattern:@"uniform\\s+(\\w+\\s+){1,2}\\w+;" options:0 error:nil];
+            sUniformRegex = [NSRegularExpression regularExpressionWithPattern:@"uniform\\s+(\\w+\\s+){1,2}\\w+(\\s*\\[\\d\\]|);" options:0 error:nil];
         });
     }
     return sUniformRegex;
@@ -484,7 +518,7 @@
     if (!sAttributeRegex) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            sAttributeRegex = [NSRegularExpression regularExpressionWithPattern:@"attribute\\s+(\\w+\\s+){1,2}\\w+;" options:0 error:nil];
+            sAttributeRegex = [NSRegularExpression regularExpressionWithPattern:@"attribute\\s+(\\w+\\s+){1,2}\\w+(\\s*\\[\\d\\]|);" options:0 error:nil];
         });
     }
     return sAttributeRegex;
@@ -496,7 +530,7 @@
     if (!sVaryingRegex) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            sVaryingRegex = [NSRegularExpression regularExpressionWithPattern:@"varying\\s+(\\w+\\s+){1,2}\\w+;" options:0 error:nil];
+            sVaryingRegex = [NSRegularExpression regularExpressionWithPattern:@"varying\\s+(\\w+\\s+){1,2}\\w+(\\s*\\[\\d\\]|);" options:0 error:nil];
         });
     }
     return sVaryingRegex;
@@ -520,7 +554,7 @@
     if (!sStructVariableRegex) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            sStructVariableRegex = [NSRegularExpression regularExpressionWithPattern:@"(\\w+\\s+)?(vec\\d|float|mat\\d|int|bool)\\s\\w+;" options:0 error:nil];
+            sStructVariableRegex = [NSRegularExpression regularExpressionWithPattern:@"(\\w+\\s+)?(vec\\d|float|mat\\d|int|bool)\\s\\w+(\\s*\\[\\d\\]|);" options:0 error:nil];
         });
     }
     return sStructVariableRegex;
@@ -573,6 +607,20 @@
     }
     return sCommentRegex;
 }
+
+
+// precision mediump float;
+- (NSRegularExpression *)defaultPrecisionRegex {
+    static NSRegularExpression *sDefaultPrecisionRegex = nil;
+    if (!sDefaultPrecisionRegex) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            sDefaultPrecisionRegex = [NSRegularExpression regularExpressionWithPattern:@"precision\\s+\\w+\\s+float;" options:0 error:nil];
+        });
+    }
+    return sDefaultPrecisionRegex;
+}
+
 
 
 @end
