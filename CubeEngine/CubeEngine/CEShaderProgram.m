@@ -9,19 +9,20 @@
 #import "CEShaderProgram.h"
 #import "CEShaderProgram_privates.h"
 
-@implementation CEShaderProgram
+@implementation CEShaderProgram {
+    NSDictionary *_variableDict;
+}
 
 + (instancetype)buildProgramWithShaderInfo:(CEShaderInfo *)shaderInfo {
     CEProgram *program = [[CEProgram alloc] initWithVertexShaderString:shaderInfo.vertexShader
                                                   fragmentShaderString:shaderInfo.fragmentShader];
-    for (NSString *attributeName in shaderInfo.attributeDict.allKeys) {
-        [program addAttribute:attributeName];
-    }
+    [shaderInfo.variableInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
+        if (info.usage == CEShaderVariableUsageAttribute) {
+            [program addAttribute:variableName];
+        }
+    }];
     
-    if ([program link]) {
-        fetch indexes...
-        
-    } else {
+    if (![program link]) {
         // print error info
         CELog("================ vertexShader ================\n%s\n", [vertexShaderString UTF8String]);
         CELog("================ fragmentShader ================\n%s\n", [fragmentShaderString UTF8String]);
@@ -31,15 +32,24 @@
         NSAssert(0, @"Fail to Compile Program");
     }
     
-    return nil;
+    CEShaderProgram *shaderProgram = [[self class] init];
+    [shaderProgram setupWithProgram:program shaderInfo:shaderInfo];
+    return shaderProgram;
 }
 
 
-- (void)setProgram:(CEProgram *)program {
-    if (program != _program) {
-        _program = program;
-    }
+- (void)setupWithProgram:(CEProgram *)program shaderInfo:(CEShaderInfo *)shaderInfo {
+    _program = program;
+    
+    NSMutableDictionary *variableDict = [NSMutableDictionary dictionary];
+    [shaderInfo.variableInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
+        how to parse struct and variables
+    }];
 }
 
+
++ (NSDictionary *)
 
 @end
+
+

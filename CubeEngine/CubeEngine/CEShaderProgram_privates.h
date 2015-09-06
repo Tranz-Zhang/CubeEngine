@@ -12,15 +12,10 @@
 
 
 /**
- return the uniform index for the specify varialbe.
- return -1 if varialbe is not availiable in shader program.
+ Get output Attributes or Uniforms in current program. return nil if no item match the name and type;
  */
-- (GLint)uniformIndexOfVariable:(CEShaderVariable *)variable;
+- (CEShaderVariable *)outputVariableWithName:(NSString *)name type:(NSString *)typeString;
 
-/**
- return the attribute index for the specify varialbe.
- return -1 if varialbe is not availiable in shader program.
- */
-- (GLint)attributeIndexOfVariable:(CEShaderVariable *)variable;
 
 @end
+
