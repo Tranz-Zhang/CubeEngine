@@ -7,7 +7,6 @@
 //
 
 #import "CEUniformFloat.h"
-#import "CEShaderVariable_privates.h"
 
 @implementation CEUniformFloat
 

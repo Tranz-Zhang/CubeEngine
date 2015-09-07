@@ -26,4 +26,10 @@
 }
 
 
+- (BOOL)setupIndexWithProgram:(CEProgram *)program {
+    NSAssert(false, @"Must implemented by subclass");
+    return NO;
+}
+
+
 @end

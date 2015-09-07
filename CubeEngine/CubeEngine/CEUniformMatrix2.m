@@ -7,7 +7,6 @@
 //
 
 #import "CEUniformMatrix2.h"
-#import "CEShaderVariable_privates.h"
 
 @implementation CEUniformMatrix2
 

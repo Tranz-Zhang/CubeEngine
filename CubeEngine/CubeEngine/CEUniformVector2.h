@@ -6,10 +6,9 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderVariable.h"
+#import "CEUniform.h"
 
-
-@interface CEUniformVector2 : CEShaderVariable
+@interface CEUniformVector2 : CEUniform
 
 @property (nonatomic, assign) GLKVector2 vector2;
 

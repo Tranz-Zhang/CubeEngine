@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderVariable.h"
+#import "CEUniform.h"
 
-@interface CEUniformMatrix2 : CEShaderVariable
+@interface CEUniformMatrix2 : CEUniform
 
 @property (nonatomic, assign) GLKMatrix2 matrix2;
 

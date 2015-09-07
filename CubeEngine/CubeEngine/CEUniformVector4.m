@@ -7,7 +7,6 @@
 //
 
 #import "CEUniformVector4.h"
-#import "CEShaderVariable_privates.h"
 
 @implementation CEUniformVector4
 

@@ -10,11 +10,14 @@
 #import "CEVBOAttribute.h"
 
 typedef NS_ENUM(int, CEAttributeType) {
+    CEAttributeTypeNone = 0,
     CEAttributeTypeFloat = 1,
     CEAttributeTypeVector2,
     CEAttributeTypeVector3,
     CEAttributeTypeVector4,
 };
+
+CEAttributeType CEAttributeTypeWithString(NSString *attributeString);
 
 
 @interface CEAttribute : CEShaderVariable

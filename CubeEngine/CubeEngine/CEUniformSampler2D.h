@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderVariable.h"
+#import "CEUniform.h"
 
-@interface CEUniformSample2D : CEShaderVariable
+@interface CEUniformSampler2D : CEUniform
 
 @property (nonatomic, assign) GLuint textureID;
 

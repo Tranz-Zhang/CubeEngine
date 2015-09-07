@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderVariable.h"
+#import "CEUniform.h"
 #import "CEUniformBool.h"
 #import "CEUniformInteger.h"
 #import "CEUniformFloat.h"
@@ -14,7 +14,7 @@
 #import "CEUniformVector4.h"
 
 // Light Info Struct
-@interface CEShaderLightInfo : CEShaderVariable
+@interface CEUniformLightInfo : CEUniform
 
 @property (nonatomic, readonly) CEUniformBool *isEnabled;
 @property (nonatomic, readonly) CEUniformInteger *lightType;

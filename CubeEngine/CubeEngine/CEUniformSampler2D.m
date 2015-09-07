@@ -6,10 +6,9 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEUniformSample2D.h"
-#import "CEShaderVariable_privates.h"
+#import "CEUniformSampler2D.h"
 
-@implementation CEUniformSample2D {
+@implementation CEUniformSampler2D {
     int _textureIndex;
 }
 

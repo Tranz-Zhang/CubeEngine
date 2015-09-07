@@ -23,10 +23,10 @@
 #import "CEUniformMatrix3.h"
 #import "CEUniformMatrix4.h"
 
-#import "CEUniformSample2D.h"
+#import "CEUniformSampler2D.h"
 #import "CEAttribute.h"
 
-#import "CEShaderLightInfo.h"
+#import "CEUniformLightInfo.h"
 
 
 

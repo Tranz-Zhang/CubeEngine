@@ -7,7 +7,6 @@
 //
 
 #import "CEUniformInteger.h"
-#import "CEShaderVariable_privates.h"
 
 @implementation CEUniformInteger
 

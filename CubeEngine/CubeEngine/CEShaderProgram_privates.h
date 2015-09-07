@@ -10,7 +10,6 @@
 
 @interface CEShaderProgram ()
 
-
 /**
  Get output Attributes or Uniforms in current program. return nil if no item match the name and type;
  */

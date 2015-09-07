@@ -7,10 +7,14 @@
 //
 
 #import "CEShaderVariable.h"
+#import "CEProgram.h"
 
 @interface CEShaderVariable ()
 
 // index retrive from glProgram
-@property (nonatomic, assign) GLint index;
+//@property (nonatomic, assign) GLint index;
+
+// implementd by subclass
+- (BOOL)setupIndexWithProgram:(CEProgram *)program;
 
 @end

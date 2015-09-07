@@ -7,7 +7,6 @@
 //
 
 #import "CEUniformBool.h"
-#import "CEShaderVariable_privates.h"
 
 @implementation CEUniformBool
 

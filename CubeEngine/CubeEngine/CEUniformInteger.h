@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderVariable.h"
+#import "CEUniform.h"
 
-@interface CEUniformInteger : CEShaderVariable
+@interface CEUniformInteger : CEUniform
 
 @property (nonatomic, assign) GLint intValue;
 

@@ -10,6 +10,21 @@
 #import "CEShaderVariable_privates.h"
 #import "CEDefines.h"
 
+CEAttributeType CEAttributeTypeWithString(NSString *attributeString) {
+    if ([attributeString isEqualToString:@"float"]) {
+        return CEAttributeTypeFloat;
+    } else if ([attributeString isEqualToString:@"vec2"]) {
+        return CEAttributeTypeVector2;
+    } else if ([attributeString isEqualToString:@"vec3"]) {
+        return CEAttributeTypeVector3;
+    } else if ([attributeString isEqualToString:@"vec4"]) {
+        return CEAttributeTypeVector4;
+    } else {
+        return CEAttributeTypeNone;
+    }
+}
+
+
 @implementation CEAttribute {
     BOOL _enabled;
 }
@@ -61,6 +76,12 @@
                           attribute.elementStride,
                           CE_BUFFER_OFFSET(attribute.elementOffset));
     return;
+}
+
+
+- (BOOL)setupIndexWithProgram:(CEProgram *)program {
+    _index = [program attributeIndex:self.name];
+    return _index >= 0;
 }
 
 
