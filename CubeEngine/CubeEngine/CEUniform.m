@@ -17,4 +17,8 @@
 }
 
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"uniform %@ %@(%d)", [self dataType], self.name, _index];
+}
+
 @end

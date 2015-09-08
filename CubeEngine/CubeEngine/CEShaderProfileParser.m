@@ -7,7 +7,7 @@
 //
 
 #import "CEShaderProfileParser.h"
-#import "CEShaderVariable.h"
+//#import "CEShaderVariable.h"
 #import "CEShaderVariableInfo_setter.h"
 #import "CEShaderStructInfo_setter.h"
 #import "CEShaderProfile__setter.h"

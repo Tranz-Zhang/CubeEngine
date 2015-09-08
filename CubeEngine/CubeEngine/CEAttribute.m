@@ -85,6 +85,13 @@ CEAttributeType CEAttributeTypeWithString(NSString *attributeString) {
 }
 
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"attribute %@ %@(%d)",
+            (_type == 1 ? @"float" : [NSString stringWithFormat:@"vec%d", (int)_type]),
+            self.name, _index];
+}
+
+
 @end
 
 

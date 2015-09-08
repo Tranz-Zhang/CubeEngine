@@ -63,4 +63,17 @@
            _lightColor && _attenuation && _spotConsCutOff && _spotExponent;
 }
 
+
+- (NSString *)description {
+    return [@[[_isEnabled description],
+              [_lightType description],
+              [_lightPosition description],
+              [_lightDirection description],
+              [_lightColor description],
+              [_attenuation description],
+              [_spotConsCutOff description],
+              [_spotExponent description]]
+            description];
+}
+
 @end

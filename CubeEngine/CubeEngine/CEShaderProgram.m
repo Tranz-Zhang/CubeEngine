@@ -9,6 +9,7 @@
 #import "CEShaderProgram.h"
 #import "CEShaderProgram_privates.h"
 #import "CEShaderVariable_privates.h"
+#import "CEShaderVariableDefines.h"
 
 @implementation CEShaderProgram {
     NSDictionary *_variableDict;
@@ -33,7 +34,7 @@
         NSAssert(0, @"Fail to Compile Program");
     }
     
-    CEShaderProgram *shaderProgram = [[self class] init];
+    CEShaderProgram *shaderProgram = [[[self class] alloc] init];
     [shaderProgram setupWithProgram:program shaderInfo:shaderInfo];
     return shaderProgram;
 }
@@ -52,9 +53,12 @@
             }
             
         } else if (info.usage == CEShaderVariableUsageUniform) {
-            CEUniform *uniform = [[CEUniform alloc] initWithName:variableName];
-            if ([uniform setupIndexWithProgram:program]) {
-                variableDict[variableName] = uniform;
+            NSString *className = [[CEShaderProgram typeToUniformClassNameDict] objectForKey:info.type];
+            if (className) {
+                CEUniform *uniform = [[NSClassFromString(className) alloc] initWithName:variableName];
+                if ([uniform setupIndexWithProgram:program]) {
+                    variableDict[variableName] = uniform;
+                }
             }
         }
     }];
@@ -82,6 +86,19 @@
               @"sampler2D" : @"CEUniformSampler2D",
               @"LightInfo" : @"CEUniformLightInfo", //!!!: custom struct
               };
+            
+            // load class the first time
+            [CEUniformBool new];
+            [CEUniformInteger new];
+            [CEUniformFloat new];
+            [CEUniformVector2 new];
+            [CEUniformVector3 new];
+            [CEUniformVector4 new];
+            [CEUniformMatrix2 new];
+            [CEUniformMatrix3 new];
+            [CEUniformMatrix4 new];
+            [CEUniformSampler2D new];
+            [CEUniformLightInfo new];
         });
     }
     return sTypeToVariableClassNameDict;

@@ -8,7 +8,7 @@
 
 #import "CEShaderBuilder.h"
 #import "CEShaderProfile.h"
-#import "CEShaderVariable_privates.h"
+//#import "CEShaderVariable_privates.h"
 #import "CEShaderBuildProfileResult.h"
 #import "CEShaderInfo_setter.h"
 

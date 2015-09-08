@@ -78,18 +78,6 @@
 		4CD480941B40E7B40044517C /* CELightUniforms.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD480931B40E7B40044517C /* CELightUniforms.m */; };
 		4CD7F1381B91BA9900C118D7 /* CEShaderBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3F81B842A0E00200C4E /* CEShaderBuilder.m */; };
 		4CD7F1391B91BA9900C118D7 /* CEShaderInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3FB1B842A8400200C4E /* CEShaderInfo.m */; };
-		4CD7F13A1B91BABF00C118D7 /* CEShaderVariable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBD44231B723AB600D72831 /* CEShaderVariable.m */; };
-		4CD7F13B1B91BABF00C118D7 /* CEUniformBool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403701B73853300C02BAE /* CEUniformBool.m */; };
-		4CD7F13C1B91BABF00C118D7 /* CEUniformInteger.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403771B73864900C02BAE /* CEUniformInteger.m */; };
-		4CD7F13D1B91BABF00C118D7 /* CEUniformFloat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF4037A1B73866800C02BAE /* CEUniformFloat.m */; };
-		4CD7F13E1B91BABF00C118D7 /* CEUniformVector2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403741B73862900C02BAE /* CEUniformVector2.m */; };
-		4CD7F13F1B91BABF00C118D7 /* CEUniformVector3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF4037D1B73868600C02BAE /* CEUniformVector3.m */; };
-		4CD7F1401B91BABF00C118D7 /* CEUniformVector4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403801B7386A400C02BAE /* CEUniformVector4.m */; };
-		4CD7F1411B91BABF00C118D7 /* CEUniformMatrix2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403831B7386B000C02BAE /* CEUniformMatrix2.m */; };
-		4CD7F1421B91BABF00C118D7 /* CEUniformMatrix3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403861B7386BA00C02BAE /* CEUniformMatrix3.m */; };
-		4CD7F1431B91BABF00C118D7 /* CEUniformMatrix4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403891B7386C200C02BAE /* CEUniformMatrix4.m */; };
-		4CD7F1441B91BABF00C118D7 /* CEUniformSampler2D.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF4038C1B7386CD00C02BAE /* CEUniformSampler2D.m */; };
-		4CD7F1451B91BABF00C118D7 /* CEAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403921B73887600C02BAE /* CEAttribute.m */; };
 		4CD9CA9F1B8AB56600FDE357 /* CEShaderVariableInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CA9E1B8AB56600FDE357 /* CEShaderVariableInfo.m */; };
 		4CD9CAA41B8AC1FB00FDE357 /* CECodingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CAA31B8AC1FB00FDE357 /* CECodingObject.m */; };
 		4CD9CAA51B8AC39900FDE357 /* CEShaderProfileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3FF1B842F3100200C4E /* CEShaderProfileParser.m */; };
@@ -879,30 +867,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CD7F13E1B91BABF00C118D7 /* CEUniformVector2.m in Sources */,
-				4CD7F1451B91BABF00C118D7 /* CEAttribute.m in Sources */,
-				4CD7F13F1B91BABF00C118D7 /* CEUniformVector3.m in Sources */,
-				4CD7F1411B91BABF00C118D7 /* CEUniformMatrix2.m in Sources */,
 				4CC7F9611B96A1730078F441 /* CEShaderBuildProfileResult.m in Sources */,
 				4C51F1231B8B20F10052511E /* CEShaderProfile.m in Sources */,
-				4CD7F1431B91BABF00C118D7 /* CEUniformMatrix4.m in Sources */,
-				4CD7F13A1B91BABF00C118D7 /* CEShaderVariable.m in Sources */,
 				4C51F11F1B8B1EE50052511E /* CEShaderFunctionInfo.m in Sources */,
-				4CD7F1401B91BABF00C118D7 /* CEUniformVector4.m in Sources */,
-				4CD7F1421B91BABF00C118D7 /* CEUniformMatrix3.m in Sources */,
 				4C3A8EAB1B9588CF00BC3BC1 /* CEShaderStructInfo.m in Sources */,
 				4C9D75951B8F009600AEA174 /* CEShaderLinkFunctionInfo.m in Sources */,
 				4CD7F1381B91BA9900C118D7 /* CEShaderBuilder.m in Sources */,
-				4CD7F1441B91BABF00C118D7 /* CEUniformSampler2D.m in Sources */,
 				4CD7F1391B91BA9900C118D7 /* CEShaderInfo.m in Sources */,
 				4CD9CAAA1B8AF9E500FDE357 /* CECodingObject.m in Sources */,
 				4C1352171B8364B2008EA484 /* main.m in Sources */,
 				4CD9CAA51B8AC39900FDE357 /* CEShaderProfileParser.m in Sources */,
 				4CD9CAA81B8AC39900FDE357 /* CEShaderVariableInfo.m in Sources */,
-				4CD7F13C1B91BABF00C118D7 /* CEUniformInteger.m in Sources */,
-				4CD7F13B1B91BABF00C118D7 /* CEUniformBool.m in Sources */,
 				4C1352151B83638B008EA484 /* BuildToolManager.m in Sources */,
-				4CD7F13D1B91BABF00C118D7 /* CEUniformFloat.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
