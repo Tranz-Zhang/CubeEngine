@@ -13,7 +13,7 @@
 
 @interface CEShaderStructInfo : NSObject <CEJsonCoding>
 
-@property (nonatomic, readonly) NSUInteger structID;
+@property (nonatomic, readonly) unsigned long long structID;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSArray *variables;
 

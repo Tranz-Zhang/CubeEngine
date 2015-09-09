@@ -10,7 +10,7 @@
 
 @interface CEShaderVariableInfo ()
 
-@property (nonatomic, assign, readwrite) NSUInteger variableID;
+@property (nonatomic, assign, readwrite) unsigned long long variableID;
 @property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, assign, readwrite) NSString *type;
 @property (nonatomic, strong, readwrite) NSString *precision;

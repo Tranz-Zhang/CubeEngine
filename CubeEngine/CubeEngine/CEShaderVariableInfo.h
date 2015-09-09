@@ -21,7 +21,7 @@ CEShaderVariableUsage CEShaderVariableUsageFromString(NSString *usageString);
 
 @interface CEShaderVariableInfo : NSObject <CEJsonCoding>
 
-@property (nonatomic, readonly) NSUInteger variableID;
+@property (nonatomic, readonly) unsigned long long variableID;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *type;
 @property (nonatomic, readonly) NSString *precision;

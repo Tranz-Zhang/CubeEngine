@@ -62,7 +62,7 @@
             }
         }
     }];
-    
+    _variableDict = variableDict.copy;
     NSLog(@"");
 }
 

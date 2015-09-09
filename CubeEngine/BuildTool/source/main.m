@@ -23,6 +23,7 @@ NSString *kAppPath = nil;
 
 
 // commandLine: BuildTool -app ${PRODUCT_NAME} -buildDirectory ${BUILT_PRODUCTS_DIR} -engineDirectory ${SRCROOT}/../CubeEngine
+// scheme: BuildTool -app DEBUG -buildDirectory ${SRCROOT}/BuildTool -engineDirectory ${SRCROOT}/../CubeEngine
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         NSString *test1 = [NSString stringWithFormat:@"%@_%@", [NSString stringWithFormat:@"1"], @"2"];
@@ -89,6 +90,7 @@ int main(int argc, const char * argv[]) {
                    appNameComponents.count ? "OK" : "Fail",
                    buildDirComponents.count ? "OK" : "Fail",
                    engineDirComponents.count ? "OK" : "Fail");
+            assert(0);
         }
         printf("\n====================================\n");
     }

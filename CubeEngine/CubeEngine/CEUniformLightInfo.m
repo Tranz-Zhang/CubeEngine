@@ -65,15 +65,17 @@
 
 
 - (NSString *)description {
-    return [@[[_isEnabled description],
-              [_lightType description],
-              [_lightPosition description],
-              [_lightDirection description],
-              [_lightColor description],
-              [_attenuation description],
-              [_spotConsCutOff description],
-              [_spotExponent description]]
-            description];
+    NSMutableString *desc = [NSMutableString string];
+    [desc appendFormat:@"uniform %@ %@:\n", [self dataType], self.name];
+    [desc appendFormat:@"%@\n", [_isEnabled description]];
+    [desc appendFormat:@"%@\n", [_lightType description]];
+    [desc appendFormat:@"%@\n", [_lightPosition description]];
+    [desc appendFormat:@"%@\n", [_lightDirection description]];
+    [desc appendFormat:@"%@\n", [_lightColor description]];
+    [desc appendFormat:@"%@\n", [_attenuation description]];
+    [desc appendFormat:@"%@\n", [_spotConsCutOff description]];
+    [desc appendFormat:@"%@\n", [_spotExponent description]];
+    return desc.copy;
 }
 
 @end
