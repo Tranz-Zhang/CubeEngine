@@ -102,6 +102,7 @@
 		4CF9B6001BA06CAC00E2128D /* CEAttributeVector2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9B5FF1BA06CAC00E2128D /* CEAttributeVector2.m */; };
 		4CF9B6031BA06CBA00E2128D /* CEAttributeVector3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9B6021BA06CBA00E2128D /* CEAttributeVector3.m */; };
 		4CF9B6061BA06CCB00E2128D /* CEAttributeVector4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9B6051BA06CCB00E2128D /* CEAttributeVector4.m */; };
+		4CF9B6091BA07A9200E2128D /* CETextureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9B6081BA07A9200E2128D /* CETextureManager.m */; };
 		4CFE33631B3CFAAB00679817 /* CEShadowMapRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 269F476C1B00893D0030CD55 /* CEShadowMapRenderer.m */; };
 /* End PBXBuildFile section */
 
@@ -337,6 +338,8 @@
 		4CF9B6021BA06CBA00E2128D /* CEAttributeVector3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEAttributeVector3.m; sourceTree = "<group>"; };
 		4CF9B6041BA06CCB00E2128D /* CEAttributeVector4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEAttributeVector4.h; sourceTree = "<group>"; };
 		4CF9B6051BA06CCB00E2128D /* CEAttributeVector4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEAttributeVector4.m; sourceTree = "<group>"; };
+		4CF9B6071BA07A9200E2128D /* CETextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CETextureManager.h; sourceTree = "<group>"; };
+		4CF9B6081BA07A9200E2128D /* CETextureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CETextureManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -377,7 +380,7 @@
 			name = ObjFileLoader;
 			sourceTree = "<group>";
 		};
-		2610896A1AAD31CE0041E142 /* Render */ = {
+		2610896A1AAD31CE0041E142 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
 				4CBD44211B723A8200D72831 /* Shader */,
@@ -386,6 +389,8 @@
 				26A9A8D61AF7744200394A4C /* CERenderCore.m */,
 				2624ABAA1AD6A85500FC863C /* CERenderManager.h */,
 				2624ABAB1AD6A85500FC863C /* CERenderManager.m */,
+				4CF9B6071BA07A9200E2128D /* CETextureManager.h */,
+				4CF9B6081BA07A9200E2128D /* CETextureManager.m */,
 				26FF85361B0A173C0075B971 /* CEMainRenderer.h */,
 				26FF85371B0A173C0075B971 /* CEMainRenderer.m */,
 				269F476B1B00893D0030CD55 /* CEShadowMapRenderer.h */,
@@ -396,7 +401,7 @@
 				26F7FF8E1ADE45660086D9D7 /* CEAssistRenderer.m */,
 				26F1C3A61AEF342C0007ACB6 /* Deprecated */,
 			);
-			name = Render;
+			name = Renderer;
 			sourceTree = "<group>";
 		};
 		2610896B1AAD31E40041E142 /* 3DScene */ = {
@@ -463,7 +468,7 @@
 				269608EF1AF85E9C0045FB03 /* CEViewController.m */,
 				4C3992191B2AD6F500AC4B53 /* Common */,
 				2610896B1AAD31E40041E142 /* 3DScene */,
-				2610896A1AAD31CE0041E142 /* Render */,
+				2610896A1AAD31CE0041E142 /* Renderer */,
 				260949101B0597E200F7465B /* ObjFileLoader */,
 				2610896C1AAD31FF0041E142 /* Support */,
 			);
@@ -837,6 +842,7 @@
 				4CF9B5FD1BA06C9D00E2128D /* CEAttributeFloat.m in Sources */,
 				2690E8541AEA2F8E000BDD8F /* CEPointLight.m in Sources */,
 				4CF9B6001BA06CAC00E2128D /* CEAttributeVector2.m in Sources */,
+				4CF9B6091BA07A9200E2128D /* CETextureManager.m in Sources */,
 				4CD9EB951B3BF7D400C6FCB5 /* CEShadowLight.m in Sources */,
 				4C3A8EAA1B95850A00BC3BC1 /* CEShaderStructInfo.m in Sources */,
 				4CF4037E1B73868600C02BAE /* CEUniformVector3.m in Sources */,
