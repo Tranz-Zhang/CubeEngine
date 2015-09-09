@@ -45,34 +45,72 @@
     
     NSMutableDictionary *variableDict = [NSMutableDictionary dictionary];
     [shaderInfo.variableInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
+        NSString *className = nil;
         if (info.usage == CEShaderVariableUsageAttribute) {
-            CEAttributeType type = CEAttributeTypeWithString(info.type);
-            CEAttribute *attribute = [[CEAttribute alloc] initWithName:variableName type:type];
-            if ([attribute setupIndexWithProgram:program]) {
-                variableDict[variableName] = attribute;
-            }
-            
+            className = [[CEShaderProgram typeToAttributeClassNameDict] objectForKey:info.type];
         } else if (info.usage == CEShaderVariableUsageUniform) {
-            NSString *className = [[CEShaderProgram typeToUniformClassNameDict] objectForKey:info.type];
-            if (className) {
-                CEUniform *uniform = [[NSClassFromString(className) alloc] initWithName:variableName];
-                if ([uniform setupIndexWithProgram:program]) {
-                    variableDict[variableName] = uniform;
-                }
+            className = [[CEShaderProgram typeToUniformClassNameDict] objectForKey:info.type];
+        }
+        if (className) {
+            CEShaderVariable *uniform = [[NSClassFromString(className) alloc] initWithName:variableName];
+            if ([uniform setupIndexWithProgram:program]) {
+                variableDict[variableName] = uniform;
             }
         }
     }];
     _variableDict = variableDict.copy;
-    NSLog(@"");
+    [self onProgramSetup];
+}
+
+
+- (CEShaderVariable *)outputVariableWithName:(NSString *)name type:(NSString *)dataType {
+    if (!name.length || !dataType.length) {
+        return nil;
+    }
+    CEShaderVariable *variable = _variableDict[name];
+    if (variable && [variable.dataType isEqualToString:dataType]) {
+        return variable;
+    }
+    return nil;
+}
+
+- (void)onProgramSetup {
+    
+}
+
+
+#pragma mark - Others
+
++ (NSDictionary *)typeToAttributeClassNameDict {
+    static NSDictionary *sTypeToAttributeClassNameDict = nil;
+    if (!sTypeToAttributeClassNameDict) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            sTypeToAttributeClassNameDict =
+            @{
+              @"float"  : @"CEAttributeFloat",
+              @"vec2"   : @"CEAttributeVector2",
+              @"vec3"   : @"CEAttributeVector3",
+              @"vec4"   : @"CEAttributeVector4",
+              };
+            
+            // load class the first time
+            [CEAttributeFloat new];
+            [CEAttributeVector2 new];
+            [CEAttributeVector3 new];
+            [CEAttributeVector4 new];
+        });
+    }
+    return sTypeToAttributeClassNameDict;
 }
 
 
 + (NSDictionary *)typeToUniformClassNameDict {
-    static NSDictionary *sTypeToVariableClassNameDict = nil;
-    if (!sTypeToVariableClassNameDict) {
+    static NSDictionary *sTypeToUniformClassNameDict = nil;
+    if (!sTypeToUniformClassNameDict) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            sTypeToVariableClassNameDict =
+            sTypeToUniformClassNameDict =
             @{
               @"bool"   : @"CEUniformBool",
               @"int"    : @"CEUniformInteger",
@@ -101,7 +139,7 @@
             [CEUniformLightInfo new];
         });
     }
-    return sTypeToVariableClassNameDict;
+    return sTypeToUniformClassNameDict;
 }
 
 @end

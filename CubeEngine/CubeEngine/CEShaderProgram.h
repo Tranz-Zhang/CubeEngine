@@ -22,5 +22,7 @@
 
 + (instancetype)buildProgramWithShaderInfo:(CEShaderInfo *)shaderInfo;
 
+/** called when finished building program */
+- (void)onProgramSetup;
 
 @end

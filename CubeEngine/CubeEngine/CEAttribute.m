@@ -1,5 +1,5 @@
 //
-//  CEShaderAttribute.m
+//  CEAttribute.m
 //  CubeEngine
 //
 //  Created by chance on 8/6/15.
@@ -10,41 +10,12 @@
 #import "CEShaderVariable_privates.h"
 #import "CEDefines.h"
 
-CEAttributeType CEAttributeTypeWithString(NSString *attributeString) {
-    if ([attributeString isEqualToString:@"float"]) {
-        return CEAttributeTypeFloat;
-    } else if ([attributeString isEqualToString:@"vec2"]) {
-        return CEAttributeTypeVector2;
-    } else if ([attributeString isEqualToString:@"vec3"]) {
-        return CEAttributeTypeVector3;
-    } else if ([attributeString isEqualToString:@"vec4"]) {
-        return CEAttributeTypeVector4;
-    } else {
-        return CEAttributeTypeNone;
-    }
-}
-
-
 @implementation CEAttribute {
     BOOL _enabled;
 }
 
-
-- (instancetype)initWithName:(NSString *)name type:(CEAttributeType)type {
-    self = [super initWithName:name];
-    if (self) {
-        if (type < 1 || type > 4) {
-            NSAssert(false, @"wrong variable count for attribute");
-        }
-        _type = type;
-    }
-    return self;
-}
-
-
 - (void)setAttribute:(CEVBOAttribute *)attribute {
-    if ([_attribute isEqualToAttribute:attribute] ||
-        attribute.primaryCount != _type) {
+    if ([_attribute isEqualToAttribute:attribute]) {
         return;
     }
     
@@ -86,9 +57,7 @@ CEAttributeType CEAttributeTypeWithString(NSString *attributeString) {
 
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"attribute %@ %@(%d)",
-            (_type == 1 ? @"float" : [NSString stringWithFormat:@"vec%d", (int)_type]),
-            self.name, _index];
+    return [NSString stringWithFormat:@"attribute %@ %@(%d)", self.dataType, self.name, _index];
 }
 
 

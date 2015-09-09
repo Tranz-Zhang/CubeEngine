@@ -91,8 +91,8 @@ NSString *CEShaderDirectory() {
     [allVariableInfos addObjectsFromArray:fragmentResult.uniforms];
     [allStructInfos addObjectsFromArray:fragmentResult.structs];
     
-    printf("================ vertexShader ================\n%s\n", [vertexShaderString UTF8String]);
-    printf("================ fragmentShader ================\n%s\n", [fragmentShaderString UTF8String]);
+//    printf("================ vertexShader ================\n%s\n", [vertexShaderString UTF8String]);
+//    printf("================ fragmentShader ================\n%s\n", [fragmentShaderString UTF8String]);
     printf("shader build duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
     
     // gen struct dictionary
