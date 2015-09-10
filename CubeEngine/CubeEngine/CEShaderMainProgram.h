@@ -23,7 +23,7 @@
 @property (nonatomic, readonly) CEUniformVector3 *specularColor;
 @property (nonatomic, readonly) CEUniformVector3 *ambientColor;
 @property (nonatomic, readonly) CEUniformFloat *shininessExponent;
-@property (nonatomic, readonly) CEUniformLightInfo *lightInfo;
+@property (nonatomic, readonly) CEUniformLightInfo *mainLight;
 
 
 @end

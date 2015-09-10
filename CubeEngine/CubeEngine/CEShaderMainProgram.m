@@ -25,7 +25,7 @@
     _specularColor =    (CEUniformVector3 *)[self outputVariableWithName:@"SpecularColor" type:@"vec3"];
     _ambientColor =     (CEUniformVector3 *)[self outputVariableWithName:@"AmbientColor" type:@"vec3"];
     _shininessExponent = (CEUniformFloat *)[self outputVariableWithName:@"ShininessExponent" type:@"float"];
-    _lightInfo =        (CEUniformLightInfo *)[self outputVariableWithName:@"MainLight" type:@"LightInfo"];
+    _mainLight =        (CEUniformLightInfo *)[self outputVariableWithName:@"MainLight" type:@"LightInfo"];
 }
 
 

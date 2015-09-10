@@ -40,10 +40,12 @@ NSString *CEShaderDirectory() {
     [_vertexProfileDict removeAllObjects];
     [_fragmentProfileDict removeAllObjects];
     
+    /*
+     
     // add test function profile and test
     CEShaderProfile *profile = [self shaderProfileWithName:@"BaseLightEffect.vert"];
     _vertexProfileDict[profile.function.functionID] = profile;
-    profile = [self shaderProfileWithName:@"PointLightFunciton.vert"];
+    profile = [self shaderProfileWithName:@"DirectionalLightFunction.vert"];
     _vertexProfileDict[profile.function.functionID] = profile;
     
     profile = [self shaderProfileWithName:@"BaseLightEffect.frag"];
@@ -55,6 +57,8 @@ NSString *CEShaderDirectory() {
     _vertexProfileDict[profile.function.functionID] = profile;
     profile = [self shaderProfileWithName:@"TestFunction3.vert"];
     _vertexProfileDict[profile.function.functionID] = profile;
+     
+     //*/
 }
 
 

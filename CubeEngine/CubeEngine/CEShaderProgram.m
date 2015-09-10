@@ -78,6 +78,9 @@
     
 }
 
+- (void)use {
+    [_program use];
+}
 
 #pragma mark - Others
 

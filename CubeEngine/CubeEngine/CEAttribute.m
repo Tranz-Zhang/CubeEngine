@@ -28,8 +28,7 @@
         _enabled = NO;
         return;
         
-    } else if (attribute.name != CEVBOAttributeTangent ||
-               attribute.primaryCount <= 0 ||
+    } else if (attribute.primaryCount <= 0 ||
                attribute.elementStride <= 0) {
         NSLog(@"Fail to setup texture attribute");
         return;

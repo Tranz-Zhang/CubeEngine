@@ -69,6 +69,7 @@
 		4C51F1231B8B20F10052511E /* CEShaderProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C51F1211B8B20DD0052511E /* CEShaderProfile.m */; };
 		4C9D75941B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */; };
 		4C9D75951B8F009600AEA174 /* CEShaderLinkFunctionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */; };
+		4CBADCFF1BA1ACC400505E7E /* CETestRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBADCFE1BA1ACC400505E7E /* CETestRenderer.m */; };
 		4CBD44241B723AB600D72831 /* CEShaderVariable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBD44231B723AB600D72831 /* CEShaderVariable.m */; };
 		4CC4E7E91B9DB722008DEEC1 /* CEUniform.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC4E7E81B9DB722008DEEC1 /* CEUniform.m */; };
 		4CC7F9601B969EF70078F441 /* CEShaderBuildProfileResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC7F95F1B969EF70078F441 /* CEShaderBuildProfileResult.m */; };
@@ -269,6 +270,8 @@
 		4C9D75911B8EEAA900AEA174 /* template.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = template.glsl; sourceTree = "<group>"; };
 		4C9D75921B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderLinkFunctionInfo.h; sourceTree = "<group>"; };
 		4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderLinkFunctionInfo.m; sourceTree = "<group>"; };
+		4CBADCFD1BA1ACC400505E7E /* CETestRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CETestRenderer.h; sourceTree = "<group>"; };
+		4CBADCFE1BA1ACC400505E7E /* CETestRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CETestRenderer.m; sourceTree = "<group>"; };
 		4CBD44221B723AB600D72831 /* CEShaderVariable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderVariable.h; sourceTree = "<group>"; };
 		4CBD44231B723AB600D72831 /* CEShaderVariable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderVariable.m; sourceTree = "<group>"; };
 		4CC4E7E71B9DB722008DEEC1 /* CEUniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEUniform.h; sourceTree = "<group>"; };
@@ -490,6 +493,8 @@
 		2624A6121B0B1943001E3F32 /* Program */ = {
 			isa = PBXGroup;
 			children = (
+				4CBADCFD1BA1ACC400505E7E /* CETestRenderer.h */,
+				4CBADCFE1BA1ACC400505E7E /* CETestRenderer.m */,
 				4CF3E96A1B99E3E400D42515 /* CEShaderProgram.h */,
 				4CF3E96B1B99E3E400D42515 /* CEShaderProgram.m */,
 				269D96031B9AD01200D0556A /* CEShaderProgram_privates.h */,
@@ -877,6 +882,7 @@
 				265ACD591AB2D406000277F2 /* CEObject.m in Sources */,
 				2658786B1AD7C99100BA2137 /* CEWireframeRenderer.m in Sources */,
 				26FF85381B0A173C0075B971 /* CEMainRenderer.m in Sources */,
+				4CBADCFF1BA1ACC400505E7E /* CETestRenderer.m in Sources */,
 				4CBD44241B723AB600D72831 /* CEShaderVariable.m in Sources */,
 				260949191B0598EE00F7465B /* CEObjParser.m in Sources */,
 				2624ABAC1AD6A85500FC863C /* CERenderManager.m in Sources */,

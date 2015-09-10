@@ -25,6 +25,7 @@
 
 // test
 #import "CEMainProgram.h"
+#import "CETestRenderer.h"
 
 
 @interface CERenderGroup : NSObject
@@ -240,6 +241,16 @@
 
 
 - (CEMainRenderer *)rendererWithConfig:(CEProgramConfig *)config {
+    static CETestRenderer *testRenderer;
+    if (!testRenderer) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            testRenderer = [[CETestRenderer alloc] init];
+        });
+    }
+    return testRenderer;
+    
+    
     CEMainRenderer *render = _rendererDict[config];
     if (!render) {
         render = [CEMainRenderer rendererWithConfig:config];
