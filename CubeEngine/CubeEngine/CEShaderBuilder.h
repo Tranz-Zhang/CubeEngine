@@ -20,8 +20,7 @@ typedef NS_ENUM(int, CEShaderRenderType) {
 
 - (void)startBuildingNewShader;
 
-- (void)setRanderType:(CEShaderRenderType)renderType;
-- (void)enableLight:(BOOL)enabled;
+- (void)enableLightWithType:(CELightType)lightType;
 - (void)enableTexture:(BOOL)enabled;
 - (void)enableNormalMap:(BOOL)enabled;
 - (void)enableShadowMap:(BOOL)enabled;
@@ -29,3 +28,4 @@ typedef NS_ENUM(int, CEShaderRenderType) {
 - (CEShaderInfo *)build;
 
 @end
+

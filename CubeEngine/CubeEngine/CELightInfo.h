@@ -9,11 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 
-typedef NS_ENUM(NSInteger, CELightType) {
-    CELightTypeDirectional = 1,
-    CELightTypePoint,
-    CELightTypeSpot,
-};
 
 // Save the uniform index of LightInfo struct in the program
 @interface CELightInfo : NSObject

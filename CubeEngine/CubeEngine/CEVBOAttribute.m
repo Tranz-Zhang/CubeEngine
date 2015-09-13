@@ -8,6 +8,25 @@
 
 #import "CEVBOAttribute.h"
 
+NSString *CEVBOAttributeNameString(CEVBOAttributeName name) {
+    switch (name) {
+        case CEVBOAttributePosition:
+            return @"Position";
+        case CEVBOAttributeTextureCoord:
+            return @"TextureCoord";
+        case CEVBOAttributeNormal:
+            return @"Normal";
+        case CEVBOAttributeColor:
+            return @"Color";
+        case CEVBOAttributeTangent:
+            return @"Tangent";
+        case CEVBOAttributeBitangent:
+            return @"Bitangen";
+        default:
+            return nil;
+    }
+}
+
 @interface CEVBOAttribute ()
 
 @property (nonatomic, readwrite) CEVBOAttributeName name;    // 属性名称 如：CEVBOAttributePosition

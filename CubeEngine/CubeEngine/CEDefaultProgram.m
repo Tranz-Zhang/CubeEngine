@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEShaderMainProgram.h"
+#import "CEDefaultProgram.h"
 #import "CEShaderProgram_privates.h"
 
-@implementation CEShaderMainProgram
+@implementation CEDefaultProgram
 
 - (void)onProgramSetup {
     // basic

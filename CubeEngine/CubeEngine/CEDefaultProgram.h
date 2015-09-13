@@ -8,7 +8,7 @@
 
 #import "CEShaderProgram.h"
 
-@interface CEShaderMainProgram : CEShaderProgram
+@interface CEDefaultProgram : CEShaderProgram
 
 // basic
 @property (nonatomic, readonly) CEAttributeVector4 *vertexPosition;

@@ -16,6 +16,9 @@
 }
 
 + (instancetype)buildProgramWithShaderInfo:(CEShaderInfo *)shaderInfo {
+    if (!shaderInfo.vertexShader.length || !shaderInfo.fragmentShader.length) {
+        return nil;
+    }
     CEProgram *program = [[CEProgram alloc] initWithVertexShaderString:shaderInfo.vertexShader
                                                   fragmentShaderString:shaderInfo.fragmentShader];
     [shaderInfo.variableInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {

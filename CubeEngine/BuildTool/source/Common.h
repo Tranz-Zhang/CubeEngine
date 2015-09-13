@@ -11,4 +11,6 @@
 
 extern NSString *kAppPath;
 
+#import "CEDefines.h"
+
 #endif

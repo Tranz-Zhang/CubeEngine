@@ -16,4 +16,13 @@
 #define CE_BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 
+typedef NS_ENUM(NSInteger, CELightType) {
+    CELightTypeNone = 0,
+    CELightTypeDirectional = 1,
+    CELightTypePoint,
+    CELightTypeSpot,
+};
+
+
+
 #endif

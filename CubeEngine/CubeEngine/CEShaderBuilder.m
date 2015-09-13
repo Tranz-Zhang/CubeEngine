@@ -21,46 +21,96 @@ NSString *CEShaderDirectory() {
 #endif
 
 @implementation CEShaderBuilder {
-    NSMutableDictionary *_vertexProfileDict;
-    NSMutableDictionary *_fragmentProfileDict;
+    NSMutableDictionary *_vertexProfilePool;
+    NSMutableDictionary *_fragmentProfilePool;
 }
 
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _vertexProfileDict = [NSMutableDictionary dictionary];
-        _fragmentProfileDict = [NSMutableDictionary dictionary];
+        _vertexProfilePool = [NSMutableDictionary dictionary];
+        _fragmentProfilePool = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
+#pragma mark - config
 
 - (void)startBuildingNewShader {
-    [_vertexProfileDict removeAllObjects];
-    [_fragmentProfileDict removeAllObjects];
+    [_vertexProfilePool removeAllObjects];
+    [_fragmentProfilePool removeAllObjects];
     
     /*
      
     // add test function profile and test
     CEShaderProfile *profile = [self shaderProfileWithName:@"BaseLightEffect.vert"];
-    _vertexProfileDict[profile.function.functionID] = profile;
+    _vertexProfilePool[profile.function.functionID] = profile;
     profile = [self shaderProfileWithName:@"DirectionalLightFunction.vert"];
-    _vertexProfileDict[profile.function.functionID] = profile;
+    _vertexProfilePool[profile.function.functionID] = profile;
     
     profile = [self shaderProfileWithName:@"BaseLightEffect.frag"];
-    _fragmentProfileDict[profile.function.functionID] = profile;
+    _fragmentProfilePool[profile.function.functionID] = profile;
     
     profile = [self shaderProfileWithName:@"TestFunction1.vert"];
-    _vertexProfileDict[profile.function.functionID] = profile;
+    _vertexProfilePool[profile.function.functionID] = profile;
     profile = [self shaderProfileWithName:@"TestFunction2.vert"];
-    _vertexProfileDict[profile.function.functionID] = profile;
+    _vertexProfilePool[profile.function.functionID] = profile;
     profile = [self shaderProfileWithName:@"TestFunction3.vert"];
-    _vertexProfileDict[profile.function.functionID] = profile;
+    _vertexProfilePool[profile.function.functionID] = profile;
      
      //*/
 }
 
+- (void)enableLightWithType:(CELightType)lightType {
+    switch (lightType) {
+        case CELightTypeDirectional:
+            [self loadProfileWithName:@"DirectionalLightFunction"];
+            break;
+        case CELightTypePoint:
+            [self loadProfileWithName:@"PointLightFunciton"];
+            break;
+        case CELightTypeSpot:
+            [self loadProfileWithName:@"SpotLightFunction"];
+            break;
+        case CELightTypeNone:
+            [self removeProfileWithName:@"DirectionalLightFunction"];
+            [self removeProfileWithName:@"PointLightFunciton"];
+            [self removeProfileWithName:@"SpotLightFunction"];
+        default:
+            break;
+    }
+}
+
+
+- (void)enableTexture:(BOOL)enabled {
+    if (enabled) {
+        [self loadProfileWithName:@""];
+    } else {
+        [self removeProfileWithName:@""];
+    }
+}
+
+
+- (void)enableNormalMap:(BOOL)enabled {
+    if (enabled) {
+        [self loadProfileWithName:@""];
+    } else {
+        [self removeProfileWithName:@""];
+    }
+}
+
+
+- (void)enableShadowMap:(BOOL)enabled {
+    if (enabled) {
+        [self loadProfileWithName:@""];
+    } else {
+        [self removeProfileWithName:@""];
+    }
+}
+
+
+#pragma mark - shader building
 
 - (CEShaderInfo *)build {
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
@@ -73,7 +123,7 @@ NSString *CEShaderDirectory() {
     NSMutableSet *allStructInfos = [NSMutableSet set];
     
     // build vertex shader
-    NSDictionary *vertexProfilePool = [_vertexProfileDict copy];
+    NSDictionary *vertexProfilePool = [_vertexProfilePool copy];
     CEShaderBuildProfileResult *vertexResult = [CEShaderBuildProfileResult new];
     [self buildProfile:mainVertexProfile withProfilePool:vertexProfilePool result:vertexResult];
     NSString *vertexVariableDeclaration = [self variableDeclarationStringWithProfileResult:vertexResult];
@@ -83,7 +133,7 @@ NSString *CEShaderDirectory() {
     [allStructInfos addObjectsFromArray:vertexResult.structs];
     
     // build fragment shader
-    NSDictionary *fragmentProfilePool = [_fragmentProfileDict copy];
+    NSDictionary *fragmentProfilePool = [_fragmentProfilePool copy];
     CEShaderBuildProfileResult *fragmentResult = [CEShaderBuildProfileResult new];
     [self buildProfile:mainFragmentProfile withProfilePool:fragmentProfilePool result:fragmentResult];
     NSString *fragmentVariableDeclaration = [self variableDeclarationStringWithProfileResult:fragmentResult];
@@ -123,7 +173,7 @@ NSString *CEShaderDirectory() {
 
 
 
-#pragma mark - build variables
+// build variables
 
 - (NSString *)variableDeclarationStringWithProfileResult:(CEShaderBuildProfileResult *)result {
     NSArray *declarationList = @[result.structs, result.attributes, result.uniforms, result.varyings];
@@ -155,7 +205,7 @@ NSString *CEShaderDirectory() {
 }
 
 
-#pragma mark - build function
+// build function
 
 - (void)buildProfile:(CEShaderProfile *)profile
      withProfilePool:(NSDictionary *)profilePool
@@ -243,7 +293,32 @@ NSString *CEShaderDirectory() {
 }
 
 
-#pragma mark - Tools
+#pragma mark - profile loading
+// load vertex & fragment profile with the specify name to profile pool
+- (void)loadProfileWithName:(NSString *)profileName {
+    // load vertx profile
+    NSString *vertexProfileName = [profileName stringByAppendingString:@".vert"];
+    CEShaderProfile *vertexProfile = [self shaderProfileWithName:vertexProfileName];
+    if (vertexProfile.function.functionID) {
+        _vertexProfilePool[vertexProfile.function.functionID] = vertexProfile;
+    }
+    
+    // load fragment profile
+    NSString *fragmentProfileName = [profileName stringByAppendingString:@".frag"];
+    CEShaderProfile *fragmentProfile = [self shaderProfileWithName:fragmentProfileName];
+    if (fragmentProfile.function.functionID) {
+        _fragmentProfilePool[fragmentProfile.function.functionID] = fragmentProfile;
+    }
+}
+
+
+// remove specify vertex & fragment profile from profile pool
+- (void)removeProfileWithName:(NSString *)profileName {
+    NSString *vertexProfileName = [profileName stringByAppendingString:@".vert"];
+    [_vertexProfilePool removeObjectForKey:vertexProfileName];
+    NSString *fragmentProfileName = [profileName stringByAppendingString:@".frag"];
+    [_fragmentProfilePool removeObjectForKey:fragmentProfileName];
+}
 
 
 - (CEShaderProfile *)shaderProfileWithName:(NSString *)profileName {

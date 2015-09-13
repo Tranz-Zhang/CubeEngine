@@ -10,12 +10,13 @@
 
 @implementation CEAttributeVector2
 
-- (void)setAttribute:(CEVBOAttribute *)attribute {
-    if (attribute.primaryCount != 2) {
-        return;
-    }
-    [super setAttribute:attribute];
-}
+//- (void)setAttribute:(CEVBOAttribute *)attribute {
+//    if (attribute.primaryCount != 2) {
+//        CEError("Fail to set attribute:%@", CEVBOAttributeNameString(attribute.name));
+//        return;
+//    }
+//    [super setAttribute:attribute];
+//}
 
 - (NSString *)dataType {
     return @"vec2";

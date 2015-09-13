@@ -10,12 +10,13 @@
 
 @implementation CEAttributeVector4
 
-- (void)setAttribute:(CEVBOAttribute *)attribute {
-    if (attribute.primaryCount != 4) {
-        return;
-    }
-    [super setAttribute:attribute];
-}
+//- (void)setAttribute:(CEVBOAttribute *)attribute {
+//    if (attribute.primaryCount != 4) {
+//        CEError("Fail to set attribute:%@", CEVBOAttributeNameString(attribute.name));
+//        return;
+//    }
+//    [super setAttribute:attribute];
+//}
 
 - (NSString *)dataType {
     return @"vec4";

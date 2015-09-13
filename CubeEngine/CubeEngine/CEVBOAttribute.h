@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, CEVBOAttributeName) {
     CEVBOAttributeBitangent,
 };
 
+NSString *CEVBOAttributeNameString(CEVBOAttributeName name);
 
 /**
  表示VertexBuffer的属性信息，常用的属性为位置，纹理，法线等

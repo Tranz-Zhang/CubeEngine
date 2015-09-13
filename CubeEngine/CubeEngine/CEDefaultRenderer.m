@@ -1,30 +1,48 @@
 //
-//  CETestRenderer.m
+//  CEDefaultRenderer.m
 //  CubeEngine
 //
-//  Created by chance on 9/10/15.
+//  Created by chance on 9/13/15.
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CETestRenderer.h"
+#import "CEDefaultRenderer.h"
+
 #import "CEDefaultProgram.h"
 #import "CEShaderBuilder.h"
 #import "CEModel_Rendering.h"
 #import "CELight_Rendering.h"
 #import "CECamera_Rendering.h"
 
-@implementation CETestRenderer {
+@implementation CEDefaultRenderer {
     CEDefaultProgram *_program;
 }
 
 
-- (instancetype)init {
++ (instancetype)rendererWithConfig:(CERenderConfig *)config {
+    CEShaderBuilder *shaderBuilder = [CEShaderBuilder new];
+    [shaderBuilder startBuildingNewShader];
+    [shaderBuilder enableLightWithType:config.lightType];
+    [shaderBuilder enableTexture:config.enableTexture];
+    [shaderBuilder enableNormalMap:config.enableNormalMapping];
+    [shaderBuilder enableShadowMap:config.enableShadowMapping];
+    CEShaderInfo *shaderInfo = [shaderBuilder build];
+    if (!shaderInfo) {
+        return nil;
+    }
+    CEDefaultProgram *program = [CEDefaultProgram buildProgramWithShaderInfo:shaderInfo];
+    if (!program) {
+        return nil;
+    }
+    CEDefaultRenderer *render = [[CEDefaultRenderer alloc] initWithProgram:program];
+    return render;
+}
+
+
+- (instancetype)initWithProgram:(CEDefaultProgram *)program {
     self = [super init];
     if (self) {
-        CEShaderBuilder *shaderBuilder = [CEShaderBuilder new];
-        [shaderBuilder startBuildingNewShader];
-        CEShaderInfo *shaderInfo = [shaderBuilder build];
-        _program = [CEDefaultProgram buildProgramWithShaderInfo:shaderInfo];
+        _program = program;
     }
     return self;
 }
@@ -136,3 +154,4 @@
 
 
 @end
+

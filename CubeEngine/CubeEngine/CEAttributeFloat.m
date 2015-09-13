@@ -10,12 +10,13 @@
 
 @implementation CEAttributeFloat
 
-- (void)setAttribute:(CEVBOAttribute *)attribute {
-    if (attribute.primaryCount != 1) {
-        return;
-    }
-    [super setAttribute:attribute];
-}
+//- (void)setAttribute:(CEVBOAttribute *)attribute {
+//    if (attribute.primaryCount != 1) {
+//        CEError("Fail to set attribute:%@", CEVBOAttributeNameString(attribute.name));
+//        return;
+//    }
+//    [super setAttribute:attribute];
+//}
 
 - (NSString *)dataType {
     return @"float";

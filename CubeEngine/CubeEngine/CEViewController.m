@@ -13,7 +13,7 @@
 
 // test headers
 #import "CEShaderBuilder.h"
-#import "CEShaderMainProgram.h"
+#import "CEDefaultProgram.h"
 
 #define kDefaultFramesPerSecond 30
 #define kDefaultMaxLightCount 4
@@ -76,7 +76,7 @@
     [EAGLContext setCurrentContext:_context];
     
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    CEShaderMainProgram *program = [CEShaderMainProgram buildProgramWithShaderInfo:shaderInfo];
+    CEDefaultProgram *program = [CEDefaultProgram buildProgramWithShaderInfo:shaderInfo];
     printf("program build duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
 }
 
