@@ -66,17 +66,19 @@ NSString *CEShaderDirectory() {
     switch (lightType) {
         case CELightTypeDirectional:
             [self loadProfileWithName:@"DirectionalLightFunction"];
+            [self loadProfileWithName:@"BaseLightEffect"];
             break;
         case CELightTypePoint:
             [self loadProfileWithName:@"PointLightFunciton"];
+            [self loadProfileWithName:@"BaseLightEffect"];
             break;
         case CELightTypeSpot:
             [self loadProfileWithName:@"SpotLightFunction"];
+            [self loadProfileWithName:@"BaseLightEffect"];
             break;
         case CELightTypeNone:
-            [self removeProfileWithName:@"DirectionalLightFunction"];
-            [self removeProfileWithName:@"PointLightFunciton"];
-            [self removeProfileWithName:@"SpotLightFunction"];
+            [self removeProfileWithName:@"BaseLightEffect"];
+            break;
         default:
             break;
     }

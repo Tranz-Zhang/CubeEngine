@@ -14,9 +14,12 @@
 #import "CELight_Rendering.h"
 #import "CEShadowLight_Rendering.h"
 
-// renderer
 #import "CEMainRenderer.h"
 #import "CEShadowMapRenderer.h"
+
+// new renderer
+#import "CEDefaultRenderer.h"
+#import "CERenderConfig.h"
 
 // debug renderer
 #import "CEWireframeRenderer.h"
@@ -25,12 +28,12 @@
 
 // test
 #import "CEMainProgram.h"
-#import "CETestRenderer.h"
+
 
 
 @interface CERenderGroup : NSObject
 
-@property (nonatomic, strong) CEProgramConfig *renderConfig;
+@property (nonatomic, strong) CERenderConfig *renderConfig;
 @property (nonatomic, strong) NSArray *renderObjects;
 
 @end
@@ -59,7 +62,6 @@
     if (self) {
         _context = context;
         _rendererDict = [NSMutableDictionary dictionary];
-        [self testProgramGeneration];
     }
     
     return self;
@@ -104,9 +106,9 @@
     
 
     // 4 .sort render objects
-    CEProgramConfig *baseConfig = [CEProgramConfig new];
+    CERenderConfig *baseConfig = [CERenderConfig new];
     baseConfig.enableShadowMapping = (shadowLight && shadowModels.count);
-    baseConfig.lightCount = scene.mainLight ? 1 : 0;
+    baseConfig.lightType = scene.mainLight ? scene.mainLight.lightInfo.lightType : CELightTypeNone;
     NSArray *renderGroups = [self renderGroupsWithObjects:allModels withBaseConfig:baseConfig];
     
     // 5. render models
@@ -115,9 +117,12 @@
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
     for (CERenderGroup *group in renderGroups) {
-        CEMainRenderer *renderer = [self rendererWithConfig:group.renderConfig];
+        CEDefaultRenderer *renderer = [self rendererWithConfig:group.renderConfig];
         renderer.camera = scene.camera;
         renderer.mainLight = scene.mainLight;
+        // normally render a object
+        [renderer renderObjects:group.renderObjects];
+        /*
         if (group.renderConfig.renderMode == CERenderModeTransparent) {
             // render transparent object with double sided and blend on
             glEnable(GL_BLEND);
@@ -134,6 +139,7 @@
             // normally render a object
             [renderer renderObjects:group.renderObjects];
         }
+         //*/
     }
     
     // 6. render debug info
@@ -146,12 +152,12 @@
 /**
  sort models into render groups
  */
-- (NSArray *)renderGroupsWithObjects:(NSArray *)models withBaseConfig:(CEProgramConfig *)baseConfig {
-    // @{CEProgramConfig : CERenderGroup}
+- (NSArray *)renderGroupsWithObjects:(NSArray *)models withBaseConfig:(CERenderConfig *)baseConfig {
+    // @{CERenderConfig : CERenderGroup}
     NSMutableDictionary *sortedRenderObjectDict = [NSMutableDictionary dictionary];
     for (CEModel *model in models) {
-        CEProgramConfig *modelConfig = baseConfig.copy;
-        modelConfig.renderMode = (int)model.material.materialType;
+        CERenderConfig *modelConfig = baseConfig.copy;
+        modelConfig.renderType = (int)model.material.materialType;
         modelConfig.enableTexture = model.texture ? YES : NO;
         modelConfig.enableNormalMapping = model.normalMap ? YES : NO;
         CERenderGroup *group = sortedRenderObjectDict[modelConfig];
@@ -167,7 +173,7 @@
     NSArray *renderGroups = [sortedRenderObjectDict allValues];
     // sort groups by renderMode
     renderGroups = [renderGroups sortedArrayUsingComparator:^NSComparisonResult(CERenderGroup *group1, CERenderGroup *group2) {
-        return group1.renderConfig.renderMode - group2.renderConfig.renderMode;
+        return group1.renderConfig.renderType - group2.renderConfig.renderType;
     }];
 //    // sort objects by distance to camera
 //    CECamera *camera = [CEScene currentScene].camera;
@@ -186,50 +192,6 @@
 }
 
 
-/*
-// return @{CEProgramConfig:@[CEModels]}
-- (NSDictionary *)calculateRenderObjectsWithBaseConfig:(CEProgramConfig *)baseConfig {
-    CEScene *scene = [CEScene currentScene];
-    // calcualte all visiable model without empty groups
-    NSMutableSet *allModels = [NSMutableSet set];
-    for (CEModel *model in scene.allModels) {
-        [self recursiveAddVisiableModel:model toSet:allModels];
-    }
-    // check shadowmap config
-    CEProgramConfig *baseConfig = [CEProgramConfig new];
-    baseConfig.lightCount = scene.allLights.count;
-    BOOL enableModelShadow = NO;
-    for (CEModel *model in allModels) {
-        if (model.castShadows) {
-            enableModelShadow = YES;
-            break;
-        }
-    }
-    if (enableModelShadow) {
-        for (CELight *light in scene.allLights) {
-            if (light.enableShadow) {
-                baseConfig.shadowMappingCount += 1;
-            }
-        }
-    }
-    
-    // sort models by different config
-    NSMutableDictionary *configModelDict = [NSMutableDictionary dictionary];
-    for (CEModel *model in allModels) {
-        CEProgramConfig *modelConfig = baseConfig.copy;
-        modelConfig.enableTexture = model.material.textureMap.length ? YES : NO;
-        modelConfig.enableNormalMapping = model.material.normalMap.length ? YES : NO;
-        NSMutableSet *modelsForConfig = configModelDict[modelConfig];
-        if (!modelsForConfig) {
-            modelsForConfig = [NSMutableSet set];
-            configModelDict[modelConfig] = modelsForConfig;
-        }
-        [modelsForConfig addObject:model];
-    }
-    return [configModelDict copy];
-}
-//*/
-
 - (void)recursiveAddVisiableModel:(CEModel *)model toList:(NSMutableArray *)models {
     for (CEModel *child in model.childObjects) {
         [self recursiveAddVisiableModel:child toList:models];
@@ -240,20 +202,10 @@
 }
 
 
-- (CEMainRenderer *)rendererWithConfig:(CEProgramConfig *)config {
-    static CETestRenderer *testRenderer;
-    if (!testRenderer) {
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            testRenderer = [[CETestRenderer alloc] init];
-        });
-    }
-    return testRenderer;
-    
-    
-    CEMainRenderer *render = _rendererDict[config];
+- (CEDefaultRenderer *)rendererWithConfig:(CERenderConfig *)config {
+    CEDefaultRenderer *render = _rendererDict[config];
     if (!render) {
-        render = [CEMainRenderer rendererWithConfig:config];
+        render = [CEDefaultRenderer rendererWithConfig:config];
         _rendererDict[config] = render;
     }
 #if DEBUG
@@ -303,7 +255,6 @@
 #pragma mark - Test Renderer
 
 - (void)testProgramGeneration {
-    return;
     printf("testProgramGeneration... ");
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     [EAGLContext setCurrentContext:_context];
