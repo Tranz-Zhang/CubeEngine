@@ -28,7 +28,7 @@ void  CEFrag_ApplyBaseLightEffect(vec4 inputColor) {
     vec3 scatteredLight = AmbientColor * Attenuation + MainLight.LightColor * diffuse * Attenuation;
     vec3 reflectedLight = SpecularColor * specular * Attenuation;
     
-#link CEFrag_ApplyShadowEffect(scatteredLight, reflectedLight);
+    #link CEFrag_ApplyShadowMap(scatteredLight, reflectedLight);
     
     inputColor = vec4(min(vec3(inputColor) * scatteredLight + reflectedLight, vec3(1.0)), 1.0);
 }

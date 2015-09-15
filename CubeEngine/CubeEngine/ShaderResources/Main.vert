@@ -5,6 +5,7 @@ attribute highp vec4 VertexPosition;
 //*
 void main () {
     #link CEVertex_ApplyBaseLightEffect();
+    #link CEVertex_ApplyTexture();
     
     gl_Position = MVPMatrix * VertexPosition;
 }

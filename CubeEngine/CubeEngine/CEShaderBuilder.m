@@ -87,9 +87,9 @@ NSString *CEShaderDirectory() {
 
 - (void)enableTexture:(BOOL)enabled {
     if (enabled) {
-        [self loadProfileWithName:@""];
+        [self loadProfileWithName:@"Texture"];
     } else {
-        [self removeProfileWithName:@""];
+        [self removeProfileWithName:@"Texture"];
     }
 }
 
@@ -105,9 +105,9 @@ NSString *CEShaderDirectory() {
 
 - (void)enableShadowMap:(BOOL)enabled {
     if (enabled) {
-        [self loadProfileWithName:@""];
+        [self loadProfileWithName:@"ShadowMap"];
     } else {
-        [self removeProfileWithName:@""];
+        [self removeProfileWithName:@"ShadowMap"];
     }
 }
 
@@ -147,8 +147,8 @@ NSString *CEShaderDirectory() {
     [allVariableInfos addObjectsFromArray:fragmentResult.uniforms];
     [allStructInfos addObjectsFromArray:fragmentResult.structs];
     
-//    printf("================ vertexShader ================\n%s\n", [vertexShaderString UTF8String]);
-//    printf("================ fragmentShader ================\n%s\n", [fragmentShaderString UTF8String]);
+    printf("================ vertexShader ================\n%s\n", [vertexShaderString UTF8String]);
+    printf("================ fragmentShader ================\n%s\n", [fragmentShaderString UTF8String]);
     printf("shader build duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
     
     // gen struct dictionary

@@ -13,9 +13,11 @@
 #import "CEModel_Rendering.h"
 #import "CELight_Rendering.h"
 #import "CECamera_Rendering.h"
+#import "CEShadowLight_Rendering.h"
 
 @implementation CEDefaultRenderer {
     CEDefaultProgram *_program;
+    CEShadowLight *_shadowLight;
 }
 
 
@@ -46,6 +48,17 @@
     }
     return self;
 }
+
+
+- (void)setMainLight:(CELight *)mainLight {
+    if (_mainLight != mainLight) {
+        _mainLight = mainLight;
+        if ([_mainLight isKindOfClass:[CEShadowLight class]]) {
+            _shadowLight = (CEShadowLight *)mainLight;
+        }
+    }
+}
+
 
 - (void)renderObjects:(NSArray *)objects {
     if (!_program || !_camera) {
@@ -90,10 +103,23 @@
     
     // we use eye space to do the calculation, so the eye direction is always (0, 0, 1)
     _program.eyeDirection.vector3 = GLKVector3Make(0.0, 0.0, 1.0);
+    
+    // shadow map setting
+    if (_shadowLight.enableShadow && _shadowLight.shadowMapBuffer) {
+        _program.shadowDarkness.floatValue = 1.0 - _shadowLight.shadowDarkness;
+        _program.shadowMapTexture.textureID = _shadowLight.shadowMapBuffer.textureId;
+        
+    } else {
+        _program.shadowDarkness.floatValue = 0.0;
+        _program.shadowMapTexture.textureID = 0.0;
+    }
+    
 }
 
 
 - (void)renderModel:(CEModel *)model {
+#warning TODO: order this thing!
+    
     if (!model.vertexBuffer) {
         CEError(@"Empty vertexBuffer");
         return;
@@ -141,6 +167,27 @@
         _program.specularColor.vector3 = model.material.specularColor;
         _program.ambientColor.vector3 = model.material.ambientColor;
         _program.shininessExponent.floatValue = model.material.shininessExponent;
+    }
+    
+    // texture
+    if (_program.textureCoordinate) {
+        CEVBOAttribute *textureCoordAttri = [model.vertexBuffer attributeWithName:CEVBOAttributeTextureCoord];
+        _program.textureCoordinate.attribute = textureCoordAttri;
+    }
+    if (_program.diffuseTexture) {
+        _program.diffuseTexture.textureID = model.texture.name;
+    }
+    
+    // shadow map
+    if (_program.depthBiasMVP) {
+        GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
+                                               0.0, 0.5, 0.0, 0.0,
+                                               0.0, 0.0, 0.5, 0.0,
+                                               0.5, 0.5, 0.5, 1.0);
+        GLKMatrix4 depthMVP = GLKMatrix4Multiply(_shadowLight.lightViewMatrix, model.transformMatrix);
+        depthMVP = GLKMatrix4Multiply(_shadowLight.lightProjectionMatrix, depthMVP);
+        depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
+        _program.depthBiasMVP.matrix4 = depthMVP;        
     }
     
     if (model.indicesBuffer) { // glDrawElements

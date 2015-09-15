@@ -25,6 +25,15 @@
 @property (nonatomic, readonly) CEUniformFloat *shininessExponent;
 @property (nonatomic, readonly) CEUniformLightInfo *mainLight;
 
+// texture
+@property (nonatomic, readonly) CEAttributeVector2 *textureCoordinate;
+@property (nonatomic, readonly) CEUniformSampler2D *diffuseTexture;
+
+// shadow map
+@property (nonatomic, readonly) CEUniformMatrix4 *depthBiasMVP;
+@property (nonatomic, readonly) CEUniformFloat *shadowDarkness;
+@property (nonatomic, readonly) CEUniformSampler2D *shadowMapTexture;
+
 
 @end
 

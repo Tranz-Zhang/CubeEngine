@@ -32,7 +32,7 @@
 //    self.scene.camera.farZ = 100;
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    _testModel = [CEModel modelWithObjFile:@"teapot_smooth"];
+    _testModel = [CEModel modelWithObjFile:@"sonic"];
 //    _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
 //    _testModel.showWireframe = YES;
     _testModel.showAccessoryLine = YES;
@@ -51,7 +51,7 @@
     [self.scene addModel:_testModel];
     
     
-#if 0
+#if 1
     CEModel *floorModel = [CEModel modelWithObjFile:@"floor_max"];
     floorModel.baseColor = [UIColor grayColor];
 //    floorModel.castShadows = YES;

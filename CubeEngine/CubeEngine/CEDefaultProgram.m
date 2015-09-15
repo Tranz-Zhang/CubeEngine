@@ -12,6 +12,8 @@
 @implementation CEDefaultProgram
 
 - (void)onProgramSetup {
+    GLint currentTextureIndex = 0;
+    
     // basic
     _vertexPosition =   (CEAttributeVector4 *)[self outputVariableWithName:@"VertexPosition" type:@"vec4"];
     _modelViewProjectionMatrix = (CEUniformMatrix4 *)[self outputVariableWithName:@"MVPMatrix" type:@"mat4"];
@@ -26,6 +28,24 @@
     _ambientColor =     (CEUniformVector3 *)[self outputVariableWithName:@"AmbientColor" type:@"vec3"];
     _shininessExponent = (CEUniformFloat *)[self outputVariableWithName:@"ShininessExponent" type:@"float"];
     _mainLight =        (CEUniformLightInfo *)[self outputVariableWithName:@"MainLight" type:@"LightInfo"];
+    
+    // texture
+    _textureCoordinate = (CEAttributeVector2 *)[self outputVariableWithName:@"TextureCoord" type:@"vec2"];
+    _diffuseTexture = (CEUniformSampler2D *)[self outputVariableWithName:@"DiffuseTexture" type:@"sampler2D"];
+    if (_diffuseTexture) {
+        [_diffuseTexture setTextureIndex:currentTextureIndex];
+        currentTextureIndex++;
+    }
+    
+    // shadow map
+    _depthBiasMVP = (CEUniformMatrix4 *)[self outputVariableWithName:@"DepthBiasMVP" type:@"mat4"];
+    _shadowDarkness = (CEUniformFloat *)[self outputVariableWithName:@"ShadowDarkness" type:@"float"];
+    _shadowMapTexture = (CEUniformSampler2D *)[self outputVariableWithName:@"ShadowMapTexture" type:@"sampler2D"];
+    if (_shadowMapTexture) {
+        [_shadowMapTexture setTextureIndex:currentTextureIndex];
+        currentTextureIndex++;
+    }
+    
 }
 
 

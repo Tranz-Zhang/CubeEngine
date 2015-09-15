@@ -241,7 +241,7 @@
     
     // get function name
     __block NSString *functionName;
-    [functionString enumerateSubstringsInRange:NSMakeRange(0, 100) options:NSStringEnumerationByWords usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+    [functionString enumerateSubstringsInRange:NSMakeRange(0, MIN(100, functionString.length)) options:NSStringEnumerationByWords usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
         if (![substring isEqualToString:@"void"]) {
             functionName = substring;
             *stop = YES;

@@ -277,6 +277,10 @@
 		4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderLinkFunctionInfo.m; sourceTree = "<group>"; };
 		4CBD44221B723AB600D72831 /* CEShaderVariable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderVariable.h; sourceTree = "<group>"; };
 		4CBD44231B723AB600D72831 /* CEShaderVariable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderVariable.m; sourceTree = "<group>"; };
+		4CC07C631BA6F804001A4F25 /* Texture.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Texture.vert; sourceTree = "<group>"; };
+		4CC07C641BA6F80D001A4F25 /* Texture.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Texture.frag; sourceTree = "<group>"; };
+		4CC07C651BA6FEF0001A4F25 /* ShadowMap.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShadowMap.vert; sourceTree = "<group>"; };
+		4CC07C661BA6FEFB001A4F25 /* ShadowMap.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShadowMap.frag; sourceTree = "<group>"; };
 		4CC4E7E71B9DB722008DEEC1 /* CEUniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEUniform.h; sourceTree = "<group>"; };
 		4CC4E7E81B9DB722008DEEC1 /* CEUniform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEUniform.m; sourceTree = "<group>"; };
 		4CC7F95E1B969EF70078F441 /* CEShaderBuildProfileResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderBuildProfileResult.h; sourceTree = "<group>"; };
@@ -645,6 +649,10 @@
 				4CF7CDC51B8464B30093C32D /* DirectionalLightFunction.vert */,
 				4CF7CDC61B84665E0093C32D /* PointLightFunciton.vert */,
 				4CF7CDC71B84669F0093C32D /* SpotLightFunction.vert */,
+				4CC07C631BA6F804001A4F25 /* Texture.vert */,
+				4CC07C641BA6F80D001A4F25 /* Texture.frag */,
+				4CC07C651BA6FEF0001A4F25 /* ShadowMap.vert */,
+				4CC07C661BA6FEFB001A4F25 /* ShadowMap.frag */,
 				4CF5CCA71B8C66570048E833 /* Main.vert */,
 				4CF5CCA81B8C665E0048E833 /* Main.frag */,
 				4CF306B31B8DB0A0009544DC /* TestFunction1.vert */,
