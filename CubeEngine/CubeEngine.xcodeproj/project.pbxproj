@@ -87,6 +87,19 @@
 		4CD9CAAA1B8AF9E500FDE357 /* CECodingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CAA31B8AC1FB00FDE357 /* CECodingObject.m */; };
 		4CD9EB951B3BF7D400C6FCB5 /* CEShadowLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9EB941B3BF7D400C6FCB5 /* CEShadowLight.m */; };
 		4CD9EB971B3BFD2B00C6FCB5 /* CEShadowLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CD9EB931B3BF7D400C6FCB5 /* CEShadowLight.h */; };
+		4CEA12141BB1602D00686678 /* CEDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F51BB1602C00686678 /* CEDatabase.m */; };
+		4CEA12151BB1602D00686678 /* CEDatabaseContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F71BB1602C00686678 /* CEDatabaseContext.m */; };
+		4CEA12161BB1602D00686678 /* CEDatabaseNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F91BB1602C00686678 /* CEDatabaseNotifications.m */; };
+		4CEA12171BB1602D00686678 /* CEManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11FD1BB1602C00686678 /* CEManagedObject.m */; };
+		4CEA12181BB1602D00686678 /* CEQueryCondition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11FF1BB1602C00686678 /* CEQueryCondition.m */; };
+		4CEA12191BB1602D00686678 /* FMDatabase+InMemoryOnDiskIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA12021BB1602C00686678 /* FMDatabase+InMemoryOnDiskIO.m */; };
+		4CEA121A1BB1602D00686678 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA12041BB1602C00686678 /* FMDatabase.m */; };
+		4CEA121B1BB1602D00686678 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA12061BB1602C00686678 /* FMDatabaseAdditions.m */; };
+		4CEA121C1BB1602D00686678 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA12081BB1602C00686678 /* FMDatabasePool.m */; };
+		4CEA121D1BB1602D00686678 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA120A1BB1602C00686678 /* FMDatabaseQueue.m */; };
+		4CEA121E1BB1602D00686678 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA120D1BB1602C00686678 /* FMResultSet.m */; };
+		4CEA121F1BB1602D00686678 /* CEDatabasePrivateCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA12111BB1602D00686678 /* CEDatabasePrivateCommon.m */; };
+		4CEA12201BB1602D00686678 /* CEQueryCondition+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA12131BB1602D00686678 /* CEQueryCondition+Private.m */; };
 		4CF3E96C1B99E3E400D42515 /* CEShaderProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3E96B1B99E3E400D42515 /* CEShaderProgram.m */; };
 		4CF403711B73853300C02BAE /* CEUniformBool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403701B73853300C02BAE /* CEUniformBool.m */; };
 		4CF403751B73862900C02BAE /* CEUniformVector2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403741B73862900C02BAE /* CEUniformVector2.m */; };
@@ -300,6 +313,36 @@
 		4CD9EB931B3BF7D400C6FCB5 /* CEShadowLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowLight.h; sourceTree = "<group>"; };
 		4CD9EB941B3BF7D400C6FCB5 /* CEShadowLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShadowLight.m; sourceTree = "<group>"; };
 		4CD9EB961B3BF81D00C6FCB5 /* CEShadowLight_Rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowLight_Rendering.h; sourceTree = "<group>"; };
+		4CEA11F41BB1602C00686678 /* CEDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEDatabase.h; sourceTree = "<group>"; };
+		4CEA11F51BB1602C00686678 /* CEDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEDatabase.m; sourceTree = "<group>"; };
+		4CEA11F61BB1602C00686678 /* CEDatabaseContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEDatabaseContext.h; sourceTree = "<group>"; };
+		4CEA11F71BB1602C00686678 /* CEDatabaseContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEDatabaseContext.m; sourceTree = "<group>"; };
+		4CEA11F81BB1602C00686678 /* CEDatabaseNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEDatabaseNotifications.h; sourceTree = "<group>"; };
+		4CEA11F91BB1602C00686678 /* CEDatabaseNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEDatabaseNotifications.m; sourceTree = "<group>"; };
+		4CEA11FA1BB1602C00686678 /* CEDatabaseTableTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEDatabaseTableTransition.h; sourceTree = "<group>"; };
+		4CEA11FB1BB1602C00686678 /* CEDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEDB.h; sourceTree = "<group>"; };
+		4CEA11FC1BB1602C00686678 /* CEManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEManagedObject.h; sourceTree = "<group>"; };
+		4CEA11FD1BB1602C00686678 /* CEManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEManagedObject.m; sourceTree = "<group>"; };
+		4CEA11FE1BB1602C00686678 /* CEQueryCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEQueryCondition.h; sourceTree = "<group>"; };
+		4CEA11FF1BB1602C00686678 /* CEQueryCondition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEQueryCondition.m; sourceTree = "<group>"; };
+		4CEA12011BB1602C00686678 /* FMDatabase+InMemoryOnDiskIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FMDatabase+InMemoryOnDiskIO.h"; sourceTree = "<group>"; };
+		4CEA12021BB1602C00686678 /* FMDatabase+InMemoryOnDiskIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FMDatabase+InMemoryOnDiskIO.m"; sourceTree = "<group>"; };
+		4CEA12031BB1602C00686678 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		4CEA12041BB1602C00686678 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		4CEA12051BB1602C00686678 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		4CEA12061BB1602C00686678 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		4CEA12071BB1602C00686678 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		4CEA12081BB1602C00686678 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		4CEA12091BB1602C00686678 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		4CEA120A1BB1602C00686678 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		4CEA120B1BB1602C00686678 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		4CEA120C1BB1602C00686678 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		4CEA120D1BB1602C00686678 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		4CEA120F1BB1602C00686678 /* CEDatabase+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CEDatabase+Private.h"; sourceTree = "<group>"; };
+		4CEA12101BB1602D00686678 /* CEDatabasePrivateCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEDatabasePrivateCommon.h; sourceTree = "<group>"; };
+		4CEA12111BB1602D00686678 /* CEDatabasePrivateCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEDatabasePrivateCommon.m; sourceTree = "<group>"; };
+		4CEA12121BB1602D00686678 /* CEQueryCondition+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CEQueryCondition+Private.h"; sourceTree = "<group>"; };
+		4CEA12131BB1602D00686678 /* CEQueryCondition+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CEQueryCondition+Private.m"; sourceTree = "<group>"; };
 		4CF306B31B8DB0A0009544DC /* TestFunction1.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TestFunction1.vert; sourceTree = "<group>"; };
 		4CF306B41B8DB17C009544DC /* TestFunction2.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TestFunction2.vert; sourceTree = "<group>"; };
 		4CF306B51B8DB290009544DC /* TestFunction3.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TestFunction3.vert; sourceTree = "<group>"; };
@@ -598,6 +641,7 @@
 		4C3992191B2AD6F500AC4B53 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				4CEA11F31BB1602C00686678 /* CEDatabase */,
 				4CF7CDC21B8434F40093C32D /* CEDirectoryDefines.h */,
 				263BBBDF1AB91A3600F88F65 /* CEUtils.h */,
 				263BBBE01AB91A3600F88F65 /* CEUtils.m */,
@@ -676,6 +720,60 @@
 				4CC7F95F1B969EF70078F441 /* CEShaderBuildProfileResult.m */,
 			);
 			name = Builder;
+			sourceTree = "<group>";
+		};
+		4CEA11F31BB1602C00686678 /* CEDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				4CEA11F41BB1602C00686678 /* CEDatabase.h */,
+				4CEA11F51BB1602C00686678 /* CEDatabase.m */,
+				4CEA11F61BB1602C00686678 /* CEDatabaseContext.h */,
+				4CEA11F71BB1602C00686678 /* CEDatabaseContext.m */,
+				4CEA11F81BB1602C00686678 /* CEDatabaseNotifications.h */,
+				4CEA11F91BB1602C00686678 /* CEDatabaseNotifications.m */,
+				4CEA11FA1BB1602C00686678 /* CEDatabaseTableTransition.h */,
+				4CEA11FB1BB1602C00686678 /* CEDB.h */,
+				4CEA11FC1BB1602C00686678 /* CEManagedObject.h */,
+				4CEA11FD1BB1602C00686678 /* CEManagedObject.m */,
+				4CEA11FE1BB1602C00686678 /* CEQueryCondition.h */,
+				4CEA11FF1BB1602C00686678 /* CEQueryCondition.m */,
+				4CEA12001BB1602C00686678 /* fmdb */,
+				4CEA120E1BB1602C00686678 /* Private */,
+			);
+			name = CEDatabase;
+			path = CEDatabase/CEDatabase/CEDatabase;
+			sourceTree = "<group>";
+		};
+		4CEA12001BB1602C00686678 /* fmdb */ = {
+			isa = PBXGroup;
+			children = (
+				4CEA12011BB1602C00686678 /* FMDatabase+InMemoryOnDiskIO.h */,
+				4CEA12021BB1602C00686678 /* FMDatabase+InMemoryOnDiskIO.m */,
+				4CEA12031BB1602C00686678 /* FMDatabase.h */,
+				4CEA12041BB1602C00686678 /* FMDatabase.m */,
+				4CEA12051BB1602C00686678 /* FMDatabaseAdditions.h */,
+				4CEA12061BB1602C00686678 /* FMDatabaseAdditions.m */,
+				4CEA12071BB1602C00686678 /* FMDatabasePool.h */,
+				4CEA12081BB1602C00686678 /* FMDatabasePool.m */,
+				4CEA12091BB1602C00686678 /* FMDatabaseQueue.h */,
+				4CEA120A1BB1602C00686678 /* FMDatabaseQueue.m */,
+				4CEA120B1BB1602C00686678 /* FMDB.h */,
+				4CEA120C1BB1602C00686678 /* FMResultSet.h */,
+				4CEA120D1BB1602C00686678 /* FMResultSet.m */,
+			);
+			path = fmdb;
+			sourceTree = "<group>";
+		};
+		4CEA120E1BB1602C00686678 /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				4CEA120F1BB1602C00686678 /* CEDatabase+Private.h */,
+				4CEA12101BB1602D00686678 /* CEDatabasePrivateCommon.h */,
+				4CEA12111BB1602D00686678 /* CEDatabasePrivateCommon.m */,
+				4CEA12121BB1602D00686678 /* CEQueryCondition+Private.h */,
+				4CEA12131BB1602D00686678 /* CEQueryCondition+Private.m */,
+			);
+			path = Private;
 			sourceTree = "<group>";
 		};
 		4CF3E9671B99D6AC00D42515 /* Uniform */ = {
@@ -857,23 +955,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CEA12201BB1602D00686678 /* CEQueryCondition+Private.m in Sources */,
+				4CEA12141BB1602D00686678 /* CEDatabase.m in Sources */,
 				4C43A4301ADC37C600761CA9 /* CEVertexBuffer.m in Sources */,
 				269249951B033D4A0069892D /* CEBufferGroup.m in Sources */,
 				4CD9CAA41B8AC1FB00FDE357 /* CECodingObject.m in Sources */,
 				26F7FF8F1ADE45660086D9D7 /* CEAssistRenderer.m in Sources */,
 				268CBC5B1ADCB72C00795A6D /* CEIndicesBuffer.m in Sources */,
+				4CEA121E1BB1602D00686678 /* FMResultSet.m in Sources */,
 				4CF4038D1B7386CD00C02BAE /* CEUniformSampler2D.m in Sources */,
 				4CF403751B73862900C02BAE /* CEUniformVector2.m in Sources */,
 				4CC7F9601B969EF70078F441 /* CEShaderBuildProfileResult.m in Sources */,
+				4CEA12171BB1602D00686678 /* CEManagedObject.m in Sources */,
+				4CEA12161BB1602D00686678 /* CEDatabaseNotifications.m in Sources */,
 				4CF9B5FD1BA06C9D00E2128D /* CEAttributeFloat.m in Sources */,
 				2690E8541AEA2F8E000BDD8F /* CEPointLight.m in Sources */,
 				4CF9B6001BA06CAC00E2128D /* CEAttributeVector2.m in Sources */,
 				4CF9B6091BA07A9200E2128D /* CETextureManager.m in Sources */,
+				4CEA121A1BB1602D00686678 /* FMDatabase.m in Sources */,
 				4CD9EB951B3BF7D400C6FCB5 /* CEShadowLight.m in Sources */,
 				4C3A8EAA1B95850A00BC3BC1 /* CEShaderStructInfo.m in Sources */,
 				4CF4037E1B73868600C02BAE /* CEUniformVector3.m in Sources */,
 				267F4D811B0CD81100F25452 /* CEMainProgram.m in Sources */,
 				4CF403931B73887600C02BAE /* CEAttribute.m in Sources */,
+				4CEA121C1BB1602D00686678 /* FMDatabasePool.m in Sources */,
 				4CD480941B40E7B40044517C /* CELightUniforms.m in Sources */,
 				261089661AAD31AF0041E142 /* CEScene.m in Sources */,
 				4CF9B6061BA06CCB00E2128D /* CEAttributeVector4.m in Sources */,
@@ -882,6 +987,7 @@
 				4CCBB3F91B842A0E00200C4E /* CEShaderBuilder.m in Sources */,
 				4CCBB3FC1B842A8400200C4E /* CEShaderInfo.m in Sources */,
 				261089691AAD31C60041E142 /* CECamera.m in Sources */,
+				4CEA121B1BB1602D00686678 /* FMDatabaseAdditions.m in Sources */,
 				4C9D75941B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m in Sources */,
 				4C51F11E1B8B1ECB0052511E /* CEShaderFunctionInfo.m in Sources */,
 				4C1703E61BA5A09400DBF84A /* CEDefaultRenderer.m in Sources */,
@@ -897,11 +1003,14 @@
 				4CF4038A1B7386C200C02BAE /* CEUniformMatrix4.m in Sources */,
 				26193F4E1AA8324600787C64 /* CubeEngine.m in Sources */,
 				4CF403871B7386BA00C02BAE /* CEUniformMatrix3.m in Sources */,
+				4CEA12151BB1602D00686678 /* CEDatabaseContext.m in Sources */,
 				4CF403781B73864900C02BAE /* CEUniformInteger.m in Sources */,
 				263C8E5E1AE5F546004FDFE8 /* CELight.m in Sources */,
 				2625B8C01AE7D340002FD478 /* CEDirectionalLight.m in Sources */,
+				4CEA121F1BB1602D00686678 /* CEDatabasePrivateCommon.m in Sources */,
 				26193FBF1AA85F3F00787C64 /* CEProgram.m in Sources */,
 				265ACD591AB2D406000277F2 /* CEObject.m in Sources */,
+				4CEA121D1BB1602D00686678 /* FMDatabaseQueue.m in Sources */,
 				2658786B1AD7C99100BA2137 /* CEWireframeRenderer.m in Sources */,
 				26FF85381B0A173C0075B971 /* CEMainRenderer.m in Sources */,
 				4CBD44241B723AB600D72831 /* CEShaderVariable.m in Sources */,
@@ -919,9 +1028,11 @@
 				4C43A4331ADC380A00761CA9 /* CEVBOAttribute.m in Sources */,
 				4C1703E91BA5A94100DBF84A /* CERenderConfig.m in Sources */,
 				269F476A1B0089030030CD55 /* CEShadowMapBuffer.m in Sources */,
+				4CEA12181BB1602D00686678 /* CEQueryCondition.m in Sources */,
 				4CFE33631B3CFAAB00679817 /* CEShadowMapRenderer.m in Sources */,
 				263BBBE11AB91A3600F88F65 /* CEUtils.m in Sources */,
 				26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */,
+				4CEA12191BB1602D00686678 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				260949131B05981600F7465B /* CEObjMeshInfo.m in Sources */,
 				269608ED1AF85E750045FB03 /* CEView.m in Sources */,
 			);

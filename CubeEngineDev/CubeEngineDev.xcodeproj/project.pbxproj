@@ -136,6 +136,7 @@
 		4C93CA8D1B4A14790017648B /* ram.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C93CA8B1B4A14790017648B /* ram.obj */; };
 		4C93CA8E1B4A14790017648B /* ram.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4C93CA8C1B4A14790017648B /* ram.mtl */; };
 		4CCD81741B68CFBD008041AB /* floor_max.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD81731B68CFBD008041AB /* floor_max.obj */; };
+		4CEA12221BB1609C00686678 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEA12211BB1609C00686678 /* libsqlite3.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -322,6 +323,7 @@
 		4C93CA8B1B4A14790017648B /* ram.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram.obj; sourceTree = "<group>"; };
 		4C93CA8C1B4A14790017648B /* ram.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram.mtl; sourceTree = "<group>"; };
 		4CCD81731B68CFBD008041AB /* floor_max.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor_max.obj; sourceTree = "<group>"; };
+		4CEA12211BB1609C00686678 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -329,6 +331,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CEA12221BB1609C00686678 /* libsqlite3.dylib in Frameworks */,
 				26193FB51AA853D300787C64 /* libCubeEngine.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,6 +428,7 @@
 		26193FB41AA853BF00787C64 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CEA12211BB1609C00686678 /* libsqlite3.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
