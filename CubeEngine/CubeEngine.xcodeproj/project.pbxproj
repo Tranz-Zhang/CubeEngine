@@ -22,12 +22,10 @@
 		26193F6D1AA832F800787C64 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193F6C1AA832F800787C64 /* Foundation.framework */; };
 		26193FBF1AA85F3F00787C64 /* CEProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193FBE1AA85F3F00787C64 /* CEProgram.m */; };
 		2624A6111B0AD234001E3F32 /* CEProgramConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 2624A6101B0AD234001E3F32 /* CEProgramConfig.m */; };
-		2624AB9E1AD62BAE00FC863C /* CETexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 2624AB9D1AD62BAE00FC863C /* CETexture.m */; };
 		2624ABA11AD62BC800FC863C /* CEMaterial.m in Sources */ = {isa = PBXBuildFile; fileRef = 2624ABA01AD62BC800FC863C /* CEMaterial.m */; };
 		2624ABA91AD6A56A00FC863C /* CEModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2624ABA81AD6A56A00FC863C /* CEModel.m */; };
 		2624ABAC1AD6A85500FC863C /* CERenderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2624ABAB1AD6A85500FC863C /* CERenderManager.m */; };
 		2624ABB11AD6B0BB00FC863C /* CEModel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2624ABA71AD6A56A00FC863C /* CEModel.h */; };
-		2624ABB31AD6B0BC00FC863C /* CETexture.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2624AB9C1AD62BAE00FC863C /* CETexture.h */; };
 		2624ABB41AD6B0BC00FC863C /* CEMaterial.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2624AB9F1AD62BC800FC863C /* CEMaterial.h */; };
 		2625B8C01AE7D340002FD478 /* CEDirectionalLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 2625B8BF1AE7D340002FD478 /* CEDirectionalLight.m */; };
 		263BBBE11AB91A3600F88F65 /* CEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 263BBBE01AB91A3600F88F65 /* CEUtils.m */; };
@@ -100,6 +98,8 @@
 		4CEA121E1BB1602D00686678 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA120D1BB1602C00686678 /* FMResultSet.m */; };
 		4CEA121F1BB1602D00686678 /* CEDatabasePrivateCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA12111BB1602D00686678 /* CEDatabasePrivateCommon.m */; };
 		4CEA12201BB1602D00686678 /* CEQueryCondition+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA12131BB1602D00686678 /* CEQueryCondition+Private.m */; };
+		4CEA12291BB1833600686678 /* CERenderObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA12281BB1833600686678 /* CERenderObject.m */; };
+		4CEA122C1BB184EE00686678 /* CEModelInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA122B1BB184EE00686678 /* CEModelInfo.m */; };
 		4CF3E96C1B99E3E400D42515 /* CEShaderProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3E96B1B99E3E400D42515 /* CEShaderProgram.m */; };
 		4CF403711B73853300C02BAE /* CEUniformBool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403701B73853300C02BAE /* CEUniformBool.m */; };
 		4CF403751B73862900C02BAE /* CEUniformVector2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403741B73862900C02BAE /* CEUniformVector2.m */; };
@@ -129,7 +129,6 @@
 			files = (
 				266E59C21ADBAA0A00F00C90 /* CEObjFileLoader.h in CopyFiles */,
 				2624ABB11AD6B0BB00FC863C /* CEModel.h in CopyFiles */,
-				2624ABB31AD6B0BC00FC863C /* CETexture.h in CopyFiles */,
 				2624ABB41AD6B0BC00FC863C /* CEMaterial.h in CopyFiles */,
 				267C42B01AB2E9280011CDC0 /* CEObject.h in CopyFiles */,
 				26EBAB731AAECAA700E65022 /* CECamera.h in CopyFiles */,
@@ -188,8 +187,6 @@
 		2624A6101B0AD234001E3F32 /* CEProgramConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEProgramConfig.m; sourceTree = "<group>"; };
 		2624AB961AD6286E00FC863C /* CERenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer.h; sourceTree = "<group>"; };
 		2624AB971AD6286E00FC863C /* CERenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERenderer.m; sourceTree = "<group>"; };
-		2624AB9C1AD62BAE00FC863C /* CETexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CETexture.h; sourceTree = "<group>"; };
-		2624AB9D1AD62BAE00FC863C /* CETexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CETexture.m; sourceTree = "<group>"; };
 		2624AB9F1AD62BC800FC863C /* CEMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEMaterial.h; sourceTree = "<group>"; };
 		2624ABA01AD62BC800FC863C /* CEMaterial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEMaterial.m; sourceTree = "<group>"; };
 		2624ABA71AD6A56A00FC863C /* CEModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEModel.h; sourceTree = "<group>"; };
@@ -342,6 +339,10 @@
 		4CEA12111BB1602D00686678 /* CEDatabasePrivateCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEDatabasePrivateCommon.m; sourceTree = "<group>"; };
 		4CEA12121BB1602D00686678 /* CEQueryCondition+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CEQueryCondition+Private.h"; sourceTree = "<group>"; };
 		4CEA12131BB1602D00686678 /* CEQueryCondition+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CEQueryCondition+Private.m"; sourceTree = "<group>"; };
+		4CEA12271BB1833600686678 /* CERenderObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderObject.h; sourceTree = "<group>"; };
+		4CEA12281BB1833600686678 /* CERenderObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERenderObject.m; sourceTree = "<group>"; };
+		4CEA122A1BB184EE00686678 /* CEModelInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEModelInfo.h; sourceTree = "<group>"; };
+		4CEA122B1BB184EE00686678 /* CEModelInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEModelInfo.m; sourceTree = "<group>"; };
 		4CF306B31B8DB0A0009544DC /* TestFunction1.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TestFunction1.vert; sourceTree = "<group>"; };
 		4CF306B41B8DB17C009544DC /* TestFunction2.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TestFunction2.vert; sourceTree = "<group>"; };
 		4CF306B51B8DB290009544DC /* TestFunction3.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TestFunction3.vert; sourceTree = "<group>"; };
@@ -466,15 +467,12 @@
 				2624ABA71AD6A56A00FC863C /* CEModel.h */,
 				2624ABA81AD6A56A00FC863C /* CEModel.m */,
 				268CBC601ADCC6BD00795A6D /* CEModel_Rendering.h */,
-				2624AB9C1AD62BAE00FC863C /* CETexture.h */,
-				2624AB9D1AD62BAE00FC863C /* CETexture.m */,
 				2624AB9F1AD62BC800FC863C /* CEMaterial.h */,
 				2624ABA01AD62BC800FC863C /* CEMaterial.m */,
 				261089671AAD31C60041E142 /* CECamera.h */,
 				261089681AAD31C60041E142 /* CECamera.m */,
 				2610896E1AAD3D700041E142 /* CECamera_Rendering.h */,
 				2625B8BC1AE7D0D4002FD478 /* Light */,
-				268CBC5C1ADCBD6600795A6D /* Buffers */,
 			);
 			name = 3DScene;
 			sourceTree = "<group>";
@@ -775,6 +773,11 @@
 		4CEA12251BB1825400686678 /* ResourceManager */ = {
 			isa = PBXGroup;
 			children = (
+				268CBC5C1ADCBD6600795A6D /* Buffers */,
+				4CEA12271BB1833600686678 /* CERenderObject.h */,
+				4CEA12281BB1833600686678 /* CERenderObject.m */,
+				4CEA122A1BB184EE00686678 /* CEModelInfo.h */,
+				4CEA122B1BB184EE00686678 /* CEModelInfo.m */,
 			);
 			name = ResourceManager;
 			sourceTree = "<group>";
@@ -1000,7 +1003,6 @@
 				2624ABA91AD6A56A00FC863C /* CEModel.m in Sources */,
 				4CF9B5FA1BA0660C00E2128D /* CEDefaultProgram.m in Sources */,
 				4CC4E7E91B9DB722008DEEC1 /* CEUniform.m in Sources */,
-				2624AB9E1AD62BAE00FC863C /* CETexture.m in Sources */,
 				4CD9CA9F1B8AB56600FDE357 /* CEShaderVariableInfo.m in Sources */,
 				4CF4038A1B7386C200C02BAE /* CEUniformMatrix4.m in Sources */,
 				26193F4E1AA8324600787C64 /* CubeEngine.m in Sources */,
@@ -1020,6 +1022,7 @@
 				2624ABAC1AD6A85500FC863C /* CERenderManager.m in Sources */,
 				4CF9B6031BA06CBA00E2128D /* CEAttributeVector3.m in Sources */,
 				4CF3E96C1B99E3E400D42515 /* CEShaderProgram.m in Sources */,
+				4CEA122C1BB184EE00686678 /* CEModelInfo.m in Sources */,
 				260949161B0598E000F7465B /* CEMtlParser.m in Sources */,
 				2624A6111B0AD234001E3F32 /* CEProgramConfig.m in Sources */,
 				26A9A8D71AF7744200394A4C /* CERenderCore.m in Sources */,
@@ -1032,6 +1035,7 @@
 				269F476A1B0089030030CD55 /* CEShadowMapBuffer.m in Sources */,
 				4CEA12181BB1602D00686678 /* CEQueryCondition.m in Sources */,
 				4CFE33631B3CFAAB00679817 /* CEShadowMapRenderer.m in Sources */,
+				4CEA12291BB1833600686678 /* CERenderObject.m in Sources */,
 				263BBBE11AB91A3600F88F65 /* CEUtils.m in Sources */,
 				26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */,
 				4CEA12191BB1602D00686678 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
