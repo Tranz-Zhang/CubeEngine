@@ -137,6 +137,11 @@
         return YES;
     }
     
+    for (NSString *filePath in objFiles) {
+        OBJFileParser *parser = [OBJFileParser parserWithFilePath:filePath];
+        NSArray *results = [parser parse];
+    }
+    
     NSString *test = objFiles[0];
     OBJFileParser *parser = [OBJFileParser parserWithFilePath:test];
     NSArray *results = [parser parse];

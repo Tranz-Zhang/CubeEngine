@@ -197,9 +197,11 @@
     } else {
         u_index = _indicesDict.count;
         _indicesDict[indexString] = @(u_index);
+        [group.meshData appendData:elementData];
+        
+        NSAssert((_indicesDict.count == group.meshData.length / elementData.length), @"wrong index");
     }
     [group.indicesData appendBytes:&u_index length:sizeof(unsigned short)];
-    [group.meshData appendData:elementData];
 }
 
 
