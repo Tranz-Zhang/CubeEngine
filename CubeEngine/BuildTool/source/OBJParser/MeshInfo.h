@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTLInfo.h"
 
 @interface MeshInfo : NSObject
 
 @property (nonatomic, strong) NSArray *groupNames;
 @property (nonatomic, strong) NSString *materialName;
-@property (nonatomic, strong) NSMutableData *meshData;
+@property (nonatomic, strong) MTLInfo *materialInfo;
+@property (nonatomic, assign) unsigned int indicesCount;
 @property (nonatomic, strong) NSMutableData *indicesData;
-@property (nonatomic, strong) NSArray *attributes;
 
 @end

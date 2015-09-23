@@ -7,16 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MeshInfo.h"
+#import "OBJFileInfo.h"
 
 @interface OBJFileParser : NSObject
 
 @property (nonatomic, readonly) NSString *filePath;
-@property (nonatomic, readonly) NSString *mtlFileName;
 
 + (OBJFileParser *)parserWithFilePath:(NSString *)filePath;
 
 // @return a list of MeshInfo
-- (NSArray *)parse;
+- (OBJFileInfo *)parse;
+
++ (BOOL)addTengentDataToObjInfo:(OBJFileInfo *)objFileInfo;
 
 @end

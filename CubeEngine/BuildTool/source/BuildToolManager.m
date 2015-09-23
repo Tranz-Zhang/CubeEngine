@@ -136,15 +136,33 @@
         printf("WARNING: process no model in Path:%s\n", [_resourcesDir UTF8String]);
         return YES;
     }
+    NSLog(@"%@", objFiles);
+//    for (NSString *filePath in objFiles) {
+//        OBJFileParser *parser = [OBJFileParser parserWithFilePath:filePath];
+//        NSArray *results = [parser parse];
+//    }
     
-    for (NSString *filePath in objFiles) {
-        OBJFileParser *parser = [OBJFileParser parserWithFilePath:filePath];
-        NSArray *results = [parser parse];
+    
+    NSString *objFilePath = objFiles[5];//[objFiles lastObject];
+    OBJFileParser *objParser = [OBJFileParser parserWithFilePath:objFilePath];
+    OBJFileInfo *info = [objParser parse];
+    
+    BOOL hasNormalMap = NO;
+    if (info.mtlFileName) {
+        NSString *currentDirectory = [objFilePath stringByDeletingLastPathComponent];
+        NSString *mtlFilePath = [currentDirectory stringByAppendingPathComponent:info.mtlFileName];
+        MTLFileParser *mtlParser = [MTLFileParser parserWithFilePath:mtlFilePath];
+        NSDictionary *mtlDict = [mtlParser parse];
+        for (MeshInfo *mesh in info.meshInfos) {
+            mesh.materialInfo = mtlDict[mesh.materialName];
+            if (!hasNormalMap) {
+                hasNormalMap = (mesh.materialInfo.normalTextureName != nil);
+            }
+        }
     }
-    
-    NSString *test = objFiles[0];
-    OBJFileParser *parser = [OBJFileParser parserWithFilePath:test];
-    NSArray *results = [parser parse];
+    if (hasNormalMap) {
+        [OBJFileParser addTengentDataToObjInfo:info];
+    }
     
     return YES;
 }

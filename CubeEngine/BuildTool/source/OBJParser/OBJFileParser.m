@@ -13,6 +13,8 @@
     NSMutableArray *_vertexList;
     NSMutableArray *_uvList;
     NSMutableArray *_normalList;
+    
+    NSMutableData *_vertexData;
     NSMutableDictionary *_indicesDict;
 }
 
@@ -31,7 +33,7 @@
 }
 
 
-- (NSArray *)parse {
+- (OBJFileInfo *)parse {
     NSError *error;
     NSString *objContent = [[NSString alloc] initWithContentsOfFile:_filePath encoding:NSUTF8StringEncoding error:&error];
     if (error) {
@@ -43,19 +45,26 @@
      NOTE: I use [... componentsSeparatedByString:@" "] to seperate because it's short writing,
      if something wrong, use [... componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet] instead.
      */
-    NSMutableArray *groups = [NSMutableArray array];
+    
     _vertexList = [NSMutableArray array];
     _uvList = [NSMutableArray array];
     _normalList = [NSMutableArray array];
     _indicesDict = [NSMutableDictionary dictionary];
+    _vertexData = [NSMutableData data];
+    
+    NSString *fileName = [_filePath lastPathComponent];
+    fileName = [fileName substringToIndex:fileName.length - 4];
+    OBJFileInfo *objInfo = [OBJFileInfo new];
+    objInfo.name = fileName;
+    
+    NSMutableArray *meshInfoList = [NSMutableArray array];
+    MeshInfo *currentMesh = [MeshInfo new];
+    currentMesh.indicesCount = 0;
+    currentMesh.groupNames = @[@"DefaultGroup"];
+    currentMesh.indicesData = [NSMutableData data];
+    [meshInfoList addObject:currentMesh];
+    
     NSArray *lines = [objContent componentsSeparatedByString:@"\n"];
-    
-    MeshInfo *currentGroup = [MeshInfo new];
-    currentGroup.groupNames = @[@"DefaultGroup"];
-    currentGroup.meshData = [NSMutableData data];
-    currentGroup.indicesData = [NSMutableData data];
-    [groups addObject:currentGroup];
-    
     for (NSString *lineContent in lines) {
         // parse vertex "v 2.963007 0.335381 -0.052237"
         if ([lineContent hasPrefix:@"v "]) {
@@ -85,48 +94,50 @@
         if ([lineContent hasPrefix:@"g "] || [lineContent hasPrefix:@"o "]) {
             NSString *valueString = [lineContent substringFromIndex:2];
             NSArray *groupNames = [valueString componentsSeparatedByString:@" "];
-            MeshInfo *newGroup = [MeshInfo new];
-            newGroup.groupNames = groupNames;
-            newGroup.meshData = [NSMutableData data];
-            newGroup.indicesData = [NSMutableData data];
-            [groups addObject:newGroup];
-            currentGroup = newGroup;
+            MeshInfo *newMesh = [MeshInfo new];
+            newMesh.indicesCount = 0;
+            newMesh.groupNames = groupNames;
+            newMesh.indicesData = [NSMutableData data];
+            [meshInfoList addObject:newMesh];
+            currentMesh = newMesh;
             continue;
         }
         
         // parse faces "f 10/16/25 9/15/26 29/36/27 30/37/28"
         if ([lineContent hasPrefix:@"f "]) {
             NSString *content = [lineContent substringFromIndex:2];
-            NSArray *attributeIndies = [content componentsSeparatedByString:@" "];
-            if (!currentGroup.attributes) {
-                currentGroup.attributes = [self vertexAttributesWithFaceAttributes:attributeIndies[0]];
+            NSArray *indexStringList = [content componentsSeparatedByString:@" "];
+            if (!objInfo.attributes) {
+                objInfo.attributes = [self vertexAttributesWithFaceAttributes:indexStringList[0]];
             }
             
-            if (attributeIndies.count == 3) {
-                for (NSString *indexString in attributeIndies) {
-                    [self appendMeshDataToGroup:currentGroup withIndexString:indexString];
+            if (indexStringList.count == 3) {
+                for (NSString *indexString in indexStringList) {
+                    [self appendIndexToMesh:currentMesh withIndexString:indexString];
                 }
                 
-            } else if (attributeIndies.count == 4) {
+            } else if (indexStringList.count == 4) {
                 // quadrilateral to triangle
-                [self appendMeshDataToGroup:currentGroup withIndexString:attributeIndies[0]];
-                [self appendMeshDataToGroup:currentGroup withIndexString:attributeIndies[1]];
-                [self appendMeshDataToGroup:currentGroup withIndexString:attributeIndies[3]];
-                [self appendMeshDataToGroup:currentGroup withIndexString:attributeIndies[3]];
-                [self appendMeshDataToGroup:currentGroup withIndexString:attributeIndies[1]];
-                [self appendMeshDataToGroup:currentGroup withIndexString:attributeIndies[2]];
+                [self appendIndexToMesh:currentMesh withIndexString:indexStringList[0]];
+                [self appendIndexToMesh:currentMesh withIndexString:indexStringList[1]];
+                [self appendIndexToMesh:currentMesh withIndexString:indexStringList[3]];
+                [self appendIndexToMesh:currentMesh withIndexString:indexStringList[3]];
+                [self appendIndexToMesh:currentMesh withIndexString:indexStringList[1]];
+                [self appendIndexToMesh:currentMesh withIndexString:indexStringList[2]];
             }
             continue;
         }
         
         // mtl file name
         if ([lineContent hasPrefix:@"mtllib"]) {
-            _mtlFileName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            objInfo.mtlFileName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            continue;
         }
         
         // reference material
         if ([lineContent hasPrefix:@"usemtl"]) {
-            currentGroup.materialName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            currentMesh.materialName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            continue;
         }
     }
     
@@ -135,18 +146,19 @@
     _uvList = nil;
     _normalList = nil;
     _indicesDict = nil;
-    currentGroup = nil;
-    
+    currentMesh = nil;
     // remove useless groups
-    NSMutableArray *filteredGroups = [NSMutableArray array];
-    for (MeshInfo *group in groups) {
-        if (group.groupNames.count && group.attributes.count && group.meshData.length) {
-            [filteredGroups addObject:group];
+    NSMutableArray *filteredMeshes = [NSMutableArray array];
+    for (MeshInfo *mesh in meshInfoList) {
+        if (mesh.groupNames.count && mesh.indicesCount && mesh.indicesData.length) {
+            [filteredMeshes addObject:mesh];
         }
     }
-    groups = filteredGroups;
+    objInfo.meshInfos = filteredMeshes.copy;
+    objInfo.vertexData = _vertexData.copy;
+    _vertexData = nil;
     
-    return [groups copy];
+    return objInfo;
 }
 
 
@@ -163,7 +175,7 @@
 
 
 // 根据索引获取对应的坐标，纹理，法线等值，组成NSData返回
-- (void)appendMeshDataToGroup:(MeshInfo *)group withIndexString:(NSString *)indexString {
+- (void)appendIndexToMesh:(MeshInfo *)mesh withIndexString:(NSString *)indexString {
     NSArray *indies = [indexString componentsSeparatedByString:@"/"];
     NSMutableData *elementData = [NSMutableData data];
     [indies enumerateObjectsUsingBlock:^(NSString *indexString, NSUInteger idx, BOOL *stop) {
@@ -197,11 +209,12 @@
     } else {
         u_index = _indicesDict.count;
         _indicesDict[indexString] = @(u_index);
-        [group.meshData appendData:elementData];
+        [_vertexData appendData:elementData];
         
-        NSAssert((_indicesDict.count == group.meshData.length / elementData.length), @"wrong index");
+        NSAssert((_indicesDict.count == _vertexData.length / elementData.length), @"wrong index");
     }
-    [group.indicesData appendBytes:&u_index length:sizeof(unsigned short)];
+    mesh.indicesCount++;
+    [mesh.indicesData appendBytes:&u_index length:sizeof(unsigned short)];
 }
 
 
@@ -223,6 +236,92 @@
     }
     
     return [CEVBOAttribute attributesWithNames:attributeNames];
+}
+
+
+// calcualte tengent data
++ (BOOL)addTengentDataToObjInfo:(OBJFileInfo *)objFileInfo {
+    // check normal attribute
+    BOOL containNormalAttribute = NO;
+    for (CEVBOAttribute *attribute in objFileInfo.attributes) {
+        if (attribute.name == CEVBOAttributeNormal) {
+            containNormalAttribute = YES;
+            break;
+        }
+    }
+    if (!containNormalAttribute) {
+        printf("Fail to add tengent data: obj file does not contain normal attribute\n");
+        return NO;
+    }
+    
+    // calculate tangent data
+    CEVBOAttribute *positionAttrib, *textureAttrib;
+    for (CEVBOAttribute *attribute in objFileInfo.attributes) {
+        if (attribute.name == CEVBOAttributePosition) {
+            positionAttrib = attribute;
+            continue;
+        }
+        if (attribute.name == CEVBOAttributeTextureCoord) {
+            textureAttrib = attribute;
+            continue;
+        }
+    }
+    NSData *vertexData = objFileInfo.vertexData;
+    int stride = positionAttrib.elementStride;
+    if (!positionAttrib || !textureAttrib || !vertexData.length ||
+        vertexData.length % (stride * 3)) {
+        
+        // 这里需要从indcesData拿到三角形的数据，数据重新组合不是按顺序进行的，比较麻烦。
+        // 考虑先建空数据，再逐一替代 ？ 替代时会不会重复？参考书中做法，必要时重新计算法线
+        
+        printf("Fail to add tengent data: wrong data & params");
+        return NO;
+    }
+    
+    int vertexCount = (int)vertexData.length / stride / 3;
+    int offset = 0;
+    NSMutableData *newVertexData = [NSMutableData data];
+    for (int i = 0; i < vertexCount; i++) {
+        GLKVector3 v[3];
+        GLKVector2 uv[3];
+        for (int idx = 0; idx < 3; idx++) {
+            [vertexData getBytes:v[idx].v range:NSMakeRange(offset + positionAttrib.elementOffset, 12)];
+            [vertexData getBytes:uv[idx].v range:NSMakeRange(offset + textureAttrib.elementOffset, 8)];
+            offset += stride;
+        }
+        
+        GLKVector3 deltaPos1 = GLKVector3Subtract(v[0], v[1]);
+        GLKVector3 deltaPos2 = GLKVector3Subtract(v[0], v[2]);
+        GLKVector2 deltaUV1 = GLKVector2Subtract(uv[1], uv[0]);
+        GLKVector2 deltaUV2 = GLKVector2Subtract(uv[2], uv[0]);
+        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+        // tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y) * r
+        //        GLKVector3 tangent = GLKVector3MultiplyScalar(GLKVector3Subtract(GLKVector3MultiplyScalar(deltaPos1, deltaUV2.y),
+        //                                                                         GLKVector3MultiplyScalar(deltaPos2, deltaUV1.y)), r);
+        GLKVector3 tangent;
+        tangent.x = (deltaPos1.x * deltaUV2.y + deltaPos2.x * deltaUV1.y) * r;
+        tangent.y = (deltaPos1.y * deltaUV2.y + deltaPos2.y * deltaUV1.y) * r;
+        tangent.z = (deltaPos1.z * deltaUV2.y + deltaPos2.z * deltaUV1.y) * r;
+        tangent = GLKVector3Normalize(tangent);
+        
+        offset -= 3 * stride;
+        for (int idx = 0; idx < 3; idx++) {
+            [newVertexData appendData:[vertexData subdataWithRange:NSMakeRange(offset, stride)]];
+            [newVertexData appendBytes:tangent.v length:sizeof(tangent)];
+            offset += stride;
+        }
+    }
+    objFileInfo.vertexData = [newVertexData copy];
+    
+    // add tangent attribute
+    NSMutableArray *attributeNames = [NSMutableArray array];
+    for (CEVBOAttribute *attribute in objFileInfo.attributes) {
+        [attributeNames addObject:@(attribute.name)];
+    }
+    [attributeNames addObject:@(CEVBOAttributeTangent)];
+    objFileInfo.attributes = [CEVBOAttribute attributesWithNames:attributeNames];
+    
+    return YES;
 }
 
 

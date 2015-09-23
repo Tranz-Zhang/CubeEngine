@@ -49,6 +49,8 @@
 		26C3B72B1AE893F10061BEFC /* CELight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 263C8E5C1AE5F546004FDFE8 /* CELight.h */; };
 		26C3B72C1AE893F40061BEFC /* CEDirectionalLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2625B8BE1AE7D340002FD478 /* CEDirectionalLight.h */; };
 		26C3B7321AE8F09F0061BEFC /* CELightInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 26C3B7311AE8F09F0061BEFC /* CELightInfo.m */; };
+		26C745BE1BB2F249002E412E /* OBJFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 26C745BD1BB2F249002E412E /* OBJFileInfo.m */; };
+		26C745C11BB304D4002E412E /* MTLInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 26C745C01BB304D4002E412E /* MTLInfo.m */; };
 		26EBAB711AAECAA100E65022 /* CEScene.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261089641AAD31AF0041E142 /* CEScene.h */; };
 		26EBAB731AAECAA700E65022 /* CECamera.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 261089671AAD31C60041E142 /* CECamera.h */; };
 		26F7B75A1AEE31C400BEDB01 /* CESpotLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F7B7591AEE31C400BEDB01 /* CESpotLight.m */; };
@@ -267,6 +269,10 @@
 		26C3B72E1AE8CE090061BEFC /* CEBaseRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEBaseRenderer.m; sourceTree = "<group>"; };
 		26C3B7301AE8F09F0061BEFC /* CELightInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CELightInfo.h; sourceTree = "<group>"; };
 		26C3B7311AE8F09F0061BEFC /* CELightInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CELightInfo.m; sourceTree = "<group>"; };
+		26C745BC1BB2F249002E412E /* OBJFileInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBJFileInfo.h; sourceTree = "<group>"; };
+		26C745BD1BB2F249002E412E /* OBJFileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBJFileInfo.m; sourceTree = "<group>"; };
+		26C745BF1BB304D4002E412E /* MTLInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLInfo.h; sourceTree = "<group>"; };
+		26C745C01BB304D4002E412E /* MTLInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLInfo.m; sourceTree = "<group>"; };
 		26F7B7581AEE31C400BEDB01 /* CESpotLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CESpotLight.h; sourceTree = "<group>"; };
 		26F7B7591AEE31C400BEDB01 /* CESpotLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CESpotLight.m; sourceTree = "<group>"; };
 		26F7FF8A1ADE3C3B0086D9D7 /* CERenderer_V_VN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer_V_VN.h; sourceTree = "<group>"; };
@@ -684,10 +690,14 @@
 			children = (
 				4CB61A2C1BB2A29100D83856 /* MeshInfo.h */,
 				4CB61A2D1BB2A29100D83856 /* MeshInfo.m */,
-				4CB61A2E1BB2A29100D83856 /* MTLFileParser.h */,
-				4CB61A2F1BB2A29100D83856 /* MTLFileParser.m */,
+				26C745BC1BB2F249002E412E /* OBJFileInfo.h */,
+				26C745BD1BB2F249002E412E /* OBJFileInfo.m */,
 				4CB61A301BB2A29100D83856 /* OBJFileParser.h */,
 				4CB61A311BB2A29100D83856 /* OBJFileParser.m */,
+				26C745BF1BB304D4002E412E /* MTLInfo.h */,
+				26C745C01BB304D4002E412E /* MTLInfo.m */,
+				4CB61A2E1BB2A29100D83856 /* MTLFileParser.h */,
+				4CB61A2F1BB2A29100D83856 /* MTLFileParser.m */,
 			);
 			path = OBJParser;
 			sourceTree = "<group>";
@@ -1108,6 +1118,7 @@
 				4CB61A321BB2A29100D83856 /* MeshInfo.m in Sources */,
 				4CB61A1A1BB2414600D83856 /* CEQueryCondition.m in Sources */,
 				4CB61A161BB2413F00D83856 /* FMDatabaseQueue.m in Sources */,
+				26C745BE1BB2F249002E412E /* OBJFileInfo.m in Sources */,
 				4CD9CAAA1B8AF9E500FDE357 /* CECodingObject.m in Sources */,
 				4C1352171B8364B2008EA484 /* main.m in Sources */,
 				4CB61A111BB2412800D83856 /* CEDatabaseNotifications.m in Sources */,
@@ -1118,6 +1129,7 @@
 				4CB61A1C1BB2414B00D83856 /* CEQueryCondition+Private.m in Sources */,
 				4CD9CAA81B8AC39900FDE357 /* CEShaderVariableInfo.m in Sources */,
 				4CB61A0E1BB240E700D83856 /* CEDatabase.m in Sources */,
+				26C745C11BB304D4002E412E /* MTLInfo.m in Sources */,
 				4C1352151B83638B008EA484 /* BuildToolManager.m in Sources */,
 				4CB61A181BB2414600D83856 /* CEDatabaseContext.m in Sources */,
 			);
