@@ -13,6 +13,7 @@
 @property (nonatomic, strong) NSString *appName;
 @property (nonatomic, strong) NSString *engineProjectDir;
 @property (nonatomic, strong) NSString *buildProductDir;
+@property (nonatomic, strong) NSString *resourcesDir;
 
 - (void)run;
 

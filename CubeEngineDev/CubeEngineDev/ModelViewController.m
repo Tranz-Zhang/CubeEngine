@@ -32,7 +32,7 @@
 //    self.scene.camera.farZ = 100;
     
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    _testModel = [CEModel modelWithObjFile:@"sonic"];
+    _testModel = [CEModel modelWithObjFile:@"ram"];
 //    _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
 //    _testModel.showWireframe = YES;
     _testModel.showAccessoryLine = YES;

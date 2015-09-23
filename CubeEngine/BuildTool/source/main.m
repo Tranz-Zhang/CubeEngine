@@ -22,7 +22,7 @@ NSString *kAppPath = nil;
 #define CE_SHADER_STRING(text) @ #text
 
 
-// commandLine: BuildTool -app ${PRODUCT_NAME} -buildDirectory ${BUILT_PRODUCTS_DIR} -engineDirectory ${SRCROOT}/../CubeEngine
+// commandLine: BuildTool -app ${PRODUCT_NAME} -buildDirectory ${BUILT_PRODUCTS_DIR} -engineDirectory ${SRCROOT}/../CubeEngine -resourcesDirectory ${SRCROOT}/Resources
 // scheme: BuildTool -app DEBUG -buildDirectory ${SRCROOT}/BuildTool -engineDirectory ${SRCROOT}/../CubeEngine
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
@@ -35,6 +35,7 @@ int main(int argc, const char * argv[]) {
         NSMutableArray *appNameComponents = [NSMutableArray array];
         NSMutableArray *buildDirComponents = [NSMutableArray array];
         NSMutableArray *engineDirComponents = [NSMutableArray array];
+        NSMutableArray *resourcesDirComponents = [NSMutableArray array];
         int paramType = 0;
         for (int i = 1; i < argc; i++) {
             NSString *argString = [NSString stringWithUTF8String:argv[i]];
@@ -45,6 +46,8 @@ int main(int argc, const char * argv[]) {
                     paramType = 2;
                 } else if ([argString isEqualToString:@"-engineDirectory"] && i + 1 < argc) {
                     paramType = 3;
+                } else if ([argString isEqualToString:@"-resourcesDirectory"] && i + 1 < argc) {
+                    paramType = 4;
                 } else {
                     paramType = 0;
                 }
@@ -61,6 +64,9 @@ int main(int argc, const char * argv[]) {
                 case 3:
                     [engineDirComponents addObject:argString];
                     break;
+                case 4:
+                    [resourcesDirComponents addObject:argString];
+                    break;
                 default:
                     break;
             }
@@ -73,17 +79,18 @@ int main(int argc, const char * argv[]) {
             kAppPath = [productPath stringByAppendingFormat:@"/%@.app", appName];
         }
         
-        printf("\n============== BuildTool ==============\n");
-        if (appNameComponents.count && buildDirComponents.count && engineDirComponents.count) {
+        printf("\n============================ BuildTool ============================\n");
+        if (appNameComponents.count && buildDirComponents.count && engineDirComponents.count && resourcesDirComponents.count) {
             CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
             
             BuildToolManager *manager =  [BuildToolManager new];
             manager.appName = [appNameComponents componentsJoinedByString:@" "];
             manager.buildProductDir = [[buildDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
             manager.engineProjectDir = [[engineDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
+            manager.resourcesDir = [[resourcesDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
             [manager run];
             
-            printf("BuildTool finish with duration: %.2fs\n", CFAbsoluteTimeGetCurrent() - startTime);
+            printf("\nBuildTool finish with duration: %.2fs\n", CFAbsoluteTimeGetCurrent() - startTime);
             
         } else {
             printf("ERROR: Fail to run BuildTool, checking params:\nappName: %s\nbuildDirectory: %s\nengineDirectory: %s\n",
@@ -92,7 +99,7 @@ int main(int argc, const char * argv[]) {
                    engineDirComponents.count ? "OK" : "Fail");
             assert(0);
         }
-        printf("\n====================================\n");
+        printf("\n===================================================================\n");
     }
     return 0;
 }

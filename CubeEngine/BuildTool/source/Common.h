@@ -12,5 +12,7 @@
 extern NSString *kAppPath;
 
 #import "CEDefines.h"
+#import <OpenGL/OpenGL.h>
+#import <GLKit/GLKit.h>
 
 #endif

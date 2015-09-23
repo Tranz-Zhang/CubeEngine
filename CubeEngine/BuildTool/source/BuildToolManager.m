@@ -11,6 +11,10 @@
 #import "CEShaderFunctionInfo.h"
 #import "CEShaderProfile.h"
 #import "CEShaderBuilder.h"
+#import "CEDB.h"
+
+#import "OBJFileParser.h"
+#import "MTLFileParser.h"
 
 #define kShaderResourceDir @"CubeEngine/ShaderResources"
 
@@ -38,46 +42,34 @@
         printf("App doesn't exist at path: %s\n", [_appPath UTF8String]);
         return;
     }
-    if (![self createEngineDirectoryInApp]) {
+    
+    printf("\n>> check engine directory in app:\n %s\n", [_appPath UTF8String]);
+    _engineDir = [_appPath stringByAppendingPathComponent:kEngineDirectory];
+    if (![self createDirectoryAtPath:_engineDir]) {
+        _engineDir = nil;
         return;
     }
     
-    [self processShaderResources];
-    
-    [self testShaderBuilder];
-}
-
-
-- (BOOL)createEngineDirectoryInApp {
-    printf("\n>> check engine directory in app:\n %s\n", [_appPath UTF8String]);
-    
-    _engineDir = [_appPath stringByAppendingPathComponent:kEngineDirectory];
-    if (![_fileManager fileExistsAtPath:_engineDir isDirectory:nil]) {
-        BOOL isOK = [_fileManager createDirectoryAtPath:_engineDir
-                                              withIntermediateDirectories:YES
-                                                               attributes:nil
-                                                                    error:nil];
-        printf(isOK ? "Create engine directory\n" : "Fail to create engine directory\n");
-        return isOK;
-        
-    } else {
-        return YES;
+    if(![self processShaderResources]){
+        printf("\nFail to process shader resources, ABORT!\n");
+        return;
     }
+    if(![self processModelResources]){
+        printf("\nFail to process model resources, ABORT!\n");
+        return;
+    }
+//    [self testShaderBuilder];
 }
 
 
-- (void)processShaderResources {
+#pragma mark - process shaders
+
+- (BOOL)processShaderResources {
     printf("\n>> process shader resources...\n");
-    
     // check shader directory in app
     NSString *toDir = [_appPath stringByAppendingPathComponent:kShaderDirectory];
-    if (![_fileManager fileExistsAtPath:toDir isDirectory:nil]) {
-        BOOL isOK = [_fileManager createDirectoryAtPath:toDir
-                            withIntermediateDirectories:YES
-                                             attributes:nil
-                                                  error:nil];
-        printf(isOK ? "Create shader directory\n" : "Fail to create engine directory\n");
-        if (!isOK) return;
+    if (![self createDirectoryAtPath:toDir]) {
+        return NO;
     }
     // remove existed shaders
     NSArray *lastShaderFiles = [_fileManager contentsOfDirectoryAtPath:toDir error:nil];
@@ -90,7 +82,7 @@
     NSArray * currentShaderFiles = [_fileManager contentsOfDirectoryAtPath:fromDir error:nil];
     if (!currentShaderFiles.count) {
         printf("WARNING: process no shaders in Path:%s\n", [fromDir UTF8String]);
-        return;
+        return YES;
     }
     
     CEShaderProfileParser *shaderParser = [CEShaderProfileParser new];
@@ -108,15 +100,10 @@
             printf("process shader %s.profile %s\n", [fileName UTF8String], isOK ? "OK" : "Fail");
         }
     }
+    return YES;
 }
 
 
-- (void)processModelResources {
-    
-}
-
-
-#pragma mark - Shader Builder
 - (void)testShaderBuilder {
 #if TARGET_OS_MAC
     CEShaderBuilder *shaderBuilder = [CEShaderBuilder new];
@@ -126,6 +113,73 @@
 
 }
 
+
+
+#pragma mark - process models
+
+- (BOOL)processModelResources {
+    printf("\n>> process model resources...\n");
+    if (![[NSFileManager defaultManager] fileExistsAtPath:_resourcesDir]) {
+        printf("Resources directory doesn't existed at path: %s\n", [_resourcesDir UTF8String]);
+        return NO;
+    }
+    // check model directory in app
+    NSString *modelDir = [_appPath stringByAppendingPathComponent:kModelDirectory];
+    if (![self createDirectoryAtPath:modelDir]){
+        return NO;
+    }
+    
+    // get obj files
+    NSMutableArray *objFiles = [NSMutableArray array];
+    [self parseObjFileAtPath:_resourcesDir objFiles:objFiles];
+    if (!objFiles.count) {
+        printf("WARNING: process no model in Path:%s\n", [_resourcesDir UTF8String]);
+        return YES;
+    }
+    
+    NSString *test = objFiles[0];
+    OBJFileParser *parser = [OBJFileParser parserWithFilePath:test];
+    NSArray *results = [parser parse];
+    
+    return YES;
+}
+
+
+- (void)parseObjFileAtPath:(NSString *)directory objFiles:(NSMutableArray *)objFiles {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *fileList = [fileManager contentsOfDirectoryAtPath:directory error:nil];
+    for (NSString *fileName in fileList) {
+        if ([fileName hasPrefix:@"."]) { // skip hidden directory
+            continue;
+        }
+        BOOL isDirectory;
+        NSString *filePath = [directory stringByAppendingPathComponent:fileName];
+        if([fileManager fileExistsAtPath:filePath isDirectory:&isDirectory]) {
+            if (!isDirectory) {
+                if ([fileName hasSuffix:@".obj"]) {
+                    [objFiles addObject:filePath];
+                }
+                
+            } else {
+                [self parseObjFileAtPath:filePath objFiles:objFiles];
+            }
+        }
+    }
+}
+
+
+#pragma mark - others
+- (BOOL)createDirectoryAtPath:(NSString *)directoryPath {
+    if (![_fileManager fileExistsAtPath:directoryPath isDirectory:nil]) {
+        BOOL isOK = [_fileManager createDirectoryAtPath:directoryPath
+                            withIntermediateDirectories:YES
+                                             attributes:nil
+                                                  error:nil];
+        printf("Create directory %s at:%s\n", isOK ? "OK" : "FAIL", [directoryPath UTF8String]);
+        return isOK;
+    }
+    return YES;
+}
 
 
 @end

@@ -471,7 +471,8 @@
 				261CD4311AD3DE8B00C521CC /* cylinder.mtl */,
 				261CD4321AD3DE8B00C521CC /* cylinder.obj */,
 			);
-			path = Models;
+			name = Models;
+			path = ../Resources/Models;
 			sourceTree = "<group>";
 		};
 		4C10ED791B4237C40048636C /* SampleScene */ = {
@@ -871,7 +872,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "../CubeEngine/BuildTool/BuildTool -app ${PRODUCT_NAME} -buildDirectory ${BUILT_PRODUCTS_DIR} -engineDirectory ${SRCROOT}/../CubeEngine";
+			shellScript = "../CubeEngine/BuildTool/BuildTool -app ${PRODUCT_NAME} -buildDirectory ${BUILT_PRODUCTS_DIR} -engineDirectory ${SRCROOT}/../CubeEngine -resourcesDirectory ${SRCROOT}/Resources";
 		};
 /* End PBXShellScriptBuildPhase section */
 
