@@ -72,7 +72,7 @@
                 attributes = mesh.attributes;
             }
             
-            CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:attributes];
+            CEVertexBuffer_DEPRECATED *vertexBuffer = [[CEVertexBuffer_DEPRECATED alloc] initWithData:vertexData attributes:attributes];
             CEModel *model = [[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
             model.name = groupName;
             if (!material) {

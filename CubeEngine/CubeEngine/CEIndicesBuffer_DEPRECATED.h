@@ -13,7 +13,7 @@
 /**
  Representing a indices buffer in GPU, a data buffer in CPU.
  */
-@interface CEIndicesBuffer : NSObject
+@interface CEIndicesBuffer_DEPRECATED : NSObject
 
 @property (nonatomic, readonly, getter=isReady) BOOL ready;
 @property (nonatomic, readonly) GLsizei indicesCount;

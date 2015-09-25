@@ -8,14 +8,14 @@
 
 #import <GLKit/GLKit.h>
 #import "CEModel.h"
-#import "CEVertexBuffer.h"
-#import "CEIndicesBuffer.h"
+#import "CEVertexBuffer_DEPRECATED.h"
+#import "CEIndicesBuffer_DEPRECATED.h"
 
 @interface CEModel ()
 
-@property (nonatomic, readonly) CEVertexBuffer *vertexBuffer;
-@property (nonatomic, readonly) CEIndicesBuffer *indicesBuffer;
-@property (nonatomic, readonly) CEIndicesBuffer *wireframeBuffer;
+@property (nonatomic, readonly) CEVertexBuffer_DEPRECATED *vertexBuffer;
+@property (nonatomic, readonly) CEIndicesBuffer_DEPRECATED *indicesBuffer;
+@property (nonatomic, readonly) CEIndicesBuffer_DEPRECATED *wireframeBuffer;
 
 // textures
 @property (nonatomic, strong) GLKTextureInfo *texture;
@@ -23,7 +23,7 @@
 
 
 // initialization
-- (instancetype)initWithVertexBuffer:(CEVertexBuffer *)vertexBuffer
-                       indicesBuffer:(CEIndicesBuffer *)indicesBuffer;
+- (instancetype)initWithVertexBuffer:(CEVertexBuffer_DEPRECATED *)vertexBuffer
+                       indicesBuffer:(CEIndicesBuffer_DEPRECATED *)indicesBuffer;
 
 @end

@@ -1,5 +1,5 @@
 //
-//  CEVertexDataBuffer.h
+//  CETextureBuffer.h
 //  CubeEngine
 //
 //  Created by chance on 9/25/15.
@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CEVertexBuffer : NSObject
+@interface CETextureBuffer : NSObject
 
 @end

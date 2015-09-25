@@ -24,8 +24,8 @@
 }
 
 - (void)setupSharedVertexBuffer {
-    static CEVertexBuffer *_sharedVertexBuffer;
-    static CEIndicesBuffer *_sharedIndicesBuffer;
+    static CEVertexBuffer_DEPRECATED *_sharedVertexBuffer;
+    static CEIndicesBuffer_DEPRECATED *_sharedIndicesBuffer;
     if (!_sharedVertexBuffer) {
         GLfloat red = 200.0 / 255.0, green = 150.0 / 255.0, blue = 0.0, alpha = 1.0;
         GLfloat vertices[] = {
@@ -45,7 +45,7 @@
         };
         NSData *vertexData = [NSData dataWithBytes:&vertices length:sizeof(vertices)];
         NSArray *attributes = [CELight defaultVertexBufferAttributes];
-        _sharedVertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:attributes];
+        _sharedVertexBuffer = [[CEVertexBuffer_DEPRECATED alloc] initWithData:vertexData attributes:attributes];
     }
     
     if (!_sharedIndicesBuffer) {
@@ -54,7 +54,7 @@
             7, 8, 9, 10, 11, 12 // DIRECTION
         };
         NSData *indicesData = [NSData dataWithBytes:&indices length:sizeof(indices)];
-        _sharedIndicesBuffer = [[CEIndicesBuffer alloc] initWithData:indicesData indicesCount:sizeof(indices)];
+        _sharedIndicesBuffer = [[CEIndicesBuffer_DEPRECATED alloc] initWithData:indicesData indicesCount:sizeof(indices)];
     }
     
     _vertexBuffer = _sharedVertexBuffer;

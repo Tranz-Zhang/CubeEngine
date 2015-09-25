@@ -20,8 +20,8 @@
     return [[fileLoader loadModelWithObjFileName:objFileName] anyObject];
 }
 
-- (instancetype)initWithVertexBuffer:(CEVertexBuffer *)vertexBuffer
-                       indicesBuffer:(CEIndicesBuffer *)indicesBuffer {
+- (instancetype)initWithVertexBuffer:(CEVertexBuffer_DEPRECATED *)vertexBuffer
+                       indicesBuffer:(CEIndicesBuffer_DEPRECATED *)indicesBuffer {
     self = [super init];
     if (self) {
         _vertexBuffer = vertexBuffer;
@@ -42,7 +42,7 @@
 }
 
 
-- (void)setupMeshWithVertexBuffer:(CEVertexBuffer *)vertexBuffer {
+- (void)setupMeshWithVertexBuffer:(CEVertexBuffer_DEPRECATED *)vertexBuffer {
     // vertex info
     CEVBOAttribute *positionInfo = [vertexBuffer attributeWithName:CEVBOAttributePosition];
     if (!positionInfo) {
@@ -129,9 +129,9 @@
 
 
 // duplicated ivars which can't accessed outside.
-- (void)setupDuplicatedModelWithVertexBuffer:(CEVertexBuffer *)vertexBuffer
-                               indicesBuffer:(CEIndicesBuffer *)indicesBuffer
-                             wireframeBuffer:(CEIndicesBuffer *)wireframeBuffer
+- (void)setupDuplicatedModelWithVertexBuffer:(CEVertexBuffer_DEPRECATED *)vertexBuffer
+                               indicesBuffer:(CEIndicesBuffer_DEPRECATED *)indicesBuffer
+                             wireframeBuffer:(CEIndicesBuffer_DEPRECATED *)wireframeBuffer
                                       bounds:(GLKVector3)bounds
                             offsetFromOrigin:(GLKVector3)offsetFromOrigin {
     _vertexBuffer = vertexBuffer;
@@ -205,7 +205,7 @@
         }
     }
     
-    _wireframeBuffer = [[CEIndicesBuffer alloc] initWithData:lineIndicesData
+    _wireframeBuffer = [[CEIndicesBuffer_DEPRECATED alloc] initWithData:lineIndicesData
                                                 indicesCount:indicesCount];
 }
 

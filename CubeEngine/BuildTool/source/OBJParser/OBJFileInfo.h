@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MeshInfo.h"
+#import "VertexData.h"
 
 @interface OBJFileInfo : NSObject
 
@@ -15,6 +16,7 @@
 @property (nonatomic, strong) NSString *mtlFileName;
 @property (nonatomic, strong) NSArray *meshInfos; // array of MeshInfo
 @property (nonatomic, strong) NSData *vertexData;
+@property (nonatomic, strong) NSArray *vertexDataList;
 @property (nonatomic, strong) NSArray *attributes;
 
 @end

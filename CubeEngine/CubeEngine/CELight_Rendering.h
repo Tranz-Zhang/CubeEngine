@@ -7,23 +7,23 @@
 //
 
 #import "CELight.h"
-#import "CEVertexBuffer.h"
-#import "CEIndicesBuffer.h"
+#import "CEVertexBuffer_DEPRECATED.h"
+#import "CEIndicesBuffer_DEPRECATED.h"
 #import "CELightInfo.h"
 
 
 @interface CELight () {
     @protected
-    CEVertexBuffer *_vertexBuffer;
-    CEIndicesBuffer *_indicesBuffer;
+    CEVertexBuffer_DEPRECATED *_vertexBuffer;
+    CEIndicesBuffer_DEPRECATED *_indicesBuffer;
     CELightInfo *_lightInfo;
     BOOL _enabled;
 }
 
 // light visual model
 + (NSArray *)defaultVertexBufferAttributes;
-@property (nonatomic, readonly) CEVertexBuffer *vertexBuffer;
-@property (nonatomic, readonly) CEIndicesBuffer *indicesBuffer;
+@property (nonatomic, readonly) CEVertexBuffer_DEPRECATED *vertexBuffer;
+@property (nonatomic, readonly) CEIndicesBuffer_DEPRECATED *indicesBuffer;
 
 // light info
 @property (nonatomic, readonly) CELightInfo *lightInfo;

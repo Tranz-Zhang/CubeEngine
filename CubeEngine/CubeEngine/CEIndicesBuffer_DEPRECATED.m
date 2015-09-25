@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEIndicesBuffer.h"
+#import "CEIndicesBuffer_DEPRECATED.h"
 #import "CEUtils.h"
 
-@implementation CEIndicesBuffer {
+@implementation CEIndicesBuffer_DEPRECATED {
     NSData *_indicesBufferData;
     GLsizei _dataSize;
 }

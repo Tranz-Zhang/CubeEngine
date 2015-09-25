@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CEVertexBuffer.h"
-#import "CEIndicesBuffer.h"
+#import "CEVertexBuffer_DEPRECATED.h"
+#import "CEIndicesBuffer_DEPRECATED.h"
 #import "CEMaterial.h"
 
 /**
@@ -18,8 +18,8 @@
 @interface CERenderObject : NSObject
 
 // mesh info
-@property (nonatomic, strong) CEVertexBuffer *vertexBuffer;
-@property (nonatomic, strong) CEIndicesBuffer *indexBuffer;
+@property (nonatomic, strong) CEVertexBuffer_DEPRECATED *vertexBuffer;
+@property (nonatomic, strong) CEIndicesBuffer_DEPRECATED *indexBuffer;
 
 // material info
 @property (nonatomic, strong) CEMaterial *material;

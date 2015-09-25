@@ -14,7 +14,7 @@
     NSMutableArray *_uvList;
     NSMutableArray *_normalList;
     
-    NSMutableData *_vertexData;
+    NSMutableArray *_vertexDataList;
     NSMutableDictionary *_indicesDict;
 }
 
@@ -50,7 +50,7 @@
     _uvList = [NSMutableArray array];
     _normalList = [NSMutableArray array];
     _indicesDict = [NSMutableDictionary dictionary];
-    _vertexData = [NSMutableData data];
+    _vertexDataList = [NSMutableArray array];
     
     NSString *fileName = [_filePath lastPathComponent];
     fileName = [fileName substringToIndex:fileName.length - 4];
@@ -59,9 +59,8 @@
     
     NSMutableArray *meshInfoList = [NSMutableArray array];
     MeshInfo *currentMesh = [MeshInfo new];
-    currentMesh.indicesCount = 0;
     currentMesh.groupNames = @[@"DefaultGroup"];
-    currentMesh.indicesData = [NSMutableData data];
+    currentMesh.indicesList = [NSMutableArray array];
     [meshInfoList addObject:currentMesh];
     
     NSArray *lines = [objContent componentsSeparatedByString:@"\n"];
@@ -95,9 +94,8 @@
             NSString *valueString = [lineContent substringFromIndex:2];
             NSArray *groupNames = [valueString componentsSeparatedByString:@" "];
             MeshInfo *newMesh = [MeshInfo new];
-            newMesh.indicesCount = 0;
             newMesh.groupNames = groupNames;
-            newMesh.indicesData = [NSMutableData data];
+            newMesh.indicesList = [NSMutableArray array];
             [meshInfoList addObject:newMesh];
             currentMesh = newMesh;
             continue;
@@ -150,13 +148,13 @@
     // remove useless groups
     NSMutableArray *filteredMeshes = [NSMutableArray array];
     for (MeshInfo *mesh in meshInfoList) {
-        if (mesh.groupNames.count && mesh.indicesCount && mesh.indicesData.length) {
+        if (mesh.groupNames.count && mesh.indicesList.count) {
             [filteredMeshes addObject:mesh];
         }
     }
     objInfo.meshInfos = filteredMeshes.copy;
-    objInfo.vertexData = _vertexData.copy;
-    _vertexData = nil;
+    objInfo.vertexDataList = _vertexDataList.copy;
+    _vertexDataList = nil;
     
     return objInfo;
 }
@@ -177,24 +175,30 @@
 // 根据索引获取对应的坐标，纹理，法线等值，组成NSData返回
 - (void)appendIndexToMesh:(MeshInfo *)mesh withIndexString:(NSString *)indexString {
     NSArray *indies = [indexString componentsSeparatedByString:@"/"];
-    NSMutableData *elementData = [NSMutableData data];
+    VertexData *vertex = [VertexData new];
     [indies enumerateObjectsUsingBlock:^(NSString *indexString, NSUInteger idx, BOOL *stop) {
         if (indexString.length) {
             NSInteger index = [indexString integerValue] - 1;
             if (index >= 0) {
                 switch (idx) {
-                    case 0: // vertex
-                        [elementData appendData:_vertexList[index]];
+                    case 0: { // position
+                        GLKVector3 positon;
+                        [_vertexList[index] getBytes:positon.v length:sizeof(GLKVector3)];
+                        vertex.position = positon;
                         break;
-                        
-                    case 1: // texture coordinate
-                        [elementData appendData:_uvList[index]];
+                    }
+                    case 1: { // texture coordinate
+                        GLKVector2 uv;
+                        [_uvList[index] getBytes:uv.v length:sizeof(GLKVector2)];
+                        vertex.uv = uv;
                         break;
-                        
-                    case 2: // normal
-                        [elementData appendData:_normalList[index]];
+                    }
+                    case 2: { // normal
+                        GLKVector3 normal;
+                        [_normalList[index] getBytes:normal.v length:sizeof(GLKVector3)];
+                        vertex.normal = normal;
                         break;
-                        
+                    }
                     default:
                         break;
                 }
@@ -207,14 +211,13 @@
     if (index) {
         u_index = [index unsignedShortValue];
     } else {
-        u_index = _indicesDict.count;
+        u_index = _vertexDataList.count;
         _indicesDict[indexString] = @(u_index);
-        [_vertexData appendData:elementData];
-        
-        NSAssert((_indicesDict.count == _vertexData.length / elementData.length), @"wrong index");
+        [_vertexDataList addObject:vertex];
+        NSAssert((_indicesDict.count == _vertexDataList.count), @"wrong index");
     }
-    mesh.indicesCount++;
-    [mesh.indicesData appendBytes:&u_index length:sizeof(unsigned short)];
+    mesh.maxIndex = MAX(mesh.maxIndex, u_index);
+    [mesh.indicesList addObject:@(u_index)];
 }
 
 
@@ -235,94 +238,92 @@
         [attributeNames addObject:@(CEVBOAttributeNormal)];
     }
     
-    return [CEVBOAttribute attributesWithNames:attributeNames];
+    return attributeNames;
 }
 
 
 // calcualte tengent data
 + (BOOL)addTengentDataToObjInfo:(OBJFileInfo *)objFileInfo {
-    // check normal attribute
-    BOOL containNormalAttribute = NO;
-    for (CEVBOAttribute *attribute in objFileInfo.attributes) {
-        if (attribute.name == CEVBOAttributeNormal) {
-            containNormalAttribute = YES;
-            break;
-        }
-    }
-    if (!containNormalAttribute) {
-        printf("Fail to add tengent data: obj file does not contain normal attribute\n");
+    if (!objFileInfo.vertexDataList.count ||
+        ![objFileInfo.attributes containsObject:@(CEVBOAttributePosition)] ||
+        ![objFileInfo.attributes containsObject:@(CEVBOAttributeNormal)]) {
+        printf("Fail to calculate tangent data for obj file:%s\n", [objFileInfo.name UTF8String]);
         return NO;
     }
     
-    // calculate tangent data
-    CEVBOAttribute *positionAttrib, *textureAttrib;
-    for (CEVBOAttribute *attribute in objFileInfo.attributes) {
-        if (attribute.name == CEVBOAttributePosition) {
-            positionAttrib = attribute;
-            continue;
-        }
-        if (attribute.name == CEVBOAttributeTextureCoord) {
-            textureAttrib = attribute;
-            continue;
-        }
-    }
-    NSData *vertexData = objFileInfo.vertexData;
-    int stride = positionAttrib.elementStride;
-    if (!positionAttrib || !textureAttrib || !vertexData.length ||
-        vertexData.length % (stride * 3)) {
-        
-        // 这里需要从indcesData拿到三角形的数据，数据重新组合不是按顺序进行的，比较麻烦。
-        // 考虑先建空数据，再逐一替代 ？ 替代时会不会重复？参考书中做法，必要时重新计算法线
-        
-        printf("Fail to add tengent data: wrong data & params");
-        return NO;
+    // erase old normal and tangent data
+    GLKVector3 emptyVec3 = GLKVector3Make(0, 0, 0);
+    for (VertexData *vertex in objFileInfo.vertexDataList) {
+        vertex.normal = emptyVec3;
+        vertex.tangent = emptyVec3;
     }
     
-    int vertexCount = (int)vertexData.length / stride / 3;
-    int offset = 0;
-    NSMutableData *newVertexData = [NSMutableData data];
-    for (int i = 0; i < vertexCount; i++) {
-        GLKVector3 v[3];
-        GLKVector2 uv[3];
-        for (int idx = 0; idx < 3; idx++) {
-            [vertexData getBytes:v[idx].v range:NSMakeRange(offset + positionAttrib.elementOffset, 12)];
-            [vertexData getBytes:uv[idx].v range:NSMakeRange(offset + textureAttrib.elementOffset, 8)];
-            offset += stride;
+    // calucate each triangle's normal and tangent data
+    for (MeshInfo *meshInfo in objFileInfo.meshInfos) {
+        if (!meshInfo.indicesList.count % 3) {
+            printf("warning: skip mesh with wrong indice count\n");
+            continue;
         }
-        
-        GLKVector3 deltaPos1 = GLKVector3Subtract(v[0], v[1]);
-        GLKVector3 deltaPos2 = GLKVector3Subtract(v[0], v[2]);
-        GLKVector2 deltaUV1 = GLKVector2Subtract(uv[1], uv[0]);
-        GLKVector2 deltaUV2 = GLKVector2Subtract(uv[2], uv[0]);
-        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-        // tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y) * r
-        //        GLKVector3 tangent = GLKVector3MultiplyScalar(GLKVector3Subtract(GLKVector3MultiplyScalar(deltaPos1, deltaUV2.y),
-        //                                                                         GLKVector3MultiplyScalar(deltaPos2, deltaUV1.y)), r);
-        GLKVector3 tangent;
-        tangent.x = (deltaPos1.x * deltaUV2.y + deltaPos2.x * deltaUV1.y) * r;
-        tangent.y = (deltaPos1.y * deltaUV2.y + deltaPos2.y * deltaUV1.y) * r;
-        tangent.z = (deltaPos1.z * deltaUV2.y + deltaPos2.z * deltaUV1.y) * r;
-        tangent = GLKVector3Normalize(tangent);
-        
-        offset -= 3 * stride;
-        for (int idx = 0; idx < 3; idx++) {
-            [newVertexData appendData:[vertexData subdataWithRange:NSMakeRange(offset, stride)]];
-            [newVertexData appendBytes:tangent.v length:sizeof(tangent)];
-            offset += stride;
+        // loop triangles
+        int triangleCount = (int)meshInfo.indicesList.count / 3;
+        for (int i = 0; i < triangleCount; i += 3) {
+//            int idx0 = [meshInfo.indicesList[i] intValue];
+//            int idx1 = [meshInfo.indicesList[i+1] intValue];
+//            int idx2 = [meshInfo.indicesList[i+2] intValue];
+//            printf("(%d, %d, %d)\n", idx0, idx1, idx2);
+            // three triangle vertex data
+            VertexData *vertex0 = objFileInfo.vertexDataList[[meshInfo.indicesList[i] intValue]];
+            VertexData *vertex1 = objFileInfo.vertexDataList[[meshInfo.indicesList[i + 1] intValue]];
+            VertexData *vertex2 = objFileInfo.vertexDataList[[meshInfo.indicesList[i + 2] intValue]];
+            // calculate normal vector
+            GLKVector3 v1 = GLKVector3Subtract(vertex0.position, vertex1.position);
+            GLKVector3 v2 = GLKVector3Subtract(vertex0.position, vertex2.position);
+            GLKVector3 normal = GLKVector3CrossProduct(v1, v2);
+            normal = GLKVector3Normalize(normal);
+            // smooth normals
+            vertex0.normal = GLKVector3Add(vertex0.normal, normal);
+            vertex1.normal = GLKVector3Add(vertex1.normal, normal);
+            vertex2.normal = GLKVector3Add(vertex2.normal, normal);
+            // tangent
+            GLKVector2 uv1 = GLKVector2Subtract(vertex2.uv, vertex0.uv);
+            GLKVector2 uv2 = GLKVector2Subtract(vertex1.uv, vertex0.uv);
+            GLKVector3 tangent;
+            float c = 1.0f / (uv1.x * uv2.y - uv2.x * uv1.y);
+            tangent.x = (v1.x * uv2.y + v2.x * uv1.y) * c;
+            tangent.y = (v1.y * uv2.y + v2.y * uv1.y) * c;
+            tangent.z = (v1.z * uv2.y + v2.z * uv1.y) * c;
+            vertex0.tangent = GLKVector3Add(vertex0.tangent, tangent);
+            vertex1.tangent = GLKVector3Add(vertex1.tangent, tangent);
+            vertex2.tangent = GLKVector3Add(vertex2.tangent, tangent);
         }
     }
-    objFileInfo.vertexData = [newVertexData copy];
     
-    // add tangent attribute
-    NSMutableArray *attributeNames = [NSMutableArray array];
-    for (CEVBOAttribute *attribute in objFileInfo.attributes) {
-        [attributeNames addObject:@(attribute.name)];
+    // normalize normal and tangent vector
+    for (VertexData *vertex in objFileInfo.vertexDataList) {
+        vertex.normal = GLKVector3Normalize(vertex.normal);
+        printf("(%.5f, %.5f, %.5f)\n", vertex.normal.x, vertex.normal.y, vertex.normal.z);
+        vertex.tangent = GLKVector3Normalize(vertex.tangent);
     }
-    [attributeNames addObject:@(CEVBOAttributeTangent)];
-    objFileInfo.attributes = [CEVBOAttribute attributesWithNames:attributeNames];
     
     return YES;
 }
 
 
+#pragma mark - 
+
+
+
+
 @end
+
+
+
+
+
+
+
+
+
+
+
+

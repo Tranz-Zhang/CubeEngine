@@ -63,9 +63,9 @@
     
     NSData *vertexData = [NSData dataWithBytes:&_vertices length:sizeof(_vertices)];
     NSArray *attributes = [CELight defaultVertexBufferAttributes];
-    _vertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:attributes];
+    _vertexBuffer = [[CEVertexBuffer_DEPRECATED alloc] initWithData:vertexData attributes:attributes];
     
-    static CEIndicesBuffer *_sharedIndicesBuffer;
+    static CEIndicesBuffer_DEPRECATED *_sharedIndicesBuffer;
     if (!_sharedIndicesBuffer) {
         int indexCount = 0;
         GLubyte indices[kCirclePointCount * 2 + 16] = {0};
@@ -84,7 +84,7 @@
             indexCount++;
         }
         NSData *indicesData = [NSData dataWithBytes:&indices length:sizeof(indices)];
-        _sharedIndicesBuffer = [[CEIndicesBuffer alloc] initWithData:indicesData indicesCount:sizeof(indices)];
+        _sharedIndicesBuffer = [[CEIndicesBuffer_DEPRECATED alloc] initWithData:indicesData indicesCount:sizeof(indices)];
     }
     _indicesBuffer = _sharedIndicesBuffer;
 }
