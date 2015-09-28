@@ -143,6 +143,7 @@
 //    }
     
     NSString *objFilePath = objFiles[9];//[objFiles lastObject];
+    NSLog(@"TEST FILE: %@", objFilePath);
     OBJFileParser *objParser = [OBJFileParser parserWithFilePath:objFilePath];
     OBJFileInfo *info = [objParser parse];
     

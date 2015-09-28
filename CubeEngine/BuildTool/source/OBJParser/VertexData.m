@@ -10,4 +10,11 @@
 
 @implementation VertexData
 
+- (void)setNormal:(GLKVector3)normal {
+    _normal = normal;
+    if (normal.x == 0 && normal.y == 0) {
+        printf("");
+    }
+}
+
 @end
