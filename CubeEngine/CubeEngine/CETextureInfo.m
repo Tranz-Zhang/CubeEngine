@@ -2,12 +2,12 @@
 //  CETextureInfo.m
 //  CubeEngine
 //
-//  Created by chance on 9/25/15.
+//  Created by chance on 9/29/15.
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CETextureFileInfo.h"
+#import "CETextureInfo.h"
 
-@implementation CETextureFileInfo
+@implementation CETextureInfo
 
 @end

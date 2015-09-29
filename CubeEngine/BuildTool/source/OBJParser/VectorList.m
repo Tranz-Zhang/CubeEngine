@@ -13,16 +13,24 @@
 }
 
 - (instancetype)initWithVectorType:(VectorType)vectorType {
+    return [self initWithVectorType:vectorType itemCount:0];
+}
+
+
+- (instancetype)initWithVectorType:(VectorType)vectorType itemCount:(NSInteger)itemCount {
     self = [super init];
     if (self) {
         NSAssert(vectorType > 0 && vectorType < 5, @"unsupport vector type");
         _vectorType = vectorType;
-        _vectorData = [NSMutableData data];
-        _count = 0;
+        if (itemCount) {
+            _vectorData = [NSMutableData dataWithLength:(_vectorType * sizeof(float) * itemCount)];
+        } else {
+            _vectorData = [NSMutableData data];
+        }
+        _count = itemCount;
     }
     return self;
 }
-
 
 
 - (void)addFloat:(float)floatValue {
@@ -49,6 +57,40 @@
     _count++;
 }
 
+
+- (void)setFloat:(float)floatValue atIndex:(NSInteger)index {
+    NSRange valueRange = NSMakeRange(index * sizeof(float), sizeof(float));
+    if (NSMaxRange(valueRange) > _vectorData.length) {
+        return;
+    }
+    [_vectorData replaceBytesInRange:valueRange withBytes:&floatValue];
+}
+
+- (void)setVector2:(GLKVector2)vec2 atIndex:(NSInteger)index {
+    NSRange valueRange = NSMakeRange(index * sizeof(GLKVector2), sizeof(GLKVector2));
+    if (NSMaxRange(valueRange) > _vectorData.length) {
+        return;
+    }
+    [_vectorData replaceBytesInRange:valueRange withBytes:vec2.v];
+}
+
+- (void)setVector3:(GLKVector3)vec3 atIndex:(NSInteger)index {
+    NSRange valueRange = NSMakeRange(index * sizeof(GLKVector3), sizeof(GLKVector3));
+    if (NSMaxRange(valueRange) > _vectorData.length) {
+        return;
+    }
+    [_vectorData replaceBytesInRange:valueRange withBytes:vec3.v];
+}
+
+- (void)setVector4:(GLKVector4)vec4 atIndex:(NSInteger)index {
+    NSRange valueRange = NSMakeRange(index * sizeof(GLKVector4), sizeof(GLKVector4));
+    if (NSMaxRange(valueRange) > _vectorData.length) {
+        return;
+    }
+    [_vectorData replaceBytesInRange:valueRange withBytes:vec4.v];
+}
+
+
 - (float)floatAtIndex:(NSInteger)index {
     if (index >= _vectorData.length / _vectorType) {
         return 0;
@@ -58,7 +100,6 @@
     [_vectorData getBytes:&floatValue range:NSMakeRange(index * sizeof(float), sizeof(float))];
     return floatValue;
 }
-
 
 - (GLKVector2)vector2AtIndex:(NSInteger)index {
     if (index >= _vectorData.length / _vectorType) {
@@ -88,7 +129,6 @@
     [_vectorData getBytes:&vec4 range:NSMakeRange(index * sizeof(GLKVector4), sizeof(GLKVector4))];
     return vec4;
 }
-
 
 - (NSString *)description {
     NSMutableString *des = [NSMutableString string];

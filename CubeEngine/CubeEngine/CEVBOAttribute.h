@@ -12,7 +12,7 @@
 /**
  Vertex Buffer Object Element Example
  ------------------------------------------------------------------------------
- | CEVBOAttributePosition | CEVBOAttributeTextureCoord | CEVBOAttributeNormal |
+ | CEVBOAttributePosition | CEVBOAttributeUV | CEVBOAttributeNormal |
  ------------------------------------------------------------------------------
  |      3 * GL_FLOAT      |        2 * GL_FLOAT        |     3 * GL_FLOAT     |
  ------------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 typedef NS_ENUM(NSInteger, CEVBOAttributeName) {
     CEVBOAttributeNone = 0,
     CEVBOAttributePosition,
-    CEVBOAttributeTextureCoord,
+    CEVBOAttributeUV,
     CEVBOAttributeNormal,
     CEVBOAttributeColor,
     CEVBOAttributeTangent,

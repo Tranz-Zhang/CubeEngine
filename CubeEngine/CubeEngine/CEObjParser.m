@@ -203,7 +203,7 @@
     }
     if (indices.count >= 2) {
         if ([indices[1] length]) {
-            [attributeNames addObject:@(CEVBOAttributeTextureCoord)];
+            [attributeNames addObject:@(CEVBOAttributeUV)];
         } else {
             [attributeNames addObject:@(CEVBOAttributeNormal)];
         }

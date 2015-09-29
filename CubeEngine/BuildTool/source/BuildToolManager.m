@@ -142,7 +142,7 @@
 //        NSArray *results = [parser parse];
 //    }
     
-    NSString *objFilePath = objFiles[9];//[objFiles lastObject];
+    NSString *objFilePath = objFiles[11];//[objFiles lastObject];
     NSLog(@"TEST FILE: %@", objFilePath);
     OBJFileParser *objParser = [OBJFileParser parserWithFilePath:objFilePath];
     OBJFileInfo *info = [objParser parse];
@@ -163,6 +163,10 @@
     if (hasNormalMap) {
         [OBJFileParser addTengentDataToObjInfo:info];
     }
+    
+//    1. add data support to db
+//    2. build the resource db
+//    3. add resource process
     
     // arrange resources and store into db
 //    0x00003d,id start end, id start, end, 0x00004c datablock

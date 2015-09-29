@@ -171,7 +171,7 @@
     
     // texture
     if (_program.textureCoordinate) {
-        CEVBOAttribute *textureCoordAttri = [model.vertexBuffer attributeWithName:CEVBOAttributeTextureCoord];
+        CEVBOAttribute *textureCoordAttri = [model.vertexBuffer attributeWithName:CEVBOAttributeUV];
         _program.textureCoordinate.attribute = textureCoordAttri;
     }
     if (_program.diffuseTexture) {

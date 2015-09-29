@@ -178,7 +178,7 @@
     
     // TODO: add model texture and normal texture
     if (_config.enableTexture || _config.enableNormalMapping) {
-        CEVBOAttribute *textureCoordAttri = [model.vertexBuffer attributeWithName:CEVBOAttributeTextureCoord];
+        CEVBOAttribute *textureCoordAttri = [model.vertexBuffer attributeWithName:CEVBOAttributeUV];
         [_program setTextureCoordinateAttribute:textureCoordAttri];
         if (model.texture && textureCoordAttri) {
             [_program setDiffuseTexture:model.texture.name];

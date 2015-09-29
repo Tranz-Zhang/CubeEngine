@@ -342,7 +342,7 @@ typedef NS_ENUM(GLuint, CETextureUnit) {
         _hasEnableTexture = NO;
         return YES;
         
-    } else if (attribute.name != CEVBOAttributeTextureCoord ||
+    } else if (attribute.name != CEVBOAttributeUV ||
                attribute.primaryCount <= 0 ||
                attribute.elementStride <= 0) {
         CEWarning(@"Fail to setup texture attribute");

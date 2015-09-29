@@ -159,7 +159,7 @@
 }
 
 
-// 根据索引获取对应的坐标，纹理，法线等值，组成NSData返回
+// 根据索引获取对应的坐标，纹理，法线等值
 - (void)appendIndexToMesh:(MeshInfo *)mesh withIndexString:(NSString *)indexString {
     NSArray *indies = [indexString componentsSeparatedByString:@"/"];
     __block unsigned int positionIndex = -1, uvIndex = -1, normalIndex = -1;
@@ -210,7 +210,7 @@
     }
     if (indices.count >= 2) {
         if ([indices[1] length]) {
-            [attributeNames addObject:@(CEVBOAttributeTextureCoord)];
+            [attributeNames addObject:@(CEVBOAttributeUV)];
         } else {
             [attributeNames addObject:@(CEVBOAttributeNormal)];
         }
@@ -227,14 +227,14 @@
 + (BOOL)addTengentDataToObjInfo:(OBJFileInfo *)objInfo {
     if (!objInfo.vertexDataList.count ||
         ![objInfo.attributes containsObject:@(CEVBOAttributePosition)] ||
-        ![objInfo.attributes containsObject:@(CEVBOAttributeNormal)]) {
+        ![objInfo.attributes containsObject:@(CEVBOAttributeUV)]) {
         printf("Fail to calculate tangent data for obj file:%s\n", [objInfo.name UTF8String]);
         return NO;
     }
     
     // erase old normal and tangent data
-    objInfo.normalList = [[VectorList alloc] initWithVectorType:VectorType3];
-    objInfo.tangentList = [[VectorList alloc] initWithVectorType:VectorType3];
+    objInfo.normalList = [[VectorList alloc] initWithVectorType:VectorType3 itemCount:objInfo.positionList.count];
+    objInfo.tangentList = [[VectorList alloc] initWithVectorType:VectorType3 itemCount:objInfo.positionList.count];
     
     // calucate each triangle's normal and tangent data
     for (MeshInfo *meshInfo in objInfo.meshInfos) {
@@ -243,38 +243,67 @@
             continue;
         }
         // loop triangles
-        int triangleCount = (int)meshInfo.indicesList.count / 3;
-        for (int i = 0; i < triangleCount; i += 3) {
-            printf("%d, ", i);
-            GLKVector3 idx0 = [objInfo.vertexDataList vector3AtIndex:[meshInfo.indicesList[i] intValue]];
-            GLKVector3 idx1 = [objInfo.vertexDataList vector3AtIndex:[meshInfo.indicesList[i + 1] intValue]];
-            GLKVector3 idx2 = [objInfo.vertexDataList vector3AtIndex:[meshInfo.indicesList[i + 2] intValue]];
-            
+        for (int i = 0; i < meshInfo.indicesList.count; i += 3) {
+            GLKVector3 vertexIndex0 = [objInfo.vertexDataList vector3AtIndex:[meshInfo.indicesList[i] intValue]];
+            GLKVector3 vertexIndex1 = [objInfo.vertexDataList vector3AtIndex:[meshInfo.indicesList[i + 1] intValue]];
+            GLKVector3 vertexIndex2 = [objInfo.vertexDataList vector3AtIndex:[meshInfo.indicesList[i + 2] intValue]];
             // calculate normal vector
-            GLKVector3 v1 = GLKVector3Subtract(vertex0.position, vertex1.position);
-            GLKVector3 v2 = GLKVector3Subtract(vertex0.position, vertex2.position);
+            GLKVector3 v1 = GLKVector3Subtract([objInfo.positionList vector3AtIndex:(int)vertexIndex0.x],
+                                               [objInfo.positionList vector3AtIndex:(int)vertexIndex1.x]);
+            GLKVector3 v2 = GLKVector3Subtract([objInfo.positionList vector3AtIndex:(int)vertexIndex0.x],
+                                               [objInfo.positionList vector3AtIndex:(int)vertexIndex2.x]);
             GLKVector3 normal = GLKVector3CrossProduct(v1, v2);
             normal = GLKVector3Normalize(normal);
             
             // smooth normals
-            vertex0.normal = GLKVector3Add(vertex0.normal, normal);
-            vertex1.normal = GLKVector3Add(vertex1.normal, normal);
-            vertex2.normal = GLKVector3Add(vertex2.normal, normal);
+            GLKVector3 normal0 = [objInfo.normalList vector3AtIndex:(int)vertexIndex0.x];
+            [objInfo.normalList setVector3:GLKVector3Add(normal0 ,normal) atIndex:(int)vertexIndex0.x];
+            GLKVector3 normal1 = [objInfo.normalList vector3AtIndex:(int)vertexIndex1.x];
+            [objInfo.normalList setVector3:GLKVector3Add(normal1 ,normal) atIndex:(int)vertexIndex1.x];
+            GLKVector3 normal2 = [objInfo.normalList vector3AtIndex:(int)vertexIndex2.x];
+            [objInfo.normalList setVector3:GLKVector3Add(normal2 ,normal) atIndex:(int)vertexIndex2.x];
             
-//            // tangent
-//            GLKVector2 uv1 = GLKVector2Subtract(vertex2.uv, vertex0.uv);
-//            GLKVector2 uv2 = GLKVector2Subtract(vertex1.uv, vertex0.uv);
-//            GLKVector3 tangent;
-//            float c = 1.0f / (uv1.x * uv2.y - uv2.x * uv1.y);
-//            tangent.x = (v1.x * uv2.y + v2.x * uv1.y) * c;
-//            tangent.y = (v1.y * uv2.y + v2.y * uv1.y) * c;
-//            tangent.z = (v1.z * uv2.y + v2.z * uv1.y) * c;
-//            vertex0.tangent = GLKVector3Add(vertex0.tangent, tangent);
-//            vertex1.tangent = GLKVector3Add(vertex1.tangent, tangent);
-//            vertex2.tangent = GLKVector3Add(vertex2.tangent, tangent);
+            if (objInfo.uvList.count) {
+                // tangent
+                GLKVector2 uv1 = GLKVector2Subtract([objInfo.uvList vector2AtIndex:(int)vertexIndex2.y],
+                                                    [objInfo.uvList vector2AtIndex:(int)vertexIndex0.y]);
+                GLKVector2 uv2 = GLKVector2Subtract([objInfo.uvList vector2AtIndex:(int)vertexIndex1.y],
+                                                    [objInfo.uvList vector2AtIndex:(int)vertexIndex0.y]);
+                GLKVector3 tangent;
+                float c = 1.0f / (uv1.x * uv2.y - uv2.x * uv1.y);
+                tangent.x = (v1.x * uv2.y + v2.x * uv1.y) * c;
+                tangent.y = (v1.y * uv2.y + v2.y * uv1.y) * c;
+                tangent.z = (v1.z * uv2.y + v2.z * uv1.y) * c;
+                
+                GLKVector3 tangent0 = [objInfo.tangentList vector3AtIndex:(int)vertexIndex0.x];
+                [objInfo.tangentList setVector3:GLKVector3Add(tangent0 ,tangent) atIndex:(int)vertexIndex0.x];
+                GLKVector3 tangent1 = [objInfo.tangentList vector3AtIndex:(int)vertexIndex1.x];
+                [objInfo.tangentList setVector3:GLKVector3Add(tangent1 ,tangent) atIndex:(int)vertexIndex1.x];
+                GLKVector3 tangent2 = [objInfo.tangentList vector3AtIndex:(int)vertexIndex2.x];
+                [objInfo.tangentList setVector3:GLKVector3Add(tangent2 ,tangent) atIndex:(int)vertexIndex2.x];
+            }
         }
     }
     
+    // normalized normals and tangent
+    for (int i = 0; i < objInfo.positionList.count; i++) {
+        GLKVector3 normal = GLKVector3Normalize([objInfo.normalList vector3AtIndex:i]);
+        [objInfo.normalList setVector3:normal atIndex:i];
+        GLKVector3 tangent = GLKVector3Normalize([objInfo.tangentList vector3AtIndex:i]);
+        [objInfo.tangentList setVector3:tangent atIndex:i];
+    }
+    
+    // fix normal index
+    for (int i = 0; i < objInfo.vertexDataList.count; i++) {
+        GLKVector3 vertexData = [objInfo.vertexDataList vector3AtIndex:i];
+        vertexData.z = vertexData.x;
+        [objInfo.vertexDataList setVector3:vertexData atIndex:i];
+    }
+    
+    objInfo.attributes = @[@(CEVBOAttributePosition),
+                           @(CEVBOAttributeUV),
+                           @(CEVBOAttributeNormal),
+                           @(CEVBOAttributeTangent)];
     return YES;
 }
 

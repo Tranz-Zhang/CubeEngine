@@ -12,7 +12,7 @@ NSString *CEVBOAttributeNameString(CEVBOAttributeName name) {
     switch (name) {
         case CEVBOAttributePosition:
             return @"Position";
-        case CEVBOAttributeTextureCoord:
+        case CEVBOAttributeUV:
             return @"TextureCoord";
         case CEVBOAttributeNormal:
             return @"Normal";
@@ -53,7 +53,7 @@ NSString *CEVBOAttributeNameString(CEVBOAttributeName name) {
             attribute.primarySize = sizeof(GLfloat);
             break;
             
-        case CEVBOAttributeTextureCoord:
+        case CEVBOAttributeUV:
             attribute.primaryCount = 2;
             attribute.primaryType = GL_FLOAT;
             attribute.primarySize = sizeof(GLfloat);

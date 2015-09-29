@@ -120,7 +120,7 @@
             positionAttrib = attribute;
             continue;
         }
-        if (attribute.name == CEVBOAttributeTextureCoord) {
+        if (attribute.name == CEVBOAttributeUV) {
             textureAttrib = attribute;
             continue;
         }

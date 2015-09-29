@@ -21,12 +21,19 @@ typedef NS_ENUM(NSInteger, VectorType) {
 @property (nonatomic, readonly) NSUInteger count;
 
 - (instancetype)initWithVectorType:(VectorType)vectorType;
-//- (instancetype)initWithVectorType:(VectorType)vectorType itemCount:(NSInteger)itemCount;
+
+// this method will preload space for vector list,
+- (instancetype)initWithVectorType:(VectorType)vectorType itemCount:(NSInteger)itemCount;
 
 - (void)addFloat:(float)floatValue;
 - (void)addVector2:(GLKVector2)vec2;
 - (void)addVector3:(GLKVector3)vec3;
 - (void)addVector4:(GLKVector4)vec4;
+
+- (void)setFloat:(float)floatValue atIndex:(NSInteger)index;
+- (void)setVector2:(GLKVector2)vec2 atIndex:(NSInteger)index;
+- (void)setVector3:(GLKVector3)vec3 atIndex:(NSInteger)index;
+- (void)setVector4:(GLKVector4)vec4 atIndex:(NSInteger)index;
 
 - (float)floatAtIndex:(NSInteger)index;
 - (GLKVector2)vector2AtIndex:(NSInteger)index;

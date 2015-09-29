@@ -310,7 +310,7 @@ NSString *const kTextureFragmentSahder = CE_SHADER_STRING
     }
     // prepare for rendering
     if (![model.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attribVec4Position] ||
-        ![model.vertexBuffer prepareAttribute:CEVBOAttributeTextureCoord withProgramIndex:_attribVec2TextureCoord] ||
+        ![model.vertexBuffer prepareAttribute:CEVBOAttributeUV withProgramIndex:_attribVec2TextureCoord] ||
         ![model.vertexBuffer prepareAttribute:CEVBOAttributeNormal withProgramIndex:_attribVec3Normal]){
         return;
     }
