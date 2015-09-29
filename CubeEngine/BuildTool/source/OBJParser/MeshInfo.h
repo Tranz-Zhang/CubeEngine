@@ -17,4 +17,7 @@
 @property (nonatomic, assign) unsigned int maxIndex;
 @property (nonatomic, strong) NSMutableArray *indicesList;
 
+- (GLenum)indicePrimaryType;
+- (NSData *)buildIndiceData;
+
 @end

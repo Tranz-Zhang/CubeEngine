@@ -91,7 +91,6 @@
 		4CB61A321BB2A29100D83856 /* MeshInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61A2D1BB2A29100D83856 /* MeshInfo.m */; };
 		4CB61A331BB2A29100D83856 /* MTLFileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61A2F1BB2A29100D83856 /* MTLFileParser.m */; };
 		4CB61A341BB2A29100D83856 /* OBJFileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61A311BB2A29100D83856 /* OBJFileParser.m */; };
-		4CBB74F31BB4E7AF00C3829B /* VertexData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB74F21BB4E7AF00C3829B /* VertexData.m */; };
 		4CBB74F71BB53CF200C3829B /* CEObjFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB74F61BB53CF200C3829B /* CEObjFileInfo.m */; };
 		4CBB74FA1BB53D0D00C3829B /* CEMeshInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB74F91BB53D0D00C3829B /* CEMeshInfo.m */; };
 		4CBB74FD1BB53D3000C3829B /* CEMaterialInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB74FC1BB53D3000C3829B /* CEMaterialInfo.m */; };
@@ -327,8 +326,6 @@
 		4CB61A2F1BB2A29100D83856 /* MTLFileParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLFileParser.m; sourceTree = "<group>"; };
 		4CB61A301BB2A29100D83856 /* OBJFileParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBJFileParser.h; sourceTree = "<group>"; };
 		4CB61A311BB2A29100D83856 /* OBJFileParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBJFileParser.m; sourceTree = "<group>"; };
-		4CBB74F11BB4E7AF00C3829B /* VertexData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VertexData.h; sourceTree = "<group>"; };
-		4CBB74F21BB4E7AF00C3829B /* VertexData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VertexData.m; sourceTree = "<group>"; };
 		4CBB74F51BB53CF200C3829B /* CEObjFileInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObjFileInfo.h; sourceTree = "<group>"; };
 		4CBB74F61BB53CF200C3829B /* CEObjFileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEObjFileInfo.m; sourceTree = "<group>"; };
 		4CBB74F81BB53D0D00C3829B /* CEMeshInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEMeshInfo.h; sourceTree = "<group>"; };
@@ -728,8 +725,6 @@
 			children = (
 				4CB61A2C1BB2A29100D83856 /* MeshInfo.h */,
 				4CB61A2D1BB2A29100D83856 /* MeshInfo.m */,
-				4CBB74F11BB4E7AF00C3829B /* VertexData.h */,
-				4CBB74F21BB4E7AF00C3829B /* VertexData.m */,
 				4CF4649C1BB944FE006D7DE2 /* VectorList.h */,
 				4CF4649D1BB944FE006D7DE2 /* VectorList.m */,
 				26C745BC1BB2F249002E412E /* OBJFileInfo.h */,
@@ -1175,7 +1170,6 @@
 				4CD7F1381B91BA9900C118D7 /* CEShaderBuilder.m in Sources */,
 				4CB61A191BB2414600D83856 /* CEManagedObject.m in Sources */,
 				4CB61A341BB2A29100D83856 /* OBJFileParser.m in Sources */,
-				4CBB74F31BB4E7AF00C3829B /* VertexData.m in Sources */,
 				4CB61A201BB24BA900D83856 /* CEMaterial.m in Sources */,
 				4CBB750C1BB541FF00C3829B /* CEMeshInfo.m in Sources */,
 				4CD7F1391B91BA9900C118D7 /* CEShaderInfo.m in Sources */,

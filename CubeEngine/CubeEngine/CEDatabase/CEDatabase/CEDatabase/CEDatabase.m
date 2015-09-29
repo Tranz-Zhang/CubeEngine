@@ -24,7 +24,7 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
 @interface AsyncDBInfo : NSObject
 
 @property (nonatomic, strong) FMDatabase *fmDatabase;
-@property (nonatomic, assign) dispatch_queue_t dispatchQueue;
+@property (nonatomic, strong) dispatch_queue_t dispatchQueue;
 @property (nonatomic, strong) NSMutableSet *refrences;
 
 @end

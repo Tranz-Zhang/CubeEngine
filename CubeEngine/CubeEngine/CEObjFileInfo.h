@@ -13,7 +13,7 @@
 BIND_OBJECT_ID(fileName);
 @property (nonatomic, strong) NSString *fileName;
 @property (nonatomic, strong) NSArray *attributes;
-@property (nonatomic, assign) NSString *vertexDataPath;
+@property (nonatomic, assign) int32_t vertexDataID;
 @property (nonatomic, strong) NSArray *meshIDs;
 
 @end

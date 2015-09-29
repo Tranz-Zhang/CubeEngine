@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CEVBOAttribute.h"
 #import "MeshInfo.h"
-#import "VertexData.h"
 #import "VectorList.h"
 
 @interface OBJFileInfo : NSObject
@@ -25,5 +25,7 @@
 @property (nonatomic, strong) VectorList *uvList;
 @property (nonatomic, strong) VectorList *normalList;
 @property (nonatomic, strong) VectorList *tangentList;
+
+- (NSData *)buildVertexData;
 
 @end
