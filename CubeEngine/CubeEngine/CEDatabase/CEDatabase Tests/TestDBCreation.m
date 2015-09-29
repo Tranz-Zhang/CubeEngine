@@ -41,12 +41,17 @@
     NSString *directory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
     directory = [directory stringByAppendingPathComponent:@"syb_database"];
     [[NSFileManager defaultManager] removeItemAtPath:directory error:nil];
+    _db = nil;
+    _documentPath = nil;
+    _dbName1 = nil;
+    _dbName2 = nil;
+    _dbName3 = nil;
 }
 
 - (void)testDBCreation_none
 {
     CEDatabase *db = [CEDatabase databaseWithName:_dbName1];
-    NSString *dbFilePath = [_documentPath stringByAppendingFormat:@"/%@.db", _dbName1];
+    NSString *dbFilePath = [_documentPath stringByAppendingFormat:@"/%@", _dbName1];
     XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:dbFilePath]);
     dispatch_sync(db.fmdbQueue, ^{
         FMDatabase *testDB = db.fmdb;
@@ -57,7 +62,7 @@
 
 - (void)testDBCreation_db{
     CEDatabase *db = [CEDatabase databaseWithName:_dbName2];
-    NSString *dbFilePath = [_documentPath stringByAppendingFormat:@"/%@.db", _dbName2];
+    NSString *dbFilePath = [_documentPath stringByAppendingFormat:@"/%@", _dbName2];
     XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:dbFilePath]);
     dispatch_sync(db.fmdbQueue, ^{
         FMDatabase *testDB = db.fmdb;
@@ -68,7 +73,7 @@
 
 - (void)testDBCreation_abc{
     CEDatabase *db = [CEDatabase databaseWithName:_dbName3];
-    NSString *dbFilePath = [_documentPath stringByAppendingFormat:@"/%@.db", _dbName3];
+    NSString *dbFilePath = [_documentPath stringByAppendingFormat:@"/%@", _dbName3];
     XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:dbFilePath]);
     dispatch_sync(db.fmdbQueue, ^{
         FMDatabase *testDB = db.fmdb;
@@ -81,7 +86,7 @@
 - (void)testRemoveDB {
     [CEDatabase removeDatabase:_db.name error:nil];
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *dbFilePath = [_documentPath stringByAppendingPathComponent:@"TestTable.db"];
+    NSString *dbFilePath = [_documentPath stringByAppendingPathComponent:@"TestTable"];
     XCTAssertFalse([fileManager fileExistsAtPath:dbFilePath], @"Remove DB Fail");
 }
 
@@ -157,11 +162,11 @@
         FMDatabase *testDB = db.fmdb;
         testDB = nil;
     });
-    XCTAssert([[NSFileManager defaultManager] fileExistsAtPath:[customPath stringByAppendingPathComponent:@"customPathDB.db"]]);
+    XCTAssert([[NSFileManager defaultManager] fileExistsAtPath:[customPath stringByAppendingPathComponent:@"customPathDB"]]);
     
     // remove db
     [CEDatabase removeDatabase:@"customPathDB" inPath:customPath error:nil];
-    XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:[customPath stringByAppendingPathComponent:@"customPathDB.db"]]);
+    XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:[customPath stringByAppendingPathComponent:@"customPathDB"]]);
 }
 
 - (BOOL)isTableExist:(NSString *)tableName {

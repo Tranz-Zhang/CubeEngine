@@ -258,7 +258,7 @@
     }
     
     // save db info
-    NSString *dbPath = [_engineDir stringByAppendingFormat:@"/%@.db", kResourcesDatabaseName];
+    NSString *dbPath = [_engineDir stringByAppendingPathComponent:kResourcesDatabaseName];
     if ([_fileManager fileExistsAtPath:dbPath isDirectory:nil]) {
         [_fileManager removeItemAtPath:dbPath error:nil];
     }

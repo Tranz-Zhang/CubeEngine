@@ -24,7 +24,11 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
 @interface AsyncDBInfo : NSObject
 
 @property (nonatomic, strong) FMDatabase *fmDatabase;
+#if OS_OBJECT_HAVE_OBJC_SUPPORT
 @property (nonatomic, strong) dispatch_queue_t dispatchQueue;
+#else
+@property (nonatomic, assign) dispatch_queue_t dispatchQueue;
+#endif
 @property (nonatomic, strong) NSMutableSet *refrences;
 
 @end
@@ -72,8 +76,8 @@ static __strong NSMutableDictionary *_asyncDBInfoDict;
     if (self = [super init]) {
         _name = databaseName;
         _enable = [self checkDatabaseDirectory:path];
-        NSString *dbName = [databaseName stringByAppendingString:@".db"];
-        _filePath = [path stringByAppendingPathComponent:dbName];
+//        NSString *dbName = [databaseName stringByAppendingString:@".db"];
+        _filePath = [path stringByAppendingPathComponent:databaseName];
         
         if (!_asyncDBInfoDict) {
             static dispatch_once_t onceToken;
@@ -223,8 +227,8 @@ static __strong NSMutableDictionary *_asyncDBInfoDict;
     });
     
     // 删除db文件
-    NSString *dbName = [databaseName stringByAppendingString:@".db"];
-    NSString *filePath = [path stringByAppendingPathComponent:dbName];
+//    NSString *dbName = [databaseName stringByAppendingString:@".db"];
+    NSString *filePath = [path stringByAppendingPathComponent:databaseName];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:filePath]) {
         NSError *fileDeleteError;
@@ -269,9 +273,6 @@ static __strong NSMutableDictionary *_asyncDBInfoDict;
     if (!_filePath) {
         return nil;
     }
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *dbName = [_name stringByAppendingString:@".db"];
-//    _filePath = [[paths lastObject] stringByAppendingPathComponent:dbName];
     FMDatabase *fmdb = [FMDatabase databaseWithPath:_filePath];
     if (![fmdb open]) {
         CEDatabaseLog(@"ERROR: Could not open database.");
