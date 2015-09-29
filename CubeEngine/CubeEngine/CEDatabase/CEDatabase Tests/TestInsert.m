@@ -78,11 +78,6 @@
     XCTAssertEqualObjects(dbObject5.string, originalObject5.string);
 }
 
-- (void)testDataOrder {
-    
-    
-}
-
 
 - (void)testDataOrderWithIntID {
     // ObjectID为数字类型时，取出的顺序按ObjectID进行升序排序

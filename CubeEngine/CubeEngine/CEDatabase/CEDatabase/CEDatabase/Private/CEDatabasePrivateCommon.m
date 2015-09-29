@@ -48,7 +48,11 @@ NSDictionary *ObjCToSqliteTypeDict() {
               @"NSMutableSet" : @"BLOB",
               @"NSValue" : @"BLOB",
               @"NSDate" : @"DATE",
-              @"NSNumber" : @"REAL"};
+              @"NSNumber" : @"REAL",
+              [[NSString stringWithUTF8String:@encode(NSRange)] lowercaseString] : @"BLOB",
+              [[NSString stringWithUTF8String:@encode(CGPoint)] lowercaseString] : @"BLOB",
+              [[NSString stringWithUTF8String:@encode(CGSize)] lowercaseString] : @"BLOB",
+              [[NSString stringWithUTF8String:@encode(CGRect)] lowercaseString] : @"BLOB"};
         });
     }
     return objcToSqliteTypeDict;

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define enableYLDebug 0
+#define enableYLDebug 1
 
 // log 定义
 #if DEBUG && enableYLDebug

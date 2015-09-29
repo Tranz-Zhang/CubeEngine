@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GLKit/GLKit.h>
 #import "CEManagedObject.h"
 #import "CustomKeyObject.h"
 
@@ -61,18 +62,28 @@
 @property (nonatomic, strong) CustomKeyObject *customObject; // CEManagedObject
 @property (nonatomic, strong) SubNSObject *subObject; // NSObject not support
 
+
+// OC structs
+@property NSRange range;
+@property CGPoint point;
+@property CGRect rect;
+@property CGSize size;
+
+
 // --------  Wait to Support --------
 
 // these type can use NSValue to encapsule
-//@property NSRange range;
-//@property CGPoint point;
-//@property CGRect rect;
-//@property CGSize size;
 //@property UIEdgeInsets edgeInsets;
 //@property const void *pointer;
 //@property CGAffineTransform affineTransform;
 //@property CATransform3D transform3D;
 
+
+//// GLKit Type
+//@property GLfloat glFloat;
+//@property GLKVector2 vec2;
+//@property GLKVector3 vec3;
+//@property GLKVector4 vec4;
 
 //@property (nonatomic, strong) NSDecimalNumber *decimalNumber;
 

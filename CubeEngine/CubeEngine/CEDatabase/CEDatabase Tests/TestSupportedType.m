@@ -58,7 +58,7 @@
     XCTAssertEqualObjects(queryObj.data, obj.data);
 }
 
-- (void)testMaxCValue {
+- (void)testMaxCValue {    
     TestObject *obj = [TestObject new];
     obj.boolValue = YES;
     obj.charValue = CHAR_MAX;
@@ -73,7 +73,11 @@
     obj.uLongLongValue = ULLONG_MAX;
     obj.doubleValue = DBL_MAX;
     obj.floatValue = FLT_MAX;
-    
+    // oc structs
+    obj.range = NSMakeRange(NSUIntegerMax, NSUIntegerMax);
+    obj.point = CGPointMake(CGFLOAT_MAX, CGFLOAT_MAX);
+    obj.size = CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX);
+    obj.rect = CGRectMake(CGFLOAT_MAX, CGFLOAT_MAX, CGFLOAT_MAX, CGFLOAT_MAX);
     XCTAssert([_context insert:obj error:nil]);
     
     TestObject *queryObj = [_context queryAllWithError:nil].lastObject;
@@ -91,6 +95,11 @@
     XCTAssertEqual(queryObj.uLongLongValue, obj.uLongLongValue);
     XCTAssertEqual(queryObj.doubleValue, obj.doubleValue);
     XCTAssertEqual(queryObj.floatValue, obj.floatValue);
+    
+    XCTAssertTrue(NSEqualRanges(queryObj.range, obj.range));
+    XCTAssertTrue(CGPointEqualToPoint(queryObj.point, obj.point));
+    XCTAssertTrue(CGSizeEqualToSize(queryObj.size, obj.size));
+    XCTAssertTrue(CGRectEqualToRect(queryObj.rect, obj.rect));
 }
 
 - (void)testMinCValue {
@@ -109,6 +118,11 @@
     obj.doubleValue = DBL_MIN;
     obj.floatValue = FLT_MIN;
     
+    obj.range = NSMakeRange(0, 0);
+    obj.point = CGPointMake(CGFLOAT_MIN, CGFLOAT_MIN);
+    obj.size = CGSizeMake(CGFLOAT_MIN, CGFLOAT_MIN);
+    obj.rect = CGRectMake(CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN);
+    
     XCTAssert([_context insert:obj error:nil]);
     
     TestObject *queryObj = [_context queryAllWithError:nil].lastObject;
@@ -126,6 +140,11 @@
     XCTAssertEqual(queryObj.uLongLongValue, obj.uLongLongValue);
     XCTAssertEqual(queryObj.doubleValue, obj.doubleValue);
     XCTAssertEqual(queryObj.floatValue, obj.floatValue);
+    
+    XCTAssertTrue(NSEqualRanges(queryObj.range, obj.range));
+    XCTAssertTrue(CGPointEqualToPoint(queryObj.point, obj.point));
+    XCTAssertTrue(CGSizeEqualToSize(queryObj.size, obj.size));
+    XCTAssertTrue(CGRectEqualToRect(queryObj.rect, obj.rect));
 }
 
 

@@ -164,9 +164,9 @@
         [OBJFileParser addTengentDataToObjInfo:info];
     }
     
-//    1. add data support to db
-//    2. build the resource db
-//    3. add resource process
+    1. add data support to db
+    2. build the resource db
+    3. add resource process
     
     // arrange resources and store into db
 //    0x00003d,id start end, id start, end, 0x00004c datablock
