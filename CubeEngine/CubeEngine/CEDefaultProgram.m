@@ -30,7 +30,7 @@
     _mainLight =        (CEUniformLightInfo *)[self outputVariableWithName:@"MainLight" type:@"LightInfo"];
     
     // texture
-    _textureCoordinate = (CEAttributeVector2 *)[self outputVariableWithName:@"TextureCoord" type:@"vec2"];
+    _textureCoordinate = (CEAttributeVector2 *)[self outputVariableWithName:@"VertexUV" type:@"vec2"];
     _diffuseTexture = (CEUniformSampler2D *)[self outputVariableWithName:@"DiffuseTexture" type:@"sampler2D"];
     if (_diffuseTexture) {
         [_diffuseTexture setTextureIndex:currentTextureIndex];

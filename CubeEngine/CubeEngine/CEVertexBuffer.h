@@ -10,4 +10,15 @@
 
 @interface CEVertexBuffer : NSObject
 
+- (instancetype)initWithData:(NSData *)vertexData attributes:(NSArray *)attributes;
+
+@property (nonatomic, readonly) NSArray *attributes;
+@property (nonatomic, readonly) uint16_t attributesType;
+
+- (BOOL)setupBuffer;
+- (void)destoryBuffer;
+
+- (BOOL)loadBuffer;
+- (void)unloadBuffer;
+
 @end

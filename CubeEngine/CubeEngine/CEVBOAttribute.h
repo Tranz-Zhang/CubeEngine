@@ -21,14 +21,13 @@
  */
 
 
+// NOTE: these value also used as attribute index in shader program
 typedef NS_ENUM(NSInteger, CEVBOAttributeName) {
-    CEVBOAttributeNone = 0,
-    CEVBOAttributePosition,
+    CEVBOAttributePosition = 0,
     CEVBOAttributeUV,
     CEVBOAttributeNormal,
-    CEVBOAttributeColor,
     CEVBOAttributeTangent,
-    CEVBOAttributeBitangent,
+    CEVBOAttributeColor,
 };
 
 NSString *CEVBOAttributeNameString(CEVBOAttributeName name);
@@ -52,9 +51,15 @@ NSString *CEVBOAttributeNameString(CEVBOAttributeName name);
  */
 + (NSArray *)attributesWithNames:(NSArray *)names;
 
+/**
+ attribute id for a group of atrributes
+ */
++ (uint32_t)attributesTypeWithNames:(NSArray *)names;
+
 
 - (BOOL)isEqualToAttribute:(CEVBOAttribute *)attribute;
 - (BOOL)isEqual:(id)object;
+
 
 @end
 

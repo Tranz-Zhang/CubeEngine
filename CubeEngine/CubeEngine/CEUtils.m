@@ -7,7 +7,7 @@
 //
 
 #import "CEUtils.h"
-#import "CEDirectoryDefines.h"
+#import "CEResourcesDefines.h"
 
 #pragma mark - System Tools
 

@@ -11,8 +11,9 @@
 
 @interface CEShaderInfo : NSObject
 
-@property (nonatomic, readonly) NSDictionary *structInfoDict;   // @{"StructName" : CEShaderStructInfo};
-@property (nonatomic, readonly) NSDictionary *variableInfoDict; // @{"Name" : CEShaderVariableInfo};
+@property (nonatomic, readonly) NSDictionary *structInfoDict;       // @{"StructName" : CEShaderStructInfo};
+@property (nonatomic, readonly) NSDictionary *attributeInfoDict;    // @{"Name" : CEShaderVariableInfo};
+@property (nonatomic, readonly) NSDictionary *uniformInfoDict;      // @{"Name" : CEShaderVariableInfo};
 @property (nonatomic, readonly) NSString *vertexShader;
 @property (nonatomic, readonly) NSString *fragmentShader;
 

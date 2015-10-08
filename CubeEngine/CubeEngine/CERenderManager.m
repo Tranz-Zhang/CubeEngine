@@ -118,6 +118,8 @@
     glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
     for (CERenderGroup *group in renderGroups) {
         CEDefaultRenderer *renderer = [self rendererWithConfig:group.renderConfig];
+        if (!renderer) continue;
+        
         renderer.camera = scene.camera;
         renderer.mainLight = scene.mainLight;
         // normally render a object
@@ -206,11 +208,14 @@
     CEDefaultRenderer *render = _rendererDict[config];
     if (!render) {
         render = [CEDefaultRenderer rendererWithConfig:config];
-        _rendererDict[config] = render;
-    }
 #if DEBUG
-    NSAssert(render, @"FAIL TO CREATE RENDER");
+        NSAssert(render, @"FAIL TO CREATE RENDER");
 #endif
+        if (render) {
+            _rendererDict[config] = render;
+        }
+    }
+
     return render;
 }
 

@@ -121,8 +121,10 @@ NSString *CEShaderDirectory() {
     if (!mainVertexProfile || !mainFragmentProfile) {
         return nil;
     }
-    NSMutableSet *allVariableInfos = [NSMutableSet set];
     NSMutableSet *allStructInfos = [NSMutableSet set];
+    NSMutableSet *allAttributeInfos = [NSMutableSet set];
+    NSMutableSet *allUniformInfos = [NSMutableSet set];
+    
     
     // build vertex shader
     NSDictionary *vertexProfilePool = [_vertexProfilePool copy];
@@ -130,8 +132,8 @@ NSString *CEShaderDirectory() {
     [self buildProfile:mainVertexProfile withProfilePool:vertexProfilePool result:vertexResult];
     NSString *vertexVariableDeclaration = [self variableDeclarationStringWithProfileResult:vertexResult];
     NSString *vertexShaderString = [NSString stringWithFormat:@"%@void main() %@", vertexVariableDeclaration, vertexResult.shaderString];
-    [allVariableInfos addObjectsFromArray:vertexResult.attributes];
-    [allVariableInfos addObjectsFromArray:vertexResult.uniforms];
+    [allAttributeInfos addObjectsFromArray:vertexResult.attributes];
+    [allUniformInfos addObjectsFromArray:vertexResult.uniforms];
     [allStructInfos addObjectsFromArray:vertexResult.structs];
     
     // build fragment shader
@@ -143,8 +145,8 @@ NSString *CEShaderDirectory() {
     if (mainFragmentProfile.defaultPrecision.length) {
         fragmentShaderString = [NSString stringWithFormat:@"precision %@ float;\n\n%@", mainFragmentProfile.defaultPrecision, fragmentShaderString];
     }
-    [allVariableInfos addObjectsFromArray:fragmentResult.attributes];
-    [allVariableInfos addObjectsFromArray:fragmentResult.uniforms];
+    [allAttributeInfos addObjectsFromArray:fragmentResult.attributes];
+    [allUniformInfos addObjectsFromArray:fragmentResult.uniforms];
     [allStructInfos addObjectsFromArray:fragmentResult.structs];
     
     printf("================ vertexShader ================\n%s\n", [vertexShaderString UTF8String]);
@@ -159,15 +161,22 @@ NSString *CEShaderDirectory() {
         }
     }
     // gen variable dictionary
-    NSMutableDictionary *variableInfoDict = [NSMutableDictionary dictionary];
-    for (CEShaderVariableInfo *variableInfo in allVariableInfos) {
+    NSMutableDictionary *attributeInfoDict = [NSMutableDictionary dictionary];
+    for (CEShaderVariableInfo *variableInfo in allAttributeInfos) {
         if (variableInfo.name) {
-            variableInfoDict[variableInfo.name] = variableInfo;
+            attributeInfoDict[variableInfo.name] = variableInfo;
+        }
+    }
+    NSMutableDictionary *uniformInfoDict = [NSMutableDictionary dictionary];
+    for (CEShaderVariableInfo *variableInfo in allUniformInfos) {
+        if (variableInfo.name) {
+            uniformInfoDict[variableInfo.name] = variableInfo;
         }
     }
     CEShaderInfo *shaderInfo = [CEShaderInfo new];
     shaderInfo.structInfoDict = structInfoDict.copy;
-    shaderInfo.variableInfoDict = variableInfoDict.copy;
+    shaderInfo.attributeInfoDict = attributeInfoDict.copy;
+    shaderInfo.uniformInfoDict = uniformInfoDict.copy;
     shaderInfo.vertexShader = vertexShaderString.copy;
     shaderInfo.fragmentShader = fragmentShaderString.copy;
     return shaderInfo;

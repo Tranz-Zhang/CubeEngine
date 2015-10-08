@@ -7,6 +7,7 @@
 //
 
 #import "BuildToolManager.h"
+#import "CEResourcesDefines.h"
 #import "CEShaderProfileParser.h"
 #import "CEShaderFunctionInfo.h"
 #import "CEShaderProfile.h"
@@ -17,14 +18,14 @@
 #import "MTLFileParser.h"
 
 // db object
-#import "CEObjFileInfo.h"
+#import "CEModelInfo.h"
 #import "CEMeshInfo.h"
 #import "CEMaterialInfo.h"
 #import "CETextureInfo.h"
 
 
 #define kShaderResourceDir @"CubeEngine/ShaderResources"
-#define kResourcesDatabaseName @"resources_info"
+
 
 @implementation BuildToolManager {
     NSFileManager *_fileManager;
@@ -127,7 +128,7 @@
         printf("Resources directory doesn't existed at path: %s\n", [_resourcesDir UTF8String]);
         return NO;
     }
-    // check model & texture directory in app
+    // check directories in app
     NSString *modelDir = [_appPath stringByAppendingPathComponent:kModelDirectory];
     if (![self createDirectoryAtPath:modelDir]){
         return NO;
@@ -136,9 +137,14 @@
     if (![self createDirectoryAtPath:textureDir]){
         return NO;
     }
+    NSString *configDir = [_appPath stringByAppendingPathComponent:kConfigDirectory];
+    if (![self createDirectoryAtPath:configDir]){
+        return NO;
+    }
     // remove old files
     [self cleanDirectory:modelDir];
     [self cleanDirectory:textureDir];
+    [self cleanDirectory:configDir];
     
     // get obj files
     NSMutableArray *objFiles = [NSMutableArray array];
@@ -176,6 +182,7 @@
     }
     
     // build db info
+    NSMutableDictionary *modelPathDict = [NSMutableDictionary dictionary];
     NSMutableArray *dbObjInfoList = [NSMutableArray array];
     NSMutableArray *dbMeshInfoList = [NSMutableArray array];
     NSMutableArray *dbMaterialInfoList = [NSMutableArray array];
@@ -184,8 +191,8 @@
     int meshID =        0x20000000;
     int materialID =    0x30000000;
     int textureID =     0x40000000;
-    CEObjFileInfo *dbObjInfo = [CEObjFileInfo new];
-    dbObjInfo.fileName = info.name;
+    CEModelInfo *dbObjInfo = [CEModelInfo new];
+    dbObjInfo.modelName = info.name;
     dbObjInfo.attributes = info.attributes;
     dbObjInfo.vertexDataID = modelID++;
     // transfer vertex data to app
@@ -244,6 +251,7 @@
         }
         
         [dbMaterialInfoList addObject:dbMaterialInfo];
+        dbMeshInfo.materialID = dbMaterialInfo.materialID;
         [dbMeshInfoList addObject:dbMeshInfo];
     }
     dbObjInfo.meshIDs = meshIDs.copy;
@@ -251,10 +259,12 @@
     
     // save model data to model directory
     if (modelData.length) {
-        NSString *modelPath = [modelDir stringByAppendingPathComponent:dbObjInfo.fileName];
+        NSString *modelPath = [modelDir stringByAppendingPathComponent:dbObjInfo.modelName];
         BOOL isOK = [modelData writeToFile:modelPath atomically:YES];
-        
-        printf("process model data: %s %s", dbObjInfo.fileName.UTF8String, isOK ? "OK" : "Fail");
+        if (isOK) {
+            modelPathDict[dbObjInfo.modelName] = [kModelDirectory stringByAppendingPathComponent:dbObjInfo.modelName];
+        }
+        printf("process model data: %s %s\n", dbObjInfo.modelName.UTF8String, isOK ? "OK" : "Fail");
     }
     
     // save db info
@@ -265,8 +275,8 @@
     
     NSError *error;
     BOOL isOK;
-    CEDatabase *db = [CEDatabase databaseWithName:kResourcesDatabaseName inPath:_engineDir];
-    CEDatabaseContext *objContext = [CEDatabaseContext contextWithTableName:@"obj_info" class:[CEObjFileInfo class] inDatabase:db];
+    CEDatabase *db = [CEDatabase databaseWithName:kResourcesDatabaseName inPath:configDir];
+    CEDatabaseContext *objContext = [CEDatabaseContext contextWithTableName:@"obj_info" class:[CEModelInfo class] inDatabase:db];
     isOK = [objContext insertObjects:dbObjInfoList.copy error:&error];
     if (!isOK || error) {
         printf("Fail to insert obj info to db: %s\n", [[error localizedDescription] UTF8String]);
@@ -290,6 +300,20 @@
         printf("Fail to insert texture info to db: %s\n", [[error localizedDescription] UTF8String]);
         return NO;
     }
+    
+    // save resource dict
+    if (modelPathDict.count) {
+        NSString *filePath = [configDir stringByAppendingPathComponent:kModelInfoDictName];
+        BOOL isOK = [modelPathDict writeToFile:filePath atomically:YES];
+        if (!isOK) {
+            printf("Fail to write model info directory to path: %s\n", filePath.UTF8String);
+            return NO;
+        }
+    } else {
+        printf("WARNING: no model info directory");
+    }
+    
+    // TODO: save texture info dict
     
     return YES;
 }

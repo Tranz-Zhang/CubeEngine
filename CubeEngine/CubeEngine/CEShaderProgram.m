@@ -21,11 +21,10 @@
     }
     CEProgram *program = [[CEProgram alloc] initWithVertexShaderString:shaderInfo.vertexShader
                                                   fragmentShaderString:shaderInfo.fragmentShader];
-    [shaderInfo.variableInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
-        if (info.usage == CEShaderVariableUsageAttribute) {
-            [program addAttribute:variableName];
-        }
-    }];
+    // setup attributes for program
+    if (![self addAttributes:shaderInfo.attributeInfoDict.allKeys toProgram:program]) {
+        return nil;
+    }
     
     if (![program link]) {
         // print error info
@@ -43,17 +42,44 @@
 }
 
 
++ (BOOL)addAttributes:(NSArray *)attributeNames toProgram:(CEProgram *)program {
+    if (!attributeNames.count || !program) {
+        return NO;
+    }
+    // attribute must added in this order
+    NSArray *attributeKeywords = @[@"position", @"uv", @"texture", @"normal", @"tangent", @"color"];
+    NSMutableArray *sortedAttributeNames = [NSMutableArray array];
+    for (NSString *keyword in attributeKeywords) {
+        NSString *matchedAttributeName = nil;
+        for (NSString *attributeName in attributeNames) {
+            NSRange matchRange = [attributeName rangeOfString:keyword options:NSCaseInsensitiveSearch];
+            if (matchRange.location != NSNotFound) {
+                matchedAttributeName = attributeName;
+                break;
+            }
+        }
+        if (matchedAttributeName) {
+            [sortedAttributeNames addObject:matchedAttributeName];
+        }
+    }
+    if (sortedAttributeNames.count != attributeNames.count) {
+        CEError(@"Unrecognized attribute names: %@", attributeNames);
+        return NO;
+    }
+    for (NSString *attributeName in attributeNames) {
+        [program addAttribute:attributeName];
+    }
+    
+    return YES;
+}
+
+
 - (void)setupWithProgram:(CEProgram *)program shaderInfo:(CEShaderInfo *)shaderInfo {
     _program = program;
     
     NSMutableDictionary *variableDict = [NSMutableDictionary dictionary];
-    [shaderInfo.variableInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
-        NSString *className = nil;
-        if (info.usage == CEShaderVariableUsageAttribute) {
-            className = [[CEShaderProgram typeToAttributeClassNameDict] objectForKey:info.type];
-        } else if (info.usage == CEShaderVariableUsageUniform) {
-            className = [[CEShaderProgram typeToUniformClassNameDict] objectForKey:info.type];
-        }
+    [shaderInfo.uniformInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
+        NSString *className = [[CEShaderProgram typeToUniformClassNameDict] objectForKey:info.type];
         if (className) {
             CEShaderVariable *uniform = [[NSClassFromString(className) alloc] initWithName:variableName];
             if ([uniform setupIndexWithProgram:program]) {
@@ -61,6 +87,16 @@
             }
         }
     }];
+    [shaderInfo.attributeInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
+        NSString *className = [[CEShaderProgram typeToAttributeClassNameDict] objectForKey:info.type];
+        if (className) {
+            CEAttribute *attribute = [[NSClassFromString(className) alloc] initWithName:variableName];
+            if ([attribute setupIndexWithProgram:program]) {
+                variableDict[variableName] = attribute;
+            }
+        }
+    }];
+    
     _variableDict = variableDict.copy;
     [self onProgramSetup];
 }

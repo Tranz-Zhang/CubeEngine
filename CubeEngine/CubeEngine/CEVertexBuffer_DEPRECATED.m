@@ -16,6 +16,7 @@
     NSDictionary *_offsetDict;
 }
 
+
 - (instancetype)initWithData:(NSData *)vertexBufferData
                   attributes:(NSArray *)attributes
 {

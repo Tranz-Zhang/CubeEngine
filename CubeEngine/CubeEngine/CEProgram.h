@@ -10,7 +10,7 @@
 
 @interface CEProgram : NSObject 
 {
-    NSMutableArray  *attributes;
+    NSMutableDictionary  *attributeDict;
     NSMutableArray  *uniforms;
     GLuint          program,
 	vertShader, 
@@ -26,6 +26,8 @@
             fragmentShaderString:(NSString *)fShaderString;
 
 - (void)addAttribute:(NSString *)attributeName;
+- (void)addAttribute:(NSString *)attributeName atIndex:(GLuint)index;
+
 - (GLuint)attributeIndex:(NSString *)attributeName;
 - (GLuint)uniformIndex:(NSString *)uniformName;
 - (BOOL)link;

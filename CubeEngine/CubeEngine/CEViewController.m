@@ -14,6 +14,8 @@
 // test headers
 #import "CEShaderBuilder.h"
 #import "CEDefaultProgram.h"
+#import "CEModelLoader.h"
+#import "CEVertexBuffer.h"
 
 #define kDefaultFramesPerSecond 30
 #define kDefaultMaxLightCount 4
@@ -65,6 +67,7 @@
     self.paused = NO;
     
     [self onTestShaders];
+//    [self testModelLoading];
 }
 
 
@@ -78,6 +81,12 @@
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     CEDefaultProgram *program = [CEDefaultProgram buildProgramWithShaderInfo:shaderInfo];
     printf("program build duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+}
+
+
+- (void)testModelLoading {
+    CEModelLoader *loader = [CEModelLoader new];
+    [loader loadModelWithName:@"ram_original"];
 }
 
 

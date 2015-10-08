@@ -118,7 +118,7 @@
 
 
 - (void)renderModel:(CEModel *)model {
-#warning TODO: order this thing!
+#warning TODO: sort this thing!
     
     if (!model.vertexBuffer) {
         CEError(@"Empty vertexBuffer");

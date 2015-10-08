@@ -20,8 +20,6 @@ NSString *CEVBOAttributeNameString(CEVBOAttributeName name) {
             return @"Color";
         case CEVBOAttributeTangent:
             return @"Tangent";
-        case CEVBOAttributeBitangent:
-            return @"Bitangen";
         default:
             return nil;
     }
@@ -47,7 +45,6 @@ NSString *CEVBOAttributeNameString(CEVBOAttributeName name) {
         case CEVBOAttributePosition:
         case CEVBOAttributeNormal:
         case CEVBOAttributeTangent:
-        case CEVBOAttributeBitangent:
             attribute.primaryCount = 3;
             attribute.primaryType = GL_FLOAT;
             attribute.primarySize = sizeof(GLfloat);
@@ -92,6 +89,14 @@ NSString *CEVBOAttributeNameString(CEVBOAttributeName name) {
     return attributeList.count ? attributeList.copy : nil;
 }
 
+
++ (uint32_t)attributesTypeWithNames:(NSArray *)names {
+    uint32_t type = 0;
+    for (int i = 0; i < names.count; i++) {
+        type += ([names[i] intValue] << (i * 4));
+    }
+    return type;
+}
 
 
 - (BOOL)isEqualToAttribute:(CEVBOAttribute *)attribute {

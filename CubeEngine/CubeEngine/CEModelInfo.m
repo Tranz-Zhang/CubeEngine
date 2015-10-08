@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import "CEObjFileInfo.h"
+#import "CEModelInfo.h"
 
-@implementation CEObjFileInfo
+@implementation CEModelInfo
 
 @end

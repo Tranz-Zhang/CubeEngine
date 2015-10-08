@@ -8,10 +8,10 @@
 
 #import "CEManagedObject.h"
 
-@interface CEObjFileInfo : CEManagedObject
+@interface CEModelInfo : CEManagedObject
 
 BIND_OBJECT_ID(fileName);
-@property (nonatomic, strong) NSString *fileName;
+@property (nonatomic, strong) NSString *modelName;
 @property (nonatomic, strong) NSArray *attributes;
 @property (nonatomic, assign) int32_t vertexDataID;
 @property (nonatomic, strong) NSArray *meshIDs;

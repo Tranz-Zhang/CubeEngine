@@ -83,7 +83,7 @@
 
 
 - (void)dealloc {
-    printf("%s - %s\n -%s", __FUNCTION__, [_db.name UTF8String], dispatch_queue_get_label(dispatch_get_current_queue()));
+//    printf("%s - %s\n -%s", __FUNCTION__, [_db.name UTF8String], dispatch_queue_get_label(dispatch_get_current_queue()));
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self closeContext];
 }

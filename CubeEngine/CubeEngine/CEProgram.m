@@ -38,7 +38,7 @@ typedef void (*GLLogFunction) (GLuint program,
     {
         _initialized = NO;
         
-        attributes = [[NSMutableArray alloc] init];
+        attributeDict = [[NSMutableDictionary alloc] init];
         uniforms = [[NSMutableArray alloc] init];
         program = glCreateProgram();
         
@@ -117,28 +117,38 @@ typedef void (*GLLogFunction) (GLuint program,
 }
 // END:compile
 #pragma mark -
-// START:addattribute
-- (void)addAttribute:(NSString *)attributeName
-{
-    if (![attributes containsObject:attributeName])
-    {
-        [attributes addObject:attributeName];
-        glBindAttribLocation(program, 
-                             (GLuint)[attributes indexOfObject:attributeName],
+
+- (void)addAttribute:(NSString *)attributeName {
+    if (!attributeName) return;
+    if (!attributeDict[attributeName]) {
+        attributeDict[attributeName] = @(attributeDict.count);
+        glBindAttribLocation(program,
+                             (GLuint)[attributeDict[attributeName] unsignedIntValue],
                              [attributeName UTF8String]);
     }
 }
-// END:addattribute
-// START:indexmethods
+
+
+- (void)addAttribute:(NSString *)attributeName atIndex:(GLuint)index {
+    if (!attributeName) return;
+    if (!attributeDict[attributeName]) {
+        attributeDict[attributeName] = @(index);
+        glBindAttribLocation(program, (GLuint)index, [attributeName UTF8String]);
+    }
+}
+
+
 - (GLuint)attributeIndex:(NSString *)attributeName
 {
-    return (GLuint)[attributes indexOfObject:attributeName];
+    return (GLuint)[attributeDict[attributeName] unsignedIntValue];
 }
+
 - (GLuint)uniformIndex:(NSString *)uniformName
 {
     return glGetUniformLocation(program, [uniformName UTF8String]);
 }
-// END:indexmethods
+
+
 #pragma mark -
 // START:link
 - (BOOL)link
