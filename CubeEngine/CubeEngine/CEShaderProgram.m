@@ -12,7 +12,7 @@
 #import "CEShaderVariableDefines.h"
 
 @implementation CEShaderProgram {
-    NSDictionary *_variableDict;
+    NSDictionary *_uniformVariableDict;
 }
 
 + (instancetype)buildProgramWithShaderInfo:(CEShaderInfo *)shaderInfo {
@@ -22,10 +22,11 @@
     CEProgram *program = [[CEProgram alloc] initWithVertexShaderString:shaderInfo.vertexShader
                                                   fragmentShaderString:shaderInfo.fragmentShader];
     // setup attributes for program
-    if (![self addAttributes:shaderInfo.attributeInfoDict.allKeys toProgram:program]) {
+    NSArray *attributeTypes = [self addAttributes:shaderInfo.attributeInfoDict.allKeys
+                                        toProgram:program];
+    if (!attributeTypes.count) {
         return nil;
     }
-    
     if (![program link]) {
         // print error info
         CEPrintf("================ vertexShader ================\n%s\n", [shaderInfo.vertexShader UTF8String]);
@@ -35,117 +36,74 @@
         CEError(@"Vertex shader compile log: %@", [program vertexShaderLog]);
         NSAssert(0, @"Fail to Compile Program");
     }
-    
     CEShaderProgram *shaderProgram = [[[self class] alloc] init];
-    [shaderProgram setupWithProgram:program shaderInfo:shaderInfo];
+    [shaderProgram setupWithProgram:program attributeTypes:attributeTypes uniformInfoDict:shaderInfo.uniformInfoDict];
     return shaderProgram;
 }
 
 
-+ (BOOL)addAttributes:(NSArray *)attributeNames toProgram:(CEProgram *)program {
++ (NSArray *)addAttributes:(NSArray *)attributeNames toProgram:(CEProgram *)program {
     if (!attributeNames.count || !program) {
-        return NO;
+        return nil;
     }
     // attribute must added in this order
-    NSArray *attributeKeywords = @[@"position", @"uv", @"texture", @"normal", @"tangent", @"color"];
-    NSMutableArray *sortedAttributeNames = [NSMutableArray array];
-    for (NSString *keyword in attributeKeywords) {
-        NSString *matchedAttributeName = nil;
-        for (NSString *attributeName in attributeNames) {
-            NSRange matchRange = [attributeName rangeOfString:keyword options:NSCaseInsensitiveSearch];
-            if (matchRange.location != NSNotFound) {
-                matchedAttributeName = attributeName;
-                break;
-            }
-        }
-        if (matchedAttributeName) {
-            [sortedAttributeNames addObject:matchedAttributeName];
-        }
-    }
-    if (sortedAttributeNames.count != attributeNames.count) {
-        CEError(@"Unrecognized attribute names: %@", attributeNames);
-        return NO;
-    }
+    NSMutableArray *sortedAttributes = [NSMutableArray array];
     for (NSString *attributeName in attributeNames) {
-        [program addAttribute:attributeName];
+        CEVBOAttributeName attributeType = CEVBOAttributeNameWithShaderDeclaration(attributeName);
+        if (attributeType != CEVBOAttributeUnknown) {
+            [sortedAttributes addObject:@(attributeType)];
+            [program addAttribute:attributeName atIndex:attributeType];
+        } else {
+            return nil;
+        }
     }
-    
-    return YES;
+    return sortedAttributes.copy;
 }
 
 
-- (void)setupWithProgram:(CEProgram *)program shaderInfo:(CEShaderInfo *)shaderInfo {
+- (void)setupWithProgram:(CEProgram *)program
+          attributeTypes:(NSArray *)attributeTypes
+         uniformInfoDict:(NSDictionary *)uniformInfoDict {
     _program = program;
-    
-    NSMutableDictionary *variableDict = [NSMutableDictionary dictionary];
-    [shaderInfo.uniformInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
+    NSMutableDictionary *uniformVariableDict = [NSMutableDictionary dictionary];
+    [uniformInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
         NSString *className = [[CEShaderProgram typeToUniformClassNameDict] objectForKey:info.type];
         if (className) {
             CEShaderVariable *uniform = [[NSClassFromString(className) alloc] initWithName:variableName];
             if ([uniform setupIndexWithProgram:program]) {
-                variableDict[variableName] = uniform;
+                uniformVariableDict[variableName] = uniform;
             }
         }
     }];
-    [shaderInfo.attributeInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
-        NSString *className = [[CEShaderProgram typeToAttributeClassNameDict] objectForKey:info.type];
-        if (className) {
-            CEAttribute *attribute = [[NSClassFromString(className) alloc] initWithName:variableName];
-            if ([attribute setupIndexWithProgram:program]) {
-                variableDict[variableName] = attribute;
-            }
-        }
-    }];
-    
-    _variableDict = variableDict.copy;
+    _uniformVariableDict = uniformVariableDict.copy;
+    _attributes = [attributeTypes copy];
+    _attributesType = [CEVBOAttribute attributesTypeWithNames:_attributes];
     [self onProgramSetup];
 }
 
 
-- (CEShaderVariable *)outputVariableWithName:(NSString *)name type:(NSString *)dataType {
+- (CEShaderVariable *)uniformVariableWithName:(NSString *)name type:(NSString *)dataType {
     if (!name.length || !dataType.length) {
         return nil;
     }
-    CEShaderVariable *variable = _variableDict[name];
+    CEShaderVariable *variable = _uniformVariableDict[name];
     if (variable && [variable.dataType isEqualToString:dataType]) {
         return variable;
     }
     return nil;
 }
 
+
 - (void)onProgramSetup {
-    
+    CEError(@"Must Implement by subclass");
 }
+
 
 - (void)use {
     [_program use];
 }
 
 #pragma mark - Others
-
-+ (NSDictionary *)typeToAttributeClassNameDict {
-    static NSDictionary *sTypeToAttributeClassNameDict = nil;
-    if (!sTypeToAttributeClassNameDict) {
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            sTypeToAttributeClassNameDict =
-            @{
-              @"float"  : @"CEAttributeFloat",
-              @"vec2"   : @"CEAttributeVector2",
-              @"vec3"   : @"CEAttributeVector3",
-              @"vec4"   : @"CEAttributeVector4",
-              };
-            
-            // load class the first time
-            [CEAttributeFloat new];
-            [CEAttributeVector2 new];
-            [CEAttributeVector3 new];
-            [CEAttributeVector4 new];
-        });
-    }
-    return sTypeToAttributeClassNameDict;
-}
-
 
 + (NSDictionary *)typeToUniformClassNameDict {
     static NSDictionary *sTypeToUniformClassNameDict = nil;

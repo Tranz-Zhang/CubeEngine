@@ -143,13 +143,8 @@
 		4CF403871B7386BA00C02BAE /* CEUniformMatrix3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403861B7386BA00C02BAE /* CEUniformMatrix3.m */; };
 		4CF4038A1B7386C200C02BAE /* CEUniformMatrix4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403891B7386C200C02BAE /* CEUniformMatrix4.m */; };
 		4CF4038D1B7386CD00C02BAE /* CEUniformSampler2D.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF4038C1B7386CD00C02BAE /* CEUniformSampler2D.m */; };
-		4CF403931B73887600C02BAE /* CEAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF403921B73887600C02BAE /* CEAttribute.m */; };
 		4CF4649E1BB944FE006D7DE2 /* VectorList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF4649D1BB944FE006D7DE2 /* VectorList.m */; };
 		4CF9B5FA1BA0660C00E2128D /* CEDefaultProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9B5F91BA0660C00E2128D /* CEDefaultProgram.m */; };
-		4CF9B5FD1BA06C9D00E2128D /* CEAttributeFloat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9B5FC1BA06C9D00E2128D /* CEAttributeFloat.m */; };
-		4CF9B6001BA06CAC00E2128D /* CEAttributeVector2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9B5FF1BA06CAC00E2128D /* CEAttributeVector2.m */; };
-		4CF9B6031BA06CBA00E2128D /* CEAttributeVector3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9B6021BA06CBA00E2128D /* CEAttributeVector3.m */; };
-		4CF9B6061BA06CCB00E2128D /* CEAttributeVector4.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9B6051BA06CCB00E2128D /* CEAttributeVector4.m */; };
 		4CFE33631B3CFAAB00679817 /* CEShadowMapRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 269F476C1B00893D0030CD55 /* CEShadowMapRenderer.m */; };
 /* End PBXBuildFile section */
 
@@ -428,8 +423,6 @@
 		4CF403891B7386C200C02BAE /* CEUniformMatrix4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEUniformMatrix4.m; sourceTree = "<group>"; };
 		4CF4038B1B7386CD00C02BAE /* CEUniformSampler2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEUniformSampler2D.h; sourceTree = "<group>"; };
 		4CF4038C1B7386CD00C02BAE /* CEUniformSampler2D.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEUniformSampler2D.m; sourceTree = "<group>"; };
-		4CF403911B73887600C02BAE /* CEAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEAttribute.h; sourceTree = "<group>"; };
-		4CF403921B73887600C02BAE /* CEAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEAttribute.m; sourceTree = "<group>"; };
 		4CF403941B7388CE00C02BAE /* CEShaderVariable_privates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderVariable_privates.h; sourceTree = "<group>"; };
 		4CF4649C1BB944FE006D7DE2 /* VectorList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VectorList.h; sourceTree = "<group>"; };
 		4CF4649D1BB944FE006D7DE2 /* VectorList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VectorList.m; sourceTree = "<group>"; };
@@ -444,14 +437,6 @@
 		4CF7CDC71B84669F0093C32D /* SpotLightFunction.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SpotLightFunction.vert; sourceTree = "<group>"; };
 		4CF9B5F81BA0660C00E2128D /* CEDefaultProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEDefaultProgram.h; sourceTree = "<group>"; };
 		4CF9B5F91BA0660C00E2128D /* CEDefaultProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEDefaultProgram.m; sourceTree = "<group>"; };
-		4CF9B5FB1BA06C9D00E2128D /* CEAttributeFloat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEAttributeFloat.h; sourceTree = "<group>"; };
-		4CF9B5FC1BA06C9D00E2128D /* CEAttributeFloat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEAttributeFloat.m; sourceTree = "<group>"; };
-		4CF9B5FE1BA06CAC00E2128D /* CEAttributeVector2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEAttributeVector2.h; sourceTree = "<group>"; };
-		4CF9B5FF1BA06CAC00E2128D /* CEAttributeVector2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEAttributeVector2.m; sourceTree = "<group>"; };
-		4CF9B6011BA06CBA00E2128D /* CEAttributeVector3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEAttributeVector3.h; sourceTree = "<group>"; };
-		4CF9B6021BA06CBA00E2128D /* CEAttributeVector3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEAttributeVector3.m; sourceTree = "<group>"; };
-		4CF9B6041BA06CCB00E2128D /* CEAttributeVector4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEAttributeVector4.h; sourceTree = "<group>"; };
-		4CF9B6051BA06CCB00E2128D /* CEAttributeVector4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEAttributeVector4.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -927,23 +912,6 @@
 			name = Uniform;
 			sourceTree = "<group>";
 		};
-		4CF3E9691B99E0D900D42515 /* Attribute */ = {
-			isa = PBXGroup;
-			children = (
-				4CF403911B73887600C02BAE /* CEAttribute.h */,
-				4CF403921B73887600C02BAE /* CEAttribute.m */,
-				4CF9B5FB1BA06C9D00E2128D /* CEAttributeFloat.h */,
-				4CF9B5FC1BA06C9D00E2128D /* CEAttributeFloat.m */,
-				4CF9B5FE1BA06CAC00E2128D /* CEAttributeVector2.h */,
-				4CF9B5FF1BA06CAC00E2128D /* CEAttributeVector2.m */,
-				4CF9B6011BA06CBA00E2128D /* CEAttributeVector3.h */,
-				4CF9B6021BA06CBA00E2128D /* CEAttributeVector3.m */,
-				4CF9B6041BA06CCB00E2128D /* CEAttributeVector4.h */,
-				4CF9B6051BA06CCB00E2128D /* CEAttributeVector4.m */,
-			);
-			name = Attribute;
-			sourceTree = "<group>";
-		};
 		4CF403721B73853900C02BAE /* Variables */ = {
 			isa = PBXGroup;
 			children = (
@@ -951,7 +919,6 @@
 				4CBD44221B723AB600D72831 /* CEShaderVariable.h */,
 				4CBD44231B723AB600D72831 /* CEShaderVariable.m */,
 				4CF403941B7388CE00C02BAE /* CEShaderVariable_privates.h */,
-				4CF3E9691B99E0D900D42515 /* Attribute */,
 				4CF3E9671B99D6AC00D42515 /* Uniform */,
 			);
 			name = Variables;
@@ -1090,20 +1057,16 @@
 				4CEA12171BB1602D00686678 /* CEManagedObject.m in Sources */,
 				4CBB74FD1BB53D3000C3829B /* CEMaterialInfo.m in Sources */,
 				4CEA12161BB1602D00686678 /* CEDatabaseNotifications.m in Sources */,
-				4CF9B5FD1BA06C9D00E2128D /* CEAttributeFloat.m in Sources */,
 				2690E8541AEA2F8E000BDD8F /* CEPointLight.m in Sources */,
-				4CF9B6001BA06CAC00E2128D /* CEAttributeVector2.m in Sources */,
 				4CEA121A1BB1602D00686678 /* FMDatabase.m in Sources */,
 				4CD9EB951B3BF7D400C6FCB5 /* CEShadowLight.m in Sources */,
 				4C3A8EAA1B95850A00BC3BC1 /* CEShaderStructInfo.m in Sources */,
 				4CF4037E1B73868600C02BAE /* CEUniformVector3.m in Sources */,
 				267F4D811B0CD81100F25452 /* CEMainProgram.m in Sources */,
-				4CF403931B73887600C02BAE /* CEAttribute.m in Sources */,
 				4CEA121C1BB1602D00686678 /* FMDatabasePool.m in Sources */,
 				4CD480941B40E7B40044517C /* CELightUniforms.m in Sources */,
 				261089661AAD31AF0041E142 /* CEScene.m in Sources */,
 				4CBB74F71BB53CF200C3829B /* CEModelInfo.m in Sources */,
-				4CF9B6061BA06CCB00E2128D /* CEAttributeVector4.m in Sources */,
 				4C51F1221B8B20DD0052511E /* CEShaderProfile.m in Sources */,
 				26F7B75A1AEE31C400BEDB01 /* CESpotLight.m in Sources */,
 				4CCBB3F91B842A0E00200C4E /* CEShaderBuilder.m in Sources */,
@@ -1138,7 +1101,6 @@
 				4CBD44241B723AB600D72831 /* CEShaderVariable.m in Sources */,
 				260949191B0598EE00F7465B /* CEObjParser.m in Sources */,
 				2624ABAC1AD6A85500FC863C /* CERenderManager.m in Sources */,
-				4CF9B6031BA06CBA00E2128D /* CEAttributeVector3.m in Sources */,
 				4CF3E96C1B99E3E400D42515 /* CEShaderProgram.m in Sources */,
 				260949161B0598E000F7465B /* CEMtlParser.m in Sources */,
 				2624A6111B0AD234001E3F32 /* CEProgramConfig.m in Sources */,

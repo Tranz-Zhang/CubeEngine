@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CEProgram.h"
 #import "CEShaderInfo.h"
+#import "CEVBOAttribute.h"
 #import "CEShaderVariableDefines.h"
 
 /**
@@ -18,7 +19,11 @@
 
 @interface CEShaderProgram : NSObject {
     CEProgram *_program;
+    NSArray *_attributes;
 }
+
+@property (nonatomic, readonly) NSArray *attributes; // array of CEVBOAttributeName
+@property (nonatomic, readonly) uint32_t attributesType; // attritube array type
 
 + (instancetype)buildProgramWithShaderInfo:(CEShaderInfo *)shaderInfo;
 

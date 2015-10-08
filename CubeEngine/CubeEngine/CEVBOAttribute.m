@@ -8,6 +8,7 @@
 
 #import "CEVBOAttribute.h"
 
+/*
 NSString *CEVBOAttributeNameString(CEVBOAttributeName name) {
     switch (name) {
         case CEVBOAttributePosition:
@@ -24,6 +25,30 @@ NSString *CEVBOAttributeNameString(CEVBOAttributeName name) {
             return nil;
     }
 }
+//*/
+
+static NSDictionary *attributeKeywordDict = nil;
+CEVBOAttributeName CEVBOAttributeNameWithShaderDeclaration(NSString *declaration) {
+    if (!attributeKeywordDict) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            attributeKeywordDict = @{@"position"    : @(CEVBOAttributePosition),
+                                     @"uv"          : @(CEVBOAttributeUV),
+                                     @"texture"     : @(CEVBOAttributeUV),
+                                     @"normal"      : @(CEVBOAttributeNormal),
+                                     @"tangent"     : @(CEVBOAttributeTangent),
+                                     @"color"       : @(CEVBOAttributeColor)};
+        });
+    }
+    for (NSString *keyword in attributeKeywordDict.allKeys) {
+        NSRange matchRange = [declaration rangeOfString:keyword options:NSCaseInsensitiveSearch];
+        if (matchRange.location != NSNotFound) {
+            return [attributeKeywordDict[keyword] integerValue];
+        }
+    }
+    return CEVBOAttributeUnknown;
+}
+
 
 @interface CEVBOAttribute ()
 

@@ -11,12 +11,10 @@
 @interface CEDefaultProgram : CEShaderProgram
 
 // basic
-@property (nonatomic, readonly) CEAttributeVector4 *vertexPosition;
 @property (nonatomic, readonly) CEUniformMatrix4 *modelViewProjectionMatrix;
 @property (nonatomic, readonly) CEUniformVector4 *diffuseColor;
 
 // light
-@property (nonatomic, readonly) CEAttributeVector3 *vertexNormal;
 @property (nonatomic, readonly) CEUniformMatrix3 *normalMatrix;
 @property (nonatomic, readonly) CEUniformMatrix4 *modelViewMatrix;
 @property (nonatomic, readonly) CEUniformVector3 *eyeDirection;
@@ -26,7 +24,6 @@
 @property (nonatomic, readonly) CEUniformLightInfo *mainLight;
 
 // texture
-@property (nonatomic, readonly) CEAttributeVector2 *textureCoordinate;
 @property (nonatomic, readonly) CEUniformSampler2D *diffuseTexture;
 
 // shadow map

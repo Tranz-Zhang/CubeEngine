@@ -7,13 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
 
 @interface CEVertexBuffer : NSObject
 
 - (instancetype)initWithData:(NSData *)vertexData attributes:(NSArray *)attributes;
 
 @property (nonatomic, readonly) NSArray *attributes;
-@property (nonatomic, readonly) uint16_t attributesType;
+@property (nonatomic, readonly) uint32_t attributesType;
 
 - (BOOL)setupBuffer;
 - (void)destoryBuffer;

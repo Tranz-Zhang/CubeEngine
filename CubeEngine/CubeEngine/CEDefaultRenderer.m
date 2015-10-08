@@ -141,7 +141,14 @@
         return;
     }
     // prepare for rendering
-    _program.vertexPosition.attribute = [model.vertexBuffer attributeWithName:CEVBOAttributePosition];
+    CEVBOAttribute *positionAttribute = [model.vertexBuffer attributeWithName:CEVBOAttributePosition];
+    glEnableVertexAttribArray(CEVBOAttributePosition);
+    glVertexAttribPointer(CEVBOAttributePosition,
+                          positionAttribute.primaryCount,
+                          positionAttribute.primaryType,
+                          GL_FALSE,
+                          positionAttribute.elementStride,
+                          CE_BUFFER_OFFSET(positionAttribute.elementOffset));
     
     // setup MVP matrix
     GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
@@ -149,7 +156,13 @@
     _program.modelViewProjectionMatrix.matrix4 = modelViewProjectionMatrix;
     
     CEVBOAttribute *normalAttrib = [model.vertexBuffer attributeWithName:CEVBOAttributeNormal];
-    _program.vertexNormal.attribute = normalAttrib;
+    glEnableVertexAttribArray(CEVBOAttributeNormal);
+    glVertexAttribPointer(CEVBOAttributeNormal,
+                          normalAttrib.primaryCount,
+                          normalAttrib.primaryType,
+                          GL_FALSE,
+                          normalAttrib.elementStride,
+                          CE_BUFFER_OFFSET(normalAttrib.elementOffset));
     
     // setup normal matrix
     GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(modelViewMatrix);
@@ -170,9 +183,15 @@
     }
     
     // texture
-    if (_program.textureCoordinate) {
+    if ([_program.attributes containsObject:@(CEVBOAttributeUV)]) {
         CEVBOAttribute *textureCoordAttri = [model.vertexBuffer attributeWithName:CEVBOAttributeUV];
-        _program.textureCoordinate.attribute = textureCoordAttri;
+        glEnableVertexAttribArray(CEVBOAttributeUV);
+        glVertexAttribPointer(CEVBOAttributeUV,
+                              textureCoordAttri.primaryCount,
+                              textureCoordAttri.primaryType,
+                              GL_FALSE,
+                              textureCoordAttri.elementStride,
+                              CE_BUFFER_OFFSET(textureCoordAttri.elementOffset));
     }
     if (_program.diffuseTexture) {
         _program.diffuseTexture.textureID = model.texture.name;

@@ -11,9 +11,9 @@
 @interface CEShaderProgram ()
 
 /**
- Get output Attributes or Uniforms in current program. return nil if no item match the name and type;
+ Get uniform variable in current program. return nil if no item match the name and type;
  */
-- (CEShaderVariable *)outputVariableWithName:(NSString *)name type:(NSString *)dataType;
+- (CEShaderVariable *)uniformVariableWithName:(NSString *)name type:(NSString *)dataType;
 
 
 @end

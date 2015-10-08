@@ -10,12 +10,6 @@
 #define CubeEngine_CEShaderVariableDefines_h
 
 #define kCEPrecisionDefault @"mediump"
-
-#import "CEAttributeFloat.h"
-#import "CEAttributeVector2.h"
-#import "CEAttributeVector3.h"
-#import "CEAttributeVector4.h"
-
 #import "CEUniformBool.h"
 #import "CEUniformInteger.h"
 #import "CEUniformFloat.h"

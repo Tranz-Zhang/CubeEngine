@@ -23,6 +23,7 @@
 
 // NOTE: these value also used as attribute index in shader program
 typedef NS_ENUM(NSInteger, CEVBOAttributeName) {
+    CEVBOAttributeUnknown = -1,
     CEVBOAttributePosition = 0,
     CEVBOAttributeUV,
     CEVBOAttributeNormal,
@@ -30,7 +31,11 @@ typedef NS_ENUM(NSInteger, CEVBOAttributeName) {
     CEVBOAttributeColor,
 };
 
-NSString *CEVBOAttributeNameString(CEVBOAttributeName name);
+/**
+ check if shader attribute declaration string contain any attribute keyword,
+ return the spercify CEVBOAttributeName
+*/
+CEVBOAttributeName CEVBOAttributeNameWithShaderDeclaration(NSString *declaration);
 
 /**
  表示VertexBuffer的属性信息，常用的属性为位置，纹理，法线等
