@@ -67,6 +67,41 @@
     [self.infoView scrollRangeToVisible:NSMakeRange(info.length - 1, 1)];
 }
 
+#pragma mark - test
+
+- (IBAction)onTestWrite:(UIButton *)sender {
+    CEDatabase *db = [CEDatabase databaseWithName:@"TestReadWrite"];
+    CEDatabaseContext *context = [CEDatabaseContext contextWithTableName:@"student" class:[Student class] inDatabase:db];
+    Student *testObj = [Student new];
+    testObj.name = @"hello";
+    testObj.number = @(123);
+    NSError *error;
+    if ([context insert:testObj error:&error]) {
+        NSLog(@"Insert OK");
+    } else {
+        NSLog(@"Insert Fail: %@", error);
+    }
+}
+
+
+- (IBAction)onTestRead:(UIButton *)sender {
+    CEDatabase *db = [CEDatabase databaseWithName:@"TestReadWrite"];
+    CEDatabaseContext *context = [CEDatabaseContext contextWithTableName:@"student" class:[Student class] inDatabase:db];
+    NSArray *result = [context queryAllWithError:nil];
+    if (!result.count) {
+        NSLog(@"Query Fail");
+        return;
+    }
+    
+    Student *testObj = [result lastObject];
+    if ([testObj.name isEqualToString:@"hello"] &&
+        [testObj.number isEqualToNumber:@(123)]) {
+        NSLog(@"Query OK");
+    } else {
+        NSLog(@"Query Fail");
+    }
+}
+
 
 - (IBAction)onTest:(id)sender {
     

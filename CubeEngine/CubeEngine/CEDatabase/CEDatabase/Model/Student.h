@@ -12,11 +12,13 @@
 
 @interface Student : CEManagedObject
 
-@property (nonatomic, strong) NSString *name DEPRECATED_ATTRIBUTE;
+
 @property (nonatomic, strong) NSMutableString *mutableString;
 @property (nonatomic, strong) NSArray *array;
 @property (nonatomic, strong) NSDictionary *dictionary;
 @property (nonatomic, strong) NSNumber *number;
+
+
 
 @property (nonatomic, assign) NSInteger age;
 @property (nonatomic, assign) CGFloat grade;
@@ -31,6 +33,7 @@
 @property (nonatomic, assign) float floatValue;
 @property (nonatomic, assign) unsigned int unsignedIntValue;
 @property (nonatomic, assign) unsigned long long unsignedLongLongValue;
+@property (nonatomic, strong) NSString *name DEPRECATED_ATTRIBUTE;
 
 @end
 

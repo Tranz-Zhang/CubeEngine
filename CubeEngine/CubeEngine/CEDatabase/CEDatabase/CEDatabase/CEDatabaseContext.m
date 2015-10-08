@@ -227,21 +227,26 @@
             [localColumns addObject:columnInfo];
         }
         
-        NSMutableArray *newColumns = [NSMutableArray arrayWithArray:_columnInfos];
-        // ?: any quick way to check different ?
-        BOOL hasChange = (localColumns.count != newColumns.count);
+        // 检查表是否有变化，并且按照本地数据库表重新排序columnInfos
+        BOOL hasChange = (localColumns.count != _columnInfos.count);
+        NSMutableArray *sortedColumnInfos = [NSMutableArray arrayWithCapacity:_columnInfos.count];
         if (!hasChange) {
-            for (ColumnInfo *newInfo in newColumns) {
-                BOOL findColumn = NO;
-                for (ColumnInfo *oldInfo in localColumns) {
-                    if ([oldInfo.name isEqualToString:newInfo.name] &&
-                        [oldInfo.sqliteType isEqualToString:newInfo.sqliteType] &&
-                        oldInfo.isPrimaryKey == newInfo.isPrimaryKey) {
-                        findColumn = YES;
+            for (int i = 0; i < localColumns.count; i++) {
+                ColumnInfo *oldInfo = localColumns[i];
+                ColumnInfo *matchedNewInfo = nil;
+                for (int j = 0; j < _columnInfos.count; j++) {
+                    ColumnInfo *newInfo = _columnInfos[j];
+                    if ([newInfo.name isEqualToString:oldInfo.name] &&
+                        [newInfo.sqliteType isEqualToString:oldInfo.sqliteType] &&
+                        newInfo.isPrimaryKey == oldInfo.isPrimaryKey) {
+                        matchedNewInfo = newInfo;
                         break;
                     }
                 }
-                if (!findColumn) {
+                if (matchedNewInfo) {
+                    [sortedColumnInfos addObject:matchedNewInfo];
+                    
+                } else {
                     hasChange = YES;
                     break;
                 }
@@ -257,6 +262,9 @@
             } else {
                 CEDatabaseLog(@"Remove table: %@", _sqliteTableName);
             }
+            
+        } else {
+            _columnInfos = [sortedColumnInfos copy];
         }
         
     } error:nil];
@@ -542,11 +550,9 @@
     // generate update cmd
     NSMutableString *updateCmd = [NSMutableString stringWithFormat:@"UPDATE %@ SET ", _sqliteTableName];
     for (ColumnInfo *column in _columnInfos) {
-        [updateCmd appendFormat:@"%@ = :%@", column.name, column.name];
-        if (column != _columnInfos.lastObject) {
-            [updateCmd appendString:@", "];
-        }
+        [updateCmd appendFormat:@"%@ = :%@, ", column.name, column.name];
     }
+    [updateCmd deleteCharactersInRange:NSMakeRange(updateCmd.length - 2, 2)];
     NSString *primaryKey = _customPrimaryColumn ? _customPrimaryColumn.name : @"rowid";
     [updateCmd appendFormat:@" WHERE %@ = :___where_key___", primaryKey];
     NSMutableDictionary *valueDict = [self sqliteValueDictionary:object];

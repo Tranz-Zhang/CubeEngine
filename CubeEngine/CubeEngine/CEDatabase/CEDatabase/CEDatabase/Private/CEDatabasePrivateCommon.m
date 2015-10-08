@@ -73,6 +73,11 @@ NSString *ConvertToSqliteTableName(NSString *tableName) {
 
 @implementation ColumnInfo
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%@:%@ -> %@:%@ %@", _propertyName, _objcType, _name, _sqliteType, _isPrimaryKey ? @"P" : @""];
+}
+
 @end
+
 
 
