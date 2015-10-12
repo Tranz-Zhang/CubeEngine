@@ -12,7 +12,7 @@
 /**
  Vertex Buffer Object Element Example
  ------------------------------------------------------------------------------
- | CEVBOAttributePosition | CEVBOAttributeUV | CEVBOAttributeNormal |
+ | CEVBOAttributePosition |     CEVBOAttributeUV       | CEVBOAttributeNormal |
  ------------------------------------------------------------------------------
  |      3 * GL_FLOAT      |        2 * GL_FLOAT        |     3 * GL_FLOAT     |
  ------------------------------------------------------------------------------

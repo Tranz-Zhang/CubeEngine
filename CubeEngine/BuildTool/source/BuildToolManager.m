@@ -7,7 +7,7 @@
 //
 
 #import "BuildToolManager.h"
-#import "CEResourcesDefines.h"
+#import "CEResourceDefines.h"
 #import "CEShaderProfileParser.h"
 #import "CEShaderFunctionInfo.h"
 #import "CEShaderProfile.h"
@@ -16,6 +16,7 @@
 
 #import "OBJFileParser.h"
 #import "MTLFileParser.h"
+#import "ModelDataPacker.h"
 
 // db object
 #import "CEModelInfo.h"
@@ -26,11 +27,11 @@
 
 #define kShaderResourceDir @"CubeEngine/ShaderResources"
 
-
 @implementation BuildToolManager {
     NSFileManager *_fileManager;
     NSString *_appPath;
     NSString *_engineDir;
+    NSMutableDictionary *_fileLastUpdatedDict;
 }
 
 - (instancetype)init {
@@ -67,7 +68,10 @@
         printf("\nFail to process model resources, ABORT!\n");
         return;
     }
+    
+    
 //    [self testShaderBuilder];
+    
 }
 
 
@@ -128,23 +132,6 @@
         printf("Resources directory doesn't existed at path: %s\n", [_resourcesDir UTF8String]);
         return NO;
     }
-    // check directories in app
-    NSString *modelDir = [_appPath stringByAppendingPathComponent:kModelDirectory];
-    if (![self createDirectoryAtPath:modelDir]){
-        return NO;
-    }
-    NSString *textureDir = [_appPath stringByAppendingPathComponent:kTextureDirectory];
-    if (![self createDirectoryAtPath:textureDir]){
-        return NO;
-    }
-    NSString *configDir = [_appPath stringByAppendingPathComponent:kConfigDirectory];
-    if (![self createDirectoryAtPath:configDir]){
-        return NO;
-    }
-    // remove old files
-    [self cleanDirectory:modelDir];
-    [self cleanDirectory:textureDir];
-    [self cleanDirectory:configDir];
     
     // get obj files
     NSMutableArray *objFiles = [NSMutableArray array];
@@ -156,11 +143,11 @@
     NSLog(@"%@", objFiles);
 //    for (NSString *objFilePath in objFiles) {
 //        
-//    }
+//    }\
     
-    
-    NSString *objFilePath = objFiles[11];//[objFiles lastObject];
+    NSString *objFilePath = objFiles[9];//[objFiles lastObject];
     NSLog(@"TEST FILE: %@", objFilePath);
+    
     // parse obj file
     OBJFileParser *objParser = [OBJFileParser parserWithFilePath:objFilePath];
     OBJFileInfo *info = [objParser parse];
@@ -173,7 +160,7 @@
         for (MeshInfo *mesh in info.meshInfos) {
             mesh.materialInfo = mtlDict[mesh.materialName];
             if (!hasNormalMap) {
-                hasNormalMap = (mesh.materialInfo.normalTextureName != nil);
+                hasNormalMap = (mesh.materialInfo.normalTexture != nil);
             }
         }
     }
@@ -181,152 +168,13 @@
         [OBJFileParser addTengentDataToObjInfo:info];
     }
     
-    // build db info
-    NSMutableDictionary *modelPathDict = [NSMutableDictionary dictionary];
-    NSMutableArray *dbObjInfoList = [NSMutableArray array];
-    NSMutableArray *dbMeshInfoList = [NSMutableArray array];
-    NSMutableArray *dbMaterialInfoList = [NSMutableArray array];
-    NSMutableArray *dbTextureInfoList = [NSMutableArray array];
-    int modelID =       0x10000000;
-    int meshID =        0x20000000;
-    int materialID =    0x30000000;
-    int textureID =     0x40000000;
-    CEModelInfo *dbObjInfo = [CEModelInfo new];
-    dbObjInfo.modelName = info.name;
-    dbObjInfo.attributes = info.attributes;
-    dbObjInfo.vertexDataID = modelID++;
-    // transfer vertex data to app
-    NSMutableData *modelData = [NSMutableData data];
-    NSData *vertexData = [info buildVertexData];
-    [self appendData:vertexData toModelData:modelData withID:dbObjInfo.vertexDataID];
-    
-    NSMutableArray *meshIDs = [NSMutableArray arrayWithCapacity:info.meshInfos.count];
-    for (int i = 0; i < info.meshInfos.count; i++) {
-        // parse mesh info
-        MeshInfo *meshInfo = info.meshInfos[i];
-        CEMeshInfo *dbMeshInfo = [CEMeshInfo new];
-        dbMeshInfo.meshID = meshID++;
-        dbMeshInfo.indicePrimaryType = [meshInfo indicePrimaryType];
-        dbMeshInfo.drawMode = GL_TRIANGLES;
-        // build mesh indice data
-        NSData *indiceData = [meshInfo buildIndiceData];
-        [self appendData:indiceData toModelData:modelData withID:dbMeshInfo.meshID];
-        [meshIDs addObject:@(dbMeshInfo.meshID)];
-        
-        // parse material info
-        MTLInfo *mtlInfo = meshInfo.materialInfo;
-        CEMaterialInfo *dbMaterialInfo = [CEMaterialInfo new];
-        dbMaterialInfo.materialID = materialID++;
-        dbMaterialInfo.ambientColorData = [NSData dataWithBytes:mtlInfo.ambientColor.v length:sizeof(GLKVector3)];
-        dbMaterialInfo.diffuseColorData = [NSData dataWithBytes:mtlInfo.ambientColor.v length:sizeof(GLKVector3)];
-        dbMaterialInfo.specularColorData = [NSData dataWithBytes:mtlInfo.ambientColor.v length:sizeof(GLKVector3)];
-        dbMaterialInfo.shininessExponent = mtlInfo.shininessExponent;
-        dbMaterialInfo.transparent = mtlInfo.transparency;
-        dbMaterialInfo.materialType = 0; // TODO: materialType
-        
-        // parse textures
-        if (mtlInfo.diffuseTextureName.length) {
-            CETextureInfo *diffuseTextureInfo = [CETextureInfo new];
-            diffuseTextureInfo.textureID = textureID++;
-            #warning copy texture data to app
-            
-            
-            
-            
-            
-            dbMaterialInfo.diffuseTextureID = diffuseTextureInfo.textureID;
-            [dbTextureInfoList addObject:diffuseTextureInfo];
-        }
-        if (mtlInfo.normalTextureName.length) {
-            CETextureInfo *normalTextureInfo = [CETextureInfo new];
-            normalTextureInfo.textureID = textureID++;
-            #warning copy texture data to app
-            
-            
-            
-            
-            
-            dbMaterialInfo.normalTextureID = normalTextureInfo.textureID;
-            [dbTextureInfoList addObject:normalTextureInfo];
-        }
-        
-        [dbMaterialInfoList addObject:dbMaterialInfo];
-        dbMeshInfo.materialID = dbMaterialInfo.materialID;
-        [dbMeshInfoList addObject:dbMeshInfo];
-    }
-    dbObjInfo.meshIDs = meshIDs.copy;
-    [dbObjInfoList addObject:dbObjInfo];
-    
-    // save model data to model directory
-    if (modelData.length) {
-        NSString *modelPath = [modelDir stringByAppendingPathComponent:dbObjInfo.modelName];
-        BOOL isOK = [modelData writeToFile:modelPath atomically:YES];
-        if (isOK) {
-            modelPathDict[dbObjInfo.modelName] = [kModelDirectory stringByAppendingPathComponent:dbObjInfo.modelName];
-        }
-        printf("process model data: %s %s\n", dbObjInfo.modelName.UTF8String, isOK ? "OK" : "Fail");
-    }
-    
-    // save db info
-    NSString *dbPath = [_engineDir stringByAppendingPathComponent:kResourcesDatabaseName];
-    if ([_fileManager fileExistsAtPath:dbPath isDirectory:nil]) {
-        [_fileManager removeItemAtPath:dbPath error:nil];
-    }
-    
-    NSError *error;
-    BOOL isOK;
-    CEDatabase *db = [CEDatabase databaseWithName:kResourcesDatabaseName inPath:configDir];
-    CEDatabaseContext *objContext = [CEDatabaseContext contextWithTableName:@"obj_info" class:[CEModelInfo class] inDatabase:db];
-    isOK = [objContext insertObjects:dbObjInfoList.copy error:&error];
-    if (!isOK || error) {
-        printf("Fail to insert obj info to db: %s\n", [[error localizedDescription] UTF8String]);
+    if (![self processModelResourcesDataWithObjInfos:@[info]]) {
         return NO;
     }
-    CEDatabaseContext *meshContext = [CEDatabaseContext contextWithTableName:@"mesh_info" class:[CEMeshInfo class] inDatabase:db];
-    isOK = [meshContext insertObjects:dbMeshInfoList error:&error];
-    if (!isOK || error) {
-        printf("Fail to insert mesh info to db: %s\n", [[error localizedDescription] UTF8String]);
+    if (![self buildDatabaseWithObjInfos:@[info]]) {
         return NO;
     }
-    CEDatabaseContext *materialContext = [CEDatabaseContext contextWithTableName:@"material_info" class:[CEMaterialInfo class] inDatabase:db];
-    isOK = [materialContext insertObjects:dbMaterialInfoList error:&error];
-    if (!isOK || error) {
-        printf("Fail to insert material info to db: %s\n", [[error localizedDescription] UTF8String]);
-        return NO;
-    }
-    CEDatabaseContext *textureContext = [CEDatabaseContext contextWithTableName:@"texture_info" class:[CETextureInfo class] inDatabase:db];
-    isOK = [textureContext insertObjects:dbTextureInfoList error:&error];
-    if (!isOK || error) {
-        printf("Fail to insert texture info to db: %s\n", [[error localizedDescription] UTF8String]);
-        return NO;
-    }
-    
-    // save resource dict
-    if (modelPathDict.count) {
-        NSString *filePath = [configDir stringByAppendingPathComponent:kModelInfoDictName];
-        BOOL isOK = [modelPathDict writeToFile:filePath atomically:YES];
-        if (!isOK) {
-            printf("Fail to write model info directory to path: %s\n", filePath.UTF8String);
-            return NO;
-        }
-    } else {
-        printf("WARNING: no model info directory");
-    }
-    
-    // TODO: save texture info dict
-    
     return YES;
-}
-
-
-- (void)appendData:(NSData *)appendingData toModelData:(NSMutableData *)modelData withID:(int32_t)dataID {
-    if (!appendingData.length || !modelData) {
-        return;
-    }
-    uint32 dataLength = (uint32)appendingData.length + sizeof(uint32) * 2;
-    [modelData appendBytes:&dataLength length:sizeof(uint32)];
-    [modelData appendBytes:&dataID length:sizeof(int32_t)];
-    [modelData appendData:appendingData];
 }
 
 
@@ -350,6 +198,134 @@
             }
         }
     }
+}
+
+
+- (BOOL)processModelResourcesDataWithObjInfos:(NSArray *)objFileInfos {
+    
+    NSString *modelDir = [_appPath stringByAppendingPathComponent:kModelDirectory];
+    if (![self createDirectoryAtPath:modelDir]){
+        return NO;
+    }
+    [self cleanDirectory:modelDir];
+    
+    ModelDataPacker *modelPacker = [[ModelDataPacker alloc] initWithAppPath:_appPath];
+    // composite vertex data and indic data
+    for (OBJFileInfo *objInfo in objFileInfos) {
+        printf("process model: %s", objInfo.name.UTF8String);
+        NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
+        dataDict[@(objInfo.resourceID)] = [objInfo buildVertexData];
+        for (MeshInfo *meshInfo in objInfo.meshInfos) {
+            dataDict[@(meshInfo.resourceID)] = [meshInfo buildIndiceData];
+        }
+        BOOL isOK = [modelPacker packModelDataDict:dataDict];
+        printf(" M_DATA[%s]", isOK ? "OK" : "Fail");
+        
+        // process texture data
+        
+        printf("\n");
+    }
+    
+    return YES;
+}
+
+
+- (BOOL)buildDatabaseWithObjInfos:(NSArray *)objFileInfos {
+//    // check config directory
+    NSString *configDir = [_appPath stringByAppendingPathComponent:kConfigDirectory];
+//    if (![self createDirectoryAtPath:configDir]){
+//        return NO;
+//    }
+//    [self cleanDirectory:configDir];
+    
+    // build db info
+    NSMutableArray *dbObjInfoList = [NSMutableArray array];
+    NSMutableArray *dbMeshInfoList = [NSMutableArray array];
+    NSMutableArray *dbMaterialInfoList = [NSMutableArray array];
+    NSMutableArray *dbTextureInfoList = [NSMutableArray array];
+    
+    for (OBJFileInfo *info in objFileInfos) {
+        CEModelInfo *dbObjInfo = [CEModelInfo new];
+        dbObjInfo.modelName = info.name;
+        dbObjInfo.attributes = info.attributes;
+        dbObjInfo.vertexDataID = info.resourceID;
+        NSMutableArray *meshIDs = [NSMutableArray arrayWithCapacity:info.meshInfos.count];
+        for (int i = 0; i < info.meshInfos.count; i++) {
+            // mesh info
+            MeshInfo *meshInfo = info.meshInfos[i];
+            CEMeshInfo *dbMeshInfo = [CEMeshInfo new];
+            dbMeshInfo.meshID = meshInfo.resourceID;
+            dbMeshInfo.materialID = meshInfo.materialInfo.resourceID;
+            dbMeshInfo.indicePrimaryType = [meshInfo indicePrimaryType];
+            dbMeshInfo.drawMode = GL_TRIANGLES;
+            [meshIDs addObject:@(dbMeshInfo.meshID)];
+            [dbMeshInfoList addObject:dbMeshInfo];
+            // material info
+            MTLInfo *mtlInfo = meshInfo.materialInfo;
+            CEMaterialInfo *dbMaterialInfo = [CEMaterialInfo new];
+            dbMaterialInfo.materialID = mtlInfo.resourceID;
+            dbMaterialInfo.ambientColorData = [NSData dataWithBytes:mtlInfo.ambientColor.v length:sizeof(GLKVector3)];
+            dbMaterialInfo.diffuseColorData = [NSData dataWithBytes:mtlInfo.ambientColor.v length:sizeof(GLKVector3)];
+            dbMaterialInfo.specularColorData = [NSData dataWithBytes:mtlInfo.ambientColor.v length:sizeof(GLKVector3)];
+            dbMaterialInfo.shininessExponent = mtlInfo.shininessExponent;
+            dbMaterialInfo.transparent = mtlInfo.transparency;
+            dbMaterialInfo.materialType = 0; // TODO: materialType
+            dbMaterialInfo.diffuseTextureID = mtlInfo.diffuseTexture.resourceID;
+            dbMaterialInfo.normalTextureID = mtlInfo.normalTexture.resourceID;
+            [dbMaterialInfoList addObject:dbMaterialInfo];
+            // textures info
+            if (mtlInfo.diffuseTexture) {
+                CETextureInfo *diffuseTextureInfo = [CETextureInfo new];
+                diffuseTextureInfo.textureID = mtlInfo.diffuseTexture.resourceID;
+                diffuseTextureInfo.textureSize = mtlInfo.diffuseTexture.size;
+                [dbTextureInfoList addObject:diffuseTextureInfo];
+            }
+            if (mtlInfo.normalTexture) {
+                CETextureInfo *normalTextureInfo = [CETextureInfo new];
+                normalTextureInfo.textureID = mtlInfo.normalTexture.resourceID;
+                normalTextureInfo.textureSize = mtlInfo.normalTexture.size;
+                [dbTextureInfoList addObject:normalTextureInfo];
+            }
+        }
+        dbObjInfo.meshIDs = meshIDs.copy;
+        [dbObjInfoList addObject:dbObjInfo];
+    }
+    
+    // save database info
+    NSString *dbPath = [configDir stringByAppendingPathComponent:kResourceInfoDBName];
+    if ([_fileManager fileExistsAtPath:dbPath isDirectory:nil]) {
+        [_fileManager removeItemAtPath:dbPath error:nil];
+    }
+    NSError *error;
+    BOOL isOK;
+    CEDatabase *db = [CEDatabase databaseWithName:kResourceInfoDBName inPath:configDir];
+    CEDatabaseContext *modelContext = [CEDatabaseContext contextWithTableName:kDBTableModelInfo class:[CEModelInfo class] inDatabase:db];
+    isOK = [modelContext insertObjects:dbObjInfoList.copy error:&error];
+    if (!isOK || error) {
+        printf("Fail to insert obj info to db: %s\n", [[error localizedDescription] UTF8String]);
+        return NO;
+    }
+    CEDatabaseContext *meshContext = [CEDatabaseContext contextWithTableName:kDBTableMeshInfo class:[CEMeshInfo class] inDatabase:db];
+    isOK = [meshContext insertObjects:dbMeshInfoList error:&error];
+    if (!isOK || error) {
+        printf("Fail to insert mesh info to db: %s\n", [[error localizedDescription] UTF8String]);
+        return NO;
+    }
+    CEDatabaseContext *materialContext = [CEDatabaseContext contextWithTableName:kDBTableMaterialInfo class:[CEMaterialInfo class] inDatabase:db];
+    isOK = [materialContext insertObjects:dbMaterialInfoList error:&error];
+    if (!isOK || error) {
+        printf("Fail to insert material info to db: %s\n", [[error localizedDescription] UTF8String]);
+        return NO;
+    }
+    CEDatabaseContext *textureContext = [CEDatabaseContext contextWithTableName:kDBTableTextureInfo class:[CETextureInfo class] inDatabase:db];
+    isOK = [textureContext insertObjects:dbTextureInfoList error:&error];
+    if (!isOK || error) {
+        printf("Fail to insert texture info to db: %s\n", [[error localizedDescription] UTF8String]);
+        return NO;
+    }
+    printf("Write model info to database Successfully!\n");
+    
+    return YES;
 }
 
 
@@ -382,6 +358,42 @@
     }
 }
 
+
+
+#pragma mark - File up to date checking
+
+- (void)initializeUpToDateFileInfo {
+    NSString *filePath = [_engineProjectDir stringByAppendingFormat:@"/BuildTool/resource_updated_info"];
+    _fileLastUpdatedDict = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+    if (!_fileLastUpdatedDict) {
+        _fileLastUpdatedDict = [NSMutableDictionary dictionary];
+    }
+}
+
+
+- (BOOL)isFileUpdateToDateAtPath:(NSString *)filePath {
+    NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil];
+    if (![fileAttributes fileModificationDate]) {
+        return NO;
+    }
+    NSDate *lastModifiedDate = [fileAttributes fileModificationDate];
+    NSDate *lastUpdatedDate = _fileLastUpdatedDict[filePath];
+    if (!lastUpdatedDate || ![lastModifiedDate isEqualToDate:lastUpdatedDate]) {
+        _fileLastUpdatedDict[filePath] = lastModifiedDate;
+        return NO;
+        
+    } else {
+        return YES;
+    }
+}
+
+
+- (void)syncUpToDateFileInfo {
+    NSString *filePath = [_engineProjectDir stringByAppendingFormat:@"/BuildTool/resource_updated_info"];
+    if (![_fileLastUpdatedDict writeToFile:filePath atomically:YES]) {
+        printf("Warning: fail to sync up_to_date_info\n");
+    }
+}
 
 
 @end

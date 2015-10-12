@@ -12,7 +12,7 @@
 #import "CEMaterial.h"
 
 /**
- CERenderObject includes all the information needed for rendering a model.
+ CERenderObject includes all the information needed for rendering a mesh.
  */
 
 @interface CERenderObject : NSObject
@@ -26,5 +26,6 @@
 
 // model matrix
 @property (nonatomic, assign) GLKMatrix4 modelMatrix;
+
 
 @end

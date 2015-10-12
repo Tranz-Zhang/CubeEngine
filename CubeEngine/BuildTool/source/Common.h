@@ -15,4 +15,9 @@ extern NSString *kAppPath;
 #import <OpenGL/OpenGL.h>
 #import <GLKit/GLKit.h>
 
+#define kBaseModelID    0x10000000
+#define kBaseMeshID     0x20000000
+#define kBaseMaterialID 0x30000000
+#define kBaseTextureID  0x40000000
+
 #endif

@@ -12,7 +12,6 @@
 
 BIND_OBJECT_ID(textureID);
 @property (nonatomic, assign) int32_t textureID;
-@property (nonatomic, strong) NSString *textureDataPath;
 @property (nonatomic, assign) CGSize textureSize;
 
 @end

@@ -21,6 +21,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+//    NSMutableArray *test = [@[@(1), @(2.3)] mutableCopy];
+//    [test removeObject:[NSNumber numberWithDouble:2.3]];
+    
     // Override point for customization after application launch.
 //    int testList[3] = {3, 5, 7};
 //    NSMutableData *data = [NSMutableData dataWithCapacity:6];

@@ -10,17 +10,23 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
+/**
+ represent a vertex buffer in opengles
+ */
 @interface CEVertexBuffer : NSObject
 
-- (instancetype)initWithData:(NSData *)vertexData attributes:(NSArray *)attributes;
+- (instancetype)initWithData:(NSData *)vertexData
+                  attributes:(NSArray *)attributes;
 
 @property (nonatomic, readonly) NSArray *attributes;
 @property (nonatomic, readonly) uint32_t attributesType;
+@property (nonatomic, readonly, getter=isReady) BOOL ready;
 
-- (BOOL)setupBuffer;
-- (void)destoryBuffer;
 
-- (BOOL)loadBuffer;
-- (void)unloadBuffer;
+- (BOOL)setupBuffer;    // initializing a buffer block in video memory
+- (void)destoryBuffer;  // delete a buffer from video memory
+
+- (BOOL)loadBuffer;     // bind current buffer
+- (void)unloadBuffer;   // unbind current buffer
 
 @end

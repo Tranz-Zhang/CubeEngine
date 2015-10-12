@@ -8,6 +8,8 @@
 
 #import "OBJFileInfo.h"
 
+static uint32_t sNextResourceID = kBaseModelID;
+
 @implementation OBJFileInfo
 
 - (instancetype)init {
@@ -18,6 +20,7 @@
         _uvList = [[VectorList alloc] initWithVectorType:VectorType2];
         _normalList = [[VectorList alloc] initWithVectorType:VectorType3];
         _tangentList = [[VectorList alloc] initWithVectorType:VectorType3];
+        _resourceID = sNextResourceID++;
     }
     return self;
 }

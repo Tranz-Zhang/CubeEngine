@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CEModel.h"
 
 @interface CEModelLoader : NSObject
 
-- (void)loadModelWithName:(NSString *)name;
+- (void)loadModelWithName:(NSString *)name completion:(void(^)(CEModel *model))completion;
 
 @end

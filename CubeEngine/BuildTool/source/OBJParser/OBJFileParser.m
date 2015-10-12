@@ -49,6 +49,7 @@
     fileName = [fileName substringToIndex:fileName.length - 4];
     _objInfo = [[OBJFileInfo alloc] init];
     _objInfo.name = fileName;
+    _objInfo.filePath = _filePath;
     
     NSMutableArray *meshInfoList = [NSMutableArray array];
     MeshInfo *currentMesh = [MeshInfo new];

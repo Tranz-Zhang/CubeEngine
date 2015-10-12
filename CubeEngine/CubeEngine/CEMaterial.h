@@ -16,11 +16,15 @@ typedef NS_ENUM(int, CEMaterialType) {
 
 @interface CEMaterial : NSObject<NSCopying>
 
-@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *name DEPRECATED_ATTRIBUTE;
 @property (nonatomic, assign) CEMaterialType materialType;
 
-@property (nonatomic, strong) NSString *diffuseTexture;
-@property (nonatomic, strong) NSString *normalTexture;
+@property (nonatomic, strong) NSString *diffuseTexture DEPRECATED_ATTRIBUTE;
+@property (nonatomic, strong) NSString *normalTexture DEPRECATED_ATTRIBUTE;
+
+@property (nonatomic, assign) uint32_t diffuseTextureID;
+@property (nonatomic, assign) uint32_t normalTextureID;
+@property (nonatomic, assign) uint32_t specularTextureID;
 
 @property (nonatomic, assign) GLKVector3 ambientColor;
 @property (nonatomic, assign) GLKVector3 diffuseColor; // base color

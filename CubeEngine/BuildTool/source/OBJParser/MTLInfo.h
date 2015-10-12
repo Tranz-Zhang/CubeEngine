@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TextureInfo.h"
 
 typedef NS_ENUM(int, MaterialType) {
     MaterialTypeSolid = 0,
@@ -17,10 +18,11 @@ typedef NS_ENUM(int, MaterialType) {
 @interface MTLInfo : NSObject
 
 @property (nonatomic, strong) NSString *name;
+@property (nonatomic, readonly) uint32_t resourceID;
 @property (nonatomic, assign) MaterialType materialType;
 
-@property (nonatomic, strong) NSString *diffuseTextureName;
-@property (nonatomic, strong) NSString *normalTextureName;
+@property (nonatomic, strong) TextureInfo *diffuseTexture;
+@property (nonatomic, strong) TextureInfo *normalTexture;
 
 @property (nonatomic, assign) GLKVector3 ambientColor;
 @property (nonatomic, assign) GLKVector3 diffuseColor; // base color

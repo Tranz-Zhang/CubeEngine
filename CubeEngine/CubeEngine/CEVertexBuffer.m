@@ -10,7 +10,6 @@
 #import "CEVBOAttribute.h"
 
 @implementation CEVertexBuffer {
-    BOOL _ready;
     NSData *_vertexData;
     GLuint _vertexArrayId;
     GLuint _vertexBufferId;
@@ -29,9 +28,7 @@
 
 
 - (void)dealloc {
-    if (_ready) {
-        [self destoryBuffer];
-    }
+    [self destoryBuffer];
     _vertexData = nil;
 }
 
@@ -44,10 +41,17 @@
     
     // gen vertex array object
     glGenVertexArraysOES(1, &_vertexArrayId);
+    if (!_vertexArrayId) {
+        return NO;
+    }
     glBindVertexArrayOES(_vertexArrayId);
     
     // generate vertex buffer
     glGenBuffers(1, &_vertexBufferId);
+    if (!_vertexBufferId) {
+        [self destoryBuffer];
+        return NO;
+    }
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferId);
     glBufferData(GL_ARRAY_BUFFER, _vertexData.length, _vertexData.bytes, GL_STATIC_DRAW);
     

@@ -8,7 +8,18 @@
 
 #import "MeshInfo.h"
 
+static uint32_t sNextResourceID = kBaseMeshID;
+
 @implementation MeshInfo
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _resourceID = sNextResourceID++;
+    }
+    return self;
+}
+
 
 - (GLenum)indicePrimaryType {
     if (_maxIndex > 65525) {

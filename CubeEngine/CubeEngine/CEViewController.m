@@ -16,6 +16,8 @@
 #import "CEDefaultProgram.h"
 #import "CEModelLoader.h"
 #import "CEVertexBuffer.h"
+#import "CEResourceManager.h"
+#import "CEResourceDataLoader.h"
 
 #define kDefaultFramesPerSecond 30
 #define kDefaultMaxLightCount 4
@@ -53,7 +55,7 @@
 }
 
 
-- (void)initializeViewController {    
+- (void)initializeViewController {
     _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     [EAGLContext setCurrentContext:_context];
     _scene = [[CEScene alloc] initWithContext:_context];
@@ -66,8 +68,8 @@
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     self.paused = NO;
     
-    [self onTestShaders];
-//    [self testModelLoading];
+//    [self onTestShaders];
+    [self testModelLoading];
 }
 
 
@@ -86,7 +88,15 @@
 
 - (void)testModelLoading {
     CEModelLoader *loader = [CEModelLoader new];
-    [loader loadModelWithName:@"ram_original"];
+    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+    [loader loadModelWithName:@"ram" completion:^(CEModel *model) {
+        printf("CEModelLoader load model for duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+    }];
+    
+    CEResourceDataLoader *dataLoader = [CEResourceDataLoader defaultLoader];
+//    NSData *vertexData = [dataLoader loadDataWithResourceID:0x10000000];
+    NSDictionary *dataDict = [dataLoader loadDataWithResourceIDs:@[@0x10000000, @0x20000002, @0x10000002]];
+    
 }
 
 

@@ -8,12 +8,25 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ resourceDataDict -> @{@(resourceID) : NSData}
+ */
+typedef void (^CEResourceDataLoadedCompletion)(NSDictionary *resourceDataDict);
+
 @interface CEResourceManager : NSObject
 
 + (instancetype)sharedManager;
 
-- (void)testLoadModel;
+/**
+ Asynchronously loading resource data into main memory
+ */
+- (void)loadResourceDataWithIDs:(NSArray *)resourceIDs
+                     completion:(CEResourceDataLoadedCompletion)completion;
 
+/**
+ release data from main memory
+ */
+- (void)unloadResourceDataWithID:(uint32_t)resourceID;
 
 
 @end

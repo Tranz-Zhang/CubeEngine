@@ -14,13 +14,14 @@
 @interface OBJFileInfo : NSObject
 
 @property (nonatomic, strong) NSString *name;
+@property (nonatomic, readonly) uint32_t resourceID;
+@property (nonatomic, strong) NSString *filePath;
+
 @property (nonatomic, strong) NSString *mtlFileName;
 @property (nonatomic, strong) NSArray *meshInfos; // array of MeshInfo
-//@property (nonatomic, strong) NSData *vertexData;
-
 @property (nonatomic, strong) NSArray *attributes;
-@property (nonatomic, strong) VectorList *vertexDataList;
 
+@property (nonatomic, strong) VectorList *vertexDataList;
 @property (nonatomic, strong) VectorList *positionList;
 @property (nonatomic, strong) VectorList *uvList;
 @property (nonatomic, strong) VectorList *normalList;

@@ -58,6 +58,7 @@
      NOTE: I use [... componentsSeparatedByString:@" "] to seperate because it's short writing,
      if something wrong, use [... componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet] instead.
      */
+    NSString *currentDirectory = [_filePath stringByDeletingLastPathComponent];
     NSMutableDictionary *materialDict = [NSMutableDictionary dictionary];
     MTLInfo *currentMaterial = nil;
     NSArray *lines = [objContent componentsSeparatedByString:@"\n"];
@@ -106,18 +107,15 @@
         //        }
         if ([lineContent hasPrefix:@"map_Kd "]) {
             NSString *valueString = [lineContent substringFromIndex:7];
-            currentMaterial.diffuseTextureName = valueString;
-            continue;
-        }
-        if ([lineContent hasPrefix:@"map_Kd "]) {
-            NSString *valueString = [lineContent substringFromIndex:7];
-            currentMaterial.diffuseTextureName = valueString;
+            NSString *filePath = [currentDirectory stringByAppendingPathComponent:valueString];
+            currentMaterial.diffuseTexture = [TextureInfo textureInfoWithFilePath:filePath];
             continue;
         }
         if ([lineContent hasPrefix:@"bump "] ||
             [lineContent hasPrefix:@"map_Bump "]) {
             NSArray *values = [lineContent componentsSeparatedByString:@" "];
-            currentMaterial.normalTextureName = values[1];
+            NSString *filePath = [currentDirectory stringByAppendingPathComponent:values[1]];
+            currentMaterial.normalTexture = [TextureInfo textureInfoWithFilePath:filePath];
             continue;
         }
     }

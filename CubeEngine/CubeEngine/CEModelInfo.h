@@ -10,7 +10,7 @@
 
 @interface CEModelInfo : CEManagedObject
 
-BIND_OBJECT_ID(fileName);
+BIND_OBJECT_ID(modelName);
 @property (nonatomic, strong) NSString *modelName;
 @property (nonatomic, strong) NSArray *attributes;
 @property (nonatomic, assign) int32_t vertexDataID;

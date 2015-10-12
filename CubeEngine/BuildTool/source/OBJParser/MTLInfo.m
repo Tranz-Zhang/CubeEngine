@@ -8,6 +8,16 @@
 
 #import "MTLInfo.h"
 
+static uint32_t sNextResourceID = kBaseMaterialID;
+
 @implementation MTLInfo
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _resourceID = sNextResourceID++;
+    }
+    return self;
+}
 
 @end

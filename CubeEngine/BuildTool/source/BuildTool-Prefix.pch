@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 
 #import "Common.h"
-#import "CEResourcesDefines.h"
+#import "CEResourceDefines.h"
 
 
 #endif
