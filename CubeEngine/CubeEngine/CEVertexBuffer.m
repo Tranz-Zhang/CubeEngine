@@ -35,7 +35,7 @@
 
 - (BOOL)setupBuffer {
     if (_ready) return YES;
-    if (!_vertexData.length || _attributes.count) {
+    if (!_vertexData.length || !_attributes.count) {
         return NO;
     }
     

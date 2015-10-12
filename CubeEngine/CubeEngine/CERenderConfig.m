@@ -44,7 +44,8 @@
 
 
 - (BOOL)isEqualToConfig:(CERenderConfig *)config {
-    return (config.lightType == _lightType &&
+    return (config.materialType == _materialType &&
+            config.lightType == _lightType &&
             config.enableShadowMapping == _enableShadowMapping &&
             config.enableTexture == _enableTexture &&
             config.enableNormalMapping == _enableNormalMapping);
@@ -52,3 +53,4 @@
 
 
 @end
+

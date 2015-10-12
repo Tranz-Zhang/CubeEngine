@@ -14,11 +14,13 @@
 }
 
 - (instancetype)initWithData:(NSData *)indiceData
+                 indiceCount:(uint32_t)indiceCount
                  primaryType:(GLenum)primaryType
                     drawMode:(GLenum)drawMode {
     self = [super init];
     if (self) {
         _indiceData = indiceData;
+        _indiceCount = indiceCount;
         _primaryType = primaryType;
         _drawMode = drawMode;
     }
@@ -34,8 +36,8 @@
 - (BOOL)setupBuffer {
     if (_ready) return YES;
     if (!_indiceData.length ||
-        _primaryType != GL_UNSIGNED_SHORT ||
-        _primaryType != GL_UNSIGNED_BYTE) {
+        (_primaryType != GL_UNSIGNED_SHORT &&
+        _primaryType != GL_UNSIGNED_BYTE)) {
         return NO;
     }
     

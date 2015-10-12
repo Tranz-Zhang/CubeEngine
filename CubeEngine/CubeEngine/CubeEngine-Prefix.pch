@@ -13,7 +13,8 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
-#import "CEDefines.h"
+#import "CECommon.h"
+#import "CECommon_privates.h"
 
 // debug
 #if 1

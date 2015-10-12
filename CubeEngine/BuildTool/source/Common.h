@@ -11,9 +11,11 @@
 
 extern NSString *kAppPath;
 
-#import "CEDefines.h"
 #import <OpenGL/OpenGL.h>
 #import <GLKit/GLKit.h>
+
+#import "CECommon.h"
+#import "CECommon_privates.h"
 
 #define kBaseModelID    0x10000000
 #define kBaseMeshID     0x20000000

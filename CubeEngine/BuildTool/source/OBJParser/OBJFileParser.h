@@ -18,6 +18,6 @@
 // @return a list of MeshInfo
 - (OBJFileInfo *)parse;
 
-+ (BOOL)addTengentDataToObjInfo:(OBJFileInfo *)objFileInfo;
++ (BOOL)addTangentDataToObjInfo:(OBJFileInfo *)objFileInfo;
 
 @end

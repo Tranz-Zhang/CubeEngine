@@ -33,8 +33,9 @@
 
 @interface CERenderGroup : NSObject
 
+@property (nonatomic, assign) uint32_t renderPriority;
 @property (nonatomic, strong) CERenderConfig *renderConfig;
-@property (nonatomic, strong) NSArray *renderObjects;
+@property (nonatomic, strong) NSMutableArray *renderObjects;
 
 @end
 
@@ -46,14 +47,11 @@
 @implementation CERenderManager {
     EAGLContext *_context;
     NSMutableDictionary *_rendererDict; // @{CEProgramConfig:CEMainRenderer}
-    BOOL _enableBlending;
     
-    CEMainRenderer *_mainRenderer;
-    CEShadowMapRenderer *_shadowMapRenderer;
-    
-    // debug renderer
-    CEWireframeRenderer *_wireframeRenderer;
-    CEAssistRenderer *_assistRenderer;
+    // deprecated renderer
+    CEShadowMapRenderer *_shadowMapRenderer DEPRECATED_ATTRIBUTE;
+    CEWireframeRenderer *_wireframeRenderer DEPRECATED_ATTRIBUTE;
+    CEAssistRenderer *_assistRenderer DEPRECATED_ATTRIBUTE;
 }
 
 
@@ -69,6 +67,82 @@
 
 
 - (void)renderCurrentScene {
+    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+    CEScene *scene = [CEScene currentScene];
+    [EAGLContext setCurrentContext:scene.context];
+
+    
+    // 2.check if need render shadow map
+    
+    // 3.sort render objects
+    NSArray *renderGroups = [self sortRenderGroupsWithModels:scene.allModels];
+    glBindFramebuffer(GL_FRAMEBUFFER, scene.renderCore.defaultFramebuffer);
+    glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
+    for (CERenderGroup *group in renderGroups) {
+        CEDefaultRenderer *renderer = [self rendererWithConfig:group.renderConfig];
+        if (!renderer) continue;
+        
+        renderer.camera = scene.camera;
+        renderer.mainLight = scene.mainLight;
+        // normally render a object
+        [renderer renderObjects:group.renderObjects];
+    }
+    
+    printf("render duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+}
+
+
+/**
+ sort models into render groups
+ */
+- (NSArray *)sortRenderGroupsWithModels:(NSArray *)models {
+    // @{CERenderConfig : CERenderGroup}
+    NSMutableDictionary *renderGroupDict = [NSMutableDictionary dictionary];
+    
+    for (CEModel *model in models) {
+        for (CERenderObject *renderObject in model.renderObjects) {
+            // load buffer
+            if (!renderObject.vertexBuffer.isReady) {
+                [renderObject.vertexBuffer setupBuffer];
+            }
+            if (!renderObject.indexBuffer.isReady) {
+                [renderObject.indexBuffer setupBuffer];
+            }
+            if (!renderObject.vertexBuffer.isReady ||
+                !renderObject.indexBuffer.isReady) {
+                CEPrintf("WARNING: Fail to load buffer for render object");
+                continue;
+            }
+            renderObject.modelMatrix = model.transformMatrix;
+            
+            CERenderConfig *config = [CERenderConfig new];
+            config.materialType = (int)renderObject.material.materialType;
+            CERenderGroup *group = renderGroupDict[config];
+            if (!group) {
+                group = [CERenderGroup new];
+                group.renderConfig = config;
+                group.renderObjects = [NSMutableArray array];
+                group.renderPriority = config.materialType;
+                renderGroupDict[config] = group;
+            }
+            [(NSMutableArray *)group.renderObjects addObject:renderObject];
+        }
+    }
+    
+    NSArray *renderGroups = [renderGroupDict allValues];
+    // sort groups by renderMode
+    renderGroups = [renderGroups sortedArrayUsingComparator:^NSComparisonResult(CERenderGroup *group1, CERenderGroup *group2) {
+        return group1.renderPriority - group2.renderPriority;
+    }];
+    
+    return renderGroups.copy;
+}
+
+
+
+- (void)renderCurrentScene_Deprecated {
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     CEScene *scene = [CEScene currentScene];
     [EAGLContext setCurrentContext:scene.context];
@@ -104,7 +178,6 @@
         [self loadTextureForModels:allModels];
     });
     
-
     // 4 .sort render objects
     CERenderConfig *baseConfig = [CERenderConfig new];
     baseConfig.enableShadowMapping = (shadowLight && shadowModels.count);
@@ -125,22 +198,22 @@
         // normally render a object
         [renderer renderObjects:group.renderObjects];
         /*
-        if (group.renderConfig.renderMode == CERenderModeTransparent) {
-            // render transparent object with double sided and blend on
-            glEnable(GL_BLEND);
-            glEnable(GL_CULL_FACE);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glCullFace(GL_FRONT);
-            [renderer renderObjects:group.renderObjects];
-            glCullFace(GL_BACK);
-            [renderer renderObjects:group.renderObjects];
-            glDisable(GL_CULL_FACE);
-            glDisable(GL_BLEND);
-            
-        } else {
-            // normally render a object
-            [renderer renderObjects:group.renderObjects];
-        }
+         if (group.renderConfig.renderMode == CERenderModeTransparent) {
+         // render transparent object with double sided and blend on
+         glEnable(GL_BLEND);
+         glEnable(GL_CULL_FACE);
+         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+         glCullFace(GL_FRONT);
+         [renderer renderObjects:group.renderObjects];
+         glCullFace(GL_BACK);
+         [renderer renderObjects:group.renderObjects];
+         glDisable(GL_CULL_FACE);
+         glDisable(GL_BLEND);
+         
+         } else {
+         // normally render a object
+         [renderer renderObjects:group.renderObjects];
+         }
          //*/
     }
     
@@ -159,7 +232,7 @@
     NSMutableDictionary *sortedRenderObjectDict = [NSMutableDictionary dictionary];
     for (CEModel *model in models) {
         CERenderConfig *modelConfig = baseConfig.copy;
-        modelConfig.renderType = (int)model.material.materialType;
+        modelConfig.materialType = (int)model.material.materialType;
         modelConfig.enableTexture = model.texture ? YES : NO;
         modelConfig.enableNormalMapping = model.normalMap ? YES : NO;
         CERenderGroup *group = sortedRenderObjectDict[modelConfig];
@@ -169,13 +242,13 @@
             group.renderObjects = [NSMutableArray array];
             sortedRenderObjectDict[modelConfig] = group;
         }
-        [(NSMutableArray *)group.renderObjects addObject:model];
+        [group.renderObjects addObject:model];
     }
     
     NSArray *renderGroups = [sortedRenderObjectDict allValues];
     // sort groups by renderMode
     renderGroups = [renderGroups sortedArrayUsingComparator:^NSComparisonResult(CERenderGroup *group1, CERenderGroup *group2) {
-        return group1.renderConfig.renderType - group2.renderConfig.renderType;
+        return group1.renderConfig.materialType - group2.renderConfig.materialType;
     }];
 //    // sort objects by distance to camera
 //    CECamera *camera = [CEScene currentScene].camera;

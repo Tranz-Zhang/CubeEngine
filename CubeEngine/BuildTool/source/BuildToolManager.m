@@ -165,7 +165,7 @@
         }
     }
     if (hasNormalMap) {
-        [OBJFileParser addTengentDataToObjInfo:info];
+        [OBJFileParser addTangentDataToObjInfo:info];
     }
     
     if (![self processModelResourcesDataWithObjInfos:@[info]]) {
@@ -256,6 +256,7 @@
             CEMeshInfo *dbMeshInfo = [CEMeshInfo new];
             dbMeshInfo.meshID = meshInfo.resourceID;
             dbMeshInfo.materialID = meshInfo.materialInfo.resourceID;
+            dbMeshInfo.indiceCount = (uint32_t)meshInfo.indicesList.count;
             dbMeshInfo.indicePrimaryType = [meshInfo indicePrimaryType];
             dbMeshInfo.drawMode = GL_TRIANGLES;
             [meshIDs addObject:@(dbMeshInfo.meshID)];
@@ -265,8 +266,8 @@
             CEMaterialInfo *dbMaterialInfo = [CEMaterialInfo new];
             dbMaterialInfo.materialID = mtlInfo.resourceID;
             dbMaterialInfo.ambientColorData = [NSData dataWithBytes:mtlInfo.ambientColor.v length:sizeof(GLKVector3)];
-            dbMaterialInfo.diffuseColorData = [NSData dataWithBytes:mtlInfo.ambientColor.v length:sizeof(GLKVector3)];
-            dbMaterialInfo.specularColorData = [NSData dataWithBytes:mtlInfo.ambientColor.v length:sizeof(GLKVector3)];
+            dbMaterialInfo.diffuseColorData = [NSData dataWithBytes:mtlInfo.diffuseColor.v length:sizeof(GLKVector3)];
+            dbMaterialInfo.specularColorData = [NSData dataWithBytes:mtlInfo.specularColor.v length:sizeof(GLKVector3)];
             dbMaterialInfo.shininessExponent = mtlInfo.shininessExponent;
             dbMaterialInfo.transparent = mtlInfo.transparency;
             dbMaterialInfo.materialType = 0; // TODO: materialType

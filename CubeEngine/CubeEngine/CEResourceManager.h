@@ -28,5 +28,6 @@ typedef void (^CEResourceDataLoadedCompletion)(NSDictionary *resourceDataDict);
  */
 - (void)unloadResourceDataWithID:(uint32_t)resourceID;
 
+#warning TEST LRU
 
 @end

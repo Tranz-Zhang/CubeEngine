@@ -1,5 +1,5 @@
 //
-//  CEDefines.h
+//  CECommon_privates.h
 //  CubeEngine
 //
 //  Created by chance on 15/3/6.
@@ -22,7 +22,6 @@ typedef NS_ENUM(NSInteger, CELightType) {
     CELightTypePoint,
     CELightTypeSpot,
 };
-
 
 
 #endif

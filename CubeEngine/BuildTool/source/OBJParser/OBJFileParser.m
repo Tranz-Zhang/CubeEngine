@@ -225,7 +225,7 @@
 
 
 // calcualte tengent data
-+ (BOOL)addTengentDataToObjInfo:(OBJFileInfo *)objInfo {
++ (BOOL)addTangentDataToObjInfo:(OBJFileInfo *)objInfo {
     if (!objInfo.vertexDataList.count ||
         ![objInfo.attributes containsObject:@(CEVBOAttributePosition)] ||
         ![objInfo.attributes containsObject:@(CEVBOAttributeUV)]) {

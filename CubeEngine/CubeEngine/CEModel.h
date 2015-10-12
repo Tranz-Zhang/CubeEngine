@@ -29,7 +29,6 @@
 @property (nonatomic, strong) CEMaterial *material;
 
 
-
 + (CEModel *)modelWithObjFile:(NSString *)objFileName;
 
 // recursive search child model with the indicated name

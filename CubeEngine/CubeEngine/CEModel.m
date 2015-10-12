@@ -9,6 +9,7 @@
 #import "CEModel.h"
 #import "CEModel_Rendering.h"
 #import "CEObjFileLoader.h"
+#import "CEModelLoader.h"
 #import "CEUtils.h"
 
 @implementation CEModel {
@@ -33,6 +34,15 @@
 }
 
 
+- (instancetype)initWithRenderObjects:(NSArray *)renderObjects {
+    self = [super init];
+    if (self) {
+        _renderObjects = renderObjects;
+    }
+    return self;
+}
+
+
 - (void)dealloc {
     if (_texture) {
         GLuint name = _texture.name;
@@ -49,7 +59,7 @@
         CEError(@"Fail to parse vertex info");
         return;
     }
-
+    
     // calculate model size
     NSRange readRange = NSMakeRange(positionInfo.elementOffset,
                                     positionInfo.primaryCount * positionInfo.primarySize);
@@ -166,6 +176,7 @@
         child.showWireframe = showWireframe;
     }
 }
+
 
 - (void)parseWireframeIndices {
     if (_vertexBuffer.vertexData && _vertexBuffer.vertexCount &&

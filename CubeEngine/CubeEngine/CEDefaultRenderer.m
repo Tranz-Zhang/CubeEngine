@@ -67,8 +67,8 @@
     }
     [_program use];
     [self setupLightInfosForRendering];
-    for (CEModel *model in objects) {
-        [self renderModel:model];
+    for (CERenderObject *renderObject in objects) {
+        [self renderObject:renderObject];
     }
 }
 
@@ -114,6 +114,37 @@
         _program.shadowMapTexture.textureID = 0.0;
     }
     
+}
+
+
+- (void)renderObject:(CERenderObject *)object {
+    if (!object.vertexBuffer || !object.indexBuffer || !object.material) {
+        CEError(@"Invalid render object");
+        return;
+    }
+    
+    if (![object.vertexBuffer loadBuffer] ||
+        ![object.indexBuffer loadBuffer]) {
+        CEError(@"Render object fail to load buffer");
+        return;
+    }
+    
+    // setup MVP matrix
+    GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, object.modelMatrix);
+    GLKMatrix4 modelViewProjectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
+    _program.modelViewProjectionMatrix.matrix4 = modelViewProjectionMatrix;
+    
+    // setup material
+    if (object.material) {
+        _program.diffuseColor.vector4 = GLKVector4MakeWithVector3(object.material.diffuseColor, 1.0);
+        _program.specularColor.vector3 = object.material.specularColor;
+        _program.ambientColor.vector3 = object.material.ambientColor;
+        _program.shininessExponent.floatValue = object.material.shininessExponent;
+    }
+    
+    glDrawElements(object.indexBuffer.drawMode,
+                   object.indexBuffer.indiceCount,
+                   object.indexBuffer.primaryType, 0);
 }
 
 

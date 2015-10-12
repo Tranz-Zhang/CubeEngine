@@ -10,6 +10,7 @@
 #import "CEObjFileLoader.h"
 #import "ObjectOperator.h"
 #import "CEDirectionalLight.h"
+#import "CEModelLoader.h"
 
 
 @implementation ModelViewController {
@@ -31,27 +32,34 @@
 //    self.scene.camera.nearZ = 0;
 //    self.scene.camera.farZ = 100;
     
-    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    _testModel = [CEModel modelWithObjFile:@"ram"];
-//    _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
-//    _testModel.showWireframe = YES;
-    _testModel.showAccessoryLine = YES;
-    _testModel.material.specularColor = GLKVector3Make(1, 1, 1);
-    _testModel.material.shininessExponent = 20;
-//    _testModel.material.diffuseTexture = nil;// @"gray_texture.png";
-//    _testModel.material.normalTexture = nil;
-    [self recursiveSetColorForModel:_testModel];
-    for (CEModel *model in _testModel.childObjects) {
-        if ([model.name isEqualToString:@"leaf"]) {
-            model.material.materialType = CEMaterialAlphaTested;
-        }
-    }
+//    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+//    _testModel = [CEModel modelWithObjFile:@"ram"];
+////    _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
+////    _testModel.showWireframe = YES;
+//    _testModel.showAccessoryLine = YES;
+//    _testModel.material.specularColor = GLKVector3Make(1, 1, 1);
+//    _testModel.material.shininessExponent = 20;
+////    _testModel.material.diffuseTexture = nil;// @"gray_texture.png";
+////    _testModel.material.normalTexture = nil;
+//    [self recursiveSetColorForModel:_testModel];
+//    for (CEModel *model in _testModel.childObjects) {
+//        if ([model.name isEqualToString:@"leaf"]) {
+//            model.material.materialType = CEMaterialAlphaTested;
+//        }
+//    }
     
-    printf("model loading duration: %.4f\n", CFAbsoluteTimeGetCurrent() - start);
-    [self.scene addModel:_testModel];
+//    printf("model loading duration: %.4f\n", CFAbsoluteTimeGetCurrent() - start);
     
+    CEModelLoader *loader = [CEModelLoader new];
+    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+    [loader loadModelWithName:@"ram" completion:^(CEModel *model) {
+        _testModel = model;
+        _operator.operationObject = _testModel;
+        [self.scene addModel:model];
+        printf("CEModelLoader load model for duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+    }];
     
-#if 1
+#if 0
     CEModel *floorModel = [CEModel modelWithObjFile:@"floor_max"];
     floorModel.baseColor = [UIColor grayColor];
 //    floorModel.castShadows = YES;
@@ -60,9 +68,7 @@
     
     _wireframeSwitch.on = _testModel.showWireframe;
     _accessorySwitch.on = _testModel.showAccessoryLine;
-    
     _operator = [[ObjectOperator alloc] initWithBaseView:self.view];
-    _operator.operationObject = _testModel;
     
     CEDirectionalLight *directionalLight = [[CEDirectionalLight alloc] init];
     directionalLight.position = GLKVector3Make(4, 6, 4);

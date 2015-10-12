@@ -15,6 +15,7 @@
 #import "CETextureInfo.h"
 #import "CERenderObject.h"
 #import "CEResourceManager.h"
+#import "CEModel_Rendering.h"
 
 @implementation CEModelLoader {
     CEDatabase *_db;
@@ -80,7 +81,6 @@
     [resourceIDs addObject:@(model.vertexDataID)];
     [resourceIDs addObjectsFromArray:model.meshIDs];
     
-    
     [[CEResourceManager sharedManager] loadResourceDataWithIDs:resourceIDs completion:^(NSDictionary *resourceDataDict) {
         // get vertexData
         NSData *vertexData = resourceDataDict[@(model.vertexDataID)];
@@ -100,6 +100,7 @@
                 continue;
             }
             CEIndiceBuffer *indiceBuffer = [[CEIndiceBuffer alloc] initWithData:indiceData
+                                                                    indiceCount:meshInfo.indiceCount
                                                                     primaryType:meshInfo.indicePrimaryType
                                                                        drawMode:meshInfo.drawMode];
             renderObject.indexBuffer = indiceBuffer;
@@ -118,16 +119,19 @@
             renderObject.material = material;
             // load texture for material
             
-            
             [renderObjects addObject:renderObject];
         }
         
         if (completion) {
-            completion(nil);
+            CEModel *model = nil;;
+            if (renderObjects) {
+                model = [[CEModel alloc] initWithRenderObjects:renderObjects];
+            }
+            completion(model);
         }
     }];
-
 }
+
 
 - (GLKVector3)vector3WithData:(NSData *)vectorData {
     GLKVector3 vec3;

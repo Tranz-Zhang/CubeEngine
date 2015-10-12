@@ -7,12 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-typedef NS_ENUM(int, CEMaterialType) {
-    CEMaterialSolid = 0,
-    CEMaterialAlphaTested,
-    CEMaterialTransparent,
-};
+#import "CECommon.h"
 
 @interface CEMaterial : NSObject<NSCopying>
 

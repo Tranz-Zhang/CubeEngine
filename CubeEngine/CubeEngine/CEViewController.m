@@ -87,11 +87,11 @@
 
 
 - (void)testModelLoading {
-    CEModelLoader *loader = [CEModelLoader new];
-    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    [loader loadModelWithName:@"ram" completion:^(CEModel *model) {
-        printf("CEModelLoader load model for duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
-    }];
+//    CEModelLoader *loader = [CEModelLoader new];
+//    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+//    [loader loadModelWithName:@"ram" completion:^(CEModel *model) {
+//        printf("CEModelLoader load model for duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+//    }];
     
     CEResourceDataLoader *dataLoader = [CEResourceDataLoader defaultLoader];
 //    NSData *vertexData = [dataLoader loadDataWithResourceID:0x10000000];
