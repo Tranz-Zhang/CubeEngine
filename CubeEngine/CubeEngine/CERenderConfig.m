@@ -31,7 +31,7 @@
 
 
 - (NSUInteger)hash {
-    int hashValue = 0;
+    int hashValue = 1;
     
     //8bit for bool property
     hashValue += (_enableTexture ? 1 : 0) << 0;

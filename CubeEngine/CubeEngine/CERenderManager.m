@@ -16,6 +16,7 @@
 
 #import "CEMainRenderer.h"
 #import "CEShadowMapRenderer.h"
+#import "CETextureManager.h"
 
 // new renderer
 #import "CEDefaultRenderer.h"
@@ -117,8 +118,11 @@
             }
             renderObject.modelMatrix = model.transformMatrix;
             
+            // setup config
             CERenderConfig *config = [CERenderConfig new];
-            config.materialType = (int)renderObject.material.materialType;
+            config.materialType = renderObject.material.materialType;
+            config.enableTexture = renderObject.material.diffuseTextureID ? YES : NO;
+            
             CERenderGroup *group = renderGroupDict[config];
             if (!group) {
                 group = [CERenderGroup new];

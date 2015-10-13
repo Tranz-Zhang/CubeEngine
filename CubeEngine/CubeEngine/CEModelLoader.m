@@ -7,15 +7,38 @@
 //
 
 #import "CEModelLoader.h"
-#import "CEResourceDefines.h"
 #import "CEDB.h"
+#import "CEResourceDefines.h"
+#import "CEResourceManager.h"
+#import "CETextureManager.h"
+
 #import "CEModelInfo.h"
 #import "CEMeshInfo.h"
 #import "CEMaterialInfo.h"
 #import "CETextureInfo.h"
 #import "CERenderObject.h"
-#import "CEResourceManager.h"
 #import "CEModel_Rendering.h"
+
+@interface CEModelLoadingCache : NSObject
+
+// basic info
+@property (nonatomic, strong) CEModelInfo *modelInfo;
+@property (nonatomic, strong) NSDictionary *meshInfoDict;       // {@(meshID) : CEMeshInfo}
+@property (nonatomic, strong) NSDictionary *materialInfoDict;   // @{@(materialID) : CEMaterialInfo}
+@property (nonatomic, copy) CEModelLoadingCompletion completion;
+
+// loading resources
+@property (nonatomic, strong) CEVertexBuffer *vertexBuffer;
+@property (nonatomic, strong) NSDictionary *indiceBufferDict;   // {@(meshID) : CEIndiceBuffer}
+@property (nonatomic, strong) NSSet *loadedTextureIds;
+
+@end
+
+@implementation CEModelLoadingCache
+
+@end
+
+
 
 @implementation CEModelLoader {
     CEDatabase *_db;
@@ -23,7 +46,21 @@
     CEDatabaseContext *_meshContext;
     CEDatabaseContext *_materialContext;
     CEDatabaseContext *_textureContext;
+    NSMutableDictionary *_modelLoadingDict;
 }
+
+
++ (instancetype)defaultLoader {
+    static CEModelLoader *_shareInstance;
+    if (!_shareInstance) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            _shareInstance = [[[self class] alloc] init];
+        });
+    }
+    return _shareInstance;
+}
+
 
 - (instancetype)init {
     self = [super init];
@@ -35,6 +72,8 @@
         _meshContext = [CEDatabaseContext contextWithTableName:kDBTableMeshInfo class:[CEMeshInfo class] inDatabase:_db];
         _materialContext = [CEDatabaseContext contextWithTableName:kDBTableMaterialInfo class:[CEMaterialInfo class] inDatabase:_db];
         _textureContext = [CEDatabaseContext contextWithTableName:kDBTableTextureInfo class:[CETextureInfo class] inDatabase:_db];
+        
+        _modelLoadingDict = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -44,92 +83,155 @@
     CEModelInfo *model = (CEModelInfo *)[_modelContext queryById:name error:nil];
     if (!model) return;
     
-    /** create CERenderObject
-    NSMutableDictionary *renderObjectDict = [NSMutableDictionary dictionary]; // {@(MeshID) : CERenderObject}
-    NSMutableDictionary *meshInfoDict = [NSMutableDictionary dictionary];   // {@(MeshID) : CEMeshInfo}
+    // build loading cache
+    CEModelLoadingCache *loadingCache = [CEModelLoadingCache new];
+    loadingCache.modelInfo = model;
+    loadingCache.completion = completion;
+    
+    // 1.collect neccessary infomations for the model
+    NSMutableDictionary *meshInfoDict = [NSMutableDictionary dictionary];       // {@(meshID) : CEMeshInfo}
+    NSMutableDictionary *materialInfoDict = [NSMutableDictionary dictionary];   // @{@(materialID) : CEMaterialInfo}
     NSMutableArray *textureInfos = [NSMutableArray array];
     for (NSNumber *meshID in model.meshIDs) {
-        CERenderObject *renderObject = [CERenderObject new];
-        
+        // get CEMeshInfo
         CEMeshInfo *meshInfo = (CEMeshInfo *)[_meshContext queryById:meshID error:nil];
+        meshInfoDict[meshID] = meshInfo;
+        
+        // get CEMaterial
         CEMaterialInfo *materialInfo = (CEMaterialInfo *)[_materialContext queryById:@(meshInfo.materialID) error:nil];
+        materialInfoDict[@(meshInfo.materialID)] = materialInfo;
+        
+        // get CETextureInfo
+        CETextureInfo *diffuseTexture = (CETextureInfo *)[_textureContext queryById:@(materialInfo.diffuseTextureID) error:nil];
+        if (diffuseTexture) {
+            [textureInfos addObject:diffuseTexture];
+        }
+        CETextureInfo *normalTexture = (CETextureInfo *)[_textureContext queryById:@(materialInfo.normalTextureID) error:nil];
+        if (normalTexture) {
+            [textureInfos addObject:normalTexture];
+        }
+        CETextureInfo *specularTexture = (CETextureInfo *)[_textureContext queryById:@(materialInfo.specularTextureID) error:nil];
+        if (specularTexture) {
+            [textureInfos addObject:specularTexture];
+        }
+    }
+    loadingCache.meshInfoDict = meshInfoDict.copy;
+    loadingCache.materialInfoDict = materialInfoDict.copy;
+    _modelLoadingDict[@(loadingCache.modelInfo.vertexDataID)] = loadingCache;
+    
+    [self loadModelDataForCache:loadingCache];
+    [self loadTextureDataWithTextureInfos:textureInfos.copy forCache:loadingCache];
+}
+
+
+
+- (void)loadModelDataForCache:(CEModelLoadingCache *)cache {
+    NSMutableArray *resourceIDs = [NSMutableArray array];
+    [resourceIDs addObject:@(cache.modelInfo.vertexDataID)];
+    [resourceIDs addObjectsFromArray:cache.modelInfo.meshIDs];
+    uint32_t cacheID = cache.modelInfo.vertexDataID;
+    [[CEResourceManager sharedManager] loadResourceDataWithIDs:resourceIDs completion:^(NSDictionary *resourceDataDict) {
+        CEModelLoadingCache *loadingCache = _modelLoadingDict[@(cacheID)];
+        if (!loadingCache) return;
+        
+        // get vertexData
+        CEModelInfo *model = loadingCache.modelInfo;
+        NSData *vertexData = resourceDataDict[@(model.vertexDataID)];
+        if (!vertexData.length) {
+            [self onCompleteLoadingForCacheID:cacheID];
+            return;
+        }
+        loadingCache.vertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:model.attributes];
+        
+        // get indice Data
+        NSMutableDictionary *indiceBufferDict = [NSMutableDictionary dictionary];
+        [loadingCache.meshInfoDict enumerateKeysAndObjectsUsingBlock:^(NSNumber *meshID, CEMeshInfo *meshInfo, BOOL *stop) {
+            NSData *indiceData = resourceDataDict[meshID];
+            if (indiceData.length) {
+                CEIndiceBuffer *indiceBuffer = [[CEIndiceBuffer alloc] initWithData:indiceData
+                                                                        indiceCount:meshInfo.indiceCount
+                                                                        primaryType:meshInfo.indicePrimaryType
+                                                                           drawMode:meshInfo.drawMode];
+                indiceBufferDict[meshID] = indiceBuffer;
+            }
+        }];
+        loadingCache.indiceBufferDict = indiceBufferDict.copy;
+        
+        if (loadingCache.loadedTextureIds) {
+            [self onCompleteLoadingForCacheID:cacheID];
+        }
+    }];
+}
+
+
+- (void)loadTextureDataWithTextureInfos:(NSArray *)textureInfos forCache:(CEModelLoadingCache *)cache {
+    uint32_t cacheID = cache.modelInfo.vertexDataID;
+    [[CETextureManager sharedManager] loadTextureWithInfos:textureInfos completion:^(NSSet *loadedTextureIds) {
+        CEModelLoadingCache *loadingCache = _modelLoadingDict[@(cacheID)];
+        if (!loadingCache) return;
+        
+        loadingCache.loadedTextureIds = loadedTextureIds;
+        if (loadingCache.vertexBuffer || loadingCache.indiceBufferDict) {
+            [self onCompleteLoadingForCacheID:cacheID];
+        }
+    }];
+}
+
+
+- (void)onCompleteLoadingForCacheID:(uint32_t)cacheID {
+    CEModelLoadingCache *cache = _modelLoadingDict[@(cacheID)];
+    [_modelLoadingDict removeObjectForKey:@(cacheID)];
+    if (!cache.vertexBuffer || !cache.indiceBufferDict.count) {
+        if (cache.completion) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                cache.completion(nil);
+            });
+        }
+        return;
+    }
+    
+    // try to build CEModel with cache
+    NSMutableArray *renderObjects = [NSMutableArray array];
+    for (CEMeshInfo *meshInfo in cache.meshInfoDict.allValues) {
+        CERenderObject *renderObject = [CERenderObject new];
+        renderObject.vertexBuffer = cache.vertexBuffer;
+        renderObject.indexBuffer = cache.indiceBufferDict[@(meshInfo.meshID)];
+        if (!renderObject.indexBuffer) {
+            if (cache.completion) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    cache.completion(nil);
+                });
+            }
+            return;
+        }
+        
+        CEMaterialInfo *materialInfo = cache.materialInfoDict[@(meshInfo.materialID)];
         CEMaterial *material = [CEMaterial new];
         material.materialType = materialInfo.materialType;
-        material.diffuseTextureID = materialInfo.diffuseTextureID;
-        material.normalTextureID = materialInfo.normalTextureID;
-        material.specularTextureID = materialInfo.specularTextureID;
         material.ambientColor = [self vector3WithData:materialInfo.ambientColorData];
         material.diffuseColor = [self vector3WithData:materialInfo.diffuseColorData];
         material.specularColor = [self vector3WithData:materialInfo.specularColorData];
         material.shininessExponent = materialInfo.shininessExponent;
         material.transparency = materialInfo.transparent;
-        renderObject.material = material;
-        
-        // get texture Infos
-        CETextureInfo *diffuseTexture = (CETextureInfo *)[_textureContext queryById:@(materialInfo.diffuseTextureID) error:nil];
-        if (diffuseTexture) {
-            [textureInfos addObject:diffuseTexture];
-        }
-        
-        meshInfoDict[meshID] = meshInfo;
-        renderObjectDict[meshID] = renderObject;
-    }
-    //*/
-     
-    // load model data
-    NSMutableArray *resourceIDs = [NSMutableArray array];
-    [resourceIDs addObject:@(model.vertexDataID)];
-    [resourceIDs addObjectsFromArray:model.meshIDs];
-    
-    [[CEResourceManager sharedManager] loadResourceDataWithIDs:resourceIDs completion:^(NSDictionary *resourceDataDict) {
-        // get vertexData
-        NSData *vertexData = resourceDataDict[@(model.vertexDataID)];
-        if (!vertexData.length) {
-            if (completion) completion(nil);
-            return;
-        }
-        CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:model.attributes];
-        NSMutableArray *renderObjects = [NSMutableArray array];
-        for (NSNumber *meshID in model.meshIDs) {
-            CERenderObject *renderObject = [CERenderObject new];
-            renderObject.vertexBuffer = vertexBuffer;
-            // create indice buffer
-            CEMeshInfo *meshInfo = (CEMeshInfo *)[_meshContext queryById:meshID error:nil];
-            NSData *indiceData = resourceDataDict[meshID];
-            if (!indiceData.length) {
-                continue;
-            }
-            CEIndiceBuffer *indiceBuffer = [[CEIndiceBuffer alloc] initWithData:indiceData
-                                                                    indiceCount:meshInfo.indiceCount
-                                                                    primaryType:meshInfo.indicePrimaryType
-                                                                       drawMode:meshInfo.drawMode];
-            renderObject.indexBuffer = indiceBuffer;
-            // get material
-            CEMaterialInfo *materialInfo = (CEMaterialInfo *)[_materialContext queryById:@(meshInfo.materialID) error:nil];
-            CEMaterial *material = [CEMaterial new];
-            material.materialType = materialInfo.materialType;
+        if ([cache.loadedTextureIds containsObject:@(materialInfo.diffuseTextureID)]) {
             material.diffuseTextureID = materialInfo.diffuseTextureID;
+        }
+        if ([cache.loadedTextureIds containsObject:@(materialInfo.normalTextureID)]) {
             material.normalTextureID = materialInfo.normalTextureID;
+        }
+        if ([cache.loadedTextureIds containsObject:@(materialInfo.specularTextureID)]) {
             material.specularTextureID = materialInfo.specularTextureID;
-            material.ambientColor = [self vector3WithData:materialInfo.ambientColorData];
-            material.diffuseColor = [self vector3WithData:materialInfo.diffuseColorData];
-            material.specularColor = [self vector3WithData:materialInfo.specularColorData];
-            material.shininessExponent = materialInfo.shininessExponent;
-            material.transparency = materialInfo.transparent;
-            renderObject.material = material;
-            // load texture for material
-            
-            [renderObjects addObject:renderObject];
         }
-        
-        if (completion) {
-            CEModel *model = nil;;
-            if (renderObjects) {
-                model = [[CEModel alloc] initWithRenderObjects:renderObjects];
-            }
-            completion(model);
-        }
-    }];
+        renderObject.material = material;
+        [renderObjects addObject:renderObject];
+    }
+    
+    if (cache.completion) {
+        CEModel *model = [[CEModel alloc] initWithRenderObjects:renderObjects.copy];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            cache.completion(model);
+        });
+    }
 }
 
 
@@ -139,23 +241,6 @@
     return vec3;
 }
 
-/**
- @property (nonatomic, strong) NSString *name;
- @property (nonatomic, assign) CEMaterialType materialType;
- 
- @property (nonatomic, strong) NSString *diffuseTexture;
- @property (nonatomic, strong) NSString *normalTexture;
- 
- @property (nonatomic, assign) uint32_t diffuseTextureID;
- @property (nonatomic, assign) uint32_t normalTextureID;
- 
- @property (nonatomic, assign) GLKVector3 ambientColor;
- @property (nonatomic, assign) GLKVector3 diffuseColor; // base color
- @property (nonatomic, assign) GLKVector3 specularColor;
- @property (nonatomic, assign) float shininessExponent;
- 
- @property (nonatomic, assign) float transparency;
- */
-
 
 @end
+

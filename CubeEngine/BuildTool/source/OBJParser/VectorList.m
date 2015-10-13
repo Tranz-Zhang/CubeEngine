@@ -130,6 +130,48 @@
     return vec4;
 }
 
+
+- (NSInteger)indexOfValueFloat:(float)floatValue {
+    for (int i = 0; i < _count; i++) {
+        float value = [self floatAtIndex:i];
+        if (value == floatValue) {
+            return i;
+        }
+    }
+    return NSNotFound;
+}
+
+- (NSInteger)indexOfValueVector2:(GLKVector2)vec2 {
+    for (int i = 0; i < _count; i++) {
+        GLKVector2 value = [self vector2AtIndex:i];
+        if (GLKVector2AllEqualToVector2(value, vec2)) {
+            return i;
+        }
+    }
+    return NSNotFound;
+}
+
+- (NSInteger)indexOfValueVector3:(GLKVector3)vec3 {
+    for (int i = 0; i < _count; i++) {
+        GLKVector3 value = [self vector3AtIndex:i];
+        if (GLKVector3AllEqualToVector3(value, vec3)) {
+            return i;
+        }
+    }
+    return NSNotFound;
+}
+
+- (NSInteger)indexOfValueVector4:(GLKVector4)vec4 {
+    for (int i = 0; i < _count; i++) {
+        GLKVector4 value = [self vector4AtIndex:i];
+        if (GLKVector4AllEqualToVector4(value, vec4)) {
+            return i;
+        }
+    }
+    return NSNotFound;
+}
+
+
 - (NSString *)description {
     NSMutableString *des = [NSMutableString string];
     for (int i = 0; i < _count; i++) {

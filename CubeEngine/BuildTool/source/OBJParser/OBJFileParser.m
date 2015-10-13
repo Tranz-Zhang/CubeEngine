@@ -7,10 +7,15 @@
 //
 
 #import "OBJFileParser.h"
+#import "MTLFileParser.h"
 #import "CEVBOAttribute.h"
 
 @implementation OBJFileParser {
     OBJFileInfo *_objInfo;
+    VectorList *_allPositionList;
+    VectorList *_allUVList;
+    VectorList *_allNormalList;
+    BOOL _hasNormalMap;
     NSMutableDictionary *_indicesDict;
 }
 
@@ -36,14 +41,26 @@
         NSLog(@"Error: %@", error);
         return nil;
     }
+    NSArray *lines = [objContent componentsSeparatedByString:@"\n"];
     
     /*
      NOTE: I use [... componentsSeparatedByString:@" "] to seperate because it's short writing,
      if something wrong, use [... componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet] instead.
      */
     
+    // parse mtl file first
+    NSDictionary *mtlDict = [self parseMTLFileWithContentLines:lines];
+    for (MTLInfo *mtlInfo in mtlDict.allValues) {
+        if (mtlInfo.normalTexture) {
+            _hasNormalMap = YES;
+            break;
+        }
+    }
     
     _indicesDict = [NSMutableDictionary dictionary];
+    _allPositionList = [[VectorList alloc] initWithVectorType:VectorType3];
+    _allUVList = [[VectorList alloc] initWithVectorType:VectorType2];
+    _allNormalList = [[VectorList alloc] initWithVectorType:VectorType3];
     
     NSString *fileName = [_filePath lastPathComponent];
     fileName = [fileName substringToIndex:fileName.length - 4];
@@ -56,27 +73,25 @@
     currentMesh.groupNames = @[@"DefaultGroup"];
     currentMesh.indicesList = [NSMutableArray array];
     [meshInfoList addObject:currentMesh];
-    
-    NSArray *lines = [objContent componentsSeparatedByString:@"\n"];
     for (NSString *lineContent in lines) {
         // parse vertex "v 2.963007 0.335381 -0.052237"
         if ([lineContent hasPrefix:@"v "]) {
             NSString *valueString = [lineContent substringFromIndex:2];
-            [_objInfo.positionList addVector3:[self vec3WithValueString:valueString]];
+            [_allPositionList addVector3:[self vec3WithValueString:valueString]];
             continue;
         }
         
         // parse texture coordinate "vt 0.000000 1.000000"
         if ([lineContent hasPrefix:@"vt "]) {
             NSString *valueString = [lineContent substringFromIndex:3];
-            [_objInfo.uvList addVector2:[self vec2WithValueString:valueString]];
+            [_allUVList addVector2:[self vec2WithValueString:valueString]];
             continue;
         }
         
         // parse normal "vn -0.951057 0.000000 0.309017"
-        if ([lineContent hasPrefix:@"vn "]) {
+        if (!_hasNormalMap && [lineContent hasPrefix:@"vn "]) {
             NSString *valueString = [lineContent substringFromIndex:3];
-            [_objInfo.normalList addVector3:[self vec3WithValueString:valueString]];
+            [_allNormalList addVector3:[self vec3WithValueString:valueString]];
             continue;
         }
         
@@ -125,7 +140,8 @@
         
         // reference material
         if ([lineContent hasPrefix:@"usemtl"]) {
-            currentMesh.materialName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            NSString *materialName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            currentMesh.materialInfo = mtlDict[materialName];
             continue;
         }
     }
@@ -138,12 +154,18 @@
         }
     }
     _objInfo.meshInfos = filteredMeshes.copy;
-    OBJFileInfo *returnInfo = _objInfo;
+    if (_hasNormalMap && ![self addTangentDataToObjInfo:_objInfo]) {
+        printf("WARNING: fail to add tangent for model: %s\n", _objInfo.name.UTF8String);
+    }
     
     // clean up
     _indicesDict = nil;
-    _objInfo = nil;
+    _allPositionList = nil;
+    _allUVList = nil;
+    _allNormalList = nil;
     
+    OBJFileInfo *returnInfo = _objInfo;
+    _objInfo = nil;
     return returnInfo;
 }
 
@@ -163,7 +185,7 @@
 // 根据索引获取对应的坐标，纹理，法线等值
 - (void)appendIndexToMesh:(MeshInfo *)mesh withIndexString:(NSString *)indexString {
     NSArray *indies = [indexString componentsSeparatedByString:@"/"];
-    __block unsigned int positionIndex = -1, uvIndex = -1, normalIndex = -1;
+    __block int32_t positionIndex = -1, uvIndex = -1, normalIndex = -1;
     [indies enumerateObjectsUsingBlock:^(NSString *indexString, NSUInteger idx, BOOL *stop) {
         if (indexString.length) {
             int index = [indexString intValue] - 1;
@@ -188,13 +210,46 @@
         }
     }];
     
-    NSNumber *index = _indicesDict[indexString];
+    // append value to vector lists and adjust index
+    if (positionIndex >= 0) {
+        GLKVector3 positionValue = [_allPositionList vector3AtIndex:positionIndex];
+        NSInteger actuallIndex = [_objInfo.positionList indexOfValueVector3:positionValue];
+        if (actuallIndex == NSNotFound) {
+            positionIndex = (int32_t)_objInfo.positionList.count;
+            [_objInfo.positionList addVector3:positionValue];
+        } else {
+            positionIndex = (int32_t)actuallIndex;
+        }
+    }
+    if (uvIndex >= 0) {
+        GLKVector2 uvValue = [_allUVList vector2AtIndex:uvIndex];
+        NSInteger actualIndex = [_objInfo.uvList indexOfValueVector2:uvValue];
+        if (actualIndex == NSNotFound) {
+            uvIndex = (int32_t)_objInfo.uvList.count;
+            [_objInfo.uvList addVector2:uvValue];
+        } else {
+            uvIndex = (int32_t)actualIndex;
+        }
+    }
+    if (!_hasNormalMap && normalIndex >= 0) { // normal data will be calculated if contain  normal map
+        GLKVector3 normalValue = [_allNormalList vector3AtIndex:normalIndex];
+        NSInteger actuallIndex = [_objInfo.normalList indexOfValueVector3:normalValue];
+        if (actuallIndex == NSNotFound) {
+            normalIndex = (int32_t)_objInfo.normalList.count;
+            [_objInfo.normalList addVector3:normalValue];
+        } else {
+            normalIndex = (int32_t)actuallIndex;
+        }
+    }
+    
+    NSString *actualIndexString = [NSString stringWithFormat:@"%d%d%d", positionIndex, uvIndex, normalIndex];
+    NSNumber *index = _indicesDict[actualIndexString];
     unsigned short u_index;
     if (index) {
         u_index = [index unsignedShortValue];
     } else {
         u_index = _objInfo.vertexDataList.count;
-        _indicesDict[indexString] = @(u_index);
+        _indicesDict[actualIndexString] = @(u_index);
         [_objInfo.vertexDataList addVector3:GLKVector3Make(positionIndex, uvIndex, normalIndex)];
         NSAssert((_indicesDict.count == _objInfo.vertexDataList.count), @"wrong index");
     }
@@ -225,7 +280,7 @@
 
 
 // calcualte tengent data
-+ (BOOL)addTangentDataToObjInfo:(OBJFileInfo *)objInfo {
+- (BOOL)addTangentDataToObjInfo:(OBJFileInfo *)objInfo {
     if (!objInfo.vertexDataList.count ||
         ![objInfo.attributes containsObject:@(CEVBOAttributePosition)] ||
         ![objInfo.attributes containsObject:@(CEVBOAttributeUV)]) {
@@ -324,6 +379,41 @@
     return GLKVector3Make([values[0] floatValue], [values[1] floatValue], [values[2] floatValue]);
 }
 
+#pragma mark - parseMTLFile 
+
+- (NSDictionary *)parseMTLFileWithContentLines:(NSArray *)lineContentList {
+    NSString *mtlFileName;
+    NSMutableSet *usedMtlNames = [NSMutableSet set];
+    for (NSString *lineContent in lineContentList) {
+        // mtl file name
+        if ([lineContent hasPrefix:@"mtllib"]) {
+            mtlFileName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            continue;
+        }
+        
+        // reference material
+        if ([lineContent hasPrefix:@"usemtl"]) {
+            NSString *materialName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            [usedMtlNames addObject:materialName];
+            continue;
+        }
+    }
+    if (!mtlFileName.length) {
+        return nil;
+    }
+    
+    NSString *currentDirectory = [_filePath stringByDeletingLastPathComponent];
+    NSString *mtlFilePath = [currentDirectory stringByAppendingPathComponent:mtlFileName];
+    MTLFileParser *mtlParser = [MTLFileParser parserWithFilePath:mtlFilePath];
+    NSDictionary *allMTLDict = [mtlParser parse];
+    NSMutableDictionary *usedMtlDict = [NSMutableDictionary dictionary];
+    for (NSString *mtlName in usedMtlNames) {
+        if (allMTLDict[mtlName]) {
+            usedMtlDict[mtlName] = allMTLDict[mtlName];
+        }
+    }
+    return usedMtlDict.copy;
+}
 
 @end
 

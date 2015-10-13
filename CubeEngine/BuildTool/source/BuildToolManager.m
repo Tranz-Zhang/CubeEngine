@@ -15,8 +15,8 @@
 #import "CEDB.h"
 
 #import "OBJFileParser.h"
-#import "MTLFileParser.h"
 #import "ModelDataPacker.h"
+#import "TextureDataPacker.h"
 
 // db object
 #import "CEModelInfo.h"
@@ -143,7 +143,7 @@
     NSLog(@"%@", objFiles);
 //    for (NSString *objFilePath in objFiles) {
 //        
-//    }\
+//    }
     
     NSString *objFilePath = objFiles[9];//[objFiles lastObject];
     NSLog(@"TEST FILE: %@", objFilePath);
@@ -151,23 +151,6 @@
     // parse obj file
     OBJFileParser *objParser = [OBJFileParser parserWithFilePath:objFilePath];
     OBJFileInfo *info = [objParser parse];
-    BOOL hasNormalMap = NO;
-    if (info.mtlFileName) {
-        NSString *currentDirectory = [objFilePath stringByDeletingLastPathComponent];
-        NSString *mtlFilePath = [currentDirectory stringByAppendingPathComponent:info.mtlFileName];
-        MTLFileParser *mtlParser = [MTLFileParser parserWithFilePath:mtlFilePath];
-        NSDictionary *mtlDict = [mtlParser parse];
-        for (MeshInfo *mesh in info.meshInfos) {
-            mesh.materialInfo = mtlDict[mesh.materialName];
-            if (!hasNormalMap) {
-                hasNormalMap = (mesh.materialInfo.normalTexture != nil);
-            }
-        }
-    }
-    if (hasNormalMap) {
-        [OBJFileParser addTangentDataToObjInfo:info];
-    }
-    
     if (![self processModelResourcesDataWithObjInfos:@[info]]) {
         return NO;
     }
@@ -207,22 +190,52 @@
     if (![self createDirectoryAtPath:modelDir]){
         return NO;
     }
+    NSString *textureDir = [_appPath stringByAppendingPathComponent:kTextureDirectory];
+    if (![self createDirectoryAtPath:textureDir]){
+        return NO;
+    }
     [self cleanDirectory:modelDir];
+    [self cleanDirectory:textureDir];
     
     ModelDataPacker *modelPacker = [[ModelDataPacker alloc] initWithAppPath:_appPath];
+    TextureDataPacker *texturePacker = [[TextureDataPacker alloc] initWithAppPath:_appPath];
     // composite vertex data and indic data
     for (OBJFileInfo *objInfo in objFileInfos) {
-        printf("process model: %s", objInfo.name.UTF8String);
         NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
         dataDict[@(objInfo.resourceID)] = [objInfo buildVertexData];
+        BOOL hasOptimized = NO;
         for (MeshInfo *meshInfo in objInfo.meshInfos) {
-            dataDict[@(meshInfo.resourceID)] = [meshInfo buildIndiceData];
+            NSData *indiceData = [meshInfo buildOptimizedIndiceData];
+            if (indiceData.length) {
+                meshInfo.isOptimized = YES;
+            } else {
+                indiceData = [meshInfo buildIndiceData];
+                meshInfo.isOptimized = NO;
+            }
+            dataDict[@(meshInfo.resourceID)] = indiceData;
+            if (!hasOptimized) {
+                hasOptimized = meshInfo.isOptimized;
+            }
         }
         BOOL isOK = [modelPacker packModelDataDict:dataDict];
-        printf(" M_DATA[%s]", isOK ? "OK" : "Fail");
+        printf("process model: %s\t", objInfo.name.UTF8String);
+        printf(" M_DATA[%s%s]", isOK ? "OK" : "Fail", hasOptimized ? " √" : "");
         
         // process texture data
-        
+        for (MeshInfo *meshInfo in objInfo.meshInfos) {
+            if (meshInfo.materialInfo.diffuseTexture) {
+                BOOL isOK = [texturePacker packTextureDataWithInfo:meshInfo.materialInfo.diffuseTexture];
+                printf(" D_TEX[%s]", isOK ? "OK" : "Fail");
+            }
+            if (meshInfo.materialInfo.normalTexture) {
+                BOOL isOK = [texturePacker packTextureDataWithInfo:meshInfo.materialInfo.normalTexture];
+                printf(" N_TEX[%s]", isOK ? "OK" : "Fail");
+            }
+            if (meshInfo.materialInfo.specularTexture) {
+                BOOL isOK = [texturePacker packTextureDataWithInfo:meshInfo.materialInfo.specularTexture];
+                printf(" S_TEX[%s]", isOK ? "OK" : "Fail");
+            }
+        }
         printf("\n");
     }
     
@@ -256,9 +269,9 @@
             CEMeshInfo *dbMeshInfo = [CEMeshInfo new];
             dbMeshInfo.meshID = meshInfo.resourceID;
             dbMeshInfo.materialID = meshInfo.materialInfo.resourceID;
-            dbMeshInfo.indiceCount = (uint32_t)meshInfo.indicesList.count;
+            dbMeshInfo.indiceCount = meshInfo.indiceCount;
             dbMeshInfo.indicePrimaryType = [meshInfo indicePrimaryType];
-            dbMeshInfo.drawMode = GL_TRIANGLES;
+            dbMeshInfo.drawMode = meshInfo.isOptimized ? GL_TRIANGLE_STRIP : GL_TRIANGLES;
             [meshIDs addObject:@(dbMeshInfo.meshID)];
             [dbMeshInfoList addObject:dbMeshInfo];
             // material info
@@ -269,7 +282,7 @@
             dbMaterialInfo.diffuseColorData = [NSData dataWithBytes:mtlInfo.diffuseColor.v length:sizeof(GLKVector3)];
             dbMaterialInfo.specularColorData = [NSData dataWithBytes:mtlInfo.specularColor.v length:sizeof(GLKVector3)];
             dbMaterialInfo.shininessExponent = mtlInfo.shininessExponent;
-            dbMaterialInfo.transparent = mtlInfo.transparency;
+            dbMaterialInfo.transparent = mtlInfo.transparency > 0 ?: -1;
             dbMaterialInfo.materialType = 0; // TODO: materialType
             dbMaterialInfo.diffuseTextureID = mtlInfo.diffuseTexture.resourceID;
             dbMaterialInfo.normalTextureID = mtlInfo.normalTexture.resourceID;

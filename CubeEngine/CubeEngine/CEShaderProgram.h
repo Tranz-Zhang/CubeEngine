@@ -24,6 +24,7 @@
 
 @property (nonatomic, readonly) NSArray *attributes; // array of CEVBOAttributeName
 @property (nonatomic, readonly) uint32_t attributesType; // attritube array type
+@property (nonatomic, readonly) uint32_t textureUnitCount; // units of texture in program
 
 + (instancetype)buildProgramWithShaderInfo:(CEShaderInfo *)shaderInfo;
 

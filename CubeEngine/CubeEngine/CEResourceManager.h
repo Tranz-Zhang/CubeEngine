@@ -28,6 +28,11 @@ typedef void (^CEResourceDataLoadedCompletion)(NSDictionary *resourceDataDict);
  */
 - (void)unloadResourceDataWithID:(uint32_t)resourceID;
 
-#warning TEST LRU
+
+
+#pragma mark - Runtime Resource ID 
+
++ (uint32_t)generateRuntmeResourceID;
++ (void)recycleRuntimeResourceID:(uint32_t)resourceID;
 
 @end

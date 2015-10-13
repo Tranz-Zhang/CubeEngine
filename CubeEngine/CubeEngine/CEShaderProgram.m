@@ -65,6 +65,7 @@
           attributeTypes:(NSArray *)attributeTypes
          uniformInfoDict:(NSDictionary *)uniformInfoDict {
     _program = program;
+    _textureUnitCount = 0;
     NSMutableDictionary *uniformVariableDict = [NSMutableDictionary dictionary];
     [uniformInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
         NSString *className = [[CEShaderProgram typeToUniformClassNameDict] objectForKey:info.type];
@@ -73,6 +74,9 @@
             if ([uniform setupIndexWithProgram:program]) {
                 uniformVariableDict[variableName] = uniform;
             }
+        }
+        if ([info.type isEqualToString:@"sampler2D"]) {
+            _textureUnitCount++;
         }
     }];
     _uniformVariableDict = uniformVariableDict.copy;

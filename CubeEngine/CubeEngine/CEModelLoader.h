@@ -9,8 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "CEModel.h"
 
+typedef void(^CEModelLoadingCompletion)(CEModel *model);
+
 @interface CEModelLoader : NSObject
 
-- (void)loadModelWithName:(NSString *)name completion:(void(^)(CEModel *model))completion;
++ (instancetype)defaultLoader;
+
+- (void)loadModelWithName:(NSString *)name completion:(CEModelLoadingCompletion)completion;
 
 @end

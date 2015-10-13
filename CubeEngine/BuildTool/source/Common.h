@@ -9,12 +9,12 @@
 #ifndef CubeEngine_Common_h
 #define CubeEngine_Common_h
 
-extern NSString *kAppPath;
-
+#ifdef __OBJC__
 #import <OpenGL/OpenGL.h>
 #import <GLKit/GLKit.h>
+#endif
 
-#import "CECommon.h"
+extern NSString *kAppPath;
 #import "CECommon_privates.h"
 
 #define kBaseModelID    0x10000000

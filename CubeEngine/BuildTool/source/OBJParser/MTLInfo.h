@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GLKit/GLKit.h>
 #import "TextureInfo.h"
 
 typedef NS_ENUM(int, MaterialType) {
@@ -23,6 +24,7 @@ typedef NS_ENUM(int, MaterialType) {
 
 @property (nonatomic, strong) TextureInfo *diffuseTexture;
 @property (nonatomic, strong) TextureInfo *normalTexture;
+@property (nonatomic, strong) TextureInfo *specularTexture;
 
 @property (nonatomic, assign) GLKVector3 ambientColor;
 @property (nonatomic, assign) GLKVector3 diffuseColor; // base color

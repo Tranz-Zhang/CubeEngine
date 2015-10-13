@@ -10,7 +10,7 @@
 
 @implementation CEIndiceBuffer {
     NSData *_indiceData;
-    GLuint _indiceBufferId;
+    GLuint _indiceBufferID;
 }
 
 - (instancetype)initWithData:(NSData *)indiceData
@@ -41,9 +41,9 @@
         return NO;
     }
     
-    glGenBuffers(1, &_indiceBufferId);
-    if (_indiceBufferId) {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indiceBufferId);
+    glGenBuffers(1, &_indiceBufferID);
+    if (_indiceBufferID) {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indiceBufferID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indiceData.length, _indiceData.bytes, GL_STATIC_DRAW);
         _ready = YES;
     }
@@ -52,9 +52,9 @@
 }
 
 - (void)destoryBuffer {
-    if (_indiceBufferId) {
-        glDeleteBuffers(1, &_indiceBufferId);
-        _indiceBufferId = 0;
+    if (_indiceBufferID) {
+        glDeleteBuffers(1, &_indiceBufferID);
+        _indiceBufferID = 0;
     }
     _ready = NO;
 }
@@ -62,7 +62,7 @@
 
 - (BOOL)loadBuffer {
     if (!_ready) return NO;
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indiceBufferId);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indiceBufferID);
     return YES;
 }
 

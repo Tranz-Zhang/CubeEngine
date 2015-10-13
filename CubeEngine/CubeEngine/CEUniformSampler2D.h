@@ -10,8 +10,6 @@
 
 @interface CEUniformSampler2D : CEUniform
 
-@property (nonatomic, assign) GLuint textureID;
-
-- (void)setTextureIndex:(int)textureIndex;
+@property (nonatomic, assign) GLuint textureUnit;
 
 @end

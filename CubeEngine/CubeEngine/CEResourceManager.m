@@ -15,6 +15,11 @@
 
 #define kMaxMemoryCacheSize 50 //MB
 
+#define kBaseRuntimeResourceID 0xF0000000
+#define kMaxRuntimeResourceID 0xFFFFFFFF
+static NSMutableSet *sRuntimeResourceIDs;
+static uint32_t sNextRuntimeResourceID = kBaseRuntimeResourceID;
+
 @interface CEResourceCache : NSObject
 
 @property (nonatomic, assign) uint32_t resourceID;
@@ -41,6 +46,35 @@
     uint32_t _maxCacheSize;
 }
 
+#pragma mark - Runtime Resource ID
++ (uint32_t)generateRuntmeResourceID {
+    if (!sRuntimeResourceIDs) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            sRuntimeResourceIDs = [NSMutableSet set];
+        });
+    }
+    if (sRuntimeResourceIDs.count < 0x0FFFFFFF) {
+        do {
+            sNextRuntimeResourceID++;
+            if (sNextRuntimeResourceID == 0) {
+                sNextRuntimeResourceID = kBaseRuntimeResourceID;
+            }
+            
+        } while ([sRuntimeResourceIDs containsObject:@(sNextRuntimeResourceID)]);
+        [sRuntimeResourceIDs addObject:@(sNextRuntimeResourceID)];
+        return sNextRuntimeResourceID;
+        
+    } else {
+        return 0;
+    }
+}
+
+
++ (void)recycleRuntimeResourceID:(uint32_t)resourceID {
+    [sRuntimeResourceIDs removeObject:@(sNextRuntimeResourceID)];
+}
+
 
 + (instancetype)sharedManager {
     static CEResourceManager *_shareInstance;
@@ -54,10 +88,11 @@
 }
 
 
+
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _resourceQueue = dispatch_queue_create("com.cube-engine.resources", DISPATCH_QUEUE_CONCURRENT);
+        _resourceQueue = dispatch_queue_create("com.cube-engine.resourceManager", DISPATCH_QUEUE_CONCURRENT);
         _bundlePath = [[NSBundle mainBundle] bundlePath];
         _maxCacheSize = kMaxMemoryCacheSize * 1024 * 1024;
         NSString *configDir = [_bundlePath stringByAppendingPathComponent:kConfigDirectory];

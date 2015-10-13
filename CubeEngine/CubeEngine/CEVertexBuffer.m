@@ -11,8 +11,8 @@
 
 @implementation CEVertexBuffer {
     NSData *_vertexData;
-    GLuint _vertexArrayId;
-    GLuint _vertexBufferId;
+    GLuint _vertexArrayID;
+    GLuint _vertexBufferID;
 }
 
 
@@ -40,19 +40,19 @@
     }
     
     // gen vertex array object
-    glGenVertexArraysOES(1, &_vertexArrayId);
-    if (!_vertexArrayId) {
+    glGenVertexArraysOES(1, &_vertexArrayID);
+    if (!_vertexArrayID) {
         return NO;
     }
-    glBindVertexArrayOES(_vertexArrayId);
+    glBindVertexArrayOES(_vertexArrayID);
     
     // generate vertex buffer
-    glGenBuffers(1, &_vertexBufferId);
-    if (!_vertexBufferId) {
+    glGenBuffers(1, &_vertexBufferID);
+    if (!_vertexBufferID) {
         [self destoryBuffer];
         return NO;
     }
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferId);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
     glBufferData(GL_ARRAY_BUFFER, _vertexData.length, _vertexData.bytes, GL_STATIC_DRAW);
     
     // setup attribute pointer
@@ -75,13 +75,13 @@
 
 
 - (void)destoryBuffer {
-    if (_vertexArrayId) {
-        glDeleteVertexArraysOES(1, &_vertexArrayId);
-        _vertexArrayId = 0;
+    if (_vertexArrayID) {
+        glDeleteVertexArraysOES(1, &_vertexArrayID);
+        _vertexArrayID = 0;
     }
-    if (_vertexBufferId) {
-        glDeleteBuffers(1, &_vertexBufferId);
-        _vertexBufferId = 0;
+    if (_vertexBufferID) {
+        glDeleteBuffers(1, &_vertexBufferID);
+        _vertexBufferID = 0;
     }
     _ready = NO;
 }
@@ -89,7 +89,7 @@
 
 - (BOOL)loadBuffer {
     if (!_ready) return NO;
-    glBindVertexArrayOES(_vertexArrayId);
+    glBindVertexArrayOES(_vertexArrayID);
     return YES;
 }
 

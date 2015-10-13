@@ -20,7 +20,6 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
 //    NSMutableArray *test = [@[@(1), @(2.3)] mutableCopy];
 //    [test removeObject:[NSNumber numberWithDouble:2.3]];
     

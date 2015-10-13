@@ -8,29 +8,13 @@
 
 #import "CEUniformSampler2D.h"
 
-@implementation CEUniformSampler2D {
-    int _textureIndex;
-}
+@implementation CEUniformSampler2D
 
-
-- (void)setTextureID:(GLuint)textureID {
-//    if (_textureID != textureID) {
-        _textureID = textureID;
-        
+- (void)setTextureUnit:(GLuint)textureUnit {
+    if (_textureUnit != textureUnit) {
         if (_index < 0) return;
-        glActiveTexture(GL_TEXTURE0 + _textureIndex);
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glUniform1i(_index, _textureIndex);
-//    }
-}
-
-
-- (void)setTextureIndex:(int)textureIndex {
-    _textureIndex = textureIndex;
+        glUniform1i(_index, _textureUnit);
+    }
 }
 
 
@@ -40,5 +24,4 @@
 
 
 @end
-
 

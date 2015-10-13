@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GLKit/GLKit.h>
 
 typedef NS_ENUM(NSInteger, VectorType) {
     VectorType1 = 1,    // float
@@ -39,5 +40,11 @@ typedef NS_ENUM(NSInteger, VectorType) {
 - (GLKVector2)vector2AtIndex:(NSInteger)index;
 - (GLKVector3)vector3AtIndex:(NSInteger)index;
 - (GLKVector4)vector4AtIndex:(NSInteger)index;
+
+
+- (NSInteger)indexOfValueFloat:(float)floatValue;
+- (NSInteger)indexOfValueVector2:(GLKVector2)vec2;
+- (NSInteger)indexOfValueVector3:(GLKVector3)vec3;
+- (NSInteger)indexOfValueVector4:(GLKVector4)vec4;
 
 @end

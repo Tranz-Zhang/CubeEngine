@@ -17,7 +17,6 @@
 #import "CEModelLoader.h"
 #import "CEVertexBuffer.h"
 #import "CEResourceManager.h"
-#import "CEResourceDataLoader.h"
 
 #define kDefaultFramesPerSecond 30
 #define kDefaultMaxLightCount 4
@@ -76,6 +75,7 @@
 - (void)onTestShaders {
     CEShaderBuilder *shaderBuilder = [CEShaderBuilder new];
     [shaderBuilder startBuildingNewShader];
+    [shaderBuilder enableTexture:YES];
     CEShaderInfo *shaderInfo = [shaderBuilder build];
     
     [EAGLContext setCurrentContext:_context];
@@ -93,9 +93,9 @@
 //        printf("CEModelLoader load model for duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
 //    }];
     
-    CEResourceDataLoader *dataLoader = [CEResourceDataLoader defaultLoader];
+//    CEResourceDataLoader *dataLoader = [CEResourceDataLoader defaultLoader];
 //    NSData *vertexData = [dataLoader loadDataWithResourceID:0x10000000];
-    NSDictionary *dataDict = [dataLoader loadDataWithResourceIDs:@[@0x10000000, @0x20000002, @0x10000002]];
+//    NSDictionary *dataDict = [dataLoader loadDataWithResourceIDs:@[@0x10000000, @0x20000002, @0x10000002]];
     
 }
 

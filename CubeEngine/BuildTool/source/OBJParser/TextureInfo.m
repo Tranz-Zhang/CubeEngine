@@ -7,6 +7,7 @@
 //
 
 #import "TextureInfo.h"
+#import "Common.h"
 
 static uint32_t sNextResourceID = kBaseTextureID;
 

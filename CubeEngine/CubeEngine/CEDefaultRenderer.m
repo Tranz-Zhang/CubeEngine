@@ -14,6 +14,7 @@
 #import "CELight_Rendering.h"
 #import "CECamera_Rendering.h"
 #import "CEShadowLight_Rendering.h"
+#import "CETextureManager.h"
 
 @implementation CEDefaultRenderer {
     CEDefaultProgram *_program;
@@ -22,6 +23,7 @@
 
 
 + (instancetype)rendererWithConfig:(CERenderConfig *)config {
+    // build shader
     CEShaderBuilder *shaderBuilder = [CEShaderBuilder new];
     [shaderBuilder startBuildingNewShader];
     [shaderBuilder enableLightWithType:config.lightType];
@@ -32,10 +34,17 @@
     if (!shaderInfo) {
         return nil;
     }
+    // build program
     CEDefaultProgram *program = [CEDefaultProgram buildProgramWithShaderInfo:shaderInfo];
     if (!program) {
         return nil;
     }
+    if (program.textureUnitCount > [CETextureManager maxTextureUnitCount]) {
+        CEError(@"No enough texture units for program[%d > %d]", program.textureUnitCount,
+                [CETextureManager maxTextureUnitCount]);
+        return nil;
+    }
+    // build render
     CEDefaultRenderer *render = [[CEDefaultRenderer alloc] initWithProgram:program];
     return render;
 }
@@ -107,11 +116,11 @@
     // shadow map setting
     if (_shadowLight.enableShadow && _shadowLight.shadowMapBuffer) {
         _program.shadowDarkness.floatValue = 1.0 - _shadowLight.shadowDarkness;
-        _program.shadowMapTexture.textureID = _shadowLight.shadowMapBuffer.textureId;
+//        _program.shadowMapTexture.textureID = _shadowLight.shadowMapBuffer.textureId;
         
     } else {
         _program.shadowDarkness.floatValue = 0.0;
-        _program.shadowMapTexture.textureID = 0.0;
+//        _program.shadowMapTexture.textureID = 0.0;
     }
     
 }
@@ -142,9 +151,18 @@
         _program.shininessExponent.floatValue = object.material.shininessExponent;
     }
     
+    // setup texture
+    if (object.material.diffuseTextureID && _program.diffuseTexture) {
+        uint32_t textureUnit = [[CETextureManager sharedManager] prepareTextureWithID:object.material.diffuseTextureID];
+        _program.diffuseTexture.textureUnit = textureUnit;
+    }
+    
     glDrawElements(object.indexBuffer.drawMode,
                    object.indexBuffer.indiceCount,
                    object.indexBuffer.primaryType, 0);
+    
+    [object.indexBuffer unloadBuffer];
+    [object.vertexBuffer unloadBuffer];
 }
 
 
@@ -225,7 +243,7 @@
                               CE_BUFFER_OFFSET(textureCoordAttri.elementOffset));
     }
     if (_program.diffuseTexture) {
-        _program.diffuseTexture.textureID = model.texture.name;
+//        _program.diffuseTexture.textureID = model.texture.name;
     }
     
     // shadow map
