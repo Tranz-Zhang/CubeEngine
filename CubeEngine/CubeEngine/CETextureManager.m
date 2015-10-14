@@ -81,8 +81,9 @@
                 config.format = result.format;
                 config.internalFormat = result.internalFormat;
                 config.texelType = result.texelType;
+                config.wrap_s = GL_REPEAT;
+                config.wrap_t = GL_REPEAT;
                 CETextureBuffer *textureBuffer = [[CETextureBuffer alloc] initWithConfig:config resourceID:info.textureID data:result.data];
-//                CETextureBuffer *textureBuffer = [[CETextureBuffer alloc] initWithSize:info.textureSize config:nil resourceID:info.textureID data:textureData];
                 textureBufferDict[resourceID] = textureBuffer;
             }
         }];
@@ -114,7 +115,10 @@
             [_textureUnitLRUQueue removeObjectAtIndex:[_textureUnitLRUQueue indexOfObject:preparingID]];
             [_textureUnitLRUQueue insertObject:preparingID atIndex:0];
         }
-        return [_textureUnitBindingDict[@(textureID)] intValue];
+        int32_t lastBindUnit = [_textureUnitBindingDict[@(textureID)] intValue];
+        CETextureBuffer *textureBuffer = _textureBufferDict[preparingID];
+        [textureBuffer loadBufferToUnit:lastBindUnit];
+        return lastBindUnit;
     }
     
     if (_textureBufferDict[preparingID]) { // load into new unit
@@ -141,7 +145,7 @@
             }
         }
         if (lastBindUnit >= 0) {
-            [textureBuffer loadBufferToIndex:lastBindUnit];
+            [textureBuffer loadBufferToUnit:lastBindUnit];
             return lastBindUnit;
             
         } else {

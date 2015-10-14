@@ -128,7 +128,7 @@
     */
 #  if (defined(__ARM_NEON__) || defined(__ARM_NEON)) && \
    defined(PNG_ALIGNED_MEMORY_SUPPORTED)
-#     define PNG_ARM_NEON_OPT 2
+#     define PNG_ARM_NEON_OPT 0 // close by chance zhang
 #  else
 #     define PNG_ARM_NEON_OPT 0
 #  endif

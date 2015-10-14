@@ -12,8 +12,9 @@
 
 - (void)setTextureUnit:(GLuint)textureUnit {
     if (_textureUnit != textureUnit) {
+        _textureUnit = textureUnit;
         if (_index < 0) return;
-        glUniform1i(_index, _textureUnit);
+        glUniform1i(_index, textureUnit);
     }
 }
 

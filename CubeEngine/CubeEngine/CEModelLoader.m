@@ -81,7 +81,14 @@
 
 - (void)loadModelWithName:(NSString *)name completion:(void (^)(CEModel *))completion {
     CEModelInfo *model = (CEModelInfo *)[_modelContext queryById:name error:nil];
-    if (!model) return;
+    if (!model) {
+        if (completion) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(nil);
+            });
+        }
+        return;
+    }
     
     // build loading cache
     CEModelLoadingCache *loadingCache = [CEModelLoadingCache new];

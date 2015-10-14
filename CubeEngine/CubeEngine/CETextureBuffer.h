@@ -45,7 +45,7 @@
 - (void)destoryBuffer;  // delete a buffer from video memory
 
 // load texture into specify texture index in program
-- (BOOL)loadBufferToIndex:(GLuint)textureIndex;
+- (BOOL)loadBufferToUnit:(GLuint)textureUnit;
 
 
 @end

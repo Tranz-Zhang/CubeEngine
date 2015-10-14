@@ -127,15 +127,20 @@ void onReadImageData( png_structp structp, png_bytep bytep, png_size_t size ) {
     if( (dataHandle.position + size) > dataHandle.data.length) {
         size = dataHandle.data.length - dataHandle.position;
     }
-    
     [dataHandle.data getBytes:bytep range:NSMakeRange(dataHandle.position, size)];
     dataHandle.position += size;
 }
 
+
 #pragma mark - convert
 
 - (void)convertPNGTo16Bits565:(CEPNGUnpackResult *)result {
+    if (result.format != GL_RGB || result.internalFormat != GL_RGB) {
+        CEError("Fail to convert png 16bits RGB565");
+        return;
+    }
     
+//    ok do it yourself
 }
 
 

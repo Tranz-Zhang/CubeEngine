@@ -11,9 +11,10 @@
 @implementation CEUniformFloat
 
 - (void)setFloatValue:(GLfloat)floatValue {
+    if (_index < 0 || _floatValue == floatValue) {
+        return;
+    }
     _floatValue = floatValue;
-    
-    if (_index < 0) return;
     glUniform1f(_index, floatValue);
 }
 

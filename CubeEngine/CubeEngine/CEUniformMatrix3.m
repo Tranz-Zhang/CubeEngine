@@ -11,9 +11,18 @@
 @implementation CEUniformMatrix3
 
 - (void)setMatrix3:(GLKMatrix3)matrix3 {
-    _matrix3 = matrix3;
-    
     if (_index < 0) return;
+    BOOL allEqual = YES;
+    for (int i = 0; i < 9; i++) {
+        if (allEqual) {
+            allEqual = (_matrix3.m[i] == matrix3.m[i]);
+        } else {
+            break;
+        }
+    }
+    if (allEqual) return;
+    
+    _matrix3 = matrix3;
     glUniformMatrix3fv(_index, 1, GL_FALSE, matrix3.m);
 }
 

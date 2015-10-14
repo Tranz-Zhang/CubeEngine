@@ -73,9 +73,9 @@
 }
 
 
-- (BOOL)loadBufferToIndex:(GLuint)textureIndex {
+- (BOOL)loadBufferToUnit:(GLuint)textureUnit {
     if (!_ready) return NO;
-    glActiveTexture(GL_TEXTURE0 + textureIndex);
+    glActiveTexture(GL_TEXTURE0 + textureUnit);
     glBindTexture(GL_TEXTURE_2D, _textureBufferID);
     return YES;
 }

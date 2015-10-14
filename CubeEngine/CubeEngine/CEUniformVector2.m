@@ -11,9 +11,10 @@
 @implementation CEUniformVector2
 
 - (void)setVector2:(GLKVector2)vector2 {
+    if (_index < 0 || GLKVector2AllEqualToVector2(_vector2, vector2)) {
+        return;
+    }
     _vector2 = vector2;
-    
-    if (_index < 0) return;
     glUniform2fv(_index, 1, vector2.v);
 }
 
