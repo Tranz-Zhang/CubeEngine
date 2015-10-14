@@ -138,6 +138,9 @@
 		4CC25DCC1BCE3F1C00DB3DA2 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CC25DA81BCE3F1C00DB3DA2 /* uncompr.c */; };
 		4CC25DCD1BCE3F1C00DB3DA2 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CC25DA91BCE3F1C00DB3DA2 /* unzip.c */; };
 		4CC25DCE1BCE3F1C00DB3DA2 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CC25DAD1BCE3F1C00DB3DA2 /* zutil.c */; };
+		4CC25DD21BCE477B00DB3DA2 /* CEPVRTextureBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC25DD11BCE477B00DB3DA2 /* CEPVRTextureBuffer.m */; };
+		4CC25DDB1BCE489500DB3DA2 /* CEPNGUnpacker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC25DDA1BCE489500DB3DA2 /* CEPNGUnpacker.m */; };
+		4CC25DDE1BCE48A400DB3DA2 /* CEPVRUnpacker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC25DDD1BCE48A400DB3DA2 /* CEPVRUnpacker.m */; };
 		4CC4E7E91B9DB722008DEEC1 /* CEUniform.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC4E7E81B9DB722008DEEC1 /* CEUniform.m */; };
 		4CC7F9601B969EF70078F441 /* CEShaderBuildProfileResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC7F95F1B969EF70078F441 /* CEShaderBuildProfileResult.m */; };
 		4CC7F9611B96A1730078F441 /* CEShaderBuildProfileResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC7F95F1B969EF70078F441 /* CEShaderBuildProfileResult.m */; };
@@ -446,6 +449,14 @@
 		4CC25DAC1BCE3F1C00DB3DA2 /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		4CC25DAD1BCE3F1C00DB3DA2 /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zutil.c; sourceTree = "<group>"; };
 		4CC25DAE1BCE3F1C00DB3DA2 /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
+		4CC25DD01BCE477B00DB3DA2 /* CEPVRTextureBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEPVRTextureBuffer.h; sourceTree = "<group>"; };
+		4CC25DD11BCE477B00DB3DA2 /* CEPVRTextureBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEPVRTextureBuffer.m; sourceTree = "<group>"; };
+		4CC25DD91BCE489500DB3DA2 /* CEPNGUnpacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEPNGUnpacker.h; sourceTree = "<group>"; };
+		4CC25DDA1BCE489500DB3DA2 /* CEPNGUnpacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEPNGUnpacker.m; sourceTree = "<group>"; };
+		4CC25DDC1BCE48A400DB3DA2 /* CEPVRUnpacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEPVRUnpacker.h; sourceTree = "<group>"; };
+		4CC25DDD1BCE48A400DB3DA2 /* CEPVRUnpacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEPVRUnpacker.m; sourceTree = "<group>"; };
+		4CC25DDF1BCE51DC00DB3DA2 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+		4CC25DE31BCE51F900DB3DA2 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		4CC4E7E71B9DB722008DEEC1 /* CEUniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEUniform.h; sourceTree = "<group>"; };
 		4CC4E7E81B9DB722008DEEC1 /* CEUniform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEUniform.m; sourceTree = "<group>"; };
 		4CC7F95E1B969EF70078F441 /* CEShaderBuildProfileResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderBuildProfileResult.h; sourceTree = "<group>"; };
@@ -696,6 +707,8 @@
 		26193F621AA8326900787C64 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CC25DE31BCE51F900DB3DA2 /* libc++.dylib */,
+				4CC25DDF1BCE51DC00DB3DA2 /* libstdc++.dylib */,
 				4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */,
 				26193F6C1AA832F800787C64 /* Foundation.framework */,
 				26193F6A1AA832F000787C64 /* CoreGraphics.framework */,
@@ -870,6 +883,8 @@
 				4CBB75061BB5418900C3829B /* CEIndiceBuffer.m */,
 				4CBB75081BB5419600C3829B /* CETextureBuffer.h */,
 				4CBB75091BB5419600C3829B /* CETextureBuffer.m */,
+				4CC25DD01BCE477B00DB3DA2 /* CEPVRTextureBuffer.h */,
+				4CC25DD11BCE477B00DB3DA2 /* CEPVRTextureBuffer.m */,
 			);
 			name = Buffers;
 			sourceTree = "<group>";
@@ -1092,10 +1107,14 @@
 				4CF7CDC21B8434F40093C32D /* CEResourceDefines.h */,
 				4CF2BF7F1BBBC9FE00CB1681 /* CEResourceManager.h */,
 				4CF2BF801BBBC9FE00CB1681 /* CEResourceManager.m */,
-				4CCBD8931BCCE2C500BD53F8 /* CETextureManager.h */,
-				4CCBD8941BCCE2C500BD53F8 /* CETextureManager.m */,
 				4CF2BF7B1BBB933300CB1681 /* CEModelLoader.h */,
 				4CF2BF7C1BBB933300CB1681 /* CEModelLoader.m */,
+				4CCBD8931BCCE2C500BD53F8 /* CETextureManager.h */,
+				4CCBD8941BCCE2C500BD53F8 /* CETextureManager.m */,
+				4CC25DD91BCE489500DB3DA2 /* CEPNGUnpacker.h */,
+				4CC25DDA1BCE489500DB3DA2 /* CEPNGUnpacker.m */,
+				4CC25DDC1BCE48A400DB3DA2 /* CEPVRUnpacker.h */,
+				4CC25DDD1BCE48A400DB3DA2 /* CEPVRUnpacker.m */,
 				4C18154A1BBA78C400757BFC /* ResourceDatabase */,
 				4CBB74FE1BB5409100C3829B /* Buffers */,
 				268CBC5C1ADCBD6600795A6D /* Buffers_DEPRECATED */,
@@ -1269,6 +1288,7 @@
 				4CEA12141BB1602D00686678 /* CEDatabase.m in Sources */,
 				4C43A4301ADC37C600761CA9 /* CEVertexBuffer_DEPRECATED.m in Sources */,
 				4CC25DB51BCE3F1C00DB3DA2 /* pngpread.c in Sources */,
+				4CC25DDE1BCE48A400DB3DA2 /* CEPVRUnpacker.m in Sources */,
 				4CC25DBF1BCE3F1C00DB3DA2 /* pngwtran.c in Sources */,
 				4CBB750A1BB5419600C3829B /* CETextureBuffer.m in Sources */,
 				4CC25DB01BCE3F1C00DB3DA2 /* example.c in Sources */,
@@ -1276,6 +1296,7 @@
 				4CBB75071BB5418900C3829B /* CEIndiceBuffer.m in Sources */,
 				4CC25DC51BCE3F1C00DB3DA2 /* gzio.c in Sources */,
 				4CD9CAA41B8AC1FB00FDE357 /* CECodingObject.m in Sources */,
+				4CC25DD21BCE477B00DB3DA2 /* CEPVRTextureBuffer.m in Sources */,
 				26F7FF8F1ADE45660086D9D7 /* CEAssistRenderer.m in Sources */,
 				268CBC5B1ADCB72C00795A6D /* CEIndicesBuffer_DEPRECATED.m in Sources */,
 				4CC25DC41BCE3F1C00DB3DA2 /* deflate.c in Sources */,
@@ -1371,6 +1392,7 @@
 				269F476A1B0089030030CD55 /* CEShadowMapBuffer.m in Sources */,
 				4CEA12181BB1602D00686678 /* CEQueryCondition.m in Sources */,
 				4CFE33631B3CFAAB00679817 /* CEShadowMapRenderer.m in Sources */,
+				4CC25DDB1BCE489500DB3DA2 /* CEPNGUnpacker.m in Sources */,
 				4CEA12291BB1833600686678 /* CERenderObject.m in Sources */,
 				4CF2BF811BBBC9FE00CB1681 /* CEResourceManager.m in Sources */,
 				263BBBE11AB91A3600F88F65 /* CEUtils.m in Sources */,

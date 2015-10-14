@@ -13,26 +13,18 @@
     GLuint _textureBufferID;
 }
 
-- (instancetype)initWithSize:(CGSize)textureSize {
-    return [self initWithSize:textureSize config:nil resourceID:0 data:nil];
+
+- (instancetype)initWithConfig:(CETextureBufferConfig *)config resourceID:(uint32_t)resourceID {
+    return [self initWithConfig:config resourceID:resourceID data:nil];
 }
 
-- (instancetype)initWithSize:(CGSize)textureSize config:(CETextureBufferConfig *)config {
-    return [self initWithSize:textureSize config:config resourceID:0 data:nil];
-}
-
-- (instancetype)initWithSize:(CGSize)textureSize
-                      config:(CETextureBufferConfig *)config
-                  resourceID:(uint32_t)resourceID
-                        data:(NSData *)textureData {
+- (instancetype)initWithConfig:(CETextureBufferConfig *)config
+                    resourceID:(uint32_t)resourceID
+                          data:(NSData *)textureData {
     self = [super init];
     if (self) {
-        _width = textureSize.width;
-        _height = textureSize.height;
         _resourceID = resourceID;
-        if (!config) {
-            _config = [CETextureBufferConfig new];
-        }
+        _config = config;
         _textureData = textureData;
     }
     return self;
@@ -41,17 +33,30 @@
 
 - (BOOL)setupBuffer {
     if (_ready) return YES;
-    if (_width * _height == 0) {
+    if (!_config ||
+        _config.width * _config.height == 0 ||
+        !_config.texelType ||
+        !_config.format ||
+        !_config.internalFormat) {
         return NO;
     }
     glGenTextures(1, &_textureBufferID);
     glBindTexture(GL_TEXTURE_2D, _textureBufferID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _textureData.bytes);
-    if (_config) {
+    glTexImage2D(GL_TEXTURE_2D, 0, _config.internalFormat, _config.width, _config.height, 0, _config.format, _config.texelType, _textureData.bytes);
+    if (_config.mag_filter) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _config.mag_filter);
+    }
+    if (_config.min_filter) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _config.min_filter);
+    }
+    if (_config.wrap_s) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _config.wrap_s);
+    }
+    if (_config.wrap_t) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _config.wrap_t);
+    }
+    if (_config.useMipmap) {
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
     glBindTexture(GL_TEXTURE_2D, 0);
     _ready = YES;

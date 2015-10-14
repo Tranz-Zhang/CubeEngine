@@ -4,7 +4,7 @@ Kd 0.800000 0.800000 0.800000
 Ks 1.000000 1.000000 1.000000
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-map_Kd new_char_ram_col.png
+map_Kd char_ram_col.png
 bump char_ram_nor.png -bm -0.112782
 Ni 1.00
 Ns 194.117647

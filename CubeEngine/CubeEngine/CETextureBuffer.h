@@ -10,10 +10,19 @@
 
 @interface CETextureBufferConfig : NSObject
 
-@property (nonatomic, assign) GLenum mag_filter; // default: GL_LINEAR
-@property (nonatomic, assign) GLenum min_filter; // default: GL_LINEAR
-@property (nonatomic, assign) GLenum wrap_s; // default: GL_CLAMP_TO_EDGE
-@property (nonatomic, assign) GLenum wrap_t; // default: GL_CLAMP_TO_EDGE
+@property (nonatomic, assign) GLsizei width;
+@property (nonatomic, assign) GLsizei height;
+
+@property (nonatomic, assign) GLenum format;        // default: RGBA
+@property (nonatomic, assign) GLenum internalFormat;// default: RGBA
+@property (nonatomic, assign) GLenum texelType;     // default: GL_UNSIGNED_BYTE
+
+@property (nonatomic, assign) GLenum mag_filter;    // default: GL_LINEAR
+@property (nonatomic, assign) GLenum min_filter;    // default: GL_LINEAR
+@property (nonatomic, assign) GLenum wrap_s;        // default: GL_CLAMP_TO_EDGE
+@property (nonatomic, assign) GLenum wrap_t;        // default: GL_CLAMP_TO_EDGE
+
+@property (nonatomic, assign) BOOL useMipmap;       // default: NO
 
 @end
 
@@ -21,22 +30,13 @@
 @interface CETextureBuffer : NSObject
 
 @property (nonatomic, readonly) uint32_t resourceID;
-@property (nonatomic, readonly) GLsizei width;
-@property (nonatomic, readonly) GLsizei height;
 @property (nonatomic, readonly) CETextureBufferConfig *config;
 @property (nonatomic, readonly, getter=isReady) BOOL ready;
 
-// texture properties
-@property (nonatomic, assign) GLenum filterMode;
-@property (nonatomic, assign) GLenum wrapMode;
+- (instancetype)initWithConfig:(CETextureBufferConfig *)config
+                    resourceID:(uint32_t)resourceID;
 
-- (instancetype)initWithSize:(CGSize)textureSize;
-
-- (instancetype)initWithSize:(CGSize)textureSize
-                      config:(CETextureBufferConfig *)config;
-
-- (instancetype)initWithSize:(CGSize)textureSize
-                      config:(CETextureBufferConfig *)config
+- (instancetype)initWithConfig:(CETextureBufferConfig *)config
                   resourceID:(uint32_t)resourceID
                         data:(NSData *)textureData;
 

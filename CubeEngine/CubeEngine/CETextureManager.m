@@ -8,6 +8,7 @@
 
 #import "CETextureManager.h"
 #import "CEResourceManager.h"
+#import "CEPNGUnpacker.h"
 
 @implementation CETextureManager {
     NSMutableArray *_textureUnitLRUQueue;
@@ -73,7 +74,15 @@
         [resourceDataDict enumerateKeysAndObjectsUsingBlock:^(NSNumber *resourceID, NSData *textureData, BOOL *stop) {
             CETextureInfo *info = textureInfoDict[resourceID];
             if (info) {
-                CETextureBuffer *textureBuffer = [[CETextureBuffer alloc] initWithSize:info.textureSize config:nil resourceID:info.textureID data:textureData];
+                CEPNGUnpackResult *result = [[CEPNGUnpacker defaultPacker] unpackPNGData:textureData];
+                CETextureBufferConfig *config = [CETextureBufferConfig new];
+                config.width = result.width;
+                config.height = result.height;
+                config.format = result.format;
+                config.internalFormat = result.internalFormat;
+                config.texelType = result.texelType;
+                CETextureBuffer *textureBuffer = [[CETextureBuffer alloc] initWithConfig:config resourceID:info.textureID data:result.data];
+//                CETextureBuffer *textureBuffer = [[CETextureBuffer alloc] initWithSize:info.textureSize config:nil resourceID:info.textureID data:textureData];
                 textureBufferDict[resourceID] = textureBuffer;
             }
         }];
