@@ -109,6 +109,13 @@ static uint32_t sNextRuntimeResourceID = kBaseRuntimeResourceID;
 
 
 - (void)loadResourceDataWithIDs:(NSArray *)resourceIDs completion:(CEResourceDataLoadedCompletion)completion {
+    [self loadResourceDataWithIDs:resourceIDs processDelegate:nil completion:completion];
+}
+
+
+- (void)loadResourceDataWithIDs:(NSArray *)resourceIDs
+                processDelegate:(id<CEResourceDataProcessProtocol>)processDelegate
+                     completion:(CEResourceDataLoadedCompletion)completion {
     dispatch_async(_resourceQueue, ^{
         // try to load from cached data
         NSMutableSet *resourcesToLoad = [NSMutableSet setWithArray:resourceIDs];
@@ -129,6 +136,9 @@ static uint32_t sNextRuntimeResourceID = kBaseRuntimeResourceID;
         // load from disk
         if (resourcesToLoad.count) {
             NSDictionary *diskDataDict = [self loadDataWithResourceIDs:resourcesToLoad];
+            if (processDelegate) {
+                diskDataDict = [processDelegate processDataDict:diskDataDict];
+            }
             // add to local cache
             [diskDataDict enumerateKeysAndObjectsUsingBlock:^(NSNumber *resourceID, NSData *data, BOOL *stop) {
                 if (!_resourceCacheDict[resourceID]) {

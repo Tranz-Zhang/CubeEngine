@@ -67,8 +67,6 @@
     _ready = NO;
 }
 
-wrong texture format, check that
-
 
 - (BOOL)loadBufferToIndex:(GLuint)textureIndex {
     if (!_ready) return NO;

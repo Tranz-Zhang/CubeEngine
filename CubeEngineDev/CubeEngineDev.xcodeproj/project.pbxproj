@@ -135,6 +135,8 @@
 		4C7139701B81C157005FC7C3 /* sword_spec.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C7139621B81C157005FC7C3 /* sword_spec.png */; };
 		4C93CA8D1B4A14790017648B /* ram.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C93CA8B1B4A14790017648B /* ram.obj */; };
 		4C93CA8E1B4A14790017648B /* ram.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4C93CA8C1B4A14790017648B /* ram.mtl */; };
+		4CC25CA61BCDF5E500DB3DA2 /* char_ram_col.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 4CC25CA51BCDF5E500DB3DA2 /* char_ram_col.pvr */; };
+		4CC25CAA1BCDFA9B00DB3DA2 /* new_char_ram_col.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC25CA91BCDFA9B00DB3DA2 /* new_char_ram_col.png */; };
 		4CCBD8911BCCA84200BD53F8 /* ram_blinn_nonormal.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4CCBD88F1BCCA84200BD53F8 /* ram_blinn_nonormal.mtl */; };
 		4CCBD8921BCCA84200BD53F8 /* ram_blinn_nonormal.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4CCBD8901BCCA84200BD53F8 /* ram_blinn_nonormal.obj */; };
 		4CCD81741B68CFBD008041AB /* floor_max.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD81731B68CFBD008041AB /* floor_max.obj */; };
@@ -324,6 +326,8 @@
 		4C7139621B81C157005FC7C3 /* sword_spec.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sword_spec.png; sourceTree = "<group>"; };
 		4C93CA8B1B4A14790017648B /* ram.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram.obj; sourceTree = "<group>"; };
 		4C93CA8C1B4A14790017648B /* ram.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram.mtl; sourceTree = "<group>"; };
+		4CC25CA51BCDF5E500DB3DA2 /* char_ram_col.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; path = char_ram_col.pvr; sourceTree = "<group>"; };
+		4CC25CA91BCDFA9B00DB3DA2 /* new_char_ram_col.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new_char_ram_col.png; sourceTree = "<group>"; };
 		4CCBD88F1BCCA84200BD53F8 /* ram_blinn_nonormal.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram_blinn_nonormal.mtl; sourceTree = "<group>"; };
 		4CCBD8901BCCA84200BD53F8 /* ram_blinn_nonormal.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram_blinn_nonormal.obj; sourceTree = "<group>"; };
 		4CCD81731B68CFBD008041AB /* floor_max.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor_max.obj; sourceTree = "<group>"; };
@@ -499,6 +503,7 @@
 		4C364B0C1B481D030056808D /* Ram */ = {
 			isa = PBXGroup;
 			children = (
+				4CC25CA51BCDF5E500DB3DA2 /* char_ram_col.pvr */,
 				4CCBD88F1BCCA84200BD53F8 /* ram_blinn_nonormal.mtl */,
 				4CCBD8901BCCA84200BD53F8 /* ram_blinn_nonormal.obj */,
 				4C69C4F31B4D0E8400ED44D2 /* ram_original.obj */,
@@ -509,6 +514,7 @@
 				4C69C4FC1B4D131500ED44D2 /* ram_blinn.obj */,
 				4C364B161B4820570056808D /* char_ram_nor.png */,
 				4C364B171B4820570056808D /* char_ram_col.png */,
+				4CC25CA91BCDFA9B00DB3DA2 /* new_char_ram_col.png */,
 			);
 			path = Ram;
 			sourceTree = "<group>";
@@ -776,6 +782,7 @@
 				261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */,
 				4C7138F41B817753005FC7C3 /* 01_ST_KP.jpg in Resources */,
 				4C71396B1B81C157005FC7C3 /* limbs.png in Resources */,
+				4CC25CAA1BCDFA9B00DB3DA2 /* new_char_ram_col.png in Resources */,
 				4C7138F81B817753005FC7C3 /* KAMEN-stup.jpg in Resources */,
 				4C7139391B81A170005FC7C3 /* pl0012_n.tga in Resources */,
 				4C7139681B81C157005FC7C3 /* face.png in Resources */,
@@ -821,6 +828,7 @@
 				26FF85341B0A14F70075B971 /* teapot_bump.mtl in Resources */,
 				4C7139501B81B6CF005FC7C3 /* d1419efe.jpg in Resources */,
 				4C7138FD1B817753005FC7C3 /* sp_luk-bump.jpg in Resources */,
+				4CC25CA61BCDF5E500DB3DA2 /* char_ram_col.pvr in Resources */,
 				4461FD091AEE9A3700A59229 /* SpotLightControl.xib in Resources */,
 				4C0E75791B81C7680018B8C2 /* darksiders_test.mtl in Resources */,
 				4C7138FA1B817753005FC7C3 /* PROZOR1.jpg in Resources */,

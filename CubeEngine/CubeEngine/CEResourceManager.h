@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol CEResourceDataProcessProtocol <NSObject>
+
+- (NSDictionary *)processDataDict:(NSDictionary *)dictionary;
+
+@end
+
+
 /**
  resourceDataDict -> @{@(resourceID) : NSData}
  */
@@ -24,6 +31,15 @@ typedef void (^CEResourceDataLoadedCompletion)(NSDictionary *resourceDataDict);
                      completion:(CEResourceDataLoadedCompletion)completion;
 
 /**
+ Asynchronously loading resource data into main memory, 
+ will call process delegate after loading data dict,
+ can use to process data before cached by resource manager.
+ */
+- (void)loadResourceDataWithIDs:(NSArray *)resourceIDs
+                processDelegate:(id <CEResourceDataProcessProtocol>)processDelegate
+                     completion:(CEResourceDataLoadedCompletion)completion;
+
+/**
  release data from main memory
  */
 - (void)unloadResourceDataWithID:(uint32_t)resourceID;
@@ -36,3 +52,5 @@ typedef void (^CEResourceDataLoadedCompletion)(NSDictionary *resourceDataDict);
 + (void)recycleRuntimeResourceID:(uint32_t)resourceID;
 
 @end
+
+
