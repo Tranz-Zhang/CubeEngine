@@ -19,11 +19,11 @@
 }
 
 - (void)setTransparency:(float)transparency {
-    if (transparency < 0) {
-        return;
-    }
+//    if (transparency < 0) {
+//        return;
+//    }
     _transparency = MIN(1.0, MAX(0.0, transparency));
-    _materialType = _transparency >= 1.0 ? CEMaterialSolid : CEMaterialTransparent;
+//    _materialType = _transparency >= 1.0 ? CEMaterialSolid : CEMaterialTransparent;
 }
 
 

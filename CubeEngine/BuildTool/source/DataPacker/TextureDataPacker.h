@@ -11,6 +11,6 @@
 
 @interface TextureDataPacker : BaseDataPacker
 
-- (BOOL)packTextureDataWithInfo:(TextureInfo *)textureInfo;
+- (NSString *)packTextureDataWithInfo:(TextureInfo *)textureInfo;
 
 @end

@@ -11,6 +11,7 @@
 #import "CEVBOAttribute.h"
 
 @implementation OBJFileParser {
+    // use only for parsing data
     OBJFileInfo *_objInfo;
     VectorList *_allPositionList;
     VectorList *_allUVList;
@@ -20,59 +21,165 @@
 }
 
 
-+ (OBJFileParser *)parserWithFilePath:(NSString *)filePath {
-    return [[OBJFileParser alloc] initWithFilePath:filePath];
++ (OBJFileParser *)dataParser {
+    return [[OBJFileParser alloc] init];
 }
 
 
-- (instancetype)initWithFilePath:(NSString *)filePath {
-    self = [super init];
-    if (self) {
-        _filePath = filePath;
-    }
-    return self;
-}
+#pragma mark - info parsing
 
-
-- (OBJFileInfo *)parse {
++ (OBJFileInfo *)parseBaseInfoWithFilePath:(NSString *)filePath {
     NSError *error;
-    NSString *objContent = [[NSString alloc] initWithContentsOfFile:_filePath encoding:NSUTF8StringEncoding error:&error];
+    NSString *objContent = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
     if (error) {
         NSLog(@"Error: %@", error);
         return nil;
     }
     NSArray *lines = [objContent componentsSeparatedByString:@"\n"];
     
-    /*
-     NOTE: I use [... componentsSeparatedByString:@" "] to seperate because it's short writing,
-     if something wrong, use [... componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet] instead.
-     */
-    
-    // parse mtl file first
-    NSDictionary *mtlDict = [self parseMTLFileWithContentLines:lines];
-    for (MTLInfo *mtlInfo in mtlDict.allValues) {
-        if (mtlInfo.normalTexture) {
-            _hasNormalMap = YES;
-            break;
+    // parse MTL file info
+    NSString *mtlFileName;
+    NSMutableSet *usedMtlNames = [NSMutableSet set];
+    for (NSString *lineContent in lines) {
+        // mtl file name
+        if ([lineContent hasPrefix:@"mtllib"]) {
+            mtlFileName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            continue;
+        }
+        
+        // reference material
+        if ([lineContent hasPrefix:@"usemtl"]) {
+            NSString *materialName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            [usedMtlNames addObject:materialName];
+            continue;
         }
     }
+    NSDictionary *mtlDict = nil;
+    if (mtlFileName.length) {
+        NSString *currentDirectory = [filePath stringByDeletingLastPathComponent];
+        NSString *mtlFilePath = [currentDirectory stringByAppendingPathComponent:mtlFileName];
+        MTLFileParser *mtlParser = [MTLFileParser parserWithFilePath:mtlFilePath];
+        NSDictionary *allMTLDict = [mtlParser parse];
+        NSMutableDictionary *usedMtlDict = [NSMutableDictionary dictionary];
+        for (NSString *mtlName in usedMtlNames) {
+            if (allMTLDict[mtlName]) {
+                usedMtlDict[mtlName] = allMTLDict[mtlName];
+            }
+        }
+        mtlDict = usedMtlDict.copy;
+    }
     
-    _indicesDict = [NSMutableDictionary dictionary];
-    _allPositionList = [[VectorList alloc] initWithVectorType:VectorType3];
-    _allUVList = [[VectorList alloc] initWithVectorType:VectorType2];
-    _allNormalList = [[VectorList alloc] initWithVectorType:VectorType3];
-    
-    NSString *fileName = [_filePath lastPathComponent];
+    // parsing data
+    NSString *fileName = [filePath lastPathComponent];
     fileName = [fileName substringToIndex:fileName.length - 4];
-    _objInfo = [[OBJFileInfo alloc] init];
-    _objInfo.name = fileName;
-    _objInfo.filePath = _filePath;
+    OBJFileInfo *objInfo = [[OBJFileInfo alloc] init];
+    objInfo.name = fileName;
+    objInfo.filePath = filePath;
     
     NSMutableArray *meshInfoList = [NSMutableArray array];
+    // create default group name
     MeshInfo *currentMesh = [MeshInfo new];
     currentMesh.groupNames = @[@"DefaultGroup"];
     currentMesh.indicesList = [NSMutableArray array];
     [meshInfoList addObject:currentMesh];
+    for (NSString *lineContent in lines) {
+        // parse group "g group1 pPipe1 group2"
+        if ([lineContent hasPrefix:@"g "] || [lineContent hasPrefix:@"o "]) {
+            NSString *valueString = [lineContent substringFromIndex:2];
+            NSArray *groupNames = [valueString componentsSeparatedByString:@" "];
+            MeshInfo *newMesh = [MeshInfo new];
+            newMesh.groupNames = groupNames;
+            newMesh.indicesList = [NSMutableArray array];
+            [meshInfoList addObject:newMesh];
+            currentMesh = newMesh;
+            continue;
+        }
+        
+        // mtl file name
+        if ([lineContent hasPrefix:@"mtllib"]) {
+            objInfo.mtlFileName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            continue;
+        }
+        
+        // reference material
+        if ([lineContent hasPrefix:@"usemtl"]) {
+            NSString *materialName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
+            currentMesh.materialInfo = mtlDict[materialName];
+            continue;
+        }
+        
+        if (!currentMesh.indiceCount && [lineContent hasPrefix:@"f "]) {
+            NSString *content = [lineContent substringFromIndex:2];
+            NSArray *indexStringList = [content componentsSeparatedByString:@" "];
+            if (!objInfo.attributes) {
+                objInfo.attributes = [self vertexAttributesWithFaceAttributes:indexStringList[0]];
+            }
+            currentMesh.indiceCount = 1;
+        }
+    }
+    
+    // remove useless groups
+    NSMutableArray *filteredMeshes = [NSMutableArray array];
+    for (MeshInfo *mesh in meshInfoList) {
+        if (mesh.groupNames.count && mesh.indiceCount) {
+            [filteredMeshes addObject:mesh];
+        }
+    }
+    objInfo.meshInfos = filteredMeshes.copy;
+    return objInfo;
+}
+
+
++ (NSArray *)vertexAttributesWithFaceAttributes:(NSString *)attributeString {
+    NSArray *indices = [attributeString componentsSeparatedByString:@"/"];
+    NSMutableArray *attributeNames = [NSMutableArray arrayWithCapacity:indices.count];
+    if (indices.count >= 1) { // add position
+        [attributeNames addObject:@(CEVBOAttributePosition)];
+    }
+    if (indices.count >= 2) {
+        if ([indices[1] length]) {
+            [attributeNames addObject:@(CEVBOAttributeUV)];
+        } else {
+            [attributeNames addObject:@(CEVBOAttributeNormal)];
+        }
+    }
+    if (indices.count >= 3 && [indices[1] length]) {
+        [attributeNames addObject:@(CEVBOAttributeNormal)];
+    }
+    
+    return attributeNames;
+}
+
+
+#pragma mark - Data parsing
+
+
+- (BOOL)parseDataWithFileInfo:(OBJFileInfo *)fileInfo {
+    NSError *error;
+    NSString *objContent = [[NSString alloc] initWithContentsOfFile:fileInfo.filePath encoding:NSUTF8StringEncoding error:&error];
+    if (error) {
+        NSLog(@"Error: %@", error);
+        return NO;
+    }
+    NSArray *lines = [objContent componentsSeparatedByString:@"\n"];
+    _indicesDict = [NSMutableDictionary dictionary];
+    _allPositionList = [[VectorList alloc] initWithVectorType:VectorType3];
+    _allUVList = [[VectorList alloc] initWithVectorType:VectorType2];
+    _allNormalList = [[VectorList alloc] initWithVectorType:VectorType3];
+    _objInfo = fileInfo;
+    _hasNormalMap = NO;
+    
+    // check has normal map
+    NSMutableDictionary *meshInfoDict = [NSMutableDictionary dictionary];
+    for (MeshInfo *meshInfo in fileInfo.meshInfos) {
+        if (!_hasNormalMap && meshInfo.materialInfo.normalTexture) {
+            _hasNormalMap = YES;
+        }
+        NSString *meshString = [meshInfo.groupNames componentsJoinedByString:@"-"];
+        meshInfoDict[meshString] = meshInfo;
+    }
+    
+    MeshInfo *currentMesh = fileInfo.meshInfos.count ? fileInfo.meshInfos[0] : nil;
     for (NSString *lineContent in lines) {
         // parse vertex "v 2.963007 0.335381 -0.052237"
         if ([lineContent hasPrefix:@"v "]) {
@@ -99,22 +206,16 @@
         if ([lineContent hasPrefix:@"g "] || [lineContent hasPrefix:@"o "]) {
             NSString *valueString = [lineContent substringFromIndex:2];
             NSArray *groupNames = [valueString componentsSeparatedByString:@" "];
-            MeshInfo *newMesh = [MeshInfo new];
-            newMesh.groupNames = groupNames;
-            newMesh.indicesList = [NSMutableArray array];
-            [meshInfoList addObject:newMesh];
-            currentMesh = newMesh;
+            NSString *meshString = [groupNames componentsJoinedByString:@"-"];
+            currentMesh = meshInfoDict[meshString];
             continue;
         }
         
         // parse faces "f 10/16/25 9/15/26 29/36/27 30/37/28"
-        if ([lineContent hasPrefix:@"f "]) {
+        if (currentMesh && [lineContent hasPrefix:@"f "]) {
+//            NSAssert(currentMesh, @"Fail to get current mesh");
             NSString *content = [lineContent substringFromIndex:2];
             NSArray *indexStringList = [content componentsSeparatedByString:@" "];
-            if (!_objInfo.attributes) {
-                _objInfo.attributes = [self vertexAttributesWithFaceAttributes:indexStringList[0]];
-            }
-            
             if (indexStringList.count == 3) {
                 for (NSString *indexString in indexStringList) {
                     [self appendIndexToMesh:currentMesh withIndexString:indexString];
@@ -131,29 +232,8 @@
             }
             continue;
         }
-        
-        // mtl file name
-        if ([lineContent hasPrefix:@"mtllib"]) {
-            _objInfo.mtlFileName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
-            continue;
-        }
-        
-        // reference material
-        if ([lineContent hasPrefix:@"usemtl"]) {
-            NSString *materialName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
-            currentMesh.materialInfo = mtlDict[materialName];
-            continue;
-        }
     }
     
-    // remove useless groups
-    NSMutableArray *filteredMeshes = [NSMutableArray array];
-    for (MeshInfo *mesh in meshInfoList) {
-        if (mesh.groupNames.count && mesh.indicesList.count) {
-            [filteredMeshes addObject:mesh];
-        }
-    }
-    _objInfo.meshInfos = filteredMeshes.copy;
     if (_hasNormalMap && ![self addTangentDataToObjInfo:_objInfo]) {
         printf("WARNING: fail to add tangent for model: %s\n", _objInfo.name.UTF8String);
     }
@@ -164,13 +244,9 @@
     _allUVList = nil;
     _allNormalList = nil;
     
-    OBJFileInfo *returnInfo = _objInfo;
-    _objInfo = nil;
-    return returnInfo;
+    return YES;
 }
 
-
-#pragma mark - Element Extract
 
 - (NSData *)dataWithFloatStringList:(NSArray *)floatStringList {
     NSMutableData *valueData = [NSMutableData data];
@@ -258,25 +334,6 @@
 }
 
 
-- (NSArray *)vertexAttributesWithFaceAttributes:(NSString *)attributeString {
-    NSArray *indices = [attributeString componentsSeparatedByString:@"/"];
-    NSMutableArray *attributeNames = [NSMutableArray arrayWithCapacity:indices.count];
-    if (indices.count >= 1) { // add position
-        [attributeNames addObject:@(CEVBOAttributePosition)];
-    }
-    if (indices.count >= 2) {
-        if ([indices[1] length]) {
-            [attributeNames addObject:@(CEVBOAttributeUV)];
-        } else {
-            [attributeNames addObject:@(CEVBOAttributeNormal)];
-        }
-    }
-    if (indices.count >= 3 && [indices[1] length]) {
-        [attributeNames addObject:@(CEVBOAttributeNormal)];
-    }
-    
-    return attributeNames;
-}
 
 
 // calcualte tengent data
@@ -379,50 +436,8 @@
     return GLKVector3Make([values[0] floatValue], [values[1] floatValue], [values[2] floatValue]);
 }
 
-#pragma mark - parseMTLFile 
-
-- (NSDictionary *)parseMTLFileWithContentLines:(NSArray *)lineContentList {
-    NSString *mtlFileName;
-    NSMutableSet *usedMtlNames = [NSMutableSet set];
-    for (NSString *lineContent in lineContentList) {
-        // mtl file name
-        if ([lineContent hasPrefix:@"mtllib"]) {
-            mtlFileName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
-            continue;
-        }
-        
-        // reference material
-        if ([lineContent hasPrefix:@"usemtl"]) {
-            NSString *materialName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
-            [usedMtlNames addObject:materialName];
-            continue;
-        }
-    }
-    if (!mtlFileName.length) {
-        return nil;
-    }
-    
-    NSString *currentDirectory = [_filePath stringByDeletingLastPathComponent];
-    NSString *mtlFilePath = [currentDirectory stringByAppendingPathComponent:mtlFileName];
-    MTLFileParser *mtlParser = [MTLFileParser parserWithFilePath:mtlFilePath];
-    NSDictionary *allMTLDict = [mtlParser parse];
-    NSMutableDictionary *usedMtlDict = [NSMutableDictionary dictionary];
-    for (NSString *mtlName in usedMtlNames) {
-        if (allMTLDict[mtlName]) {
-            usedMtlDict[mtlName] = allMTLDict[mtlName];
-        }
-    }
-    return usedMtlDict.copy;
-}
 
 @end
-
-
-
-
-
-
-
 
 
 

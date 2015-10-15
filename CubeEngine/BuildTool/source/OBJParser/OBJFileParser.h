@@ -11,13 +11,11 @@
 
 @interface OBJFileParser : NSObject
 
-@property (nonatomic, readonly) NSString *filePath;
+// only get base info of obj, no data parse
++ (OBJFileInfo *)parseBaseInfoWithFilePath:(NSString *)filePath;
 
-+ (OBJFileParser *)parserWithFilePath:(NSString *)filePath;
-
-// @return a list of MeshInfo
-- (OBJFileInfo *)parse;
-
-//+ (BOOL)addTangentDataToObjInfo:(OBJFileInfo *)objFileInfo;
+// data parsing
++ (OBJFileParser *)dataParser;
+- (BOOL)parseDataWithFileInfo:(OBJFileInfo *)fileInfo;
 
 @end

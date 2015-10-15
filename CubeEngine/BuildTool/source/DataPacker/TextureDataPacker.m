@@ -11,10 +11,10 @@
 
 @implementation TextureDataPacker
 
-- (BOOL)packTextureDataWithInfo:(TextureInfo *)textureInfo {
+- (NSString *)packTextureDataWithInfo:(TextureInfo *)textureInfo {
     NSData *imageData = [NSData dataWithContentsOfFile:textureInfo.filePath];
     if (!imageData.length) {
-        return NO;
+        return nil;
     }
     return [self writeData:@{@(textureInfo.resourceID) : imageData}];
 }
@@ -26,3 +26,4 @@
 
 
 @end
+

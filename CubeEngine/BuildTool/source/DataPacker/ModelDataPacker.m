@@ -11,7 +11,7 @@
 
 @implementation ModelDataPacker
 
-- (BOOL)packModelDataDict:(NSDictionary *)dataDict {
+- (NSString *)packModelDataDict:(NSDictionary *)dataDict {
     return [super writeData:dataDict];
 }
 

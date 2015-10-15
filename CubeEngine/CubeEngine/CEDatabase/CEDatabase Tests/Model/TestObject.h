@@ -32,6 +32,8 @@
 @property (nonatomic, strong) NSValue *value;
 @property (nonatomic, strong) NSData *data;
 
+//@property (nonatomic, strong) NSDate *date;
+
 
 // Mutable OC Type
 //@property (nonatomic, strong) NSMutableString *mutableString;

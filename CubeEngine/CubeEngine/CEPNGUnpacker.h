@@ -15,7 +15,7 @@
 @property (nonatomic, assign) GLenum format;
 @property (nonatomic, assign) GLenum internalFormat;
 @property (nonatomic, assign) GLenum texelType;
-@property (nonatomic, assign) GLint bytesPrePixel;
+@property (nonatomic, assign) GLint bytesPerPixel;
 @property (nonatomic, strong) NSData *data;
 
 @end
@@ -27,9 +27,9 @@
 
 - (CEPNGUnpackResult *)unpackPNGData:(NSData *)pngData;
 
-- (void)convertPNGTo16Bits565:(CEPNGUnpackResult *)result;
-- (void)convertPNGTo16Bits5551:(CEPNGUnpackResult *)result;
-- (void)convertPNGTo16Bits4444:(CEPNGUnpackResult *)result;
++ (void)convertPNGTo16Bits565:(CEPNGUnpackResult *)result;
++ (void)convertPNGTo16Bits5551:(CEPNGUnpackResult *)result;
++ (void)convertPNGTo16Bits4444:(CEPNGUnpackResult *)result;
 
 @end
 

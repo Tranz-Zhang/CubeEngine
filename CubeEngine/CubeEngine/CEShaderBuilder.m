@@ -62,6 +62,26 @@ NSString *CEShaderDirectory() {
      //*/
 }
 
+- (void)setMaterialType:(CEMaterialType)materialType {
+    switch (materialType) {
+        case CEMaterialSolid:
+            [self removeProfileWithName:@"AlphaTest"];
+            //remove tranparency
+            break;
+        case CEMaterialAlphaTested:
+            [self loadProfileWithName:@"AlphaTest"];
+            //remove tranparency
+            break;
+        case CEMaterialTransparent:
+            [self loadProfileWithName:@"AlphaTest"];
+            // load transparent
+            break;
+            
+        default:
+            break;
+    }
+}
+
 - (void)enableLightWithType:(CELightType)lightType {
     switch (lightType) {
         case CELightTypeDirectional:

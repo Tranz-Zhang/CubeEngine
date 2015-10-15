@@ -9,17 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "CEShaderInfo.h"
 
-typedef NS_ENUM(int, CEShaderRenderType) {
-    CEShaderRenderTypeSolid = 0,
-    CEShaderRenderTypeAlpha,
-    CEShaderRenderTypeTransparent,
-};
+//typedef NS_ENUM(int, CEShaderRenderType) {
+//    CEShaderRenderTypeSolid = 0,
+//    CEShaderRenderTypeAlpha,
+//    CEShaderRenderTypeTransparent,
+//};
 
 
 @interface CEShaderBuilder : NSObject
 
 - (void)startBuildingNewShader;
 
+- (void)setMaterialType:(CEMaterialType)materialType;
 - (void)enableLightWithType:(CELightType)lightType;
 - (void)enableTexture:(BOOL)enabled;
 - (void)enableNormalMap:(BOOL)enabled;

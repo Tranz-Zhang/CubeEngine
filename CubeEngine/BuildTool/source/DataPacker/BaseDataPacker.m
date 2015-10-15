@@ -36,7 +36,7 @@
 }
 
 
-- (BOOL)writeData:(NSDictionary *)dataDict {
+- (NSString *)writeData:(NSDictionary *)dataDict {
     if (!_db || !_dbContext || !dataDict.count || ![self targetFileDirectory]) {
         return NO;
     }
@@ -62,20 +62,20 @@
         }
     }];
     if (!resourceData.length || !dataInfos.count) {
-        return NO;
+        return nil;
     }
     // write DB
     NSError *error;
     if (![_dbContext insertObjects:dataInfos error:&error]) {
         printf("Fail to insert resource data info to db: %s\n", [[error localizedDescription] UTF8String]);
-        return NO;
+        return nil;
     }
     // write resource file
     if (![resourceData writeToFile:filePath atomically:YES]) {
         printf("Fail to write resource data\n");
-        return NO;
+        return nil;
     }
-    return YES;
+    return filePath;
 }
 
 

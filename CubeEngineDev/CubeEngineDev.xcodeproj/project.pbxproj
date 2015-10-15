@@ -12,7 +12,6 @@
 		26193F7D1AA833BF00787C64 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193F7C1AA833BF00787C64 /* main.m */; };
 		26193F801AA833BF00787C64 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193F7F1AA833BF00787C64 /* AppDelegate.m */; };
 		26193F831AA833BF00787C64 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193F821AA833BF00787C64 /* ViewController.m */; };
-		26193F861AA833BF00787C64 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26193F841AA833BF00787C64 /* Main.storyboard */; };
 		26193F881AA833BF00787C64 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26193F871AA833BF00787C64 /* Images.xcassets */; };
 		26193F971AA833C000787C64 /* CubeEngineDevTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 26193F961AA833C000787C64 /* CubeEngineDevTests.m */; };
 		26193FB51AA853D300787C64 /* libCubeEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26193FA91AA839AC00787C64 /* libCubeEngine.a */; };
@@ -74,25 +73,6 @@
 		4C69C4F61B4D0E8400ED44D2 /* ram_original.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4C69C4F41B4D0E8400ED44D2 /* ram_original.mtl */; };
 		4C69C4FD1B4D131500ED44D2 /* ram_blinn.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4C69C4FB1B4D131500ED44D2 /* ram_blinn.mtl */; };
 		4C69C4FE1B4D131500ED44D2 /* ram_blinn.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C69C4FC1B4D131500ED44D2 /* ram_blinn.obj */; };
-		4C7138F11B817753005FC7C3 /* 00_SKAP.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138DE1B817753005FC7C3 /* 00_SKAP.jpg */; };
-		4C7138F21B817753005FC7C3 /* 01_S_BA.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138DF1B817753005FC7C3 /* 01_S_BA.jpg */; };
-		4C7138F31B817753005FC7C3 /* 01_St_kp-bump.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138E01B817753005FC7C3 /* 01_St_kp-bump.jpg */; };
-		4C7138F41B817753005FC7C3 /* 01_ST_KP.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138E11B817753005FC7C3 /* 01_ST_KP.jpg */; };
-		4C7138F51B817753005FC7C3 /* 01_STUB-bump.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138E21B817753005FC7C3 /* 01_STUB-bump.jpg */; };
-		4C7138F61B817753005FC7C3 /* 01_STUB.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138E31B817753005FC7C3 /* 01_STUB.jpg */; };
-		4C7138F71B817753005FC7C3 /* KAMEN-bump.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138E41B817753005FC7C3 /* KAMEN-bump.jpg */; };
-		4C7138F81B817753005FC7C3 /* KAMEN-stup.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138E51B817753005FC7C3 /* KAMEN-stup.jpg */; };
-		4C7138F91B817753005FC7C3 /* KAMEN.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138E61B817753005FC7C3 /* KAMEN.jpg */; };
-		4C7138FA1B817753005FC7C3 /* PROZOR1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138E71B817753005FC7C3 /* PROZOR1.jpg */; };
-		4C7138FB1B817753005FC7C3 /* reljef-bump.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138E81B817753005FC7C3 /* reljef-bump.jpg */; };
-		4C7138FC1B817753005FC7C3 /* RELJEF.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138E91B817753005FC7C3 /* RELJEF.jpg */; };
-		4C7138FD1B817753005FC7C3 /* sp_luk-bump.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138EA1B817753005FC7C3 /* sp_luk-bump.jpg */; };
-		4C7138FE1B817753005FC7C3 /* SP_LUK.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138EB1B817753005FC7C3 /* SP_LUK.jpg */; };
-		4C7138FF1B817753005FC7C3 /* sponza.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138EC1B817753005FC7C3 /* sponza.mtl */; };
-		4C7139001B817753005FC7C3 /* sponza.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138ED1B817753005FC7C3 /* sponza.obj */; };
-		4C7139011B817753005FC7C3 /* VRATA_KO.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138EE1B817753005FC7C3 /* VRATA_KO.jpg */; };
-		4C7139021B817753005FC7C3 /* VRATA_KR.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138EF1B817753005FC7C3 /* VRATA_KR.jpg */; };
-		4C7139031B817753005FC7C3 /* X01_ST.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7138F01B817753005FC7C3 /* X01_ST.jpg */; };
 		4C71390A1B818F49005FC7C3 /* bridge.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7139051B818F49005FC7C3 /* bridge.jpg */; };
 		4C71390B1B818F49005FC7C3 /* bridge_normal.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7139061B818F49005FC7C3 /* bridge_normal.jpg */; };
 		4C71390C1B818F49005FC7C3 /* bridge_spec.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C7139071B818F49005FC7C3 /* bridge_spec.jpg */; };
@@ -140,6 +120,7 @@
 		4CCBD8911BCCA84200BD53F8 /* ram_blinn_nonormal.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4CCBD88F1BCCA84200BD53F8 /* ram_blinn_nonormal.mtl */; };
 		4CCBD8921BCCA84200BD53F8 /* ram_blinn_nonormal.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4CCBD8901BCCA84200BD53F8 /* ram_blinn_nonormal.obj */; };
 		4CCD81741B68CFBD008041AB /* floor_max.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD81731B68CFBD008041AB /* floor_max.obj */; };
+		4CE020381BCF4F00008E0179 /* char_ram_col_alpha_test.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE020371BCF4F00008E0179 /* char_ram_col_alpha_test.png */; };
 		4CEA12221BB1609C00686678 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEA12211BB1609C00686678 /* libsqlite3.dylib */; };
 /* End PBXBuildFile section */
 
@@ -331,6 +312,7 @@
 		4CCBD88F1BCCA84200BD53F8 /* ram_blinn_nonormal.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram_blinn_nonormal.mtl; sourceTree = "<group>"; };
 		4CCBD8901BCCA84200BD53F8 /* ram_blinn_nonormal.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram_blinn_nonormal.obj; sourceTree = "<group>"; };
 		4CCD81731B68CFBD008041AB /* floor_max.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor_max.obj; sourceTree = "<group>"; };
+		4CE020371BCF4F00008E0179 /* char_ram_col_alpha_test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = char_ram_col_alpha_test.png; sourceTree = "<group>"; };
 		4CEA12211BB1609C00686678 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -515,6 +497,7 @@
 				4C364B161B4820570056808D /* char_ram_nor.png */,
 				4C364B171B4820570056808D /* char_ram_col.png */,
 				4CC25CA91BCDFA9B00DB3DA2 /* new_char_ram_col.png */,
+				4CE020371BCF4F00008E0179 /* char_ram_col_alpha_test.png */,
 			);
 			path = Ram;
 			sourceTree = "<group>";
@@ -753,9 +736,8 @@
 				4C7139321B81A170005FC7C3 /* pl0004.tga in Resources */,
 				268CBC6E1ADD466E00795A6D /* teapot.png in Resources */,
 				4C7139531B81B6CF005FC7C3 /* sonic.obj in Resources */,
-				4C7139001B817753005FC7C3 /* sponza.obj in Resources */,
+				4CE020381BCF4F00008E0179 /* char_ram_col_alpha_test.png in Resources */,
 				261CD4351AD3DE8B00C521CC /* cylinder.mtl in Resources */,
-				4C7138F61B817753005FC7C3 /* 01_STUB.jpg in Resources */,
 				4C7139361B81A170005FC7C3 /* pl0011.tga in Resources */,
 				268898A81B48D46D00F757E5 /* white_texture.png in Resources */,
 				26FF85331B0A14F70075B971 /* sponza.mtl in Resources */,
@@ -768,50 +750,39 @@
 				264B13201B05F4540066195D /* test_scene.mtl in Resources */,
 				2684E9CD1B044A140044C16E /* normal.jpg in Resources */,
 				44D0CCE91AECA677000C137C /* rotation_icon@2x.png in Resources */,
-				4C7138FE1B817753005FC7C3 /* SP_LUK.jpg in Resources */,
 				4C71390B1B818F49005FC7C3 /* bridge_normal.jpg in Resources */,
 				4C10ED961B4248A80048636C /* leaf.png in Resources */,
 				2648E6AC1AD516DA00E146D8 /* test_obj.mtl in Resources */,
 				4C7139701B81C157005FC7C3 /* sword_spec.png in Resources */,
 				4C71396F1B81C157005FC7C3 /* sword_nrm.png in Resources */,
 				269249901B02F3CF0069892D /* teapot_texture.mtl in Resources */,
-				4C7138F21B817753005FC7C3 /* 01_S_BA.jpg in Resources */,
 				4C7139351B81A170005FC7C3 /* pl0005_n.tga in Resources */,
 				268CBC661ADD412200795A6D /* cube.obj in Resources */,
 				4C7139631B81C157005FC7C3 /* body.png in Resources */,
 				261CD4341AD3DE8B00C521CC /* cylinder_group.obj in Resources */,
-				4C7138F41B817753005FC7C3 /* 01_ST_KP.jpg in Resources */,
 				4C71396B1B81C157005FC7C3 /* limbs.png in Resources */,
 				4CC25CAA1BCDFA9B00DB3DA2 /* new_char_ram_col.png in Resources */,
-				4C7138F81B817753005FC7C3 /* KAMEN-stup.jpg in Resources */,
 				4C7139391B81A170005FC7C3 /* pl0012_n.tga in Resources */,
 				4C7139681B81C157005FC7C3 /* face.png in Resources */,
-				4C7138FC1B817753005FC7C3 /* RELJEF.jpg in Resources */,
 				4C71394F1B81B6CF005FC7C3 /* bab97353.jpg in Resources */,
 				4C7139651B81C157005FC7C3 /* body_spec.png in Resources */,
 				4C71390E1B818F49005FC7C3 /* store_bridge.obj in Resources */,
-				4C7138FB1B817753005FC7C3 /* reljef-bump.jpg in Resources */,
 				4C93CA8E1B4A14790017648B /* ram.mtl in Resources */,
 				269249921B02F3CF0069892D /* default.png in Resources */,
 				4CCBD8921BCCA84200BD53F8 /* ram_blinn_nonormal.obj in Resources */,
 				4C7139381B81A170005FC7C3 /* pl0012.tga in Resources */,
 				4C364B0A1B478B180056808D /* tree.png in Resources */,
-				4C7138F51B817753005FC7C3 /* 01_STUB-bump.jpg in Resources */,
 				4C71390D1B818F49005FC7C3 /* store_bridge.mtl in Resources */,
 				4C10ED991B4248A80048636C /* sample_scene.obj in Resources */,
 				4C71396A1B81C157005FC7C3 /* face_spec.png in Resources */,
 				4C69C4F61B4D0E8400ED44D2 /* ram_original.mtl in Resources */,
 				4C71396D1B81C157005FC7C3 /* limbs_spec.png in Resources */,
 				268898A61B48D45D00F757E5 /* gray_texture.png in Resources */,
-				4C7138F91B817753005FC7C3 /* KAMEN.jpg in Resources */,
 				4C7139371B81A170005FC7C3 /* pl0011_n.tga in Resources */,
-				4C7139021B817753005FC7C3 /* VRATA_KR.jpg in Resources */,
-				26193F861AA833BF00787C64 /* Main.storyboard in Resources */,
 				4C7139691B81C157005FC7C3 /* face_nrm.png in Resources */,
 				44D0CCE81AECA677000C137C /* transition_icon@2x.png in Resources */,
 				4C69C4FD1B4D131500ED44D2 /* ram_blinn.mtl in Resources */,
 				4C364B1A1B4820570056808D /* char_ram_nor.png in Resources */,
-				4C7139031B817753005FC7C3 /* X01_ST.jpg in Resources */,
 				4C71394E1B81B6CF005FC7C3 /* 64124be4.jpg in Resources */,
 				4C10ED941B4248A80048636C /* balloon.png in Resources */,
 				26A00DB61AFB014C00E12B24 /* floor.obj in Resources */,
@@ -822,16 +793,13 @@
 				4C71390A1B818F49005FC7C3 /* bridge.jpg in Resources */,
 				4C71393A1B81A170005FC7C3 /* pl0013.tga in Resources */,
 				4C69C4FE1B4D131500ED44D2 /* ram_blinn.obj in Resources */,
-				4C7139011B817753005FC7C3 /* VRATA_KO.jpg in Resources */,
 				4C10ED971B4248A80048636C /* momo.png in Resources */,
 				263C8E781AE68738004FDFE8 /* teapot_smooth.obj in Resources */,
 				26FF85341B0A14F70075B971 /* teapot_bump.mtl in Resources */,
 				4C7139501B81B6CF005FC7C3 /* d1419efe.jpg in Resources */,
-				4C7138FD1B817753005FC7C3 /* sp_luk-bump.jpg in Resources */,
 				4CC25CA61BCDF5E500DB3DA2 /* char_ram_col.pvr in Resources */,
 				4461FD091AEE9A3700A59229 /* SpotLightControl.xib in Resources */,
 				4C0E75791B81C7680018B8C2 /* darksiders_test.mtl in Resources */,
-				4C7138FA1B817753005FC7C3 /* PROZOR1.jpg in Resources */,
 				26193F881AA833BF00787C64 /* Images.xcassets in Resources */,
 				268CBC6C1ADD466E00795A6D /* teapot.mtl in Resources */,
 				26FF85351B0A14F70075B971 /* teapot_bump.obj in Resources */,
@@ -844,13 +812,9 @@
 				2648E6AD1AD516DA00E146D8 /* test_obj.obj in Resources */,
 				2609491D1B05CCBE00F7465B /* test.obj in Resources */,
 				264B13211B05F4540066195D /* test_scene.obj in Resources */,
-				4C7138F71B817753005FC7C3 /* KAMEN-bump.jpg in Resources */,
 				4C10ED9E1B4282BA0048636C /* sample_scene_noleaf.obj in Resources */,
 				4C71392F1B81A170005FC7C3 /* leon.obj in Resources */,
 				268CBC681ADD42A900795A6D /* cube_triangle.obj in Resources */,
-				4C7138FF1B817753005FC7C3 /* sponza.mtl in Resources */,
-				4C7138F11B817753005FC7C3 /* 00_SKAP.jpg in Resources */,
-				4C7138F31B817753005FC7C3 /* 01_St_kp-bump.jpg in Resources */,
 				4C93CA8D1B4A14790017648B /* ram.obj in Resources */,
 				4C71396E1B81C157005FC7C3 /* sword.png in Resources */,
 				4C71393C1B81A170005FC7C3 /* pl0014_n.tga in Resources */,

@@ -10,12 +10,20 @@
 #import "CEResourceManager.h"
 #import "CEPNGUnpacker.h"
 
-@implementation CETextureManager {
+@interface CETextureManager () <CEResourceDataProcessProtocol> {
+    // runtime
     NSMutableArray *_textureUnitLRUQueue;
     NSMutableDictionary *_textureUnitBindingDict;
     NSMutableDictionary *_textureBufferDict;
+    
+    // resource loading
+    NSMutableDictionary *_textureConfigDict;
 }
 
+@end
+
+
+@implementation CETextureManager
 
 #pragma mark - environment params
 + (GLint)maxTextureUnitCount {
@@ -54,6 +62,7 @@
         _textureUnitLRUQueue = [NSMutableArray arrayWithCapacity:[CETextureManager maxTextureUnitCount]];
         _textureBufferDict = [NSMutableDictionary dictionary];
         _textureUnitBindingDict = [NSMutableDictionary dictionary];
+        _textureConfigDict = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -68,22 +77,15 @@
             textureInfoDict[@(textureInfo.textureID)] = textureInfo;
         }
     }
-    [[CEResourceManager sharedManager] loadResourceDataWithIDs:textureInfoDict.allKeys completion:^(NSDictionary *resourceDataDict) {
+    
+    [[CEResourceManager sharedManager] loadResourceDataWithIDs:textureInfoDict.allKeys processDelegate:self completion:^(NSDictionary *resourceDataDict) {
         // generate texture buffer
         NSMutableDictionary *textureBufferDict = [NSMutableDictionary dictionary];
         [resourceDataDict enumerateKeysAndObjectsUsingBlock:^(NSNumber *resourceID, NSData *textureData, BOOL *stop) {
             CETextureInfo *info = textureInfoDict[resourceID];
-            if (info) {
-                CEPNGUnpackResult *result = [[CEPNGUnpacker defaultPacker] unpackPNGData:textureData];
-                CETextureBufferConfig *config = [CETextureBufferConfig new];
-                config.width = result.width;
-                config.height = result.height;
-                config.format = result.format;
-                config.internalFormat = result.internalFormat;
-                config.texelType = result.texelType;
-                config.wrap_s = GL_REPEAT;
-                config.wrap_t = GL_REPEAT;
-                CETextureBuffer *textureBuffer = [[CETextureBuffer alloc] initWithConfig:config resourceID:info.textureID data:result.data];
+            CETextureBufferConfig *config = _textureConfigDict[resourceID];
+            if (info && config) {
+                CETextureBuffer *textureBuffer = [[CETextureBuffer alloc] initWithConfig:config resourceID:info.textureID data:textureData];
                 textureBufferDict[resourceID] = textureBuffer;
             }
         }];
@@ -93,7 +95,36 @@
         if (completion) {
             completion([NSSet setWithArray:textureBufferDict.allKeys]);
         }
+ 
     }];
+}
+
+
+// CEResourceDataProcessProtocol
+- (NSDictionary *)processDataDict:(NSDictionary *)resourceDataDict {
+    NSMutableDictionary *unpackDataDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *configDict = [NSMutableDictionary dictionary];
+    [resourceDataDict enumerateKeysAndObjectsUsingBlock:^(NSNumber *resourceID, NSData *textureData, BOOL *stop) {
+        // unpack png data
+        CEPNGUnpackResult *result = [[CEPNGUnpacker defaultPacker] unpackPNGData:textureData];
+        // [CEPNGUnpacker convertPNGTo16Bits4444:result];
+        unpackDataDict[resourceID] = result.data;
+        
+        CETextureBufferConfig *config = [CETextureBufferConfig new];
+        config.width = result.width;
+        config.height = result.height;
+        config.format = result.format;
+        config.internalFormat = result.internalFormat;
+        config.texelType = result.texelType;
+        config.wrap_s = GL_REPEAT;
+        config.wrap_t = GL_REPEAT;
+        configDict[resourceID] = config;
+        
+    }];
+    @synchronized(_textureConfigDict) {
+        [_textureConfigDict addEntriesFromDictionary:configDict];
+    }
+    return unpackDataDict.copy;
 }
 
 

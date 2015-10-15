@@ -15,8 +15,9 @@
  Wirte data dictionary to file, and keep a record in a database
  
  @param dataDict @{@(ID) : NSData}
+ @return file path for the packed data
  */
-- (BOOL)writeData:(NSDictionary *)dataDict;
+- (NSString *)writeData:(NSDictionary *)dataDict;
 
 /** file directory relative to bundle path, must implemented by subclass */
 - (NSString *)targetFileDirectory;

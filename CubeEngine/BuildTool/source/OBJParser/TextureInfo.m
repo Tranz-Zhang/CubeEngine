@@ -14,7 +14,7 @@ static uint32_t sNextResourceID = kBaseTextureID;
 @implementation TextureInfo
 
 + (TextureInfo *)textureInfoWithFilePath:(NSString *)filePath {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath] || ![filePath hasSuffix:@".png"]) {
         return nil;
     }
     

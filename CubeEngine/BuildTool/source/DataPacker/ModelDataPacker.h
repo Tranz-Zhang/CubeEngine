@@ -10,6 +10,6 @@
 
 @interface ModelDataPacker : BaseDataPacker
 
-- (BOOL)packModelDataDict:(NSDictionary *)dataDict;
+- (NSString *)packModelDataDict:(NSDictionary *)dataDict;
 
 @end

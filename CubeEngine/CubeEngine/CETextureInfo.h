@@ -13,5 +13,6 @@
 BIND_OBJECT_ID(textureID);
 @property (nonatomic, assign) int32_t textureID;
 @property (nonatomic, assign) CGSize textureSize;
+@property (nonatomic, assign) int8_t hasAlpha;
 
 @end

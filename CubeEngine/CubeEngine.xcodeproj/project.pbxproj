@@ -158,6 +158,8 @@
 		4CD9CAAA1B8AF9E500FDE357 /* CECodingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CAA31B8AC1FB00FDE357 /* CECodingObject.m */; };
 		4CD9EB951B3BF7D400C6FCB5 /* CEShadowLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9EB941B3BF7D400C6FCB5 /* CEShadowLight.m */; };
 		4CD9EB971B3BFD2B00C6FCB5 /* CEShadowLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CD9EB931B3BF7D400C6FCB5 /* CEShadowLight.h */; };
+		4CE0203D1BCF9A14008E0179 /* FileUpdateInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE0203C1BCF9A14008E0179 /* FileUpdateInfo.m */; };
+		4CE020401BCF9AA2008E0179 /* FileUpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE0203F1BCF9AA2008E0179 /* FileUpdateManager.m */; };
 		4CE610F71BC8AAE90052F451 /* CEResourceDataInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE610F61BC8AAE90052F451 /* CEResourceDataInfo.m */; };
 		4CE611121BC90F890052F451 /* BaseDataPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE611111BC90F890052F451 /* BaseDataPacker.m */; };
 		4CE611161BC910A80052F451 /* ModelDataPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE611151BC910A80052F451 /* ModelDataPacker.m */; };
@@ -480,6 +482,11 @@
 		4CD9EB931B3BF7D400C6FCB5 /* CEShadowLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowLight.h; sourceTree = "<group>"; };
 		4CD9EB941B3BF7D400C6FCB5 /* CEShadowLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShadowLight.m; sourceTree = "<group>"; };
 		4CD9EB961B3BF81D00C6FCB5 /* CEShadowLight_Rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowLight_Rendering.h; sourceTree = "<group>"; };
+		4CE020391BCF54A2008E0179 /* AlphaTest.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = AlphaTest.frag; sourceTree = "<group>"; };
+		4CE0203B1BCF9A14008E0179 /* FileUpdateInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileUpdateInfo.h; sourceTree = "<group>"; };
+		4CE0203C1BCF9A14008E0179 /* FileUpdateInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileUpdateInfo.m; sourceTree = "<group>"; };
+		4CE0203E1BCF9AA2008E0179 /* FileUpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileUpdateManager.h; sourceTree = "<group>"; };
+		4CE0203F1BCF9AA2008E0179 /* FileUpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileUpdateManager.m; sourceTree = "<group>"; };
 		4CE610F51BC8AAE90052F451 /* CEResourceDataInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEResourceDataInfo.h; sourceTree = "<group>"; };
 		4CE610F61BC8AAE90052F451 /* CEResourceDataInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEResourceDataInfo.m; sourceTree = "<group>"; };
 		4CE611101BC90F890052F451 /* BaseDataPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDataPacker.h; sourceTree = "<group>"; };
@@ -696,8 +703,8 @@
 				269608EF1AF85E9C0045FB03 /* CEViewController.m */,
 				4C3992191B2AD6F500AC4B53 /* Common */,
 				2610896B1AAD31E40041E142 /* 3DScene */,
-				2610896A1AAD31CE0041E142 /* Renderer */,
 				4CEA12251BB1825400686678 /* ResourceManager */,
+				2610896A1AAD31CE0041E142 /* Renderer */,
 				260949101B0597E200F7465B /* ObjFileLoader */,
 				2610896C1AAD31FF0041E142 /* Support */,
 			);
@@ -804,6 +811,7 @@
 		4C1352121B8362B0008EA484 /* source */ = {
 			isa = PBXGroup;
 			children = (
+				4CE0203A1BCF99CE008E0179 /* IncrementalUpdate */,
 				4CBD74F61BCBD7C40031387A /* NvTriStrip */,
 				4CE6110F1BC90F560052F451 /* DataPacker */,
 				4CB61A2B1BB2A23D00D83856 /* OBJParser */,
@@ -892,10 +900,16 @@
 		4CBD44211B723A8200D72831 /* Shader */ = {
 			isa = PBXGroup;
 			children = (
+				4CCBB3F71B842A0E00200C4E /* CEShaderBuilder.h */,
+				4CCBB3F81B842A0E00200C4E /* CEShaderBuilder.m */,
+				4CCBB3FA1B842A8400200C4E /* CEShaderInfo.h */,
+				4CCBB3FB1B842A8400200C4E /* CEShaderInfo.m */,
+				4CF3E96D1B99E4C100D42515 /* CEShaderInfo_setter.h */,
+				4CC7F95E1B969EF70078F441 /* CEShaderBuildProfileResult.h */,
+				4CC7F95F1B969EF70078F441 /* CEShaderBuildProfileResult.m */,
 				4CF403721B73853900C02BAE /* Variables */,
+				4CF5CCA61B8C65FA0048E833 /* Model */,
 				4CCBB3F21B8425C800200C4E /* ShaderProfile */,
-				4CCBB3FD1B842EB300200C4E /* Builder */,
-				4CF5CCA61B8C65FA0048E833 /* ShaderProfile */,
 			);
 			name = Shader;
 			sourceTree = "<group>";
@@ -1010,6 +1024,7 @@
 				4CC07C661BA6FEFB001A4F25 /* ShadowMap.frag */,
 				4CF5CCA71B8C66570048E833 /* Main.vert */,
 				4CF5CCA81B8C665E0048E833 /* Main.frag */,
+				4CE020391BCF54A2008E0179 /* AlphaTest.frag */,
 				4CF306B31B8DB0A0009544DC /* TestFunction1.vert */,
 				4CF306B41B8DB17C009544DC /* TestFunction2.vert */,
 				4CF306B51B8DB290009544DC /* TestFunction3.vert */,
@@ -1019,18 +1034,15 @@
 			path = ShaderResources;
 			sourceTree = "<group>";
 		};
-		4CCBB3FD1B842EB300200C4E /* Builder */ = {
+		4CE0203A1BCF99CE008E0179 /* IncrementalUpdate */ = {
 			isa = PBXGroup;
 			children = (
-				4CCBB3F71B842A0E00200C4E /* CEShaderBuilder.h */,
-				4CCBB3F81B842A0E00200C4E /* CEShaderBuilder.m */,
-				4CCBB3FA1B842A8400200C4E /* CEShaderInfo.h */,
-				4CCBB3FB1B842A8400200C4E /* CEShaderInfo.m */,
-				4CF3E96D1B99E4C100D42515 /* CEShaderInfo_setter.h */,
-				4CC7F95E1B969EF70078F441 /* CEShaderBuildProfileResult.h */,
-				4CC7F95F1B969EF70078F441 /* CEShaderBuildProfileResult.m */,
+				4CE0203B1BCF9A14008E0179 /* FileUpdateInfo.h */,
+				4CE0203C1BCF9A14008E0179 /* FileUpdateInfo.m */,
+				4CE0203E1BCF9AA2008E0179 /* FileUpdateManager.h */,
+				4CE0203F1BCF9AA2008E0179 /* FileUpdateManager.m */,
 			);
-			name = Builder;
+			path = IncrementalUpdate;
 			sourceTree = "<group>";
 		};
 		4CE6110F1BC90F560052F451 /* DataPacker */ = {
@@ -1165,7 +1177,7 @@
 			name = Variables;
 			sourceTree = "<group>";
 		};
-		4CF5CCA61B8C65FA0048E833 /* ShaderProfile */ = {
+		4CF5CCA61B8C65FA0048E833 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				4CCBB3FE1B842F3100200C4E /* CEShaderProfileParser.h */,
@@ -1186,7 +1198,7 @@
 				4C3A8EA91B95850A00BC3BC1 /* CEShaderStructInfo.m */,
 				4C3A8EB01B95AF5000BC3BC1 /* CEShaderStructInfo_setter.h */,
 			);
-			name = ShaderProfile;
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1413,6 +1425,7 @@
 				4CC7F9611B96A1730078F441 /* CEShaderBuildProfileResult.m in Sources */,
 				4C51F1231B8B20F10052511E /* CEShaderProfile.m in Sources */,
 				4CF4649E1BB944FE006D7DE2 /* VectorList.m in Sources */,
+				4CE0203D1BCF9A14008E0179 /* FileUpdateInfo.m in Sources */,
 				4C51F11F1B8B1EE50052511E /* CEShaderFunctionInfo.m in Sources */,
 				4CB61A331BB2A29100D83856 /* MTLFileParser.m in Sources */,
 				4C1815491BBA78BC00757BFC /* CETextureInfo.m in Sources */,
@@ -1428,6 +1441,7 @@
 				4CD7F1381B91BA9900C118D7 /* CEShaderBuilder.m in Sources */,
 				4CB61A191BB2414600D83856 /* CEManagedObject.m in Sources */,
 				4CBD75031BCBD8350031387A /* VertexCache.cpp in Sources */,
+				4CE020401BCF9AA2008E0179 /* FileUpdateManager.m in Sources */,
 				4CB61A341BB2A29100D83856 /* OBJFileParser.m in Sources */,
 				4CB61A201BB24BA900D83856 /* CEMaterial.m in Sources */,
 				4CBB750C1BB541FF00C3829B /* CEMeshInfo.m in Sources */,

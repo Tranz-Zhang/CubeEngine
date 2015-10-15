@@ -7,12 +7,14 @@
 //
 
 #import "BuildToolManager.h"
+#import "Common.h"
 #import "CEResourceDefines.h"
 #import "CEShaderProfileParser.h"
 #import "CEShaderFunctionInfo.h"
 #import "CEShaderProfile.h"
 #import "CEShaderBuilder.h"
 #import "CEDB.h"
+#import "FileUpdateManager.h"
 
 #import "OBJFileParser.h"
 #import "ModelDataPacker.h"
@@ -29,9 +31,6 @@
 
 @implementation BuildToolManager {
     NSFileManager *_fileManager;
-    NSString *_appPath;
-    NSString *_engineDir;
-    NSMutableDictionary *_fileLastUpdatedDict;
 }
 
 - (instancetype)init {
@@ -44,21 +43,18 @@
 
 
 - (void)run {
-    if (!_appName.length || !_buildProductDir.length) {
-        return;
-    }
-    _appPath = [kAppPath copy];
-    if (![_fileManager fileExistsAtPath:_appPath isDirectory:nil]) {
-        printf("App doesn't exist at path: %s\n", [_appPath UTF8String]);
+    if (![_fileManager fileExistsAtPath:kAppPath isDirectory:nil]) {
+        printf("App doesn't exist at path: %s\n", [kAppPath UTF8String]);
         return;
     }
     
-    printf("\n>> check engine directory in app:\n %s\n", [_appPath UTF8String]);
-    _engineDir = [_appPath stringByAppendingPathComponent:kEngineDirectory];
-    if (![self createDirectoryAtPath:_engineDir]) {
-        _engineDir = nil;
+    // check config directory
+    NSString *configDir = [kAppPath stringByAppendingPathComponent:kConfigDirectory];
+    if (![self createDirectoryAtPath:configDir]){
+        printf("\nFail to create config directory, ABORT!\n");
         return;
     }
+    [self cleanDirectory:configDir];
     
     if(![self processShaderResources]){
         printf("\nFail to process shader resources, ABORT!\n");
@@ -71,7 +67,7 @@
     
     
 //    [self testShaderBuilder];
-    
+    [[FileUpdateManager sharedManager] cleanUp];
 }
 
 
@@ -80,14 +76,14 @@
 - (BOOL)processShaderResources {
     printf("\n>> process shader resources...\n");
     // check shader directory in app
-    NSString *toDir = [_appPath stringByAppendingPathComponent:kShaderDirectory];
+    NSString *toDir = [kAppPath stringByAppendingPathComponent:kShaderDirectory];
     if (![self createDirectoryAtPath:toDir]) {
         return NO;
     }
     // remove existed shaders
     [self cleanDirectory:toDir];
     
-    NSString *fromDir = [_engineProjectDir stringByAppendingPathComponent:kShaderResourceDir];
+    NSString *fromDir = [kEngineProjectDirectory stringByAppendingPathComponent:kShaderResourceDir];
     NSArray * currentShaderFiles = [_fileManager contentsOfDirectoryAtPath:fromDir error:nil];
     if (!currentShaderFiles.count) {
         printf("WARNING: process no shaders in Path:%s\n", [fromDir UTF8String]);
@@ -128,33 +124,44 @@
 
 - (BOOL)processModelResources {
     printf("\n>> process model resources...\n");
-    if (![[NSFileManager defaultManager] fileExistsAtPath:_resourcesDir]) {
-        printf("Resources directory doesn't existed at path: %s\n", [_resourcesDir UTF8String]);
+    if (![[NSFileManager defaultManager] fileExistsAtPath:kResourcesDirectory]) {
+        printf("Resources directory doesn't existed at path: %s\n", [kResourcesDirectory UTF8String]);
         return NO;
     }
     
-    // get obj files
-    NSMutableArray *objFiles = [NSMutableArray array];
-    [self parseObjFileAtPath:_resourcesDir objFiles:objFiles];
-    if (!objFiles.count) {
-        printf("WARNING: process no model in Path:%s\n", [_resourcesDir UTF8String]);
+    // get obj file paths
+    NSMutableArray *objFilePathList = [NSMutableArray array];
+    [self parseObjFileAtPath:kResourcesDirectory objFiles:objFilePathList];
+    if (!objFilePathList.count) {
+        printf("WARNING: process no model in Path:%s\n", [kResourcesDirectory UTF8String]);
         return YES;
     }
-    NSLog(@"%@", objFiles);
-//    for (NSString *objFilePath in objFiles) {
-//        
-//    }
-    
-    NSString *objFilePath = objFiles[9];//[objFiles lastObject];
-    NSLog(@"TEST FILE: %@", objFilePath);
-    
+
     // parse obj file
-    OBJFileParser *objParser = [OBJFileParser parserWithFilePath:objFilePath];
-    OBJFileInfo *info = [objParser parse];
-    if (![self processModelResourcesDataWithObjInfos:@[info]]) {
+    NSMutableArray *objFileInfos = [NSMutableArray array];
+    for (NSString *objFilePath in objFilePathList) {
+        printf("parsing obj file: %s", [objFilePath lastPathComponent].UTF8String);
+        OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
+        if (info) {
+            [objFileInfos addObject:info];
+        }
+        printf(" %s\n", info ? "√" : "X");
+    }
+    
+//    NSString *objFilePath = objFilePathList[9];
+//    printf("parsing obj file: %s", [objFilePath lastPathComponent].UTF8String);
+//    OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
+//    if (info) {
+//        [objFileInfos addObject:info];
+//    }
+//    printf(" %s\n", info ? "√" : "X");
+    
+    // process resources
+    if (![self processModelResourcesDataWithObjInfos:objFileInfos]) {
         return NO;
     }
-    if (![self buildDatabaseWithObjInfos:@[info]]) {
+    // write db info
+    if (![self buildDatabaseWithObjInfos:objFileInfos]) {
         return NO;
     }
     return YES;
@@ -186,57 +193,75 @@
 
 - (BOOL)processModelResourcesDataWithObjInfos:(NSArray *)objFileInfos {
     
-    NSString *modelDir = [_appPath stringByAppendingPathComponent:kModelDirectory];
+    NSString *modelDir = [kAppPath stringByAppendingPathComponent:kModelDirectory];
     if (![self createDirectoryAtPath:modelDir]){
         return NO;
     }
-    NSString *textureDir = [_appPath stringByAppendingPathComponent:kTextureDirectory];
+    NSString *textureDir = [kAppPath stringByAppendingPathComponent:kTextureDirectory];
     if (![self createDirectoryAtPath:textureDir]){
         return NO;
     }
-    [self cleanDirectory:modelDir];
-    [self cleanDirectory:textureDir];
     
-    ModelDataPacker *modelPacker = [[ModelDataPacker alloc] initWithAppPath:_appPath];
-    TextureDataPacker *texturePacker = [[TextureDataPacker alloc] initWithAppPath:_appPath];
+    ModelDataPacker *modelPacker = [[ModelDataPacker alloc] initWithAppPath:kAppPath];
+    TextureDataPacker *texturePacker = [[TextureDataPacker alloc] initWithAppPath:kAppPath];
     // composite vertex data and indic data
     for (OBJFileInfo *objInfo in objFileInfos) {
-        NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
-        dataDict[@(objInfo.resourceID)] = [objInfo buildVertexData];
-        BOOL hasOptimized = NO;
-        for (MeshInfo *meshInfo in objInfo.meshInfos) {
-            NSData *indiceData = [meshInfo buildOptimizedIndiceData];
-            if (indiceData.length) {
-                meshInfo.isOptimized = YES;
-            } else {
-                indiceData = [meshInfo buildIndiceData];
-                meshInfo.isOptimized = NO;
+        printf("process model: %s\n", objInfo.name.UTF8String);
+        // process model data
+        if (![[FileUpdateManager sharedManager] isFileUpToDateAtPath:objInfo.filePath autoDelete:YES]) {
+            NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
+            OBJFileParser *dataParser = [OBJFileParser dataParser];
+            [dataParser parseDataWithFileInfo:objInfo];
+            dataDict[@(objInfo.resourceID)] = [objInfo buildVertexData];
+            BOOL hasOptimized = NO;
+            for (MeshInfo *meshInfo in objInfo.meshInfos) {
+                NSData *indiceData = [meshInfo buildOptimizedIndiceData];
+                if (indiceData.length) {
+                    meshInfo.isOptimized = YES;
+                } else {
+                    indiceData = [meshInfo buildIndiceData];
+                    meshInfo.isOptimized = NO;
+                }
+                dataDict[@(meshInfo.resourceID)] = indiceData;
+                if (!hasOptimized) {
+                    hasOptimized = meshInfo.isOptimized;
+                }
             }
-            dataDict[@(meshInfo.resourceID)] = indiceData;
-            if (!hasOptimized) {
-                hasOptimized = meshInfo.isOptimized;
+            NSString *resultPath = [modelPacker packModelDataDict:dataDict];
+            if (resultPath) {
+                [[FileUpdateManager sharedManager] updateInfoWithSourcePath:objInfo.filePath resultPath:resultPath];
             }
+            printf(" - Model Data %s%s\n", resultPath ? "√" : "X", hasOptimized ? "+" : "");
+
+        } else {
+            printf(" - Model Data ∆\n");
         }
-        BOOL isOK = [modelPacker packModelDataDict:dataDict];
-        printf("process model: %s\t", objInfo.name.UTF8String);
-        printf(" M_DATA[%s%s]", isOK ? "OK" : "Fail", hasOptimized ? " √" : "");
         
         // process texture data
+        NSMutableArray *textureInfos = [NSMutableArray arrayWithCapacity:3];
         for (MeshInfo *meshInfo in objInfo.meshInfos) {
             if (meshInfo.materialInfo.diffuseTexture) {
-                BOOL isOK = [texturePacker packTextureDataWithInfo:meshInfo.materialInfo.diffuseTexture];
-                printf(" D_TEX[%s]", isOK ? "OK" : "Fail");
+                [textureInfos addObject:meshInfo.materialInfo.diffuseTexture];
             }
             if (meshInfo.materialInfo.normalTexture) {
-                BOOL isOK = [texturePacker packTextureDataWithInfo:meshInfo.materialInfo.normalTexture];
-                printf(" N_TEX[%s]", isOK ? "OK" : "Fail");
+                [textureInfos addObject:meshInfo.materialInfo.normalTexture];
             }
             if (meshInfo.materialInfo.specularTexture) {
-                BOOL isOK = [texturePacker packTextureDataWithInfo:meshInfo.materialInfo.specularTexture];
-                printf(" S_TEX[%s]", isOK ? "OK" : "Fail");
+                [textureInfos addObject:meshInfo.materialInfo.specularTexture];
             }
         }
-        printf("\n");
+        for (TextureInfo *info in textureInfos) {
+            if (![[FileUpdateManager sharedManager] isFileUpToDateAtPath:info.filePath autoDelete:YES]) {
+                NSString *resultPath = [texturePacker packTextureDataWithInfo:info];
+                if (resultPath) {
+                    [[FileUpdateManager sharedManager] updateInfoWithSourcePath:info.filePath resultPath:resultPath];
+                }
+                printf(" - Texture:%s %s\n", info.fileName.UTF8String, resultPath ? "√" : "X");
+                
+            } else {
+                printf(" - Texture:%s ∆\n", info.fileName.UTF8String);
+            }
+        }
     }
     
     return YES;
@@ -244,13 +269,7 @@
 
 
 - (BOOL)buildDatabaseWithObjInfos:(NSArray *)objFileInfos {
-//    // check config directory
-    NSString *configDir = [_appPath stringByAppendingPathComponent:kConfigDirectory];
-//    if (![self createDirectoryAtPath:configDir]){
-//        return NO;
-//    }
-//    [self cleanDirectory:configDir];
-    
+    NSString *configDir = [kAppPath stringByAppendingPathComponent:kConfigDirectory];
     // build db info
     NSMutableArray *dbObjInfoList = [NSMutableArray array];
     NSMutableArray *dbMeshInfoList = [NSMutableArray array];
@@ -283,22 +302,39 @@
             dbMaterialInfo.specularColorData = [NSData dataWithBytes:mtlInfo.specularColor.v length:sizeof(GLKVector3)];
             dbMaterialInfo.shininessExponent = mtlInfo.shininessExponent;
             dbMaterialInfo.transparent = mtlInfo.transparency > 0 ?: -1;
-            dbMaterialInfo.materialType = 0; // TODO: materialType
             dbMaterialInfo.diffuseTextureID = mtlInfo.diffuseTexture.resourceID;
             dbMaterialInfo.normalTextureID = mtlInfo.normalTexture.resourceID;
+            dbMaterialInfo.specularTextureID = mtlInfo.specularTexture.resourceID;
+            if (dbMaterialInfo.transparent > 0 && dbMaterialInfo.transparent < 1) {
+                dbMaterialInfo.materialType = CEMaterialTransparent;
+            } else if (mtlInfo.diffuseTexture.hasAlpha) {
+                dbMaterialInfo.materialType = CEMaterialAlphaTested;
+            } else {
+                dbMaterialInfo.materialType = CEMaterialSolid;
+            }
             [dbMaterialInfoList addObject:dbMaterialInfo];
+            
             // textures info
             if (mtlInfo.diffuseTexture) {
                 CETextureInfo *diffuseTextureInfo = [CETextureInfo new];
                 diffuseTextureInfo.textureID = mtlInfo.diffuseTexture.resourceID;
                 diffuseTextureInfo.textureSize = mtlInfo.diffuseTexture.size;
+                diffuseTextureInfo.hasAlpha = mtlInfo.diffuseTexture.hasAlpha;
                 [dbTextureInfoList addObject:diffuseTextureInfo];
             }
             if (mtlInfo.normalTexture) {
                 CETextureInfo *normalTextureInfo = [CETextureInfo new];
                 normalTextureInfo.textureID = mtlInfo.normalTexture.resourceID;
                 normalTextureInfo.textureSize = mtlInfo.normalTexture.size;
+                normalTextureInfo.hasAlpha = mtlInfo.normalTexture.hasAlpha;
                 [dbTextureInfoList addObject:normalTextureInfo];
+            }
+            if (mtlInfo.specularTexture) {
+                CETextureInfo *specularTextureInfo = [CETextureInfo new];
+                specularTextureInfo.textureID = mtlInfo.specularTexture.resourceID;
+                specularTextureInfo.textureSize = mtlInfo.specularTexture.size;
+                specularTextureInfo.hasAlpha = mtlInfo.specularTexture.hasAlpha;
+                [dbTextureInfoList addObject:specularTextureInfo];
             }
         }
         dbObjInfo.meshIDs = meshIDs.copy;
@@ -369,43 +405,6 @@
     for (NSString *fileName in lastShaderFiles) {
         NSString *filePath = [directoryPath stringByAppendingPathComponent:fileName];
         [_fileManager removeItemAtPath:filePath error:nil];
-    }
-}
-
-
-
-#pragma mark - File up to date checking
-
-- (void)initializeUpToDateFileInfo {
-    NSString *filePath = [_engineProjectDir stringByAppendingFormat:@"/BuildTool/resource_updated_info"];
-    _fileLastUpdatedDict = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
-    if (!_fileLastUpdatedDict) {
-        _fileLastUpdatedDict = [NSMutableDictionary dictionary];
-    }
-}
-
-
-- (BOOL)isFileUpdateToDateAtPath:(NSString *)filePath {
-    NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil];
-    if (![fileAttributes fileModificationDate]) {
-        return NO;
-    }
-    NSDate *lastModifiedDate = [fileAttributes fileModificationDate];
-    NSDate *lastUpdatedDate = _fileLastUpdatedDict[filePath];
-    if (!lastUpdatedDate || ![lastModifiedDate isEqualToDate:lastUpdatedDate]) {
-        _fileLastUpdatedDict[filePath] = lastModifiedDate;
-        return NO;
-        
-    } else {
-        return YES;
-    }
-}
-
-
-- (void)syncUpToDateFileInfo {
-    NSString *filePath = [_engineProjectDir stringByAppendingFormat:@"/BuildTool/resource_updated_info"];
-    if (![_fileLastUpdatedDict writeToFile:filePath atomically:YES]) {
-        printf("Warning: fail to sync up_to_date_info\n");
     }
 }
 

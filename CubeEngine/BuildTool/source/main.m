@@ -10,6 +10,8 @@
 #import "BuildToolManager.h"
 
 NSString *kAppPath = nil;
+NSString *kEngineProjectDirectory = nil;
+NSString *kResourcesDirectory = nil;
 
 /**
  BuildTool
@@ -79,24 +81,29 @@ int main(int argc, const char * argv[]) {
             kAppPath = [productPath stringByAppendingFormat:@"/%@.app", appName];
         }
         
+        // setup project directory
+        if (!kEngineProjectDirectory && engineDirComponents.count) {
+            kEngineProjectDirectory = [[engineDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
+        }
+        
+        // setup resources directoy
+        if (!kResourcesDirectory && resourcesDirComponents.count) {
+            kResourcesDirectory = [[resourcesDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
+        }
+        
         printf("\n============================ BuildTool ============================\n");
-        if (appNameComponents.count && buildDirComponents.count && engineDirComponents.count && resourcesDirComponents.count) {
+        if (kAppPath && kEngineProjectDirectory && kResourcesDirectory) {
             CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
             
             BuildToolManager *manager =  [BuildToolManager new];
-            manager.appName = [appNameComponents componentsJoinedByString:@" "];
-            manager.buildProductDir = [[buildDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
-            manager.engineProjectDir = [[engineDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
-            manager.resourcesDir = [[resourcesDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
             [manager run];
-            
             printf("\nBuildTool finish with duration: %.2fs\n", CFAbsoluteTimeGetCurrent() - startTime);
             
         } else {
-            printf("ERROR: Fail to run BuildTool, checking params:\nappName: %s\nbuildDirectory: %s\nengineDirectory: %s\n",
-                   appNameComponents.count ? "OK" : "Fail",
-                   buildDirComponents.count ? "OK" : "Fail",
-                   engineDirComponents.count ? "OK" : "Fail");
+            printf("ERROR: Fail to run BuildTool, checking params:\nappPath: %s\nengine directory: %s\nresource directory: %s\n",
+                   kAppPath ? "OK" : "Fail",
+                   kEngineProjectDirectory ? "OK" : "Fail",
+                   kResourcesDirectory ? "OK" : "Fail");
             assert(0);
         }
         printf("\n===================================================================\n");

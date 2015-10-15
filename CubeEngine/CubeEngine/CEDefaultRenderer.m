@@ -26,6 +26,7 @@
     // build shader
     CEShaderBuilder *shaderBuilder = [CEShaderBuilder new];
     [shaderBuilder startBuildingNewShader];
+    [shaderBuilder setMaterialType:config.materialType];
     [shaderBuilder enableLightWithType:config.lightType];
     [shaderBuilder enableTexture:config.enableTexture];
     [shaderBuilder enableNormalMap:config.enableNormalMapping];
