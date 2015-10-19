@@ -9,8 +9,6 @@
 #import "TextureInfo.h"
 #import "Common.h"
 
-static uint32_t sNextResourceID = kBaseTextureID;
-
 @implementation TextureInfo
 
 + (TextureInfo *)textureInfoWithFilePath:(NSString *)filePath {
@@ -19,7 +17,7 @@ static uint32_t sNextResourceID = kBaseTextureID;
     }
     
     TextureInfo *info = [TextureInfo new];
-    info.fileName = [filePath lastPathComponent];
+    info.name = [filePath lastPathComponent];
     info.filePath = filePath;
     // get format
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:filePath];
@@ -38,10 +36,12 @@ static uint32_t sNextResourceID = kBaseTextureID;
         info.bitsPerPixel = [imageProperties[(id)kCGImagePropertyDepth] shortValue];
         
         // TODO: try to get image format from these properties...
+        
     }
     
     return info;
 }
+
 
 + (TextureFormat )textureFormatImageData:(NSData *)data {
     uint8_t c;
@@ -64,10 +64,35 @@ static uint32_t sNextResourceID = kBaseTextureID;
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _resourceID = sNextResourceID++;
+        
     }
     return self;
 }
 
 
+- (void)setFilePath:(NSString *)filePath {
+    if (![_filePath isEqualToString:filePath]) {
+        _filePath = filePath;
+        _resourceID = HashValueWithString(filePath);
+    }
+}
+
+
+- (BOOL)isEqual:(TextureInfo *)other {
+    if (other == self) {
+        return YES;
+    }else {
+        return _resourceID && _resourceID == other.resourceID;;
+    }
+}
+
+
+- (NSUInteger)hash {
+    return _resourceID;
+}
+
+
 @end
+
+
+

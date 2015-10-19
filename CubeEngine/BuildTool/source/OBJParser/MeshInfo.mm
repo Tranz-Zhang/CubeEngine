@@ -9,14 +9,12 @@
 #import "MeshInfo.h"
 #import "NvTriStrip.h"
 
-static uint32_t sNextResourceID = kBaseMeshID;
-
 @implementation MeshInfo
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _resourceID = sNextResourceID++;
+        
     }
     return self;
 }
@@ -73,7 +71,7 @@ static uint32_t sNextResourceID = kBaseMeshID;
     unsigned short *indiceDataPtr = (unsigned short *)preIndiceData.bytes;
     
 //    for (int i = 0; i < _indicesList.count; i++) {
-//        printf("%d\n", indiceDataPtr[i]);
+//        NSLog(@"%d\n", indiceDataPtr[i]);
 //    }
     
     SetCacheSize(128);
@@ -95,4 +93,28 @@ static uint32_t sNextResourceID = kBaseMeshID;
     return optimizedIndiceData;
 }
 
+
+- (void)setName:(NSString *)name {
+    if (![_name isEqualToString:name]) {
+        _name = name;
+        _resourceID = HashValueWithString(name);
+    }
+}
+
+
+- (BOOL)isEqual:(MeshInfo *)other {
+    if (other == self) {
+        return YES;
+    } else {
+        return _resourceID && _resourceID == other.resourceID;
+    }
+}
+
+
+- (NSUInteger)hash {
+    return _resourceID;
+}
+
+
 @end
+

@@ -13,6 +13,8 @@ NSString *kAppPath = nil;
 NSString *kEngineProjectDirectory = nil;
 NSString *kResourcesDirectory = nil;
 
+
+
 /**
  BuildTool
  - copy shader resources
@@ -91,22 +93,22 @@ int main(int argc, const char * argv[]) {
             kResourcesDirectory = [[resourcesDirComponents componentsJoinedByString:@" "] stringByStandardizingPath];
         }
         
-        printf("\n============================ BuildTool ============================\n");
+        NSLog(@"\n============================ BuildTool ============================\n");
         if (kAppPath && kEngineProjectDirectory && kResourcesDirectory) {
             CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
             
             BuildToolManager *manager =  [BuildToolManager new];
             [manager run];
-            printf("\nBuildTool finish with duration: %.2fs\n", CFAbsoluteTimeGetCurrent() - startTime);
+            NSLog(@"BuildTool finish with duration: %.2fs\n", CFAbsoluteTimeGetCurrent() - startTime);
             
         } else {
-            printf("ERROR: Fail to run BuildTool, checking params:\nappPath: %s\nengine directory: %s\nresource directory: %s\n",
+            NSLog(@"ERROR: Fail to run BuildTool, checking params:\nappPath: %s\nengine directory: %s\nresource directory: %s\n",
                    kAppPath ? "OK" : "Fail",
                    kEngineProjectDirectory ? "OK" : "Fail",
                    kResourcesDirectory ? "OK" : "Fail");
             assert(0);
         }
-        printf("\n===================================================================\n");
+        NSLog(@"\n===================================================================\n");
     }
     return 0;
 }

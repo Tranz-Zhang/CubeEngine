@@ -13,7 +13,7 @@
 BIND_OBJECT_ID(modelName);
 @property (nonatomic, strong) NSString *modelName;
 @property (nonatomic, strong) NSArray *attributes;
-@property (nonatomic, assign) int32_t vertexDataID;
+@property (nonatomic, assign) int32_t modelID;
 @property (nonatomic, strong) NSArray *meshIDs;
 
 @property (nonatomic, strong) NSData *offsetFromOriginData;

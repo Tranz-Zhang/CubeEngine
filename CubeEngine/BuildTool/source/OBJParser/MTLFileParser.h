@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MTLInfo.h"
+#import "MaterialInfo.h"
 
 @interface MTLFileParser : NSObject
 
@@ -15,7 +15,7 @@
 
 + (MTLFileParser *)parserWithFilePath:(NSString *)filePath;
 
-// @return @{@"MaterialName" : MTLInfo}
+// @return @{@"MaterialName" : MaterialInfo}
 - (NSDictionary *)parse;
 
 @end

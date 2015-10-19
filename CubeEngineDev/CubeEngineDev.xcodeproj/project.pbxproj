@@ -115,6 +115,7 @@
 		4C7139701B81C157005FC7C3 /* sword_spec.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C7139621B81C157005FC7C3 /* sword_spec.png */; };
 		4C93CA8D1B4A14790017648B /* ram.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4C93CA8B1B4A14790017648B /* ram.obj */; };
 		4C93CA8E1B4A14790017648B /* ram.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4C93CA8C1B4A14790017648B /* ram.mtl */; };
+		4CACA1F41BD0F2430095A530 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26193F841AA833BF00787C64 /* Main.storyboard */; };
 		4CC25CA61BCDF5E500DB3DA2 /* char_ram_col.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 4CC25CA51BCDF5E500DB3DA2 /* char_ram_col.pvr */; };
 		4CC25CAA1BCDFA9B00DB3DA2 /* new_char_ram_col.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC25CA91BCDFA9B00DB3DA2 /* new_char_ram_col.png */; };
 		4CCBD8911BCCA84200BD53F8 /* ram_blinn_nonormal.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4CCBD88F1BCCA84200BD53F8 /* ram_blinn_nonormal.mtl */; };
@@ -179,7 +180,7 @@
 		26193F961AA833C000787C64 /* CubeEngineDevTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CubeEngineDevTests.m; sourceTree = "<group>"; };
 		26193FA31AA839AC00787C64 /* CubeEngine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CubeEngine.xcodeproj; path = ../CubeEngine/CubeEngine.xcodeproj; sourceTree = "<group>"; };
 		261CD42B1AD3DE0000C521CC /* ModelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelViewController.h; sourceTree = "<group>"; };
-		261CD42C1AD3DE0000C521CC /* ModelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelViewController.m; sourceTree = "<group>"; };
+		261CD42C1AD3DE0000C521CC /* ModelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ModelViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		261CD42F1AD3DE8B00C521CC /* cylinder_group.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder_group.mtl; sourceTree = "<group>"; };
 		261CD4301AD3DE8B00C521CC /* cylinder_group.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder_group.obj; sourceTree = "<group>"; };
 		261CD4311AD3DE8B00C521CC /* cylinder.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder.mtl; sourceTree = "<group>"; };
@@ -212,7 +213,7 @@
 		4461FD061AEE9A2700A59229 /* SpotLightControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpotLightControl.m; sourceTree = "<group>"; };
 		4461FD081AEE9A3700A59229 /* SpotLightControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpotLightControl.xib; sourceTree = "<group>"; };
 		44D0CCE31AECA3E7000C137C /* ObjectOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectOperator.h; sourceTree = "<group>"; };
-		44D0CCE41AECA3E7000C137C /* ObjectOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectOperator.m; sourceTree = "<group>"; };
+		44D0CCE41AECA3E7000C137C /* ObjectOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ObjectOperator.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		44D0CCE61AECA677000C137C /* transition_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "transition_icon@2x.png"; sourceTree = "<group>"; };
 		44D0CCE71AECA677000C137C /* rotation_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rotation_icon@2x.png"; sourceTree = "<group>"; };
 		44D0CCEA1AECFEBC000C137C /* PointLightControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointLightControl.h; sourceTree = "<group>"; };
@@ -729,6 +730,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CACA1F41BD0F2430095A530 /* Main.storyboard in Resources */,
 				261CD4331AD3DE8B00C521CC /* cylinder_group.mtl in Resources */,
 				4C7139331B81A170005FC7C3 /* pl0004_n.tga in Resources */,
 				261CD4361AD3DE8B00C521CC /* cylinder.obj in Resources */,

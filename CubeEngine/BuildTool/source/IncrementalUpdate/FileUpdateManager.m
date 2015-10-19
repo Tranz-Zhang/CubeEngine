@@ -30,14 +30,20 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _db = [CEDatabase databaseWithName:@"file_update_info" inPath:[kAppPath stringByDeletingLastPathComponent]];
-        _dbContext = [CEDatabaseContext contextWithTableName:@"file_info" class:[FileUpdateInfo class] inDatabase:_db];
-        
-        // get all file ids
-        _unusedFileIDs = [NSMutableSet set];
-        NSArray *allInfos = [_dbContext queryAllWithError:nil];
-        for (FileUpdateInfo *info in allInfos) {
-            [_unusedFileIDs addObject:@(info.fileID)];
+        if (ENABLE_INCREMENTAL_UPDATE) {
+            _db = [CEDatabase databaseWithName:@"file_update_info" inPath:[kAppPath stringByDeletingLastPathComponent]];
+            _dbContext = [CEDatabaseContext contextWithTableName:@"file_info" class:[FileUpdateInfo class] inDatabase:_db];
+            
+            // get all file ids
+            _unusedFileIDs = [NSMutableSet set];
+            NSArray *allInfos = [_dbContext queryAllWithError:nil];
+            for (FileUpdateInfo *info in allInfos) {
+                [_unusedFileIDs addObject:@(info.fileID)];
+            }
+            
+        } else {
+            NSString *dbPath = [[kAppPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"file_update_info"];
+            [[NSFileManager defaultManager] removeItemAtPath:dbPath error:nil];
         }
     }
     return self;
@@ -45,6 +51,10 @@
 
 
 - (BOOL)isFileUpToDateAtPath:(NSString *)filePath autoDelete:(BOOL)autoDelete {
+    if (!ENABLE_INCREMENTAL_UPDATE) {
+        return NO;
+    }
+    
     // get local file info
     NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil];
     if (![fileAttributes fileModificationDate]) {
@@ -73,6 +83,10 @@
 
 
 - (void)updateInfoWithSourcePath:(NSString *)sourceFilePath resultPath:(NSString *)resultFilePath {
+    if (!ENABLE_INCREMENTAL_UPDATE) {
+        return;
+    }
+    
     NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:sourceFilePath error:nil];
     if (![fileAttributes fileModificationDate]) {
         return;
@@ -97,12 +111,16 @@
 
 
 - (void)cleanUp {
-    printf("Clean up: %s\n", _unusedFileIDs.count ? "" : "none");
+    if (!ENABLE_INCREMENTAL_UPDATE) {
+        return;
+    }
+    
+    NSLog(@"Clean up: %s\n", _unusedFileIDs.count ? "" : "none");
     for (NSNumber *fileID in _unusedFileIDs) {
         FileUpdateInfo *info = (FileUpdateInfo *)[_dbContext queryById:fileID error:nil];
         if (info && [[NSFileManager defaultManager] removeItemAtPath:info.resultPath error:nil]) {
             [_dbContext remove:info error:nil];
-            printf(" - remove: %s\n", info.resultPath.UTF8String);
+            NSLog(@" - remove: %s\n", info.resultPath.UTF8String);
         }
     }
 }

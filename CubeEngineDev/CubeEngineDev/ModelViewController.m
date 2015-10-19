@@ -52,7 +52,7 @@
     
     CEModelLoader *loader = [CEModelLoader new];
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    [loader loadModelWithName:@"ram" completion:^(CEModel *model) {
+    [loader loadModelWithName:@"test_scene" completion:^(CEModel *model) {
         _testModel = model;
         _operator.operationObject = _testModel;
         [self.scene addModel:model];

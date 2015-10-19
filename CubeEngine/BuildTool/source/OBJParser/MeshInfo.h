@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MTLInfo.h"
+#import "MaterialInfo.h"
 
 @interface MeshInfo : NSObject
 
+@property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSArray *groupNames;
 @property (nonatomic, readonly) uint32_t resourceID;
-@property (nonatomic, strong) MTLInfo *materialInfo;
+@property (nonatomic, strong) MaterialInfo *materialInfo;
 @property (nonatomic, assign) unsigned int maxIndex;
 @property (nonatomic, strong) NSMutableArray *indicesList;
 @property (nonatomic, assign) uint32_t indiceCount;

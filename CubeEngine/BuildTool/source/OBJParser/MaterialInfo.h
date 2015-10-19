@@ -1,5 +1,5 @@
 //
-//  MTLInfo.h
+//  MaterialInfo.h
 //  CubeEngine
 //
 //  Created by chance on 9/24/15.
@@ -10,17 +10,11 @@
 #import <GLKit/GLKit.h>
 #import "TextureInfo.h"
 
-typedef NS_ENUM(int, MaterialType) {
-    MaterialTypeSolid = 0,
-    MaterialTypeAlphaTested,
-    MaterialTypeTransparent,
-};
-
-@interface MTLInfo : NSObject
+@interface MaterialInfo : NSObject
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, readonly) uint32_t resourceID;
-@property (nonatomic, assign) MaterialType materialType;
+@property (nonatomic, assign) CEMaterialType materialType;
 
 @property (nonatomic, strong) TextureInfo *diffuseTexture;
 @property (nonatomic, strong) TextureInfo *normalTexture;

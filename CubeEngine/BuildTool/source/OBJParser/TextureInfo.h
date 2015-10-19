@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, TextureFormat) {
 
 @interface TextureInfo : BaseDataPacker
 
-@property (nonatomic, strong) NSString *fileName;
+@property (nonatomic, strong) NSString *name;
 @property (nonatomic, readonly) uint32_t resourceID;
 @property (nonatomic, strong) NSString *filePath;
 @property (nonatomic, assign) TextureFormat format;

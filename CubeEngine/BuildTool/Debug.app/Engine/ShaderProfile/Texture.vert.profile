@@ -1,1 +1,0 @@
-{"variables":[{"usage":2,"variableID":10675750622317621438,"arrayItemCount":1,"precision":"lowp","name":"VertexUV","type":"vec2"},{"usage":3,"variableID":11290727296874931951,"arrayItemCount":1,"precision":"mediump","name":"TextureCoordOut","type":"vec2"}],"function":{"functionID":"CEVertex_ApplyTexture()","functionContent":"{\n    TextureCoordOut = VertexUV;\n}"}}

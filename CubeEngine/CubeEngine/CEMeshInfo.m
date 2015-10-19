@@ -10,4 +10,22 @@
 
 @implementation CEMeshInfo
 
+- (BOOL)isEqual:(CEMeshInfo *)other {
+    if (other == self) {
+        return YES;
+    } else {
+        return _meshID == other.meshID;;
+    }
+}
+
+
+- (NSUInteger)hash {
+    return _meshID;
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"MESH%X", _meshID];
+}
+
+
 @end

@@ -50,7 +50,7 @@
     NSError *error;
     NSString *objContent = [[NSString alloc] initWithContentsOfFile:_filePath encoding:NSUTF8StringEncoding error:&error];
     if (error) {
-        printf("Fail to parse mtl file: %s\n", [[error localizedDescription] UTF8String]);
+        NSLog(@"Fail to parse mtl file: %s\n", [[error localizedDescription] UTF8String]);
         return nil;
     }
     
@@ -60,11 +60,12 @@
      */
     NSString *currentDirectory = [_filePath stringByDeletingLastPathComponent];
     NSMutableDictionary *materialDict = [NSMutableDictionary dictionary];
-    MTLInfo *currentMaterial = nil;
+    NSMutableDictionary *textureDict = [NSMutableDictionary dictionary];
+    MaterialInfo *currentMaterial = nil;
     NSArray *lines = [objContent componentsSeparatedByString:@"\n"];
     for (NSString *lineContent in lines) {
         if ([lineContent hasPrefix:@"newmtl"]) {
-            MTLInfo *newMaterial = [MTLInfo new];
+            MaterialInfo *newMaterial = [MaterialInfo new];
             newMaterial.name = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
             materialDict[newMaterial.name] =  newMaterial;
             currentMaterial= newMaterial;
@@ -108,14 +109,24 @@
         if ([lineContent hasPrefix:@"map_Kd "]) {
             NSString *valueString = [lineContent substringFromIndex:7];
             NSString *filePath = [currentDirectory stringByAppendingPathComponent:valueString];
-            currentMaterial.diffuseTexture = [TextureInfo textureInfoWithFilePath:filePath];
+            TextureInfo *texture = textureDict[filePath];
+            if (!texture) {
+                texture = [TextureInfo textureInfoWithFilePath:filePath];
+                textureDict[filePath] = texture;
+            }
+            currentMaterial.diffuseTexture = texture;
             continue;
         }
         if ([lineContent hasPrefix:@"bump "] ||
             [lineContent hasPrefix:@"map_Bump "]) {
             NSArray *values = [lineContent componentsSeparatedByString:@" "];
             NSString *filePath = [currentDirectory stringByAppendingPathComponent:values[1]];
-            currentMaterial.normalTexture = [TextureInfo textureInfoWithFilePath:filePath];
+            TextureInfo *texture = textureDict[filePath];
+            if (!texture) {
+                texture = [TextureInfo textureInfoWithFilePath:filePath];
+                textureDict[filePath] = texture;
+            }
+            currentMaterial.normalTexture = texture;
             continue;
         }
     }

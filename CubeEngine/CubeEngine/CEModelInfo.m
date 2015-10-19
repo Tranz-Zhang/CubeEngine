@@ -10,4 +10,22 @@
 
 @implementation CEModelInfo
 
+- (BOOL)isEqual:(CEModelInfo *)other {
+    if (other == self) {
+        return YES;
+    } else {
+        return _modelID == other.modelID;
+    }
+}
+
+
+- (NSUInteger)hash {
+    return _modelID;
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"MODEL%X", _modelID];
+}
+
+
 @end

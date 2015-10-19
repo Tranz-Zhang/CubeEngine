@@ -8,8 +8,6 @@
 
 #import "OBJFileInfo.h"
 
-static uint32_t sNextResourceID = kBaseModelID;
-
 @implementation OBJFileInfo
 
 - (instancetype)init {
@@ -20,7 +18,6 @@ static uint32_t sNextResourceID = kBaseModelID;
         _uvList = [[VectorList alloc] initWithVectorType:VectorType2];
         _normalList = [[VectorList alloc] initWithVectorType:VectorType3];
         _tangentList = [[VectorList alloc] initWithVectorType:VectorType3];
-        _resourceID = sNextResourceID++;
     }
     return self;
 }
@@ -47,4 +44,28 @@ static uint32_t sNextResourceID = kBaseModelID;
     return vertexData.copy;
 }
 
+- (void)setFilePath:(NSString *)filePath {
+    if (![_filePath isEqualToString:filePath]) {
+        _filePath = filePath;
+        _resourceID = HashValueWithString(filePath);
+    }
+}
+
+
+- (BOOL)isEqual:(OBJFileInfo *)other {
+    if (other == self) {
+        return YES;
+    }else {
+        return _resourceID && _resourceID == other.resourceID;;
+    }
+}
+
+
+- (NSUInteger)hash {
+    return _resourceID;
+}
+
+
+
 @end
+

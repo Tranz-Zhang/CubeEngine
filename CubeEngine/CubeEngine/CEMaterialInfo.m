@@ -10,4 +10,22 @@
 
 @implementation CEMaterialInfo
 
+- (BOOL)isEqual:(CEMaterialInfo *)other {
+    if (other == self) {
+        return YES;
+    } else {
+        return _materialID == other.materialID;
+    }
+}
+
+- (NSUInteger)hash {
+    return _materialID;
+}
+
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"MTL%X", _materialID];
+}
+
+
 @end

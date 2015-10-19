@@ -10,6 +10,8 @@
 #import "MTLFileParser.h"
 #import "CEVBOAttribute.h"
 
+#define kDefaultMTLName @"defaultMTL"
+
 @implementation OBJFileParser {
     // use only for parsing data
     OBJFileInfo *_objInfo;
@@ -54,7 +56,7 @@
             continue;
         }
     }
-    NSDictionary *mtlDict = nil;
+    NSMutableDictionary *mtlDict = [NSMutableDictionary dictionary];
     if (mtlFileName.length) {
         NSString *currentDirectory = [filePath stringByDeletingLastPathComponent];
         NSString *mtlFilePath = [currentDirectory stringByAppendingPathComponent:mtlFileName];
@@ -66,7 +68,7 @@
                 usedMtlDict[mtlName] = allMTLDict[mtlName];
             }
         }
-        mtlDict = usedMtlDict.copy;
+        [mtlDict addEntriesFromDictionary:usedMtlDict];
     }
     
     // parsing data
@@ -104,7 +106,17 @@
         // reference material
         if ([lineContent hasPrefix:@"usemtl"]) {
             NSString *materialName = [lineContent substringWithRange:NSMakeRange(7, lineContent.length - 7)];
-            currentMesh.materialInfo = mtlDict[materialName];
+            MaterialInfo *mtlInfo = mtlDict[materialName];
+            if (!mtlInfo) {
+                mtlInfo = mtlDict[kDefaultMTLName];
+            }
+            if (!mtlInfo) {
+                MaterialInfo *defaultMtlInfo = [MaterialInfo new];
+                defaultMtlInfo.name = kDefaultMTLName;
+                mtlDict[kDefaultMTLName] = defaultMtlInfo;
+                mtlInfo = defaultMtlInfo;
+            }
+            currentMesh.materialInfo = mtlInfo;
             continue;
         }
         
@@ -118,13 +130,60 @@
         }
     }
     
-    // remove useless groups
+    // remove useless groups &
     NSMutableArray *filteredMeshes = [NSMutableArray array];
     for (MeshInfo *mesh in meshInfoList) {
         if (mesh.groupNames.count && mesh.indiceCount) {
             [filteredMeshes addObject:mesh];
         }
     }
+    
+    // get mesh name
+    NSMutableDictionary *groupNameCountDict = [NSMutableDictionary dictionary]; // @{groupName: nameCount}
+    for (MeshInfo *mesh in filteredMeshes) {
+        for (NSString *groupName in mesh.groupNames) {
+            NSNumber *nameCount = groupNameCountDict[groupName];
+            if (nameCount) {
+                groupNameCountDict[groupName] = @(nameCount.intValue + 1);
+            } else {
+                groupNameCountDict[groupName] = @(1);
+            }
+        }
+    }
+    NSMutableSet *duplicatedNames = [NSMutableSet set];
+    [groupNameCountDict enumerateKeysAndObjectsUsingBlock:^(NSString *groupName, NSNumber *nameCount, BOOL *stop) {
+        if (nameCount.intValue > 1) {
+            [duplicatedNames addObject:groupName];
+        }
+    }];
+    for (MeshInfo *mesh in filteredMeshes) {
+        NSString *meshName = nil;
+        for (NSString *groupName in mesh.groupNames) {
+            if (![duplicatedNames containsObject:groupName]) {
+                meshName = groupName;
+                break;
+            }
+        }
+        mesh.name = meshName;
+    }
+    
+    // generate mesh, material, texture names
+    NSMutableSet *mtlInfoSet = [NSMutableSet set];
+    NSMutableSet *textureSet = [NSMutableSet set];
+    for (MeshInfo *mesh in filteredMeshes) {
+        mesh.name = [NSString stringWithFormat:@"%@_%@", objInfo.name, mesh.name];
+        [mtlInfoSet addObject:mesh.materialInfo];
+        if (mesh.materialInfo.diffuseTexture)     [textureSet addObject:mesh.materialInfo.diffuseTexture];
+        if (mesh.materialInfo.normalTexture)      [textureSet addObject:mesh.materialInfo.normalTexture];
+        if (mesh.materialInfo.specularTexture)    [textureSet addObject:mesh.materialInfo.specularTexture];
+    }
+    for (MaterialInfo *mtlInfo in mtlInfoSet) {
+        mtlInfo.name = [NSString stringWithFormat:@"%@_%@", objInfo.name, mtlInfo.name];
+    }
+    for (TextureInfo *texture in textureSet) {
+        texture.name = [NSString stringWithFormat:@"%@_%@", objInfo.name, [texture.name stringByDeletingPathExtension]];
+    }
+    
     objInfo.meshInfos = filteredMeshes.copy;
     return objInfo;
 }
@@ -235,7 +294,7 @@
     }
     
     if (_hasNormalMap && ![self addTangentDataToObjInfo:_objInfo]) {
-        printf("WARNING: fail to add tangent for model: %s\n", _objInfo.name.UTF8String);
+        NSLog(@"WARNING: fail to add tangent for model: %s\n", _objInfo.name.UTF8String);
     }
     
     // clean up
@@ -341,7 +400,7 @@
     if (!objInfo.vertexDataList.count ||
         ![objInfo.attributes containsObject:@(CEVBOAttributePosition)] ||
         ![objInfo.attributes containsObject:@(CEVBOAttributeUV)]) {
-        printf("Fail to calculate tangent data for obj file:%s\n", [objInfo.name UTF8String]);
+        NSLog(@"Fail to calculate tangent data for obj file:%s\n", [objInfo.name UTF8String]);
         return NO;
     }
     
@@ -352,7 +411,7 @@
     // calucate each triangle's normal and tangent data
     for (MeshInfo *meshInfo in objInfo.meshInfos) {
         if (!meshInfo.indicesList.count % 3) {
-            printf("warning: skip mesh with wrong indice count\n");
+            NSLog(@"warning: skip mesh with wrong indice count\n");
             continue;
         }
         // loop triangles

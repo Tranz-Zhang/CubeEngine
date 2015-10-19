@@ -82,6 +82,7 @@
 - (void)loadModelWithName:(NSString *)name completion:(void (^)(CEModel *))completion {
     CEModelInfo *model = (CEModelInfo *)[_modelContext queryById:name error:nil];
     if (!model) {
+        CEError(@"Fail to get model info: %@", name);
         if (completion) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 completion(nil);
@@ -124,7 +125,7 @@
     }
     loadingCache.meshInfoDict = meshInfoDict.copy;
     loadingCache.materialInfoDict = materialInfoDict.copy;
-    _modelLoadingDict[@(loadingCache.modelInfo.vertexDataID)] = loadingCache;
+    _modelLoadingDict[@(loadingCache.modelInfo.modelID)] = loadingCache;
     
     [self loadModelDataForCache:loadingCache];
     [self loadTextureDataWithTextureInfos:textureInfos.copy forCache:loadingCache];
@@ -134,16 +135,16 @@
 
 - (void)loadModelDataForCache:(CEModelLoadingCache *)cache {
     NSMutableArray *resourceIDs = [NSMutableArray array];
-    [resourceIDs addObject:@(cache.modelInfo.vertexDataID)];
+    [resourceIDs addObject:@(cache.modelInfo.modelID)];
     [resourceIDs addObjectsFromArray:cache.modelInfo.meshIDs];
-    uint32_t cacheID = cache.modelInfo.vertexDataID;
+    uint32_t cacheID = cache.modelInfo.modelID;
     [[CEResourceManager sharedManager] loadResourceDataWithIDs:resourceIDs completion:^(NSDictionary *resourceDataDict) {
         CEModelLoadingCache *loadingCache = _modelLoadingDict[@(cacheID)];
         if (!loadingCache) return;
         
         // get vertexData
         CEModelInfo *model = loadingCache.modelInfo;
-        NSData *vertexData = resourceDataDict[@(model.vertexDataID)];
+        NSData *vertexData = resourceDataDict[@(model.modelID)];
         if (!vertexData.length) {
             [self onCompleteLoadingForCacheID:cacheID];
             return;
@@ -172,7 +173,7 @@
 
 
 - (void)loadTextureDataWithTextureInfos:(NSArray *)textureInfos forCache:(CEModelLoadingCache *)cache {
-    uint32_t cacheID = cache.modelInfo.vertexDataID;
+    uint32_t cacheID = cache.modelInfo.modelID;
     [[CETextureManager sharedManager] loadTextureWithInfos:textureInfos completion:^(NSSet *loadedTextureIds) {
         CEModelLoadingCache *loadingCache = _modelLoadingDict[@(cacheID)];
         if (!loadingCache) return;
@@ -194,6 +195,7 @@
                 cache.completion(nil);
             });
         }
+        CEError(@"Fail to get model buffer data: %@", cache.modelInfo.modelName);
         return;
     }
     
@@ -209,6 +211,7 @@
                     cache.completion(nil);
                 });
             }
+            CEError(@"Fail to get mesh's indece data: %@-%X",  cache.modelInfo.modelName, meshInfo.meshID);
             return;
         }
         

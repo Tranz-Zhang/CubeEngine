@@ -44,27 +44,26 @@
 
 - (void)run {
     if (![_fileManager fileExistsAtPath:kAppPath isDirectory:nil]) {
-        printf("App doesn't exist at path: %s\n", [kAppPath UTF8String]);
+        NSLog(@"App doesn't exist at path: %@\n", kAppPath);
         return;
     }
     
     // check config directory
     NSString *configDir = [kAppPath stringByAppendingPathComponent:kConfigDirectory];
     if (![self createDirectoryAtPath:configDir]){
-        printf("\nFail to create config directory, ABORT!\n");
+        NSLog(@"\nFail to create config directory, ABORT!\n");
         return;
     }
     [self cleanDirectory:configDir];
     
     if(![self processShaderResources]){
-        printf("\nFail to process shader resources, ABORT!\n");
+        NSLog(@"\nFail to process shader resources, ABORT!\n");
         return;
     }
     if(![self processModelResources]){
-        printf("\nFail to process model resources, ABORT!\n");
+        NSLog(@"\nFail to process model resources, ABORT!\n");
         return;
     }
-    
     
 //    [self testShaderBuilder];
     [[FileUpdateManager sharedManager] cleanUp];
@@ -74,7 +73,7 @@
 #pragma mark - process shaders
 
 - (BOOL)processShaderResources {
-    printf("\n>> process shader resources...\n");
+    NSLog(@"\n>> process shader resources...\n");
     // check shader directory in app
     NSString *toDir = [kAppPath stringByAppendingPathComponent:kShaderDirectory];
     if (![self createDirectoryAtPath:toDir]) {
@@ -86,7 +85,7 @@
     NSString *fromDir = [kEngineProjectDirectory stringByAppendingPathComponent:kShaderResourceDir];
     NSArray * currentShaderFiles = [_fileManager contentsOfDirectoryAtPath:fromDir error:nil];
     if (!currentShaderFiles.count) {
-        printf("WARNING: process no shaders in Path:%s\n", [fromDir UTF8String]);
+        NSLog(@"WARNING: process no shaders in Path:%@\n", fromDir);
         return YES;
     }
     
@@ -102,7 +101,7 @@
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[fileInfo jsonDict]
                                                                options:0 error:nil];
             BOOL isOK = [jsonData writeToFile:[toDir stringByAppendingFormat:@"/%@.profile", fileName] atomically:YES];
-            printf("process shader: %s.profile %s\n", [fileName UTF8String], isOK ? "OK" : "Fail");
+            NSLog(@"process shader: %@.profile %@\n", fileName, isOK ? @"√" : @"X");
         }
     }
     return YES;
@@ -123,9 +122,9 @@
 #pragma mark - process models
 
 - (BOOL)processModelResources {
-    printf("\n>> process model resources...\n");
+    NSLog(@"\n>> process model resources...\n");
     if (![[NSFileManager defaultManager] fileExistsAtPath:kResourcesDirectory]) {
-        printf("Resources directory doesn't existed at path: %s\n", [kResourcesDirectory UTF8String]);
+        NSLog(@"Resources directory doesn't existed at path: %@\n", kResourcesDirectory);
         return NO;
     }
     
@@ -133,28 +132,28 @@
     NSMutableArray *objFilePathList = [NSMutableArray array];
     [self parseObjFileAtPath:kResourcesDirectory objFiles:objFilePathList];
     if (!objFilePathList.count) {
-        printf("WARNING: process no model in Path:%s\n", [kResourcesDirectory UTF8String]);
+        NSLog(@"WARNING: process no model in Path:%@\n", kResourcesDirectory);
         return YES;
     }
 
+    NSLog(@"%@", objFilePathList);
     // parse obj file
     NSMutableArray *objFileInfos = [NSMutableArray array];
-    for (NSString *objFilePath in objFilePathList) {
-        printf("parsing obj file: %s", [objFilePath lastPathComponent].UTF8String);
-        OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
-        if (info) {
-            [objFileInfos addObject:info];
-        }
-        printf(" %s\n", info ? "√" : "X");
-    }
-    
-//    NSString *objFilePath = objFilePathList[9];
-//    printf("parsing obj file: %s", [objFilePath lastPathComponent].UTF8String);
-//    OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
-//    if (info) {
-//        [objFileInfos addObject:info];
+//    for (NSString *objFilePath in objFilePathList) {
+//        NSLog(@"parsing obj file: %s", [objFilePath lastPathComponent].UTF8String);
+//        OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
+//        if (info) {
+//            [objFileInfos addObject:info];
+//        }
+//        NSLog(@" %@\n", info ? @"√" : @"X");
 //    }
-//    printf(" %s\n", info ? "√" : "X");
+    
+    NSString *objFilePath = [objFilePathList lastObject]; //objFilePathList[9];
+    OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
+    if (info) {
+        [objFileInfos addObject:info];
+    }
+    NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
     
     // process resources
     if (![self processModelResourcesDataWithObjInfos:objFileInfos]) {
@@ -195,10 +194,12 @@
     
     NSString *modelDir = [kAppPath stringByAppendingPathComponent:kModelDirectory];
     if (![self createDirectoryAtPath:modelDir]){
+        NSLog(@"Fail to create model directory: %@", modelDir);
         return NO;
     }
     NSString *textureDir = [kAppPath stringByAppendingPathComponent:kTextureDirectory];
     if (![self createDirectoryAtPath:textureDir]){
+        NSLog(@"Fail to create texture directory: %@", textureDir);
         return NO;
     }
     
@@ -206,7 +207,7 @@
     TextureDataPacker *texturePacker = [[TextureDataPacker alloc] initWithAppPath:kAppPath];
     // composite vertex data and indic data
     for (OBJFileInfo *objInfo in objFileInfos) {
-        printf("process model: %s\n", objInfo.name.UTF8String);
+        NSLog(@"process model: %@\n", objInfo.name);
         // process model data
         if (![[FileUpdateManager sharedManager] isFileUpToDateAtPath:objInfo.filePath autoDelete:YES]) {
             NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
@@ -215,7 +216,10 @@
             dataDict[@(objInfo.resourceID)] = [objInfo buildVertexData];
             BOOL hasOptimized = NO;
             for (MeshInfo *meshInfo in objInfo.meshInfos) {
-                NSData *indiceData = [meshInfo buildOptimizedIndiceData];
+                NSData *indiceData = nil;
+                if (ENABLE_TRIANGLE_STRIP) {
+                    indiceData = [meshInfo buildOptimizedIndiceData];
+                }
                 if (indiceData.length) {
                     meshInfo.isOptimized = YES;
                 } else {
@@ -231,14 +235,14 @@
             if (resultPath) {
                 [[FileUpdateManager sharedManager] updateInfoWithSourcePath:objInfo.filePath resultPath:resultPath];
             }
-            printf(" - Model Data %s%s\n", resultPath ? "√" : "X", hasOptimized ? "+" : "");
-
+            NSLog(@" - ModelData[%X] %@%@\n", objInfo.resourceID, resultPath ? @"√" : @"X", hasOptimized ? @"+" : @"");
+            
         } else {
-            printf(" - Model Data ∆\n");
+            NSLog(@" - ModelData[%X] ∆\n", objInfo.resourceID);
         }
         
         // process texture data
-        NSMutableArray *textureInfos = [NSMutableArray arrayWithCapacity:3];
+        NSMutableSet *textureInfos = [NSMutableSet setWithCapacity:3];
         for (MeshInfo *meshInfo in objInfo.meshInfos) {
             if (meshInfo.materialInfo.diffuseTexture) {
                 [textureInfos addObject:meshInfo.materialInfo.diffuseTexture];
@@ -256,10 +260,10 @@
                 if (resultPath) {
                     [[FileUpdateManager sharedManager] updateInfoWithSourcePath:info.filePath resultPath:resultPath];
                 }
-                printf(" - Texture:%s %s\n", info.fileName.UTF8String, resultPath ? "√" : "X");
+                NSLog(@" - Texture[%X]: %@ %@\n", info.resourceID, info.name, resultPath ? @"√" : @"X");
                 
             } else {
-                printf(" - Texture:%s ∆\n", info.fileName.UTF8String);
+                NSLog(@" - Texture[%X]: %@ ∆\n", info.resourceID, info.name);
             }
         }
     }
@@ -271,16 +275,16 @@
 - (BOOL)buildDatabaseWithObjInfos:(NSArray *)objFileInfos {
     NSString *configDir = [kAppPath stringByAppendingPathComponent:kConfigDirectory];
     // build db info
-    NSMutableArray *dbObjInfoList = [NSMutableArray array];
-    NSMutableArray *dbMeshInfoList = [NSMutableArray array];
-    NSMutableArray *dbMaterialInfoList = [NSMutableArray array];
-    NSMutableArray *dbTextureInfoList = [NSMutableArray array];
+    NSMutableSet *dbObjInfoList = [NSMutableSet set];
+    NSMutableSet *dbMeshInfoList = [NSMutableSet set];
+    NSMutableSet *dbMaterialInfoList = [NSMutableSet set];
+    NSMutableSet *dbTextureInfoList = [NSMutableSet set];
     
     for (OBJFileInfo *info in objFileInfos) {
         CEModelInfo *dbObjInfo = [CEModelInfo new];
         dbObjInfo.modelName = info.name;
         dbObjInfo.attributes = info.attributes;
-        dbObjInfo.vertexDataID = info.resourceID;
+        dbObjInfo.modelID = info.resourceID;
         NSMutableArray *meshIDs = [NSMutableArray arrayWithCapacity:info.meshInfos.count];
         for (int i = 0; i < info.meshInfos.count; i++) {
             // mesh info
@@ -294,7 +298,7 @@
             [meshIDs addObject:@(dbMeshInfo.meshID)];
             [dbMeshInfoList addObject:dbMeshInfo];
             // material info
-            MTLInfo *mtlInfo = meshInfo.materialInfo;
+            MaterialInfo *mtlInfo = meshInfo.materialInfo;
             CEMaterialInfo *dbMaterialInfo = [CEMaterialInfo new];
             dbMaterialInfo.materialID = mtlInfo.resourceID;
             dbMaterialInfo.ambientColorData = [NSData dataWithBytes:mtlInfo.ambientColor.v length:sizeof(GLKVector3)];
@@ -350,30 +354,34 @@
     BOOL isOK;
     CEDatabase *db = [CEDatabase databaseWithName:kResourceInfoDBName inPath:configDir];
     CEDatabaseContext *modelContext = [CEDatabaseContext contextWithTableName:kDBTableModelInfo class:[CEModelInfo class] inDatabase:db];
-    isOK = [modelContext insertObjects:dbObjInfoList.copy error:&error];
+    isOK = [modelContext insertObjects:dbObjInfoList.allObjects error:&error];
     if (!isOK || error) {
-        printf("Fail to insert obj info to db: %s\n", [[error localizedDescription] UTF8String]);
+        NSLog(@"Fail to insert obj info to db: %@\n", [error localizedDescription]);
+        [_fileManager removeItemAtPath:dbPath error:nil];
         return NO;
     }
     CEDatabaseContext *meshContext = [CEDatabaseContext contextWithTableName:kDBTableMeshInfo class:[CEMeshInfo class] inDatabase:db];
-    isOK = [meshContext insertObjects:dbMeshInfoList error:&error];
+    isOK = [meshContext insertObjects:dbMeshInfoList.allObjects error:&error];
     if (!isOK || error) {
-        printf("Fail to insert mesh info to db: %s\n", [[error localizedDescription] UTF8String]);
+        NSLog(@"Fail to insert mesh info to db: %@\n", [error localizedDescription]);
+        [_fileManager removeItemAtPath:dbPath error:nil];
         return NO;
     }
     CEDatabaseContext *materialContext = [CEDatabaseContext contextWithTableName:kDBTableMaterialInfo class:[CEMaterialInfo class] inDatabase:db];
-    isOK = [materialContext insertObjects:dbMaterialInfoList error:&error];
+    isOK = [materialContext insertObjects:dbMaterialInfoList.allObjects error:&error];
     if (!isOK || error) {
-        printf("Fail to insert material info to db: %s\n", [[error localizedDescription] UTF8String]);
+        NSLog(@"Fail to insert material info to db: %@\n", [error localizedDescription]);
+        [_fileManager removeItemAtPath:dbPath error:nil];
         return NO;
     }
     CEDatabaseContext *textureContext = [CEDatabaseContext contextWithTableName:kDBTableTextureInfo class:[CETextureInfo class] inDatabase:db];
-    isOK = [textureContext insertObjects:dbTextureInfoList error:&error];
+    isOK = [textureContext insertObjects:dbTextureInfoList.allObjects error:&error];
     if (!isOK || error) {
-        printf("Fail to insert texture info to db: %s\n", [[error localizedDescription] UTF8String]);
+        NSLog(@"Fail to insert texture info to db: %@\n", [error localizedDescription]);
+        [_fileManager removeItemAtPath:dbPath error:nil];
         return NO;
     }
-    printf("Write model info to database Successfully!\n");
+    NSLog(@"Write model info to database Successfully!\n");
     
     return YES;
 }
@@ -386,7 +394,7 @@
                             withIntermediateDirectories:YES
                                              attributes:nil
                                                   error:nil];
-        printf("Create directory %s at:%s\n", isOK ? "OK" : "FAIL", [directoryPath UTF8String]);
+        NSLog(@"Create directory %@ at:%@\n", isOK ? @"OK" : @"FAIL", directoryPath);
         return isOK;
     }
     return YES;
@@ -398,7 +406,7 @@
     BOOL isDirectory = NO;
     BOOL existed = [_fileManager fileExistsAtPath:directoryPath isDirectory:&isDirectory];
     if (!existed || !isDirectory) {
-        printf("Warning: directory does not exist at path: %s\n", directoryPath.UTF8String);
+        NSLog(@"Warning: directory does not exist at path: %@\n", directoryPath);
     }
     
     NSArray *lastShaderFiles = [_fileManager contentsOfDirectoryAtPath:directoryPath error:nil];
