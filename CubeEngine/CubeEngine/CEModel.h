@@ -34,7 +34,7 @@
 // recursive search child model with the indicated name
 - (CEModel *)childWithName:(NSString *)modelName;
 
-- (CEModel *)duplicate;
+- (CEModel *)duplicate DEPRECATED_ATTRIBUTE;
 
 
 #pragma mark - debug

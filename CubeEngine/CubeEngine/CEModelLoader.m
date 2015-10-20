@@ -204,8 +204,8 @@
     for (CEMeshInfo *meshInfo in cache.meshInfoDict.allValues) {
         CERenderObject *renderObject = [CERenderObject new];
         renderObject.vertexBuffer = cache.vertexBuffer;
-        renderObject.indexBuffer = cache.indiceBufferDict[@(meshInfo.meshID)];
-        if (!renderObject.indexBuffer) {
+        renderObject.indiceBuffer = cache.indiceBufferDict[@(meshInfo.meshID)];
+        if (!renderObject.indiceBuffer) {
             if (cache.completion) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     cache.completion(nil);
@@ -238,6 +238,12 @@
     
     if (cache.completion) {
         CEModel *model = [[CEModel alloc] initWithRenderObjects:renderObjects.copy];
+        if (cache.modelInfo.boundsData) {
+            model.bounds = GLKVector3MakeWithData(cache.modelInfo.boundsData);
+        }
+        if (cache.modelInfo.offsetFromOriginData) {
+            model.offsetFromOrigin = GLKVector3MakeWithData(cache.modelInfo.offsetFromOriginData);
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             cache.completion(model);
         });

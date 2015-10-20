@@ -24,7 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.scene.camera.position = GLKVector3Make(0, 20, 20);
+    self.scene.camera.position = GLKVector3Make(15, 15, 15);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
 
 //    self.scene.camera.position = GLKVector3Make(0, 2, 5);
@@ -52,7 +52,7 @@
     
     CEModelLoader *loader = [CEModelLoader new];
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    [loader loadModelWithName:@"darksiders_war" completion:^(CEModel *model) {
+    [loader loadModelWithName:@"ram" completion:^(CEModel *model) {
         _testModel = model;
         _operator.operationObject = _testModel;
         [self.scene addModel:model];

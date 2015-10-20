@@ -75,11 +75,14 @@
         CEError(@"Invalid renderer environment");
         return;
     }
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     [_program use];
     [self setupLightInfosForRendering];
     for (CERenderObject *renderObject in objects) {
         [self renderObject:renderObject];
     }
+    glDisable(GL_BLEND);
 }
 
 - (void)setupLightInfosForRendering {
@@ -128,13 +131,13 @@
 
 
 - (void)renderObject:(CERenderObject *)object {
-    if (!object.vertexBuffer || !object.indexBuffer || !object.material) {
+    if (!object.vertexBuffer || !object.indiceBuffer || !object.material) {
         CEError(@"Invalid render object");
         return;
     }
     
     if (![object.vertexBuffer loadBuffer] ||
-        ![object.indexBuffer loadBuffer]) {
+        ![object.indiceBuffer loadBuffer]) {
         CEError(@"Render object fail to load buffer");
         return;
     }
@@ -158,115 +161,13 @@
         _program.diffuseTexture.textureUnit = textureUnit;
     }
     
-    glDrawElements(object.indexBuffer.drawMode,
-                   object.indexBuffer.indiceCount,
-                   object.indexBuffer.primaryType, 0);
+    glDrawElements(object.indiceBuffer.drawMode,
+                   object.indiceBuffer.indiceCount,
+                   object.indiceBuffer.primaryType, 0);
     
-    [object.indexBuffer unloadBuffer];
+    [object.indiceBuffer unloadBuffer];
     [object.vertexBuffer unloadBuffer];
 }
-
-
-- (void)renderModel:(CEModel *)model {
-#warning TODO: sort this thing!
-    
-    if (!model.vertexBuffer) {
-        CEError(@"Empty vertexBuffer");
-        return;
-    }
-    
-    if (model.indicesBuffer && ![model.indicesBuffer bindBuffer]) {
-        CEError(@"Empty indices buffer");
-        return;
-    }
-    
-    if (model.material) {
-        _program.diffuseColor.vector4 = GLKVector4MakeWithVector3(model.material.diffuseColor, 1.0);
-    }
-    
-    // setup vertex buffer
-    if (![model.vertexBuffer setupBuffer] ||
-        (model.indicesBuffer && ![model.indicesBuffer setupBuffer])) {
-        CEError(@"Fail to setup buffer");
-        return;
-    }
-    // prepare for rendering
-    CEVBOAttribute *positionAttribute = [model.vertexBuffer attributeWithName:CEVBOAttributePosition];
-    glEnableVertexAttribArray(CEVBOAttributePosition);
-    glVertexAttribPointer(CEVBOAttributePosition,
-                          positionAttribute.primaryCount,
-                          positionAttribute.primaryType,
-                          GL_FALSE,
-                          positionAttribute.elementStride,
-                          CE_BUFFER_OFFSET(positionAttribute.elementOffset));
-    
-    // setup MVP matrix
-    GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
-    GLKMatrix4 modelViewProjectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
-    _program.modelViewProjectionMatrix.matrix4 = modelViewProjectionMatrix;
-    
-    CEVBOAttribute *normalAttrib = [model.vertexBuffer attributeWithName:CEVBOAttributeNormal];
-    glEnableVertexAttribArray(CEVBOAttributeNormal);
-    glVertexAttribPointer(CEVBOAttributeNormal,
-                          normalAttrib.primaryCount,
-                          normalAttrib.primaryType,
-                          GL_FALSE,
-                          normalAttrib.elementStride,
-                          CE_BUFFER_OFFSET(normalAttrib.elementOffset));
-    
-    // setup normal matrix
-    GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(modelViewMatrix);
-    normalMatrix = GLKMatrix3InvertAndTranspose(normalMatrix, NULL);
-    _program.normalMatrix.matrix3 = normalMatrix;
-    
-    // setup model view matrix for specify lights
-    if (_mainLight.lightInfo.lightType == CELightTypePoint ||
-        _mainLight.lightInfo.lightType == CELightTypeSpot) {
-        _program.modelViewMatrix.matrix4 = modelViewMatrix;
-    }
-    
-    // setup material
-    if (model.material) {
-        _program.specularColor.vector3 = model.material.specularColor;
-        _program.ambientColor.vector3 = model.material.ambientColor;
-        _program.shininessExponent.floatValue = model.material.shininessExponent;
-    }
-    
-    // texture
-    if ([_program.attributes containsObject:@(CEVBOAttributeUV)]) {
-        CEVBOAttribute *textureCoordAttri = [model.vertexBuffer attributeWithName:CEVBOAttributeUV];
-        glEnableVertexAttribArray(CEVBOAttributeUV);
-        glVertexAttribPointer(CEVBOAttributeUV,
-                              textureCoordAttri.primaryCount,
-                              textureCoordAttri.primaryType,
-                              GL_FALSE,
-                              textureCoordAttri.elementStride,
-                              CE_BUFFER_OFFSET(textureCoordAttri.elementOffset));
-    }
-    if (_program.diffuseTexture) {
-//        _program.diffuseTexture.textureID = model.texture.name;
-    }
-    
-    // shadow map
-    if (_program.depthBiasMVP) {
-        GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
-                                               0.0, 0.5, 0.0, 0.0,
-                                               0.0, 0.0, 0.5, 0.0,
-                                               0.5, 0.5, 0.5, 1.0);
-        GLKMatrix4 depthMVP = GLKMatrix4Multiply(_shadowLight.lightViewMatrix, model.transformMatrix);
-        depthMVP = GLKMatrix4Multiply(_shadowLight.lightProjectionMatrix, depthMVP);
-        depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
-        _program.depthBiasMVP.matrix4 = depthMVP;        
-    }
-    
-    if (model.indicesBuffer) { // glDrawElements
-        glDrawElements(GL_TRIANGLES, model.indicesBuffer.indicesCount, model.indicesBuffer.indicesDataType, 0);
-        
-    } else { // glDrawArrays
-        glDrawArrays(GL_TRIANGLES, 0, model.vertexBuffer.vertexCount);
-    }
-}
-
 
 
 @end

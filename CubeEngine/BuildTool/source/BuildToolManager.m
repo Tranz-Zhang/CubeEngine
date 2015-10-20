@@ -147,7 +147,7 @@
 //        NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
 //    }
     
-    NSString *objFilePath = objFilePathList[5];//[objFilePathList lastObject]; //
+    NSString *objFilePath = objFilePathList[9];//[objFilePathList lastObject]; //
     OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
     if (info) {
         [objFileInfos addObject:info];
@@ -253,6 +253,8 @@
             CEModelInfo *dbModelInfo = (CEModelInfo *)[modelContext queryById:objInfo.name error:nil];
             if (dbModelInfo) {
                 objInfo.attributes = dbModelInfo.attributes;
+                objInfo.bounds = GLKVector3MakeWithData(dbModelInfo.boundsData);
+                objInfo.offsetFromOrigin = GLKVector3MakeWithData(dbModelInfo.offsetFromOriginData);
             } else {
                 NSLog(@"WARNING: can't get db info for model: %@", objInfo.name);
             }
@@ -317,6 +319,9 @@
         dbObjInfo.modelName = info.name;
         dbObjInfo.attributes = info.attributes;
         dbObjInfo.modelID = info.resourceID;
+        dbObjInfo.boundsData = [NSData dataWithVector3:info.bounds];
+        dbObjInfo.offsetFromOriginData = [NSData dataWithVector3:info.offsetFromOrigin];
+        
         NSMutableArray *meshIDs = [NSMutableArray arrayWithCapacity:info.meshInfos.count];
         for (int i = 0; i < info.meshInfos.count; i++) {
             // mesh info
@@ -333,9 +338,9 @@
             MaterialInfo *mtlInfo = meshInfo.materialInfo;
             CEMaterialInfo *dbMaterialInfo = [CEMaterialInfo new];
             dbMaterialInfo.materialID = mtlInfo.resourceID;
-            dbMaterialInfo.ambientColorData = [NSData dataWithBytes:mtlInfo.ambientColor.v length:sizeof(GLKVector3)];
-            dbMaterialInfo.diffuseColorData = [NSData dataWithBytes:mtlInfo.diffuseColor.v length:sizeof(GLKVector3)];
-            dbMaterialInfo.specularColorData = [NSData dataWithBytes:mtlInfo.specularColor.v length:sizeof(GLKVector3)];
+            dbMaterialInfo.ambientColorData = [NSData dataWithVector3:mtlInfo.ambientColor];
+            dbMaterialInfo.diffuseColorData = [NSData dataWithVector3:mtlInfo.diffuseColor];
+            dbMaterialInfo.specularColorData = [NSData dataWithVector3:mtlInfo.specularColor];
             dbMaterialInfo.shininessExponent = mtlInfo.shininessExponent;
             dbMaterialInfo.transparent = mtlInfo.transparency > 0 ?: -1;
             dbMaterialInfo.diffuseTextureID = mtlInfo.diffuseTexture.resourceID;

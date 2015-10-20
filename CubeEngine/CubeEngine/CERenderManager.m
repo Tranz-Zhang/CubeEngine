@@ -49,10 +49,10 @@
     EAGLContext *_context;
     NSMutableDictionary *_rendererDict; // @{CEProgramConfig:CEMainRenderer}
     
-    // deprecated renderer
+    // special renderer
     CEShadowMapRenderer *_shadowMapRenderer DEPRECATED_ATTRIBUTE;
-    CEWireframeRenderer *_wireframeRenderer DEPRECATED_ATTRIBUTE;
-    CEAssistRenderer *_assistRenderer DEPRECATED_ATTRIBUTE;
+    CEWireframeRenderer *_wireframeRenderer;
+    CEAssistRenderer *_assistRenderer;
 }
 
 
@@ -91,6 +91,10 @@
         [renderer renderObjects:group.renderObjects];
     }
     
+    if (scene.enableDebug) {
+        [self renderDebugSceneWithObjects:scene.allModels];
+    }
+    
     printf("render duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
 }
 
@@ -108,11 +112,11 @@
             if (!renderObject.vertexBuffer.isReady) {
                 [renderObject.vertexBuffer setupBuffer];
             }
-            if (!renderObject.indexBuffer.isReady) {
-                [renderObject.indexBuffer setupBuffer];
+            if (!renderObject.indiceBuffer.isReady) {
+                [renderObject.indiceBuffer setupBuffer];
             }
             if (!renderObject.vertexBuffer.isReady ||
-                !renderObject.indexBuffer.isReady) {
+                !renderObject.indiceBuffer.isReady) {
                 CEPrintf("WARNING: Fail to load buffer for render object");
                 continue;
             }
@@ -138,146 +142,10 @@
     NSArray *renderGroups = [renderGroupDict allValues];
     // sort groups by renderMode
     renderGroups = [renderGroups sortedArrayUsingComparator:^NSComparisonResult(CERenderGroup *group1, CERenderGroup *group2) {
-        return group1.renderPriority - group2.renderPriority;
+        return group2.renderPriority - group1.renderPriority;
     }];
     
     return renderGroups.copy;
-}
-
-
-
-- (void)renderCurrentScene_Deprecated {
-    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    CEScene *scene = [CEScene currentScene];
-    [EAGLContext setCurrentContext:scene.context];
-    
-    // 1. get all visiable objects(without empty group)
-    NSMutableArray *allModels = [NSMutableArray array];
-    for (CEModel *model in scene.allModels) {
-        [self recursiveAddVisiableModel:model toList:allModels];
-    }
-    
-    // 2. check if need render shadow map
-    CEShadowLight *shadowLight = nil;
-    NSMutableArray *shadowModels = [NSMutableArray array];
-    if ([scene.mainLight isKindOfClass:[CEShadowLight class]] &&
-        [(CEShadowLight *)scene.mainLight enableShadow] &&
-        [(CEShadowLight *)scene.mainLight isEnabled]) {
-        shadowLight = (CEShadowLight *)scene.mainLight;
-    }
-    for (CEModel *model in allModels) {
-        if (model.castShadows) {
-            [shadowModels addObject:model];
-        }
-    }
-    if (shadowLight && shadowModels.count) {
-        // try render shadow mapp if needed
-        [self renderShadowMapsWithShadowLight:shadowLight
-                                 shadowModels:shadowModels];
-    }
-    
-    // 3. load texture for models
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [self loadTextureForModels:allModels];
-    });
-    
-    // 4 .sort render objects
-    CERenderConfig *baseConfig = [CERenderConfig new];
-    baseConfig.enableShadowMapping = (shadowLight && shadowModels.count);
-    baseConfig.lightType = scene.mainLight ? scene.mainLight.lightInfo.lightType : CELightTypeNone;
-    NSArray *renderGroups = [self renderGroupsWithObjects:allModels withBaseConfig:baseConfig];
-    
-    // 5. render models
-    glBindFramebuffer(GL_FRAMEBUFFER, scene.renderCore.defaultFramebuffer);
-    glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
-    for (CERenderGroup *group in renderGroups) {
-        CEDefaultRenderer *renderer = [self rendererWithConfig:group.renderConfig];
-        if (!renderer) continue;
-        
-        renderer.camera = scene.camera;
-        renderer.mainLight = scene.mainLight;
-        // normally render a object
-        [renderer renderObjects:group.renderObjects];
-        /*
-         if (group.renderConfig.renderMode == CERenderModeTransparent) {
-         // render transparent object with double sided and blend on
-         glEnable(GL_BLEND);
-         glEnable(GL_CULL_FACE);
-         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-         glCullFace(GL_FRONT);
-         [renderer renderObjects:group.renderObjects];
-         glCullFace(GL_BACK);
-         [renderer renderObjects:group.renderObjects];
-         glDisable(GL_CULL_FACE);
-         glDisable(GL_BLEND);
-         
-         } else {
-         // normally render a object
-         [renderer renderObjects:group.renderObjects];
-         }
-         //*/
-    }
-    
-    // 6. render debug info
-    if (scene.enableDebug) {
-        [self renderDebugSceneWithObjects:allModels];
-    }
-    printf("render duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
-}
-
-/**
- sort models into render groups
- */
-- (NSArray *)renderGroupsWithObjects:(NSArray *)models withBaseConfig:(CERenderConfig *)baseConfig {
-    // @{CERenderConfig : CERenderGroup}
-    NSMutableDictionary *sortedRenderObjectDict = [NSMutableDictionary dictionary];
-    for (CEModel *model in models) {
-        CERenderConfig *modelConfig = baseConfig.copy;
-        modelConfig.materialType = (int)model.material.materialType;
-        modelConfig.enableTexture = model.texture ? YES : NO;
-        modelConfig.enableNormalMapping = model.normalMap ? YES : NO;
-        CERenderGroup *group = sortedRenderObjectDict[modelConfig];
-        if (!group) {
-            group = [CERenderGroup new];
-            group.renderConfig = modelConfig;
-            group.renderObjects = [NSMutableArray array];
-            sortedRenderObjectDict[modelConfig] = group;
-        }
-        [group.renderObjects addObject:model];
-    }
-    
-    NSArray *renderGroups = [sortedRenderObjectDict allValues];
-    // sort groups by renderMode
-    renderGroups = [renderGroups sortedArrayUsingComparator:^NSComparisonResult(CERenderGroup *group1, CERenderGroup *group2) {
-        return group1.renderConfig.materialType - group2.renderConfig.materialType;
-    }];
-//    // sort objects by distance to camera
-//    CECamera *camera = [CEScene currentScene].camera;
-//    for (CERenderGroup *group in renderGroups) {
-//        BOOL isAccending = group.renderConfig.renderMode == CERenderModeTransparent ? NO : YES;
-//        group.renderObjects = [group.renderObjects sortedArrayUsingComparator:^NSComparisonResult(CEModel *model1, CEModel *model2) {
-//            float distance1 = GLKVector3Distance([model1 positionInWorldSpace],
-//                                                 [camera positionInWorldSpace]);
-//            float distance2 = GLKVector3Distance([model2 positionInWorldSpace],
-//                                                 [camera positionInWorldSpace]);
-//            return isAccending ? distance1 - distance2 : distance2 - distance1;
-//        }];
-//    }
-    
-    return renderGroups.copy;
-}
-
-
-- (void)recursiveAddVisiableModel:(CEModel *)model toList:(NSMutableArray *)models {
-    for (CEModel *child in model.childObjects) {
-        [self recursiveAddVisiableModel:child toList:models];
-    }
-    if (model.vertexBuffer) {
-        [models addObject:model];
-    }
 }
 
 
@@ -294,43 +162,6 @@
     }
 
     return render;
-}
-
-
-- (void)loadTextureForModels:(NSArray *)models {
-    for (CEModel *model in models) {
-        // load diffuse texture
-        if (model.material.diffuseTexture && !model.texture) {
-            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-            NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:model.material.diffuseTexture];
-            NSDictionary *options = @{GLKTextureLoaderOriginBottomLeft : @YES};
-            NSError *error;
-            GLKTextureInfo *texture = [GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
-            if (error) {
-                CEWarning(@"Fail to load texture: %@", error);
-                
-            } else {
-                model.texture = texture;
-                CEPrintf("load texture OK duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
-            }
-        }
-        
-        // load normal map texture
-        if (model.material.normalTexture && !model.normalMap) {
-            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-            NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:model.material.normalTexture];
-            NSDictionary *options = @{GLKTextureLoaderOriginBottomLeft : @YES};
-            NSError *error;
-            GLKTextureInfo *texture = [GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
-            if (error) {
-                CEWarning(@"Fail to load normal map texture: %@", error);
-                
-            } else {
-                model.normalMap = texture;
-                CEPrintf("load normal map texture OK duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
-            }
-        }
-    }
 }
 
 

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GLKit/GLKit.h>
 #import "CEVBOAttribute.h"
 #import "MeshInfo.h"
 #import "VectorList.h"
@@ -20,6 +21,9 @@
 @property (nonatomic, strong) NSString *mtlFileName;
 @property (nonatomic, strong) NSArray *meshInfos; // array of MeshInfo
 @property (nonatomic, strong) NSArray *attributes;
+
+@property (nonatomic, assign) GLKVector3 bounds;
+@property (nonatomic, assign) GLKVector3 offsetFromOrigin;
 
 @property (nonatomic, strong) VectorList *vertexDataList;
 @property (nonatomic, strong) VectorList *positionList;

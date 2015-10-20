@@ -55,7 +55,6 @@
 		26F7B75A1AEE31C400BEDB01 /* CESpotLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F7B7591AEE31C400BEDB01 /* CESpotLight.m */; };
 		26F7B75B1AEE6AD900BEDB01 /* CESpotLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26F7B7581AEE31C400BEDB01 /* CESpotLight.h */; };
 		26F7FF8F1ADE45660086D9D7 /* CEAssistRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F7FF8E1ADE45660086D9D7 /* CEAssistRenderer.m */; };
-		26FF85381B0A173C0075B971 /* CEMainRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 26FF85371B0A173C0075B971 /* CEMainRenderer.m */; };
 		4C1352151B83638B008EA484 /* BuildToolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1352141B83638B008EA484 /* BuildToolManager.m */; };
 		4C1352171B8364B2008EA484 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1352161B8364B2008EA484 /* main.m */; };
 		4C1703E61BA5A09400DBF84A /* CEDefaultRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1703E51BA5A09400DBF84A /* CEDefaultRenderer.m */; };
@@ -72,6 +71,9 @@
 		4C51F1231B8B20F10052511E /* CEShaderProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C51F1211B8B20DD0052511E /* CEShaderProfile.m */; };
 		4C9D75941B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */; };
 		4C9D75951B8F009600AEA174 /* CEShaderLinkFunctionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */; };
+		4C9D80E51BD63BE2000A5617 /* NSData+GLKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */; };
+		4C9D80E61BD63D05000A5617 /* NSData+GLKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */; };
+		4C9D80E71BD64299000A5617 /* CEShadowMapRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 269F476C1B00893D0030CD55 /* CEShadowMapRenderer.m */; };
 		4CB61A0E1BB240E700D83856 /* CEDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F51BB1602C00686678 /* CEDatabase.m */; };
 		4CB61A101BB2410100D83856 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */; };
 		4CB61A111BB2412800D83856 /* CEDatabaseNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F91BB1602C00686678 /* CEDatabaseNotifications.m */; };
@@ -195,7 +197,6 @@
 		4CF4038D1B7386CD00C02BAE /* CEUniformSampler2D.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF4038C1B7386CD00C02BAE /* CEUniformSampler2D.m */; };
 		4CF4649E1BB944FE006D7DE2 /* VectorList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF4649D1BB944FE006D7DE2 /* VectorList.m */; };
 		4CF9B5FA1BA0660C00E2128D /* CEDefaultProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF9B5F91BA0660C00E2128D /* CEDefaultProgram.m */; };
-		4CFE33631B3CFAAB00679817 /* CEShadowMapRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 269F476C1B00893D0030CD55 /* CEShadowMapRenderer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -368,6 +369,8 @@
 		4C9D75911B8EEAA900AEA174 /* template.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = template.glsl; sourceTree = "<group>"; };
 		4C9D75921B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderLinkFunctionInfo.h; sourceTree = "<group>"; };
 		4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderLinkFunctionInfo.m; sourceTree = "<group>"; };
+		4C9D80E31BD63BE2000A5617 /* NSData+GLKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GLKit.h"; sourceTree = "<group>"; };
+		4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GLKit.m"; sourceTree = "<group>"; };
 		4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/lib/libsqlite3.dylib; sourceTree = DEVELOPER_DIR; };
 		4CB61A2C1BB2A29100D83856 /* MeshInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshInfo.h; sourceTree = "<group>"; };
 		4CB61A2D1BB2A29100D83856 /* MeshInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = MeshInfo.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -860,6 +863,8 @@
 				4CD9CAA21B8AC1FB00FDE357 /* CECodingObject.h */,
 				4CD9CAA31B8AC1FB00FDE357 /* CECodingObject.m */,
 				4CF5CCA01B8C0D7F0048E833 /* CEJsonCoding.h */,
+				4C9D80E31BD63BE2000A5617 /* NSData+GLKit.h */,
+				4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -1310,6 +1315,7 @@
 				4CBB750A1BB5419600C3829B /* CETextureBuffer.m in Sources */,
 				4CC25DB01BCE3F1C00DB3DA2 /* example.c in Sources */,
 				4CC25DCE1BCE3F1C00DB3DA2 /* zutil.c in Sources */,
+				4C9D80E51BD63BE2000A5617 /* NSData+GLKit.m in Sources */,
 				4CBB75071BB5418900C3829B /* CEIndiceBuffer.m in Sources */,
 				4CC25DC51BCE3F1C00DB3DA2 /* gzio.c in Sources */,
 				4CD9CAA41B8AC1FB00FDE357 /* CECodingObject.m in Sources */,
@@ -1342,6 +1348,7 @@
 				26F7B75A1AEE31C400BEDB01 /* CESpotLight.m in Sources */,
 				4CC25DC31BCE3F1C00DB3DA2 /* crc32.c in Sources */,
 				4CC25DC91BCE3F1C00DB3DA2 /* inftrees.c in Sources */,
+				4C9D80E71BD64299000A5617 /* CEShadowMapRenderer.m in Sources */,
 				4CCBB3F91B842A0E00200C4E /* CEShaderBuilder.m in Sources */,
 				4CCBB3FC1B842A8400200C4E /* CEShaderInfo.m in Sources */,
 				261089691AAD31C60041E142 /* CECamera.m in Sources */,
@@ -1386,7 +1393,6 @@
 				4CEA121D1BB1602D00686678 /* FMDatabaseQueue.m in Sources */,
 				2658786B1AD7C99100BA2137 /* CEWireframeRenderer.m in Sources */,
 				4CC25DB81BCE3F1C00DB3DA2 /* pngrtran.c in Sources */,
-				26FF85381B0A173C0075B971 /* CEMainRenderer.m in Sources */,
 				4CBD44241B723AB600D72831 /* CEShaderVariable.m in Sources */,
 				4CC25DB41BCE3F1C00DB3DA2 /* pngmem.c in Sources */,
 				260949191B0598EE00F7465B /* CEObjParser.m in Sources */,
@@ -1408,7 +1414,6 @@
 				4C1703E91BA5A94100DBF84A /* CERenderConfig.m in Sources */,
 				269F476A1B0089030030CD55 /* CEShadowMapBuffer.m in Sources */,
 				4CEA12181BB1602D00686678 /* CEQueryCondition.m in Sources */,
-				4CFE33631B3CFAAB00679817 /* CEShadowMapRenderer.m in Sources */,
 				4CC25DDB1BCE489500DB3DA2 /* CEPNGUnpacker.m in Sources */,
 				4CEA12291BB1833600686678 /* CERenderObject.m in Sources */,
 				4CF2BF811BBBC9FE00CB1681 /* CEResourceManager.m in Sources */,
@@ -1467,6 +1472,7 @@
 				4CB61A131BB2413F00D83856 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				4CB61A171BB2413F00D83856 /* FMResultSet.m in Sources */,
 				4CB61A151BB2413F00D83856 /* FMDatabasePool.m in Sources */,
+				4C9D80E61BD63D05000A5617 /* NSData+GLKit.m in Sources */,
 				4CD9CAA51B8AC39900FDE357 /* CEShaderProfileParser.m in Sources */,
 				4CB61A1C1BB2414B00D83856 /* CEQueryCondition+Private.m in Sources */,
 				4CD9CAA81B8AC39900FDE357 /* CEShaderVariableInfo.m in Sources */,

@@ -9,6 +9,8 @@
 #ifndef CubeEngine_CEDefines_h
 #define CubeEngine_CEDefines_h
 
+#import "NSData+GLKit.h"
+
 // shader string
 #define CE_SHADER_STRING(text) @ #text
 
@@ -22,6 +24,7 @@ typedef NS_ENUM(NSInteger, CELightType) {
     CELightTypePoint,
     CELightTypeSpot,
 };
+
 
 
 #endif

@@ -73,7 +73,7 @@
             }
             
             CEVertexBuffer_DEPRECATED *vertexBuffer = [[CEVertexBuffer_DEPRECATED alloc] initWithData:vertexData attributes:attributes];
-            CEModel *model = [[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
+            CEModel *model = nil;//[[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
             model.name = groupName;
             if (!material) {
                 material = [CEMaterial new];

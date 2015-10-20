@@ -19,7 +19,7 @@
 
 // mesh info
 @property (nonatomic, strong) CEVertexBuffer *vertexBuffer;
-@property (nonatomic, strong) CEIndiceBuffer *indexBuffer;
+@property (nonatomic, strong) CEIndiceBuffer *indiceBuffer;
 
 // material info
 @property (nonatomic, strong) CEMaterial *material;
@@ -27,5 +27,8 @@
 // model matrix
 @property (nonatomic, assign) GLKMatrix4 modelMatrix;
 
+
+// for showing wireframe of object
+@property (nonatomic, strong) CEIndiceBuffer *wireframeIndiceBuffer;
 
 @end

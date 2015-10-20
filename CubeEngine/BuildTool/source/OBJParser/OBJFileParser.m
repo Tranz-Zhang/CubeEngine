@@ -297,6 +297,9 @@
         NSLog(@"WARNING: fail to add tangent for model: %s\n", _objInfo.name.UTF8String);
     }
     
+    // get bounds
+    [self calculateBoundsForObjInfo:fileInfo];
+    
     // clean up
     _indicesDict = nil;
     _allPositionList = nil;
@@ -477,6 +480,26 @@
                            @(CEVBOAttributeNormal),
                            @(CEVBOAttributeTangent)];
     return YES;
+}
+
+
+- (void)calculateBoundsForObjInfo:(OBJFileInfo *)objInfo {
+    GLfloat maxX = FLT_MIN, maxY = FLT_MIN, maxZ = FLT_MIN;
+    GLfloat minX = FLT_MAX, minY = FLT_MAX, minZ = FLT_MAX;
+    
+    for (int i = 0; i < objInfo.positionList.count; i++) {
+        GLKVector3 position = [objInfo.positionList vector3AtIndex:i];
+        maxX = MAX(maxX, position.x);
+        maxY = MAX(maxY, position.y);
+        maxZ = MAX(maxZ, position.z);
+        minX = MIN(minX, position.x);
+        minY = MIN(minY, position.y);
+        minZ = MIN(minZ, position.z);
+    }
+    objInfo.offsetFromOrigin = GLKVector3Make((maxX + minX) / 2,
+                                              (maxY + minY) / 2,
+                                              (maxZ + minZ) / 2);
+    objInfo.bounds = GLKVector3Make(maxX - minX, maxY - minY, maxZ - minZ);
 }
 
 

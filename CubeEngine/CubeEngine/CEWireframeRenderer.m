@@ -43,27 +43,27 @@
         return;
     }
     [_program beginRendering];
-    for (CEModel *model in objects) {
-        if (!model.showWireframe || !model.wireframeBuffer) {
-            continue;
-        }
-        // setup vertex buffer
-        if (![model.wireframeBuffer setupBuffer] ||
-            ![model.vertexBuffer setupBuffer]) {
-            continue;
-        }
-        // prepare attribute for rendering
-        CEVBOAttribute *positionAttri = [model.vertexBuffer attributeWithName:CEVBOAttributePosition];
-        if (![_program setPositionAttribute:positionAttri]){
-            continue;
-        }
-        glLineWidth(_lineWidth);
-        GLKMatrix4 mvpMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
-        mvpMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, mvpMatrix);
-        [_program setModelViewProjectionMatrix:mvpMatrix];
-        [_program setDiffuseColor:_lineColorVec4];
-        glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);
-    }
+//    for (CEModel *model in objects) {
+//        if (!model.showWireframe || !model.wireframeBuffer) {
+//            continue;
+//        }
+//        // setup vertex buffer
+//        if (![model.wireframeBuffer setupBuffer] ||
+//            ![model.vertexBuffer setupBuffer]) {
+//            continue;
+//        }
+//        // prepare attribute for rendering
+//        CEVBOAttribute *positionAttri = [model.vertexBuffer attributeWithName:CEVBOAttributePosition];
+//        if (![_program setPositionAttribute:positionAttri]){
+//            continue;
+//        }
+//        glLineWidth(_lineWidth);
+//        GLKMatrix4 mvpMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
+//        mvpMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, mvpMatrix);
+//        [_program setModelViewProjectionMatrix:mvpMatrix];
+//        [_program setDiffuseColor:_lineColorVec4];
+//        glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);
+//    }
     [_program endRendering];
 }
 
