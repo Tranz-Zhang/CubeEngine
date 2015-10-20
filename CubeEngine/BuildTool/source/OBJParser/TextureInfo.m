@@ -91,8 +91,10 @@
     return _resourceID;
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"TEX[%08X] %.0fX%.0f PNG %s", _resourceID, _size.width, _size.height, _hasAlpha ? "-Alpha" : ""];
+}
 
 @end
-
 
 

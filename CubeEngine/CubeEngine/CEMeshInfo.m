@@ -24,7 +24,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"MESH%X", _meshID];
+    return [NSString stringWithFormat:@"MESH%08X", _meshID];
 }
 
 

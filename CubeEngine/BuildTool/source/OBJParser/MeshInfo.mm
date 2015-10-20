@@ -19,20 +19,6 @@
     return self;
 }
 
-
-- (GLenum)indicePrimaryType {
-    if (_maxIndex > 65525) {
-        return GL_UNSIGNED_INT;
-        
-    } else if (_maxIndex > 255) {
-        return GL_UNSIGNED_SHORT;
-        
-    } else {
-        return GL_UNSIGNED_BYTE;
-    }
-}
-
-
 - (NSData *)buildIndiceData {
     NSMutableData *indiceData = [NSMutableData data];
     if (_maxIndex > 65525) {
@@ -113,6 +99,11 @@
 
 - (NSUInteger)hash {
     return _resourceID;
+}
+
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"Mesh[%08X]-%@:\nindiceCount:%d\nmaxIndice:%d\nprimaryType:%04X\ndrawMode%04X\n- Material:{%@}\n", _resourceID, _name, _indiceCount, _maxIndex, _indicePrimaryType, _drawMode, _materialInfo];
 }
 
 

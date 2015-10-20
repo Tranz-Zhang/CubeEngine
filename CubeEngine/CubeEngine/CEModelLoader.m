@@ -211,7 +211,7 @@
                     cache.completion(nil);
                 });
             }
-            CEError(@"Fail to get mesh's indece data: %@-%X",  cache.modelInfo.modelName, meshInfo.meshID);
+            CEError(@"Fail to get mesh's indece data: %@-%08X",  cache.modelInfo.modelName, meshInfo.meshID);
             return;
         }
         

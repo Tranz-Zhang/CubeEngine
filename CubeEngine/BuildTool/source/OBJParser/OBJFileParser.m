@@ -57,6 +57,9 @@
         }
     }
     NSMutableDictionary *mtlDict = [NSMutableDictionary dictionary];
+    MaterialInfo *defaultMtlInfo = [MaterialInfo new]; // default material
+    defaultMtlInfo.name = kDefaultMTLName;
+    mtlDict[kDefaultMTLName] = defaultMtlInfo;
     if (mtlFileName.length) {
         NSString *currentDirectory = [filePath stringByDeletingLastPathComponent];
         NSString *mtlFilePath = [currentDirectory stringByAppendingPathComponent:mtlFileName];
@@ -110,12 +113,6 @@
             if (!mtlInfo) {
                 mtlInfo = mtlDict[kDefaultMTLName];
             }
-            if (!mtlInfo) {
-                MaterialInfo *defaultMtlInfo = [MaterialInfo new];
-                defaultMtlInfo.name = kDefaultMTLName;
-                mtlDict[kDefaultMTLName] = defaultMtlInfo;
-                mtlInfo = defaultMtlInfo;
-            }
             currentMesh.materialInfo = mtlInfo;
             continue;
         }
@@ -135,6 +132,9 @@
     for (MeshInfo *mesh in meshInfoList) {
         if (mesh.groupNames.count && mesh.indiceCount) {
             [filteredMeshes addObject:mesh];
+            if (!mesh.materialInfo) {
+                mesh.materialInfo = mtlDict[kDefaultMTLName];
+            }
         }
     }
     

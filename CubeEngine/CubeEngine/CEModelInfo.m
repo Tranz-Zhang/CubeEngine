@@ -24,7 +24,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"MODEL%X", _modelID];
+    return [NSString stringWithFormat:@"MODEL%08X", _modelID];
 }
 
 

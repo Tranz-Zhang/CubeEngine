@@ -66,6 +66,34 @@
 }
 
 
+- (NSString *)description {
+    NSMutableString *des = [NSMutableString stringWithFormat:@"OBJ[%08X]-%@:\nfilePath:%@\n", _resourceID, _name, _filePath];
+    [des appendString:@"attribute: "];
+    for (NSNumber *attribute in _attributes) {
+        [des appendFormat:@"%@ ", CEVBOAttributeNameString([attribute integerValue])];
+    }
+    [des appendString:@"\nMeshInfos:\n"];
+    for (MeshInfo *info in _meshInfos) {
+        [des appendFormat:@">> %@", [info description]];
+    }
+    return [des copy];
+}
+
+/**
+ @property (nonatomic, strong) NSString *name;
+ @property (nonatomic, readonly) uint32_t resourceID;
+ @property (nonatomic, strong) NSString *filePath;
+ 
+ @property (nonatomic, strong) NSString *mtlFileName;
+ @property (nonatomic, strong) NSArray *meshInfos; // array of MeshInfo
+ @property (nonatomic, strong) NSArray *attributes;
+ 
+ @property (nonatomic, strong) VectorList *vertexDataList;
+ @property (nonatomic, strong) VectorList *positionList;
+ @property (nonatomic, strong) VectorList *uvList;
+ @property (nonatomic, strong) VectorList *normalList;
+ @property (nonatomic, strong) VectorList *tangentList;
+ */
 
 @end
 

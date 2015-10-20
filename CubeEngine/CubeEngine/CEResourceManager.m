@@ -123,7 +123,7 @@ static uint32_t sNextRuntimeResourceID = kBaseRuntimeResourceID;
         for (NSNumber *resourceID in resourceIDs) {
             NSData *cachedData = _resourceCacheDict[resourceID];
             if (cachedData) {
-                CEPrintf("Load fast cache for resource: %X\n", resourceID.unsignedIntValue);
+                CEPrintf("Load fast cache for resource: %08X\n", resourceID.unsignedIntValue);
                 loadedDataDict[resourceID] = cachedData;
                 [resourcesToLoad removeObject:resourceID];
                 
@@ -183,7 +183,7 @@ static uint32_t sNextRuntimeResourceID = kBaseRuntimeResourceID;
         NSData *lastData = _resourceCacheDict[lastResourceID];
         [_resourceCacheDict removeObjectForKey:lastResourceID];
         _currentCacheSize -= lastData.length;
-        CEPrintf("LRU: release resource: %X\n", lastResourceID.unsignedIntValue);
+        CEPrintf("LRU: release resource: %08X\n", lastResourceID.unsignedIntValue);
     }
 }
 

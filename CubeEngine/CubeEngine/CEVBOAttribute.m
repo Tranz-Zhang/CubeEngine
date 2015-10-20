@@ -8,7 +8,7 @@
 
 #import "CEVBOAttribute.h"
 
-/*
+//*
 NSString *CEVBOAttributeNameString(CEVBOAttributeName name) {
     switch (name) {
         case CEVBOAttributePosition:

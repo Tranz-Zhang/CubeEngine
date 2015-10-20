@@ -31,6 +31,9 @@ typedef NS_ENUM(NSInteger, CEVBOAttributeName) {
     CEVBOAttributeColor,
 };
 
+/** CEVBOAttributeName -> NSString */
+NSString *CEVBOAttributeNameString(CEVBOAttributeName name);
+
 /**
  check if shader attribute declaration string contain any attribute keyword,
  return the spercify CEVBOAttributeName

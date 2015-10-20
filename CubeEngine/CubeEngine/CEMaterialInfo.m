@@ -24,7 +24,7 @@
 
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"MTL%X", _materialID];
+    return [NSString stringWithFormat:@"MTL%08X", _materialID];
 }
 
 

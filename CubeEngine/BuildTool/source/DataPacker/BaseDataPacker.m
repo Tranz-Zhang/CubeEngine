@@ -29,7 +29,9 @@
             _dbContext = [CEDatabaseContext contextWithTableName:kDBTableResourceData
                                                            class:[CEResourceDataInfo class]
                                                       inDatabase:_db];
-            [_dbContext removeAllObjectsWithError:nil];
+            if (!ENABLE_INCREMENTAL_UPDATE) {
+                [_dbContext removeAllObjectsWithError:nil];
+            }
         }
     }
     return self;
@@ -41,10 +43,11 @@
         return NO;
     }
     
-    NSMutableArray *dataInfos = [NSMutableArray arrayWithCapacity:dataDict.count];
+    NSMutableArray *insertDataInfos = [NSMutableArray array];
+    NSMutableArray *updateDataInfos = [NSMutableArray array];
     NSMutableData *resourceData = [NSMutableData data];
     uint32_t mainResourceID = [dataDict.allKeys[0] unsignedIntValue];
-    NSString *relativeFilePath = [NSString stringWithFormat:@"%@/%X", [self targetFileDirectory], mainResourceID];
+    NSString *relativeFilePath = [NSString stringWithFormat:@"%@/%08X", [self targetFileDirectory], mainResourceID];
     NSString *filePath = [_appPath stringByAppendingPathComponent:relativeFilePath];
     [dataDict enumerateKeysAndObjectsUsingBlock:^(NSNumber *resourceID, NSData *data, BOOL *stop) {
         uint32_t uResourceID = [resourceID unsignedIntValue];
@@ -54,22 +57,33 @@
             [resourceData appendBytes:&uResourceID length:sizeof(uint32_t)];
             [resourceData appendData:data];
             
-            CEResourceDataInfo *info = [CEResourceDataInfo new];
+            CEResourceDataInfo *info = (CEResourceDataInfo *)[_dbContext queryById:@(uResourceID) error:nil];
+            if (info) {
+                [updateDataInfos addObject:info];
+                
+            } else {
+                info = [CEResourceDataInfo new];
+                [insertDataInfos addObject:info];
+            }
             info.resourceID = uResourceID;
             info.dataRange = NSMakeRange(resourceData.length - data.length, data.length);
             info.filePath = relativeFilePath;
-            [dataInfos addObject:info];
         }
     }];
-    if (!resourceData.length || !dataInfos.count) {
+    if (!resourceData.length || (!insertDataInfos.count && !updateDataInfos.count)) {
         return nil;
     }
     // write DB
     NSError *error;
-    if (![_dbContext insertObjects:dataInfos error:&error]) {
-        printf("Fail to insert resource data info to db: %s\n", [[error localizedDescription] UTF8String]);
+    if (![_dbContext updateObjects:updateDataInfos error:&error]) {
+        NSLog(@"Fail to update resource data info to db: %@\n", [error localizedDescription]);
         return nil;
     }
+    if (![_dbContext insertObjects:insertDataInfos error:&error]) {
+        NSLog(@"Fail to insert resource data info to db: %@\n", [error localizedDescription]);
+        return nil;
+    }
+    
     // write resource file
     if (![resourceData writeToFile:filePath atomically:YES]) {
         printf("Fail to write resource data\n");

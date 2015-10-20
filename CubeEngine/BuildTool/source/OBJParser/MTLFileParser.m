@@ -112,7 +112,11 @@
             TextureInfo *texture = textureDict[filePath];
             if (!texture) {
                 texture = [TextureInfo textureInfoWithFilePath:filePath];
-                textureDict[filePath] = texture;
+                if (texture) {
+                    textureDict[filePath] = texture;
+                } else {
+                    NSLog(@"WARNING: can not parse texture at path: %@", filePath);
+                }
             }
             currentMaterial.diffuseTexture = texture;
             continue;
@@ -124,7 +128,11 @@
             TextureInfo *texture = textureDict[filePath];
             if (!texture) {
                 texture = [TextureInfo textureInfoWithFilePath:filePath];
-                textureDict[filePath] = texture;
+                if (texture) {
+                    textureDict[filePath] = texture;
+                } else {
+                    NSLog(@"WARNING: can not parse texture at path: %@", filePath);
+                }
             }
             currentMaterial.normalTexture = texture;
             continue;

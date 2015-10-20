@@ -25,7 +25,7 @@
 
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"TEX%X", _textureID];
+    return [NSString stringWithFormat:@"TEX%08X", _textureID];
 }
 
 

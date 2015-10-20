@@ -54,7 +54,7 @@
         NSLog(@"\nFail to create config directory, ABORT!\n");
         return;
     }
-    [self cleanDirectory:configDir];
+//    [self cleanDirectory:configDir];
     
     if(![self processShaderResources]){
         NSLog(@"\nFail to process shader resources, ABORT!\n");
@@ -140,20 +140,20 @@
     // parse obj file
     NSMutableArray *objFileInfos = [NSMutableArray array];
 //    for (NSString *objFilePath in objFilePathList) {
-//        NSLog(@"parsing obj file: %s", [objFilePath lastPathComponent].UTF8String);
 //        OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
 //        if (info) {
 //            [objFileInfos addObject:info];
 //        }
-//        NSLog(@" %@\n", info ? @"√" : @"X");
+//        NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
 //    }
     
-    NSString *objFilePath = [objFilePathList lastObject]; //objFilePathList[9];
+    NSString *objFilePath = objFilePathList[5];//[objFilePathList lastObject]; //
     OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
     if (info) {
         [objFileInfos addObject:info];
     }
     NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
+    NSLog(@"%@", info);
     
     // process resources
     if (![self processModelResourcesDataWithObjInfos:objFileInfos]) {
@@ -191,7 +191,6 @@
 
 
 - (BOOL)processModelResourcesDataWithObjInfos:(NSArray *)objFileInfos {
-    
     NSString *modelDir = [kAppPath stringByAppendingPathComponent:kModelDirectory];
     if (![self createDirectoryAtPath:modelDir]){
         NSLog(@"Fail to create model directory: %@", modelDir);
@@ -202,6 +201,12 @@
         NSLog(@"Fail to create texture directory: %@", textureDir);
         return NO;
     }
+    
+    // get mesh table
+    NSString *configDir = [kAppPath stringByAppendingPathComponent:kConfigDirectory];
+    CEDatabase *db = [CEDatabase databaseWithName:kResourceInfoDBName inPath:configDir];
+    CEDatabaseContext *modelContext = [CEDatabaseContext contextWithTableName:kDBTableModelInfo class:[CEModelInfo class] inDatabase:db];
+    CEDatabaseContext *meshContext = [CEDatabaseContext contextWithTableName:kDBTableMeshInfo class:[CEMeshInfo class] inDatabase:db];
     
     ModelDataPacker *modelPacker = [[ModelDataPacker alloc] initWithAppPath:kAppPath];
     TextureDataPacker *texturePacker = [[TextureDataPacker alloc] initWithAppPath:kAppPath];
@@ -221,24 +226,51 @@
                     indiceData = [meshInfo buildOptimizedIndiceData];
                 }
                 if (indiceData.length) {
-                    meshInfo.isOptimized = YES;
+                    if (!hasOptimized) hasOptimized = YES;
+                    meshInfo.drawMode = GL_TRIANGLE_STRIP;
+                    
                 } else {
                     indiceData = [meshInfo buildIndiceData];
-                    meshInfo.isOptimized = NO;
+                    meshInfo.drawMode = GL_TRIANGLES;
+                }
+                if (meshInfo.maxIndex > 65525) {
+                    meshInfo.indicePrimaryType = GL_UNSIGNED_INT;
+                } else if (meshInfo.maxIndex > 255) {
+                    meshInfo.indicePrimaryType = GL_UNSIGNED_SHORT;
+                } else {
+                    meshInfo.indicePrimaryType = GL_UNSIGNED_BYTE;
                 }
                 dataDict[@(meshInfo.resourceID)] = indiceData;
-                if (!hasOptimized) {
-                    hasOptimized = meshInfo.isOptimized;
-                }
             }
             NSString *resultPath = [modelPacker packModelDataDict:dataDict];
             if (resultPath) {
                 [[FileUpdateManager sharedManager] updateInfoWithSourcePath:objInfo.filePath resultPath:resultPath];
             }
-            NSLog(@" - ModelData[%X] %@%@\n", objInfo.resourceID, resultPath ? @"√" : @"X", hasOptimized ? @"+" : @"");
+            NSLog(@" - ModelData[%08X] %@%@ to:%@\n", objInfo.resourceID, resultPath ? @"√" : @"X", hasOptimized ? @"+" : @"", resultPath);
             
         } else {
-            NSLog(@" - ModelData[%X] ∆\n", objInfo.resourceID);
+            // get some required info from last db
+            CEModelInfo *dbModelInfo = (CEModelInfo *)[modelContext queryById:objInfo.name error:nil];
+            if (dbModelInfo) {
+                objInfo.attributes = dbModelInfo.attributes;
+            } else {
+                NSLog(@"WARNING: can't get db info for model: %@", objInfo.name);
+            }
+            
+            // assign indice count
+            for (MeshInfo *meshInfo in objInfo.meshInfos) {
+                CEMeshInfo *dbInfo = (CEMeshInfo *)[meshContext queryById:@(meshInfo.resourceID) error:nil];
+                if (!dbInfo) {
+                    NSLog(@"WARNING: can't get db info for mesh:%@", meshInfo.name);
+                    continue;
+                }
+                meshInfo.indicePrimaryType = dbInfo.indicePrimaryType;
+                meshInfo.drawMode = dbInfo.drawMode;
+                meshInfo.indiceCount = dbInfo.indiceCount;
+                
+            }
+            
+            NSLog(@" - ModelData[%08X] ∆\n", objInfo.resourceID);
         }
         
         // process texture data
@@ -260,10 +292,10 @@
                 if (resultPath) {
                     [[FileUpdateManager sharedManager] updateInfoWithSourcePath:info.filePath resultPath:resultPath];
                 }
-                NSLog(@" - Texture[%X]: %@ %@\n", info.resourceID, info.name, resultPath ? @"√" : @"X");
+                NSLog(@" - Texture[%08X]: %@ %@\n", info.resourceID, info.name, resultPath ? @"√" : @"X");
                 
             } else {
-                NSLog(@" - Texture[%X]: %@ ∆\n", info.resourceID, info.name);
+                NSLog(@" - Texture[%08X]: %@ ∆\n", info.resourceID, info.name);
             }
         }
     }
@@ -293,8 +325,8 @@
             dbMeshInfo.meshID = meshInfo.resourceID;
             dbMeshInfo.materialID = meshInfo.materialInfo.resourceID;
             dbMeshInfo.indiceCount = meshInfo.indiceCount;
-            dbMeshInfo.indicePrimaryType = [meshInfo indicePrimaryType];
-            dbMeshInfo.drawMode = meshInfo.isOptimized ? GL_TRIANGLE_STRIP : GL_TRIANGLES;
+            dbMeshInfo.indicePrimaryType = meshInfo.indicePrimaryType;
+            dbMeshInfo.drawMode = meshInfo.drawMode;
             [meshIDs addObject:@(dbMeshInfo.meshID)];
             [dbMeshInfoList addObject:dbMeshInfo];
             // material info

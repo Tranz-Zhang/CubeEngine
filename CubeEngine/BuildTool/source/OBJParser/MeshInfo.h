@@ -18,9 +18,12 @@
 @property (nonatomic, assign) unsigned int maxIndex;
 @property (nonatomic, strong) NSMutableArray *indicesList;
 @property (nonatomic, assign) uint32_t indiceCount;
-@property (nonatomic, assign) BOOL isOptimized;
+//@property (nonatomic, assign) BOOL isOptimized;
 
-- (GLenum)indicePrimaryType;
+@property (nonatomic, assign) GLenum indicePrimaryType;
+@property (nonatomic, assign) GLenum drawMode;
+
+
 - (NSData *)buildIndiceData;
 - (NSData *)buildOptimizedIndiceData;
 

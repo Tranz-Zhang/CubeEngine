@@ -184,7 +184,7 @@
         }
         
     } else {
-        CEPrintf("Not texture found for id: %X\n", textureID);
+        CEPrintf("Not texture found for id: %08X\n", textureID);
     }
     return 0;
 }
