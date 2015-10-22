@@ -62,7 +62,7 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
     self = [super init];
     if (self) {
         _lineWidth = 2.0f;
-        [self setLineColor:[UIColor colorWithWhite:0.2 alpha:1.0f]];
+        [self setLineColor:[UIColor colorWithRed:0.259 green:1.0 blue:0.64 alpha:1]];
         [self setupRenderer];
         _indiceBufferDict = [NSMutableDictionary dictionary];
     }
@@ -145,7 +145,7 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
 
 
 - (CEIndiceBuffer *)wireframeIndiceBufferForObject:(CERenderObject *)object {
-    NSString *bufferID = [NSString stringWithFormat:@"%08X", (unsigned int)(&object)];
+    NSString *bufferID = [NSString stringWithFormat:@"%p", object];
     CEIndiceBuffer *buffer = _indiceBufferDict[bufferID];
     if (buffer) {
         return buffer;
@@ -161,7 +161,7 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
         if (object.indiceBuffer.primaryType == GL_UNSIGNED_SHORT) {
             for (int i = 0; i < object.indiceBuffer.indiceCount; i += 3) {
                 unsigned short idx0, idx1, idx2;
-                [sourceData getBytes:&idx0 range:NSMakeRange(i * 2, sizeof(uint16_t))];
+                [sourceData getBytes:&idx0 range:NSMakeRange(i * sizeof(uint16_t), sizeof(uint16_t))];
                 [sourceData getBytes:&idx1 range:NSMakeRange((i + 1) * sizeof(uint16_t), sizeof(uint16_t))];
                 [sourceData getBytes:&idx2 range:NSMakeRange((i + 2) * sizeof(uint16_t), sizeof(uint16_t))];
                 [indiceData appendBytes:&idx0 length:sizeof(uint16_t)];
@@ -178,11 +178,72 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
                                                  drawMode:GL_LINES];
             
         } else if (object.indiceBuffer.primaryType == GL_UNSIGNED_BYTE) {
-            
+            for (int i = 0; i < object.indiceBuffer.indiceCount; i += 3) {
+                unsigned char idx0, idx1, idx2;
+                [sourceData getBytes:&idx0 range:NSMakeRange(i * sizeof(uint8_t), sizeof(uint8_t))];
+                [sourceData getBytes:&idx1 range:NSMakeRange((i + 1) * sizeof(uint8_t), sizeof(uint8_t))];
+                [sourceData getBytes:&idx2 range:NSMakeRange((i + 2) * sizeof(uint8_t), sizeof(uint8_t))];
+                [indiceData appendBytes:&idx0 length:sizeof(uint8_t)];
+                [indiceData appendBytes:&idx1 length:sizeof(uint8_t)];
+                [indiceData appendBytes:&idx0 length:sizeof(uint8_t)];
+                [indiceData appendBytes:&idx2 length:sizeof(uint8_t)];
+                [indiceData appendBytes:&idx1 length:sizeof(uint8_t)];
+                [indiceData appendBytes:&idx2 length:sizeof(uint8_t)];
+                indiceCount += 6;
+            }
+            buffer = [[CEIndiceBuffer alloc] initWithData:indiceData.copy
+                                              indiceCount:(uint32_t)indiceCount
+                                              primaryType:GL_UNSIGNED_BYTE
+                                                 drawMode:GL_LINES];
         }
         
     } else if (object.indiceBuffer.drawMode == GL_TRIANGLE_STRIP) {
-        
+        if (object.indiceBuffer.primaryType == GL_UNSIGNED_SHORT) {
+            unsigned short idx0, idx1, idx2;
+            [sourceData getBytes:&idx0 range:NSMakeRange(0, sizeof(uint16_t))];
+            [sourceData getBytes:&idx1 range:NSMakeRange(sizeof(uint16_t), sizeof(uint16_t))];
+            for (int i = 2; i < object.indiceBuffer.indiceCount; i++) {
+                [sourceData getBytes:&idx2 range:NSMakeRange(i * sizeof(uint16_t), sizeof(uint16_t))];
+                if (idx0 != idx1 && idx0 != idx2 && idx1 != idx2) {
+                    [indiceData appendBytes:&idx0 length:sizeof(uint16_t)];
+                    [indiceData appendBytes:&idx1 length:sizeof(uint16_t)];
+                    [indiceData appendBytes:&idx0 length:sizeof(uint16_t)];
+                    [indiceData appendBytes:&idx2 length:sizeof(uint16_t)];
+                    [indiceData appendBytes:&idx1 length:sizeof(uint16_t)];
+                    [indiceData appendBytes:&idx2 length:sizeof(uint16_t)];
+                    indiceCount += 6;
+                }
+                idx0 = idx1;
+                idx1 = idx2;
+            }
+            buffer = [[CEIndiceBuffer alloc] initWithData:indiceData.copy
+                                              indiceCount:(uint32_t)indiceCount
+                                              primaryType:GL_UNSIGNED_SHORT
+                                                 drawMode:GL_LINES];
+            
+        } else if (object.indiceBuffer.primaryType == GL_UNSIGNED_BYTE) {
+            unsigned char idx0, idx1, idx2;
+            [sourceData getBytes:&idx0 range:NSMakeRange(0, sizeof(uint8_t))];
+            [sourceData getBytes:&idx1 range:NSMakeRange(sizeof(uint8_t), sizeof(uint8_t))];
+            for (int i = 2; i < object.indiceBuffer.indiceCount; i++) {
+                [sourceData getBytes:&idx2 range:NSMakeRange(i * sizeof(uint8_t), sizeof(uint8_t))];
+                if (idx0 != idx1 && idx0 != idx2 && idx1 != idx2) {
+                    [indiceData appendBytes:&idx0 length:sizeof(uint8_t)];
+                    [indiceData appendBytes:&idx1 length:sizeof(uint8_t)];
+                    [indiceData appendBytes:&idx0 length:sizeof(uint8_t)];
+                    [indiceData appendBytes:&idx2 length:sizeof(uint8_t)];
+                    [indiceData appendBytes:&idx1 length:sizeof(uint8_t)];
+                    [indiceData appendBytes:&idx2 length:sizeof(uint8_t)];
+                    indiceCount += 6;
+                }
+                idx0 = idx1;
+                idx1 = idx2;
+            }
+            buffer = [[CEIndiceBuffer alloc] initWithData:indiceData.copy
+                                              indiceCount:(uint32_t)indiceCount
+                                              primaryType:GL_UNSIGNED_BYTE
+                                                 drawMode:GL_LINES];
+        }
     }
     
     if (buffer) {

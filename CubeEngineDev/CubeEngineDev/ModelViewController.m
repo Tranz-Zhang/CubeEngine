@@ -79,7 +79,6 @@
     
     self.scene.mainLight = directionalLight;
     
-    
     _light = directionalLight;
 }
 

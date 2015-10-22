@@ -237,7 +237,6 @@
         NSString *meshString = [meshInfo.groupNames componentsJoinedByString:@"-"];
         meshInfoDict[meshString] = meshInfo;
     }
-    
     MeshInfo *currentMesh = fileInfo.meshInfos.count ? fileInfo.meshInfos[0] : nil;
     for (NSString *lineContent in lines) {
         // parse vertex "v 2.963007 0.335381 -0.052237"

@@ -5,8 +5,9 @@ Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd limbs.png
 bump limbs_nrm.png -bm 0.2
+Ns 50
 Ni 1.00
-Ks 0.00 0.00 0.00
+Ks 1.000000 1.000000 1.000000
 map_Ks limbs_spec.png
 newmtl blinn2SG
 illum 4
@@ -15,8 +16,9 @@ Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd body.png
 bump body_nrm.png -bm 0.2
+Ns 50
 Ni 1.00
-Ks 0.00 0.00 0.00
+Ks 1.000000 1.000000 1.000000
 map_Ks body_spec.png
 newmtl blinn3SG
 illum 4
@@ -25,8 +27,9 @@ Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd sword.png
 bump sword_nrm.png -bm 0.2
+Ns 50
 Ni 1.00
-Ks 0.00 0.00 0.00
+Ks 1.000000 1.000000 1.000000
 map_Ks sword_spec.png
 newmtl blinn4SG
 illum 4
@@ -35,6 +38,7 @@ Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd face.png
 bump face_nrm.png -bm 0.2
+Ns 50
 Ni 1.00
-Ks 0.00 0.00 0.00
+Ks 1.000000 1.000000 1.000000
 map_Ks face_spec.png
