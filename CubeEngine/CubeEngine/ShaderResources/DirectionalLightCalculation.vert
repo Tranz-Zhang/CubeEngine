@@ -11,7 +11,7 @@ struct LightInfo {
 };
 uniform LightInfo MainLight;
 
-void CEVertex_DirectionLightCalculation(vec3 LightDirection, float Attenuation) {
+void DirectionLightCalculation(vec3 LightDirection, float Attenuation) {
     LightDirection = MainLight.LightDirection;
     Attenuation = 1.0;
 }

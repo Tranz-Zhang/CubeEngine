@@ -54,6 +54,7 @@
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     [loader loadModelWithName:@"ram" completion:^(CEModel *model) {
         _testModel = model;
+        _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
         _operator.operationObject = _testModel;
         [self.scene addModel:model];
         printf("CEModelLoader load model for duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
@@ -75,6 +76,7 @@
     directionalLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 5);
     [directionalLight lookAt:GLKVector3Make(0, 0, 0)];
     directionalLight.enableShadow = YES;
+    
     self.scene.mainLight = directionalLight;
     
     

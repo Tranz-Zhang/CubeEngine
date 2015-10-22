@@ -26,6 +26,9 @@
 // texture
 @property (nonatomic, readonly) CEUniformSampler2D *diffuseTexture;
 
+// normal map
+@property (nonatomic, readonly) CEUniformSampler2D *normalTexture;
+
 // shadow map
 @property (nonatomic, readonly) CEUniformMatrix4 *depthBiasMVP;
 @property (nonatomic, readonly) CEUniformFloat *shadowDarkness;

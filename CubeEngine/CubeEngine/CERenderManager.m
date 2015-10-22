@@ -72,7 +72,6 @@
     CEScene *scene = [CEScene currentScene];
     [EAGLContext setCurrentContext:scene.context];
 
-    
     // 2.check if need render shadow map
     
     // 3.sort render objects
@@ -94,7 +93,6 @@
     if (scene.enableDebug) {
         [self renderDebugSceneWithObjects:scene.allModels];
     }
-    
     printf("render duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
 }
 
@@ -105,6 +103,7 @@
 - (NSArray *)sortRenderGroupsWithModels:(NSArray *)models {
     // @{CERenderConfig : CERenderGroup}
     NSMutableDictionary *renderGroupDict = [NSMutableDictionary dictionary];
+    CELightType lightType = [CEScene currentScene].mainLight ? [CEScene currentScene].mainLight.lightInfo.lightType : CELightTypeNone;
     
     for (CEModel *model in models) {
         for (CERenderObject *renderObject in model.renderObjects) {
@@ -126,6 +125,8 @@
             CERenderConfig *config = [CERenderConfig new];
             config.materialType = renderObject.material.materialType;
             config.enableTexture = renderObject.material.diffuseTextureID ? YES : NO;
+            config.lightType = lightType;
+            config.enableNormalMapping = renderObject.material.normalTextureID ? YES : NO;
             
             CERenderGroup *group = renderGroupDict[config];
             if (!group) {
@@ -212,7 +213,7 @@
 #pragma mark - Debug renderer
 - (void)renderDebugSceneWithObjects:(NSArray *)objects {
     // render wireframe add assist info
-    [[self wireframeRenderer] renderWireframeForObjects:objects];
+    [[self wireframeRenderer] renderWireframeForModels:objects];
     [[self assistRender] renderBoundsForObjects:objects];
     [[self assistRender] renderWorldOriginCoordinate];
     if ([CEScene currentScene].mainLight) {

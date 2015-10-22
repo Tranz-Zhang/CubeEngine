@@ -28,7 +28,5 @@
 @property (nonatomic, assign) GLKMatrix4 modelMatrix;
 
 
-// for showing wireframe of object
-@property (nonatomic, strong) CEIndiceBuffer *wireframeIndiceBuffer;
-
 @end
+

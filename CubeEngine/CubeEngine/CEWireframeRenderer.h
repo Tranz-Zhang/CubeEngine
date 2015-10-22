@@ -16,6 +16,6 @@
 @property (nonatomic, assign) GLfloat lineWidth;
 @property (nonatomic, copy) UIColor *lineColor;
 
-- (void)renderWireframeForObjects:(NSArray *)objects;
+- (void)renderWireframeForModels:(NSArray *)objects;
 
 @end

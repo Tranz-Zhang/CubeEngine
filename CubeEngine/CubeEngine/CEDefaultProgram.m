@@ -28,6 +28,9 @@
     // texture
     _diffuseTexture = (CEUniformSampler2D *)[self uniformVariableWithName:@"DiffuseTexture" type:@"sampler2D"];
     
+    // normal mapping
+    _normalTexture = (CEUniformSampler2D *)[self uniformVariableWithName:@"NormalMapTexture" type:@"sampler2D"];
+    
     // shadow map
     _depthBiasMVP =     (CEUniformMatrix4 *)[self uniformVariableWithName:@"DepthBiasMVP" type:@"mat4"];
     _shadowDarkness =   (CEUniformFloat *)[self uniformVariableWithName:@"ShadowDarkness" type:@"float"];

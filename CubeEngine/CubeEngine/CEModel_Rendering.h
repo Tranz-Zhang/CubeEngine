@@ -9,9 +9,6 @@
 #import <GLKit/GLKit.h>
 #import "CEModel.h"
 #import "CERenderObject.h"
-#import "CEVertexBuffer_DEPRECATED.h"
-#import "CEIndicesBuffer_DEPRECATED.h"
-
 
 @interface CEModel ()
 

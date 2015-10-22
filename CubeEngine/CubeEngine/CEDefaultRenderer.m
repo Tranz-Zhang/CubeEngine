@@ -27,9 +27,12 @@
     CEShaderBuilder *shaderBuilder = [CEShaderBuilder new];
     [shaderBuilder startBuildingNewShader];
     [shaderBuilder setMaterialType:config.materialType];
-    [shaderBuilder enableLightWithType:config.lightType];
+    if (config.enableNormalMapping) {
+        [shaderBuilder enableNormalLightWithType:config.lightType];
+    } else {
+        [shaderBuilder enableLightWithType:config.lightType];
+    }
     [shaderBuilder enableTexture:config.enableTexture];
-    [shaderBuilder enableNormalMap:config.enableNormalMapping];
     [shaderBuilder enableShadowMap:config.enableShadowMapping];
     CEShaderInfo *shaderInfo = [shaderBuilder build];
     if (!shaderInfo) {
@@ -75,14 +78,11 @@
         CEError(@"Invalid renderer environment");
         return;
     }
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     [_program use];
     [self setupLightInfosForRendering];
     for (CERenderObject *renderObject in objects) {
         [self renderObject:renderObject];
     }
-    glDisable(GL_BLEND);
 }
 
 - (void)setupLightInfosForRendering {
@@ -159,6 +159,25 @@
     if (object.material.diffuseTextureID && _program.diffuseTexture) {
         uint32_t textureUnit = [[CETextureManager sharedManager] prepareTextureWithID:object.material.diffuseTextureID];
         _program.diffuseTexture.textureUnit = textureUnit;
+    }
+    
+    // setup light
+    if (_mainLight.enabled) {
+        // setup normal matrix
+        GLKMatrix4 normalMatrix = GLKMatrix4InvertAndTranspose(modelViewMatrix, NULL);
+        _program.normalMatrix.matrix3 = GLKMatrix4GetMatrix3(normalMatrix);
+        
+        // setup model view matrix for specify lights
+        if (_mainLight.lightInfo.lightType == CELightTypePoint ||
+            _mainLight.lightInfo.lightType == CELightTypeSpot) {
+            _program.modelViewMatrix.matrix4 = modelViewMatrix;
+        }
+        
+        // normal mapping
+        if (object.material.normalTextureID && _program.normalTexture) {
+            uint32_t textureUnit = [[CETextureManager sharedManager] prepareTextureWithID:object.material.normalTextureID];
+            _program.normalTexture.textureUnit = textureUnit;
+        }
     }
     
     glDrawElements(object.indiceBuffer.drawMode,

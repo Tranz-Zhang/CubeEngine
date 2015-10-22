@@ -10,6 +10,9 @@
 #import "CEObjParser.h"
 #import "CEMtlParser.h"
 #import "CEModel_Rendering.h"
+#import "CEVertexBuffer_DEPRECATED.h"
+#import "CEIndicesBuffer_DEPRECATED.h"
+#import "CEVBOAttribute.h"
 
 
 @implementation CEObjFileLoader

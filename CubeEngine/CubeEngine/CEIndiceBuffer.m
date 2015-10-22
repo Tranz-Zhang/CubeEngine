@@ -8,10 +8,7 @@
 
 #import "CEIndiceBuffer.h"
 
-@implementation CEIndiceBuffer {
-    NSData *_indiceData;
-    GLuint _indiceBufferID;
-}
+@implementation CEIndiceBuffer
 
 - (instancetype)initWithData:(NSData *)indiceData
                  indiceCount:(uint32_t)indiceCount

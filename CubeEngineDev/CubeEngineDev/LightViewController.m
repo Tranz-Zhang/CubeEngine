@@ -13,6 +13,7 @@
 #import "DirectionalLightControl.h"
 #import "PointLightControl.h"
 #import "SpotLightControl.h"
+#import "CEModelLoader.h"
 
 
 #define kLocalWidth self.view.bounds.size.width1
@@ -69,23 +70,32 @@
 //        }
 //    }
     
-    _testModel = [CEModel modelWithObjFile:@"ram"];
-    _testModel.showAccessoryLine = YES;
-//    _teapotModel.castShadows = YES;
-    _testModel.baseColor = [UIColor orangeColor];
-    _testModel.material.shininessExponent = 20;
-    _testModel.material.specularColor = GLKVector3Make(0.7, 0.7, 0.7);
-    _testModel.material.ambientColor = GLKVector3Make(0.3, 0.3, 0.3);
-    _testModel.scale = GLKVector3Make(1.5, 1.5, 1.5);
-    _testModel.castShadows = YES;
-//    _teapotModel.material.diffuseTexture = nil;
-//    _teapotModel.material.normalTexture = nil;
-    [self.scene addModel:_testModel];
+    CEModelLoader *loader = [CEModelLoader new];
+    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+    [loader loadModelWithName:@"ram" completion:^(CEModel *model) {
+        _testModel = model;
+        _objectOperator.operationObject = _testModel;
+        [self.scene addModel:model];
+        printf("CEModelLoader load model for duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+    }];
     
-    _floorModel = [CEModel modelWithObjFile:@"floor_max"];
-    _floorModel.baseColor = [UIColor grayColor];
-    _floorModel.castShadows = YES;
-    [self.scene addModel:_floorModel];
+//    _testModel = [CEModel modelWithObjFile:@"ram"];
+//    _testModel.showAccessoryLine = YES;
+////    _teapotModel.castShadows = YES;
+//    _testModel.baseColor = [UIColor orangeColor];
+//    _testModel.material.shininessExponent = 20;
+//    _testModel.material.specularColor = GLKVector3Make(0.7, 0.7, 0.7);
+//    _testModel.material.ambientColor = GLKVector3Make(0.3, 0.3, 0.3);
+//    _testModel.scale = GLKVector3Make(1.5, 1.5, 1.5);
+//    _testModel.castShadows = YES;
+////    _teapotModel.material.diffuseTexture = nil;
+////    _teapotModel.material.normalTexture = nil;
+//    [self.scene addModel:_testModel];
+    
+//    _floorModel = [CEModel modelWithObjFile:@"floor_max"];
+//    _floorModel.baseColor = [UIColor grayColor];
+//    _floorModel.castShadows = YES;
+//    [self.scene addModel:_floorModel];
     
     _directionalLight = [[CEDirectionalLight alloc] init];
     _directionalLight.position = GLKVector3Make(8, 8, 8);
@@ -104,9 +114,7 @@
     _spotLight.scale = GLKVector3MultiplyScalar(GLKVector3Make(1, 1, 1), 10);
     [_spotLight lookAt:_testModel.position];
 //    self.scene.mainLight = _spotLight;
-    
-    _objectOperator.operationObject = _testModel;
-
+        
     // update light switches
     _directionalLight.enabled = YES;
     _pointLight.enabled = YES;

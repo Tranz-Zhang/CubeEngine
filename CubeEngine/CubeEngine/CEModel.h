@@ -29,7 +29,7 @@
 @property (nonatomic, strong) CEMaterial *material;
 
 
-+ (CEModel *)modelWithObjFile:(NSString *)objFileName;
++ (CEModel *)modelWithObjFile:(NSString *)objFileName DEPRECATED_ATTRIBUTE;
 
 // recursive search child model with the indicated name
 - (CEModel *)childWithName:(NSString *)modelName;

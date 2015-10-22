@@ -30,6 +30,6 @@ extern NSString *kResourcesDirectory;
 #define kToolVersion 1
 
 #define ENABLE_INCREMENTAL_UPDATE 1
-#define ENABLE_TRIANGLE_STRIP 1
+#define ENABLE_TRIANGLE_STRIP 0
 
 #endif

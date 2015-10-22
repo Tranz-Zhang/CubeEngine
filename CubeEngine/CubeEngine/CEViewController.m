@@ -68,7 +68,7 @@
     self.paused = NO;
     
 //    [self onTestShaders];
-    [self testModelLoading];
+//    [self testModelLoading];
 }
 
 
@@ -76,6 +76,8 @@
     CEShaderBuilder *shaderBuilder = [CEShaderBuilder new];
     [shaderBuilder startBuildingNewShader];
     [shaderBuilder enableTexture:YES];
+//    [shaderBuilder enableLightWithType:CELightTypeDirectional];
+    [shaderBuilder enableNormalLightWithType:CELightTypeDirectional];
     CEShaderInfo *shaderInfo = [shaderBuilder build];
     
     [EAGLContext setCurrentContext:_context];

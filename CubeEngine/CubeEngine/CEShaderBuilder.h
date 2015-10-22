@@ -22,8 +22,8 @@
 
 - (void)setMaterialType:(CEMaterialType)materialType;
 - (void)enableLightWithType:(CELightType)lightType;
+- (void)enableNormalLightWithType:(CELightType)lightType;
 - (void)enableTexture:(BOOL)enabled;
-- (void)enableNormalMap:(BOOL)enabled;
 - (void)enableShadowMap:(BOOL)enabled;
 
 - (CEShaderInfo *)build;

@@ -7,12 +7,53 @@
 //
 
 #import "CEWireframeRenderer.h"
-#import "CEMainProgram.h"
+#import "CEProgram.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
+#import "CEIndiceBuffer.h"
+#import "CEVBOAttribute.h"
+
+@interface CEIndiceBuffer (DataSource)
+
+- (NSData *)indiceData;
+
+@end
+
+@implementation CEIndiceBuffer (DataSource)
+
+- (NSData *)indiceData {
+    return _indiceData;
+}
+
+@end
+
+
+NSString *const kWireframeVertexShader = CE_SHADER_STRING
+(
+ attribute lowp vec4 position;
+ uniform mat4 projection;
+
+ void main () {
+     gl_Position = projection * position;
+ }
+);
+
+NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
+(
+ uniform lowp vec4 lineColor;
+ void main() {
+     gl_FragColor = lineColor;
+ }
+);
 
 @implementation CEWireframeRenderer {
-    CEMainProgram *_program;
+    CEProgram *_program;
+    GLint _attributePosition;
+    GLint _uniformProjection;
+    GLint _uniformLineColor;
+    
+    NSMutableDictionary *_indiceBufferDict; // @{CEIndiceBuffer : @(&CERenderObject)}
+    
     GLKVector4 _lineColorVec4;
 }
 
@@ -20,11 +61,40 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _program = [CEMainProgram programWithConfig:[CEProgramConfig new]];
         _lineWidth = 2.0f;
         [self setLineColor:[UIColor colorWithWhite:0.2 alpha:1.0f]];
+        [self setupRenderer];
+        _indiceBufferDict = [NSMutableDictionary dictionary];
     }
     return self;
+}
+
+
+- (BOOL)setupRenderer {
+    if (_program.initialized) return YES;
+    
+    _program = [[CEProgram alloc] initWithVertexShaderString:kWireframeVertexShader
+                                        fragmentShaderString:kWireframeFragmentSahder];
+    [_program addAttribute:@"position" atIndex:CEVBOAttributePosition];
+    BOOL isOK = [_program link];
+    if (isOK) {
+        _attributePosition = [_program attributeIndex:@"position"];
+        _uniformProjection = [_program uniformIndex:@"projection"];
+        _uniformLineColor = [_program uniformIndex:@"lineColor"];
+        
+    } else {
+        // print error info
+        NSString *progLog = [_program programLog];
+        CEError(@"Program link log: %@", progLog);
+        NSString *fragLog = [_program fragmentShaderLog];
+        CEError(@"Fragment shader compile log: %@", fragLog);
+        NSString *vertLog = [_program vertexShaderLog];
+        CEError(@"Vertex shader compile log: %@", vertLog);
+        _program = nil;
+        NSAssert(0, @"Fail to Compile Program");
+    }
+    
+    return isOK;
 }
 
 
@@ -38,37 +108,89 @@
 }
 
 
-- (void)renderWireframeForObjects:(NSArray *)objects {
+- (void)renderWireframeForModels:(NSArray *)models {
     if (!_program.initialized) {
         return;
     }
-    [_program beginRendering];
-//    for (CEModel *model in objects) {
-//        if (!model.showWireframe || !model.wireframeBuffer) {
-//            continue;
-//        }
-//        // setup vertex buffer
-//        if (![model.wireframeBuffer setupBuffer] ||
-//            ![model.vertexBuffer setupBuffer]) {
-//            continue;
-//        }
-//        // prepare attribute for rendering
-//        CEVBOAttribute *positionAttri = [model.vertexBuffer attributeWithName:CEVBOAttributePosition];
-//        if (![_program setPositionAttribute:positionAttri]){
-//            continue;
-//        }
-//        glLineWidth(_lineWidth);
-//        GLKMatrix4 mvpMatrix = GLKMatrix4Multiply(_camera.viewMatrix, model.transformMatrix);
-//        mvpMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, mvpMatrix);
-//        [_program setModelViewProjectionMatrix:mvpMatrix];
-//        [_program setDiffuseColor:_lineColorVec4];
-//        glDrawElements(GL_LINES, model.wireframeBuffer.indicesCount, model.wireframeBuffer.indicesDataType, 0);
-//    }
-    [_program endRendering];
+    [_program use];
+    glUniform4fv(_uniformLineColor, 1, _lineColorVec4.v);
+    glLineWidth(_lineWidth);
+    GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, _camera.viewMatrix);
+    for (CEModel *model in models) {
+        if (!model.showWireframe) continue;
+        GLKMatrix4 tranformMatrix = GLKMatrix4MakeTranslation(model.position.x, model.position.y, model.position.z);
+        tranformMatrix = GLKMatrix4Multiply(tranformMatrix, GLKMatrix4MakeWithQuaternion(model.rotation));
+        tranformMatrix = GLKMatrix4ScaleWithVector3(tranformMatrix, GLKVector3MultiplyScalar(model.scale, 1.002));
+        GLKMatrix4 mvpMatrix = GLKMatrix4Multiply(projectionMatrix, tranformMatrix);
+        glUniformMatrix4fv(_uniformProjection, 1, 0, mvpMatrix.m);
+        
+        for (CERenderObject *object in model.renderObjects) {
+            if (!object.vertexBuffer) return;
+            
+            CEIndiceBuffer *wireframeIndiceBuffer = [self wireframeIndiceBufferForObject:object];
+            if (!wireframeIndiceBuffer) return;
+            
+            if (![object.vertexBuffer loadBuffer] || ![wireframeIndiceBuffer loadBuffer]) {
+                CEError(@"WireframeRenderer: Render object fail to load buffer");
+                return;
+            }
+            glDrawElements(wireframeIndiceBuffer.drawMode,
+                           wireframeIndiceBuffer.indiceCount,
+                           wireframeIndiceBuffer.primaryType, 0);
+            [wireframeIndiceBuffer unloadBuffer];
+            [object.vertexBuffer unloadBuffer];
+        }
+    }
 }
 
- 
 
+- (CEIndiceBuffer *)wireframeIndiceBufferForObject:(CERenderObject *)object {
+    NSString *bufferID = [NSString stringWithFormat:@"%08X", (unsigned int)(&object)];
+    CEIndiceBuffer *buffer = _indiceBufferDict[bufferID];
+    if (buffer) {
+        return buffer;
+    }
+    // generate wireframe indice buffer
+    NSData *sourceData = object.indiceBuffer.indiceData;
+    NSMutableData *indiceData = [NSMutableData data];
+    size_t indiceCount = 0;
+    if (object.indiceBuffer.drawMode == GL_TRIANGLES) {
+        if (object.indiceBuffer.indiceCount % 3 != 0) {
+            return nil;
+        }
+        if (object.indiceBuffer.primaryType == GL_UNSIGNED_SHORT) {
+            for (int i = 0; i < object.indiceBuffer.indiceCount; i += 3) {
+                unsigned short idx0, idx1, idx2;
+                [sourceData getBytes:&idx0 range:NSMakeRange(i * 2, sizeof(uint16_t))];
+                [sourceData getBytes:&idx1 range:NSMakeRange((i + 1) * sizeof(uint16_t), sizeof(uint16_t))];
+                [sourceData getBytes:&idx2 range:NSMakeRange((i + 2) * sizeof(uint16_t), sizeof(uint16_t))];
+                [indiceData appendBytes:&idx0 length:sizeof(uint16_t)];
+                [indiceData appendBytes:&idx1 length:sizeof(uint16_t)];
+                [indiceData appendBytes:&idx0 length:sizeof(uint16_t)];
+                [indiceData appendBytes:&idx2 length:sizeof(uint16_t)];
+                [indiceData appendBytes:&idx1 length:sizeof(uint16_t)];
+                [indiceData appendBytes:&idx2 length:sizeof(uint16_t)];
+                indiceCount += 6;
+            }
+            buffer = [[CEIndiceBuffer alloc] initWithData:indiceData.copy
+                                              indiceCount:(uint32_t)indiceCount
+                                              primaryType:GL_UNSIGNED_SHORT
+                                                 drawMode:GL_LINES];
+            
+        } else if (object.indiceBuffer.primaryType == GL_UNSIGNED_BYTE) {
+            
+        }
+        
+    } else if (object.indiceBuffer.drawMode == GL_TRIANGLE_STRIP) {
+        
+    }
+    
+    if (buffer) {
+        [buffer setupBuffer];
+        _indiceBufferDict[bufferID] = buffer;
+    }
+    return buffer;
+}
 
 
 @end

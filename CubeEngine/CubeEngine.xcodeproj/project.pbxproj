@@ -371,6 +371,10 @@
 		4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderLinkFunctionInfo.m; sourceTree = "<group>"; };
 		4C9D80E31BD63BE2000A5617 /* NSData+GLKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GLKit.h"; sourceTree = "<group>"; };
 		4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GLKit.m"; sourceTree = "<group>"; };
+		4CB0F40F1BD87FC100683B5D /* NormalLightEffect.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NormalLightEffect.vert; sourceTree = "<group>"; };
+		4CB0F4101BD8812900683B5D /* NormalLightEffect.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NormalLightEffect.frag; sourceTree = "<group>"; };
+		4CB0F4111BD8852900683B5D /* fragment.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
+		4CB0F4121BD8852900683B5D /* vertex.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
 		4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/lib/libsqlite3.dylib; sourceTree = DEVELOPER_DIR; };
 		4CB61A2C1BB2A29100D83856 /* MeshInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshInfo.h; sourceTree = "<group>"; };
 		4CB61A2D1BB2A29100D83856 /* MeshInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = MeshInfo.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -574,9 +578,9 @@
 		4CF7CDC21B8434F40093C32D /* CEResourceDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CEResourceDefines.h; sourceTree = "<group>"; };
 		4CF7CDC31B84614C0093C32D /* BaseLightEffect.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = BaseLightEffect.vert; sourceTree = "<group>"; };
 		4CF7CDC41B84614C0093C32D /* BaseLightEffect.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = BaseLightEffect.frag; sourceTree = "<group>"; };
-		4CF7CDC51B8464B30093C32D /* DirectionalLightFunction.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DirectionalLightFunction.vert; sourceTree = "<group>"; };
-		4CF7CDC61B84665E0093C32D /* PointLightFunciton.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PointLightFunciton.vert; sourceTree = "<group>"; };
-		4CF7CDC71B84669F0093C32D /* SpotLightFunction.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SpotLightFunction.vert; sourceTree = "<group>"; };
+		4CF7CDC51B8464B30093C32D /* DirectionalLightCalculation.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DirectionalLightCalculation.vert; sourceTree = "<group>"; };
+		4CF7CDC61B84665E0093C32D /* PointLightCalculation.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PointLightCalculation.vert; sourceTree = "<group>"; };
+		4CF7CDC71B84669F0093C32D /* SpotLightCalculation.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SpotLightCalculation.vert; sourceTree = "<group>"; };
 		4CF9B5F81BA0660C00E2128D /* CEDefaultProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEDefaultProgram.h; sourceTree = "<group>"; };
 		4CF9B5F91BA0660C00E2128D /* CEDefaultProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEDefaultProgram.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -623,24 +627,16 @@
 		2610896A1AAD31CE0041E142 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
-				4CBD44211B723A8200D72831 /* Shader */,
-				2624A6121B0B1943001E3F32 /* Program */,
-				4CC07C621BA6F41D001A4F25 /* DEPRECATED */,
 				4CEA12271BB1833600686678 /* CERenderObject.h */,
 				4CEA12281BB1833600686678 /* CERenderObject.m */,
 				2624ABAA1AD6A85500FC863C /* CERenderManager.h */,
 				2624ABAB1AD6A85500FC863C /* CERenderManager.m */,
 				4C1703E71BA5A94100DBF84A /* CERenderConfig.h */,
 				4C1703E81BA5A94100DBF84A /* CERenderConfig.m */,
-				4C1703E41BA5A09400DBF84A /* CEDefaultRenderer.h */,
-				4C1703E51BA5A09400DBF84A /* CEDefaultRenderer.m */,
-				269F476B1B00893D0030CD55 /* CEShadowMapRenderer.h */,
-				269F476C1B00893D0030CD55 /* CEShadowMapRenderer.m */,
-				265878691AD7C99100BA2137 /* CEWireframeRenderer.h */,
-				2658786A1AD7C99100BA2137 /* CEWireframeRenderer.m */,
-				26F7FF8D1ADE45660086D9D7 /* CEAssistRenderer.h */,
-				26F7FF8E1ADE45660086D9D7 /* CEAssistRenderer.m */,
-				26F1C3A61AEF342C0007ACB6 /* Deprecated */,
+				4C9D80E81BD66661000A5617 /* Renderer */,
+				4CBD44211B723A8200D72831 /* Shader */,
+				2624A6121B0B1943001E3F32 /* Program */,
+				4CC07C621BA6F41D001A4F25 /* DEPRECATED */,
 			);
 			name = Renderer;
 			sourceTree = "<group>";
@@ -778,33 +774,6 @@
 			name = Buffers_DEPRECATED;
 			sourceTree = "<group>";
 		};
-		26F1C3A61AEF342C0007ACB6 /* Deprecated */ = {
-			isa = PBXGroup;
-			children = (
-				2624AB961AD6286E00FC863C /* CERenderer.h */,
-				2624AB971AD6286E00FC863C /* CERenderer.m */,
-				26036FB01AF1CEA900A1B84D /* CEShadowRenderer.h */,
-				26036FB11AF1CEA900A1B84D /* CEShadowRenderer.m */,
-				2692498A1B02E7F70069892D /* CETextureRenderer.h */,
-				2692498B1B02E7F70069892D /* CETextureRenderer.m */,
-				26C3B72D1AE8CE090061BEFC /* CEBaseRenderer.h */,
-				26C3B72E1AE8CE090061BEFC /* CEBaseRenderer.m */,
-				26A2468F1AFA06A800FB9B82 /* CEShadowMapGenerator.h */,
-				26A246901AFA06A800FB9B82 /* CEShadowMapGenerator.m */,
-				2624ABAD1AD6ABC800FC863C /* CERenderer_V.h */,
-				2624ABAE1AD6ABC800FC863C /* CERenderer_V.m */,
-				26F7FF8A1ADE3C3B0086D9D7 /* CERenderer_V_VN.h */,
-				26F7FF8B1ADE3C3B0086D9D7 /* CERenderer_V_VN.m */,
-				269762671AE0AF52005E95DA /* CERenderer_Dev.h */,
-				269762681AE0AF52005E95DA /* CERenderer_Dev.m */,
-				263C8E5F1AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.h */,
-				263C8E601AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.m */,
-				263C8E651AE62F8E004FDFE8 /* CERenderer_PointLight.h */,
-				263C8E661AE62F8E004FDFE8 /* CERenderer_PointLight.m */,
-			);
-			name = Deprecated;
-			sourceTree = "<group>";
-		};
 		4C1352071B835CEF008EA484 /* BuildTool */ = {
 			isa = PBXGroup;
 			children = (
@@ -867,6 +836,21 @@
 				4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */,
 			);
 			name = Common;
+			sourceTree = "<group>";
+		};
+		4C9D80E81BD66661000A5617 /* Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				4C1703E41BA5A09400DBF84A /* CEDefaultRenderer.h */,
+				4C1703E51BA5A09400DBF84A /* CEDefaultRenderer.m */,
+				269F476B1B00893D0030CD55 /* CEShadowMapRenderer.h */,
+				269F476C1B00893D0030CD55 /* CEShadowMapRenderer.m */,
+				265878691AD7C99100BA2137 /* CEWireframeRenderer.h */,
+				2658786A1AD7C99100BA2137 /* CEWireframeRenderer.m */,
+				26F7FF8D1ADE45660086D9D7 /* CEAssistRenderer.h */,
+				26F7FF8E1ADE45660086D9D7 /* CEAssistRenderer.m */,
+			);
+			name = Renderer;
 			sourceTree = "<group>";
 		};
 		4CB61A2B1BB2A23D00D83856 /* OBJParser */ = {
@@ -951,6 +935,26 @@
 				267F4D7E1B0CD26200F25452 /* CEShaders.h */,
 				26FF85361B0A173C0075B971 /* CEMainRenderer.h */,
 				26FF85371B0A173C0075B971 /* CEMainRenderer.m */,
+				2624AB961AD6286E00FC863C /* CERenderer.h */,
+				2624AB971AD6286E00FC863C /* CERenderer.m */,
+				26036FB01AF1CEA900A1B84D /* CEShadowRenderer.h */,
+				26036FB11AF1CEA900A1B84D /* CEShadowRenderer.m */,
+				2692498A1B02E7F70069892D /* CETextureRenderer.h */,
+				2692498B1B02E7F70069892D /* CETextureRenderer.m */,
+				26C3B72D1AE8CE090061BEFC /* CEBaseRenderer.h */,
+				26C3B72E1AE8CE090061BEFC /* CEBaseRenderer.m */,
+				26A2468F1AFA06A800FB9B82 /* CEShadowMapGenerator.h */,
+				26A246901AFA06A800FB9B82 /* CEShadowMapGenerator.m */,
+				2624ABAD1AD6ABC800FC863C /* CERenderer_V.h */,
+				2624ABAE1AD6ABC800FC863C /* CERenderer_V.m */,
+				26F7FF8A1ADE3C3B0086D9D7 /* CERenderer_V_VN.h */,
+				26F7FF8B1ADE3C3B0086D9D7 /* CERenderer_V_VN.m */,
+				269762671AE0AF52005E95DA /* CERenderer_Dev.h */,
+				269762681AE0AF52005E95DA /* CERenderer_Dev.m */,
+				263C8E5F1AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.h */,
+				263C8E601AE5FCCD004FDFE8 /* CERenderer_DirectionalLight.m */,
+				263C8E651AE62F8E004FDFE8 /* CERenderer_PointLight.h */,
+				263C8E661AE62F8E004FDFE8 /* CERenderer_PointLight.m */,
 			);
 			name = DEPRECATED;
 			sourceTree = "<group>";
@@ -1025,9 +1029,11 @@
 			children = (
 				4CF7CDC31B84614C0093C32D /* BaseLightEffect.vert */,
 				4CF7CDC41B84614C0093C32D /* BaseLightEffect.frag */,
-				4CF7CDC51B8464B30093C32D /* DirectionalLightFunction.vert */,
-				4CF7CDC61B84665E0093C32D /* PointLightFunciton.vert */,
-				4CF7CDC71B84669F0093C32D /* SpotLightFunction.vert */,
+				4CB0F40F1BD87FC100683B5D /* NormalLightEffect.vert */,
+				4CB0F4101BD8812900683B5D /* NormalLightEffect.frag */,
+				4CF7CDC51B8464B30093C32D /* DirectionalLightCalculation.vert */,
+				4CF7CDC61B84665E0093C32D /* PointLightCalculation.vert */,
+				4CF7CDC71B84669F0093C32D /* SpotLightCalculation.vert */,
 				4CC07C631BA6F804001A4F25 /* Texture.vert */,
 				4CC07C641BA6F80D001A4F25 /* Texture.frag */,
 				4CC07C651BA6FEF0001A4F25 /* ShadowMap.vert */,
@@ -1039,6 +1045,8 @@
 				4CF306B41B8DB17C009544DC /* TestFunction2.vert */,
 				4CF306B51B8DB290009544DC /* TestFunction3.vert */,
 				4C9D75911B8EEAA900AEA174 /* template.glsl */,
+				4CB0F4111BD8852900683B5D /* fragment.glsl */,
+				4CB0F4121BD8852900683B5D /* vertex.glsl */,
 			);
 			name = ShaderProfile;
 			path = ShaderResources;

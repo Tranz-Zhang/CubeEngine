@@ -85,19 +85,42 @@ NSString *CEShaderDirectory() {
 - (void)enableLightWithType:(CELightType)lightType {
     switch (lightType) {
         case CELightTypeDirectional:
-            [self loadProfileWithName:@"DirectionalLightFunction"];
+            [self loadProfileWithName:@"DirectionalLightCalculation"];
             [self loadProfileWithName:@"BaseLightEffect"];
             break;
         case CELightTypePoint:
-            [self loadProfileWithName:@"PointLightFunciton"];
+            [self loadProfileWithName:@"PointLightCalculation"];
             [self loadProfileWithName:@"BaseLightEffect"];
             break;
         case CELightTypeSpot:
-            [self loadProfileWithName:@"SpotLightFunction"];
+            [self loadProfileWithName:@"SpotLightCalculation"];
             [self loadProfileWithName:@"BaseLightEffect"];
             break;
         case CELightTypeNone:
             [self removeProfileWithName:@"BaseLightEffect"];
+            break;
+        default:
+            break;
+    }
+}
+
+
+- (void)enableNormalLightWithType:(CELightType)lightType {
+    switch (lightType) {
+        case CELightTypeDirectional:
+            [self loadProfileWithName:@"DirectionalLightCalculation"];
+            [self loadProfileWithName:@"NormalLightEffect"];
+            break;
+        case CELightTypePoint:
+            [self loadProfileWithName:@"PointLightCalculation"];
+            [self loadProfileWithName:@"NormalLightEffect"];
+            break;
+        case CELightTypeSpot:
+            [self loadProfileWithName:@"SpotLightCalculation"];
+            [self loadProfileWithName:@"NormalLightEffect"];
+            break;
+        case CELightTypeNone:
+            [self removeProfileWithName:@"NormalLightEffect"];
             break;
         default:
             break;
@@ -114,13 +137,13 @@ NSString *CEShaderDirectory() {
 }
 
 
-- (void)enableNormalMap:(BOOL)enabled {
-    if (enabled) {
-        [self loadProfileWithName:@""];
-    } else {
-        [self removeProfileWithName:@""];
-    }
-}
+//- (void)enableNormalMap:(BOOL)enabled {
+//    if (enabled) {
+//        [self loadProfileWithName:@"NormalLightEffect"];
+//    } else {
+//        [self removeProfileWithName:@"NormalLightEffect"];
+//    }
+//}
 
 
 - (void)enableShadowMap:(BOOL)enabled {

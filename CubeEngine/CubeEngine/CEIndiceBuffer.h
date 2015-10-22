@@ -11,7 +11,10 @@
 /**
  represent a indice buffer in opengles, offering essential information for drawing indices.
  */
-@interface CEIndiceBuffer : NSObject
+@interface CEIndiceBuffer : NSObject {
+    NSData *_indiceData;
+    GLuint _indiceBufferID;
+}
 
 @property (nonatomic, readonly) uint32_t indiceCount;
 @property (nonatomic, readonly) GLenum primaryType; // GL_UNSIGNED_SHORT or GL_UNSIGNED_BYTE

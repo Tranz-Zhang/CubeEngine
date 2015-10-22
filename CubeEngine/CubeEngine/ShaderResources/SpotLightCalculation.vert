@@ -15,7 +15,7 @@ uniform LightInfo MainLight;
 attribute highp vec4 VertexPosition;
 uniform lowp mat4 MVMatrix;
 
-void  CEVertex_SpotLightCalculation(vec3 LightDirection, float Attenuation) {
+void SpotLightCalculation(vec3 LightDirection, float Attenuation) {
     LightDirection = vec3(MainLight.LightPosition) - vec3(MVMatrix * VertexPosition);
     float lightDistance = length(LightDirection);
     LightDirection = LightDirection / lightDistance; // normalize light direction

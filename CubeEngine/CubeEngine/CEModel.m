@@ -8,7 +8,6 @@
 
 #import "CEModel.h"
 #import "CEModel_Rendering.h"
-#import "CEObjFileLoader.h"
 #import "CEModelLoader.h"
 #import "CEUtils.h"
 
@@ -16,11 +15,10 @@
     
 }
 
-+ (CEModel *)modelWithObjFile:(NSString *)objFileName {
-    CEObjFileLoader *fileLoader =  [CEObjFileLoader new];
-    return [[fileLoader loadModelWithObjFileName:objFileName] anyObject];
-}
 
++ (CEModel *)modelWithObjFile:(NSString *)objFileName {
+    return nil;
+}
 
 
 - (instancetype)initWithRenderObjects:(NSArray *)renderObjects {
@@ -88,44 +86,12 @@
 - (void)setShowWireframe:(BOOL)showWireframe {
     if (showWireframe != _showWireframe) {
         _showWireframe = showWireframe;
-        
     }
     for (CEModel *child in _childObjects) {
         child.showWireframe = showWireframe;
     }
 }
 
-
-- (void)parseWireframeIndices {
-    
-}
-
-
-- (id)generateLineIdWithBetweenPoint:(GLfloat *)p0 andPoint:(GLfloat *)p1 {
-    NSMutableData *identifierData = [NSMutableData dataWithCapacity:24];
-    int compareResult = p0[0] - p1[0];
-    if (0 == compareResult) {
-        compareResult = p0[1] - p1[1];
-    }
-    if (0 == compareResult) {
-        compareResult = p0[2] - p1[2];
-    }
-    
-    if (compareResult > 0) {
-        [identifierData appendBytes:p0 length:12];
-        [identifierData appendBytes:p1 length:12];
-        
-    } else {
-        [identifierData appendBytes:p1 length:12];
-        [identifierData appendBytes:p0 length:12];
-    }
-    return identifierData;
-}
-
-
-- (void)testAutoGenerateIndicesBuffer {
-    
-}
-
-
 @end
+
+

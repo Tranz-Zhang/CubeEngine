@@ -395,9 +395,6 @@
     [mesh.indicesList addObject:@(u_index)];
 }
 
-
-
-
 // calcualte tengent data
 - (BOOL)addTangentDataToObjInfo:(OBJFileInfo *)objInfo {
     if (!objInfo.vertexDataList.count ||
@@ -456,6 +453,8 @@
                 [objInfo.tangentList setVector3:GLKVector3Add(tangent1 ,tangent) atIndex:(int)vertexIndex1.x];
                 GLKVector3 tangent2 = [objInfo.tangentList vector3AtIndex:(int)vertexIndex2.x];
                 [objInfo.tangentList setVector3:GLKVector3Add(tangent2 ,tangent) atIndex:(int)vertexIndex2.x];
+                
+                
             }
         }
     }
