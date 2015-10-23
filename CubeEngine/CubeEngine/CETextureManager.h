@@ -44,10 +44,9 @@ typedef void(^CETextureLoadCompletion)(NSSet *loadedTextureIds);
 
 
 /**
- generate a blank texture buffer, normally for offscreen drawing
+ add texture buffer to manager for managing texture at runtime
  */
-- (CETextureBuffer *)generateTextureBufferWithSize:(CGSize)textureSize
-                                            config:(CETextureBufferConfig *)config;
+- (BOOL)manageTextureBuffer:(CETextureBuffer *)textureBuffer;
 
 
 @end

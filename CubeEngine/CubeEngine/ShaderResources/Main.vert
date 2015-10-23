@@ -1,5 +1,5 @@
 
-uniform mat4 MVPMatrix;
+uniform highp mat4 MVPMatrix;
 attribute highp vec4 VertexPosition;
 
 //*

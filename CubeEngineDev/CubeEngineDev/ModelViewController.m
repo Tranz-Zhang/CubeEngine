@@ -21,12 +21,17 @@
     __weak IBOutlet UISwitch *_accessorySwitch;
 }
 
+- (BOOL)enableDebugMode {
+    return YES;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.scene.camera.position = GLKVector3Make(15, 15, 15);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
-
+    
+    
 //    self.scene.camera.position = GLKVector3Make(0, 2, 5);
 //    [self.scene.camera lookAt:GLKVector3Make(0, 1, 0)];
 //    self.scene.camera.nearZ = 0;
@@ -49,7 +54,16 @@
 //    }
     
 //    printf("model loading duration: %.4f\n", CFAbsoluteTimeGetCurrent() - start);
+#if 0
+    CEObjFileLoader *objLoader = [[CEObjFileLoader alloc] init];
+    CEModel *testRam = [[objLoader loadModelWithObjFileName:@"ram"] anyObject];
+    _testModel = testRam;
+    [self.scene addModel:testRam];
     
+    CEModel *floorModel = [[objLoader loadModelWithObjFileName:@"floor_max"] anyObject];
+    [self.scene addModel:floorModel];
+    
+#else
     CEModelLoader *loader = [CEModelLoader new];
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     [loader loadModelWithName:@"ram" completion:^(CEModel *model) {
@@ -59,6 +73,11 @@
         [self.scene addModel:model];
         printf("CEModelLoader load model for duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
     }];
+    
+    [loader loadModelWithName:@"floor_max" completion:^(CEModel *model) {
+        [self.scene addModel:model];
+    }];
+#endif
     
 #if 0
     CEModel *floorModel = [CEModel modelWithObjFile:@"floor_max"];
@@ -70,6 +89,7 @@
     _wireframeSwitch.on = _testModel.showWireframe;
     _accessorySwitch.on = _testModel.showAccessoryLine;
     _operator = [[ObjectOperator alloc] initWithBaseView:self.view];
+    _operator.operationObject = _testModel;
     
     CEDirectionalLight *directionalLight = [[CEDirectionalLight alloc] init];
     directionalLight.position = GLKVector3Make(4, 6, 4);
@@ -78,7 +98,6 @@
     directionalLight.enableShadow = YES;
     
     self.scene.mainLight = directionalLight;
-    
     _light = directionalLight;
 }
 

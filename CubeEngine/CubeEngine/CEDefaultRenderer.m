@@ -113,7 +113,6 @@
         _program.mainLight.spotExponent.floatValue = _mainLight.lightInfo.spotExponent;
     }
     
-    
     // we use eye space to do the calculation, so the eye direction is always (0, 0, 1)
     _program.eyeDirection.vector3 = GLKVector3Make(0.0, 0.0, 1.0);
     

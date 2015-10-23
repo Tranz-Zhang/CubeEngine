@@ -8,10 +8,7 @@
 
 #import "CETextureBuffer.h"
 
-@implementation CETextureBuffer {
-    NSData *_textureData;
-    GLuint _textureBufferID;
-}
+@implementation CETextureBuffer
 
 
 - (instancetype)initWithConfig:(CETextureBufferConfig *)config resourceID:(uint32_t)resourceID {

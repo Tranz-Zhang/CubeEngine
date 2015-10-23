@@ -58,4 +58,7 @@
 // bind current vertex buffer and setup attribute infos of the vertex buffer by call glVertexAttribPointer()
 - (BOOL)prepareAttribute:(CEVBOAttributeName)attribute withProgramIndex:(GLint)programIndex;
 
+// test method
+- (BOOL)prepareAttribute:(CEVBOAttributeName)attribute;
+
 @end

@@ -59,6 +59,8 @@
     NSMutableDictionary *mtlDict = [NSMutableDictionary dictionary];
     MaterialInfo *defaultMtlInfo = [MaterialInfo new]; // default material
     defaultMtlInfo.name = kDefaultMTLName;
+    defaultMtlInfo.diffuseColor = GLKVector3Make(0.8, 0.8, 0.8);
+    
     mtlDict[kDefaultMTLName] = defaultMtlInfo;
     if (mtlFileName.length) {
         NSString *currentDirectory = [filePath stringByDeletingLastPathComponent];

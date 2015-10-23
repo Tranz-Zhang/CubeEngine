@@ -122,7 +122,21 @@
 }
 
 
-
+- (BOOL)prepareAttribute:(CEVBOAttributeName)attribute {
+    if (!_ready) {
+        return NO;
+    }
+    CEVBOAttribute *attrib = _attributeDict[@(attribute)];
+    if (!attrib) {
+        CEError(@"Can not find attribute");
+        return NO;
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferIndex);
+    const GLvoid *offsetPtr = CE_BUFFER_OFFSET([self offsetOfAttribute:attrib.name]);
+    glEnableVertexAttribArray(attribute);
+    glVertexAttribPointer(attribute, attrib.primaryCount, attrib.primaryType, GL_FALSE, _vertexStride, offsetPtr);
+    return YES;
+}
 
 
 @end

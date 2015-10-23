@@ -155,6 +155,12 @@
     NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
     NSLog(@"%@", info);
     
+    NSString *floorMaxPath = objFilePathList[7];//[objFilePathList lastObject]; //
+    OBJFileInfo *floorMax = [OBJFileParser parseBaseInfoWithFilePath:floorMaxPath];
+    if (floorMax) {
+        [objFileInfos addObject:floorMax];
+    }
+    
     // process resources
     if (![self processModelResourcesDataWithObjInfos:objFileInfos]) {
         return NO;

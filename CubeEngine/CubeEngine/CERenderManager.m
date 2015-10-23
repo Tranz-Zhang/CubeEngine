@@ -29,6 +29,7 @@
 
 // test
 #import "CEMainProgram.h"
+#import "TESTRenderer.h"
 
 
 
@@ -53,6 +54,9 @@
     CEShadowMapRenderer *_shadowMapRenderer DEPRECATED_ATTRIBUTE;
     CEWireframeRenderer *_wireframeRenderer;
     CEAssistRenderer *_assistRenderer;
+    
+    // test
+    TESTRenderer *_testRenderer;
 }
 
 
@@ -71,7 +75,7 @@
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     CEScene *scene = [CEScene currentScene];
     [EAGLContext setCurrentContext:scene.context];
-
+    
     // 2.check if need render shadow map
     
     // 3.sort render objects
@@ -81,6 +85,15 @@
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
     for (CERenderGroup *group in renderGroups) {
+#if 0
+#warning TEST code
+        if (!_testRenderer) {
+            _testRenderer = [[TESTRenderer alloc] init];
+        }
+        _testRenderer.camera = scene.camera;
+        _testRenderer.mainLight = scene.mainLight;
+        [_testRenderer renderObjects:group.renderObjects];
+#else
         CEDefaultRenderer *renderer = [self rendererWithConfig:group.renderConfig];
         if (!renderer) continue;
         
@@ -88,6 +101,7 @@
         renderer.mainLight = scene.mainLight;
         // normally render a object
         [renderer renderObjects:group.renderObjects];
+#endif
     }
     
     if (scene.enableDebug) {
@@ -108,6 +122,12 @@
     for (CEModel *model in models) {
         for (CERenderObject *renderObject in model.renderObjects) {
             // load buffer
+#if 0
+            if (![renderObject.testVertexBuffer setupBuffer]) {
+                CEPrintf("WARNING: Fail to load buffer for render object");
+                continue;
+            }
+#else
             if (!renderObject.vertexBuffer.isReady) {
                 [renderObject.vertexBuffer setupBuffer];
             }
@@ -119,14 +139,16 @@
                 CEPrintf("WARNING: Fail to load buffer for render object");
                 continue;
             }
+#endif
             renderObject.modelMatrix = model.transformMatrix;
             
             // setup config
             CERenderConfig *config = [CERenderConfig new];
             config.materialType = renderObject.material.materialType;
-            config.enableTexture = renderObject.material.diffuseTextureID ? YES : NO;
+#warning TEST CODE
+//            config.enableTexture = renderObject.material.diffuseTextureID ? YES : NO;
             config.lightType = lightType;
-            config.enableNormalMapping = renderObject.material.normalTextureID ? YES : NO;
+//            config.enableNormalMapping = renderObject.material.normalTextureID ? YES : NO;
             
             CERenderGroup *group = renderGroupDict[config];
             if (!group) {

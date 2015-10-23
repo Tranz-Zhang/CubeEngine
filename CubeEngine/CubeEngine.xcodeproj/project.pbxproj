@@ -74,6 +74,8 @@
 		4C9D80E51BD63BE2000A5617 /* NSData+GLKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */; };
 		4C9D80E61BD63D05000A5617 /* NSData+GLKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */; };
 		4C9D80E71BD64299000A5617 /* CEShadowMapRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 269F476C1B00893D0030CD55 /* CEShadowMapRenderer.m */; };
+		4CA5B0CE1BDA0D56006E567B /* TESTRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5B0CD1BDA0D56006E567B /* TESTRenderer.m */; };
+		4CB0F4181BD9103A00683B5D /* CEDepthTextureBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0F4171BD9103A00683B5D /* CEDepthTextureBuffer.m */; };
 		4CB61A0E1BB240E700D83856 /* CEDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F51BB1602C00686678 /* CEDatabase.m */; };
 		4CB61A101BB2410100D83856 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */; };
 		4CB61A111BB2412800D83856 /* CEDatabaseNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F91BB1602C00686678 /* CEDatabaseNotifications.m */; };
@@ -371,10 +373,14 @@
 		4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderLinkFunctionInfo.m; sourceTree = "<group>"; };
 		4C9D80E31BD63BE2000A5617 /* NSData+GLKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GLKit.h"; sourceTree = "<group>"; };
 		4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GLKit.m"; sourceTree = "<group>"; };
+		4CA5B0CC1BDA0D56006E567B /* TESTRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TESTRenderer.h; sourceTree = "<group>"; };
+		4CA5B0CD1BDA0D56006E567B /* TESTRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TESTRenderer.m; sourceTree = "<group>"; };
 		4CB0F40F1BD87FC100683B5D /* NormalLightEffect.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NormalLightEffect.vert; sourceTree = "<group>"; };
 		4CB0F4101BD8812900683B5D /* NormalLightEffect.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NormalLightEffect.frag; sourceTree = "<group>"; };
 		4CB0F4111BD8852900683B5D /* fragment.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		4CB0F4121BD8852900683B5D /* vertex.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
+		4CB0F4161BD9103A00683B5D /* CEDepthTextureBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEDepthTextureBuffer.h; sourceTree = "<group>"; };
+		4CB0F4171BD9103A00683B5D /* CEDepthTextureBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEDepthTextureBuffer.m; sourceTree = "<group>"; };
 		4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/lib/libsqlite3.dylib; sourceTree = DEVELOPER_DIR; };
 		4CB61A2C1BB2A29100D83856 /* MeshInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshInfo.h; sourceTree = "<group>"; };
 		4CB61A2D1BB2A29100D83856 /* MeshInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = MeshInfo.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -641,7 +647,7 @@
 			name = Renderer;
 			sourceTree = "<group>";
 		};
-		2610896B1AAD31E40041E142 /* 3DScene */ = {
+		2610896B1AAD31E40041E142 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
 				261089641AAD31AF0041E142 /* CEScene.h */,
@@ -661,7 +667,7 @@
 				2610896E1AAD3D700041E142 /* CECamera_Rendering.h */,
 				2625B8BC1AE7D0D4002FD478 /* Light */,
 			);
-			name = 3DScene;
+			name = Scene;
 			sourceTree = "<group>";
 		};
 		2610896C1AAD31FF0041E142 /* Support */ = {
@@ -704,7 +710,7 @@
 				269608EE1AF85E9C0045FB03 /* CEViewController.h */,
 				269608EF1AF85E9C0045FB03 /* CEViewController.m */,
 				4C3992191B2AD6F500AC4B53 /* Common */,
-				2610896B1AAD31E40041E142 /* 3DScene */,
+				2610896B1AAD31E40041E142 /* Scene */,
 				4CEA12251BB1825400686678 /* ResourceManager */,
 				2610896A1AAD31CE0041E142 /* Renderer */,
 				260949101B0597E200F7465B /* ObjFileLoader */,
@@ -843,6 +849,8 @@
 			children = (
 				4C1703E41BA5A09400DBF84A /* CEDefaultRenderer.h */,
 				4C1703E51BA5A09400DBF84A /* CEDefaultRenderer.m */,
+				4CA5B0CC1BDA0D56006E567B /* TESTRenderer.h */,
+				4CA5B0CD1BDA0D56006E567B /* TESTRenderer.m */,
 				269F476B1B00893D0030CD55 /* CEShadowMapRenderer.h */,
 				269F476C1B00893D0030CD55 /* CEShadowMapRenderer.m */,
 				265878691AD7C99100BA2137 /* CEWireframeRenderer.h */,
@@ -887,6 +895,8 @@
 				4CBB75091BB5419600C3829B /* CETextureBuffer.m */,
 				4CC25DD01BCE477B00DB3DA2 /* CEPVRTextureBuffer.h */,
 				4CC25DD11BCE477B00DB3DA2 /* CEPVRTextureBuffer.m */,
+				4CB0F4161BD9103A00683B5D /* CEDepthTextureBuffer.h */,
+				4CB0F4171BD9103A00683B5D /* CEDepthTextureBuffer.m */,
 			);
 			name = Buffers;
 			sourceTree = "<group>";
@@ -1374,6 +1384,7 @@
 				4CC25DBE1BCE3F1C00DB3DA2 /* pngwrite.c in Sources */,
 				4CC25DB11BCE3F1C00DB3DA2 /* png.c in Sources */,
 				2624ABA11AD62BC800FC863C /* CEMaterial.m in Sources */,
+				4CA5B0CE1BDA0D56006E567B /* TESTRenderer.m in Sources */,
 				4CCBD8951BCCE2C500BD53F8 /* CETextureManager.m in Sources */,
 				4CF4037B1B73866800C02BAE /* CEUniformFloat.m in Sources */,
 				4CC25DCB1BCE3F1C00DB3DA2 /* trees.c in Sources */,
@@ -1382,6 +1393,7 @@
 				4C1815481BBA761F00757BFC /* CETextureInfo.m in Sources */,
 				2624ABA91AD6A56A00FC863C /* CEModel.m in Sources */,
 				4CF9B5FA1BA0660C00E2128D /* CEDefaultProgram.m in Sources */,
+				4CB0F4181BD9103A00683B5D /* CEDepthTextureBuffer.m in Sources */,
 				4CC25DC21BCE3F1C00DB3DA2 /* compress.c in Sources */,
 				4CC4E7E91B9DB722008DEEC1 /* CEUniform.m in Sources */,
 				4CD9CA9F1B8AB56600FDE357 /* CEShaderVariableInfo.m in Sources */,

@@ -3,7 +3,7 @@ attribute lowp vec3 VertexNormal;
 attribute lowp vec3 VertexTangent;
 attribute lowp vec2 VertexUV;
 
-uniform lowp mat3 NormalMatrix;
+uniform highp mat3 NormalMatrix;
 uniform lowp vec3 EyeDirection; // in eye space
 
 varying lowp vec3 LightDirection;

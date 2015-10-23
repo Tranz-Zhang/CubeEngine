@@ -136,16 +136,6 @@ NSString *CEShaderDirectory() {
     }
 }
 
-
-//- (void)enableNormalMap:(BOOL)enabled {
-//    if (enabled) {
-//        [self loadProfileWithName:@"NormalLightEffect"];
-//    } else {
-//        [self removeProfileWithName:@"NormalLightEffect"];
-//    }
-//}
-
-
 - (void)enableShadowMap:(BOOL)enabled {
     if (enabled) {
         [self loadProfileWithName:@"ShadowMap"];

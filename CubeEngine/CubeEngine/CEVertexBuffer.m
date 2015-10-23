@@ -9,9 +9,11 @@
 #import "CEVertexBuffer.h"
 #import "CEVBOAttribute.h"
 
+#warning VertexArray Disabled!!!!
+
 @implementation CEVertexBuffer {
     NSData *_vertexData;
-    GLuint _vertexArrayID;
+//    GLuint _vertexArrayID;
     GLuint _vertexBufferID;
 }
 
@@ -40,11 +42,11 @@
     }
     
     // gen vertex array object
-    glGenVertexArraysOES(1, &_vertexArrayID);
-    if (!_vertexArrayID) {
-        return NO;
-    }
-    glBindVertexArrayOES(_vertexArrayID);
+//    glGenVertexArraysOES(1, &_vertexArrayID);
+//    if (!_vertexArrayID) {
+//        return NO;
+//    }
+//    glBindVertexArrayOES(_vertexArrayID);
     
     // generate vertex buffer
     glGenBuffers(1, &_vertexBufferID);
@@ -67,7 +69,7 @@
                               CE_BUFFER_OFFSET(attributeInfo.elementOffset));
     }
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArrayOES(0);
+//    glBindVertexArrayOES(0);
     
     _ready = YES;
     return YES;
@@ -75,10 +77,10 @@
 
 
 - (void)destoryBuffer {
-    if (_vertexArrayID) {
-        glDeleteVertexArraysOES(1, &_vertexArrayID);
-        _vertexArrayID = 0;
-    }
+//    if (_vertexArrayID) {
+//        glDeleteVertexArraysOES(1, &_vertexArrayID);
+//        _vertexArrayID = 0;
+//    }
     if (_vertexBufferID) {
         glDeleteBuffers(1, &_vertexBufferID);
         _vertexBufferID = 0;
@@ -89,13 +91,26 @@
 
 - (BOOL)loadBuffer {
     if (!_ready) return NO;
-    glBindVertexArrayOES(_vertexArrayID);
+//    glBindVertexArrayOES(_vertexArrayID);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
+    NSArray *attributeInfos = [CEVBOAttribute attributesWithNames:_attributes];
+    for (CEVBOAttribute *attributeInfo in attributeInfos) {
+//        glEnableVertexAttribArray(attributeInfo.name);
+        glVertexAttribPointer(attributeInfo.name,
+                              attributeInfo.primaryCount,
+                              attributeInfo.primaryType,
+                              GL_FALSE,
+                              attributeInfo.elementStride,
+                              CE_BUFFER_OFFSET(attributeInfo.elementOffset));
+    }
+    
     return YES;
 }
 
 
 - (void)unloadBuffer {
-    glBindVertexArrayOES(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    glBindVertexArrayOES(0);
 }
 
 

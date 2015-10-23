@@ -132,6 +132,7 @@
     @synchronized(self) {
         [_textureUnitLRUQueue removeObject:@(textureID)];
         [_textureBufferDict removeObjectForKey:@(textureID)];
+        [_textureConfigDict removeObjectForKey:@(textureID)];
     }
     if (removeFromMemory) {
         [[CEResourceManager sharedManager] unloadResourceDataWithID:textureID];
@@ -190,7 +191,15 @@
 }
 
 
-
+- (BOOL)manageTextureBuffer:(CETextureBuffer *)textureBuffer {
+    if (!textureBuffer.resourceID) {
+        return NO;
+    }
+    @synchronized(self) {
+        [_textureBufferDict setObject:textureBuffer forKey:@(textureBuffer.resourceID)];
+    }
+    return YES;
+}
 
 
 @end
