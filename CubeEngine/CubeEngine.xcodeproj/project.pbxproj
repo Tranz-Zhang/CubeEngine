@@ -74,7 +74,6 @@
 		4C9D80E51BD63BE2000A5617 /* NSData+GLKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */; };
 		4C9D80E61BD63D05000A5617 /* NSData+GLKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */; };
 		4C9D80E71BD64299000A5617 /* CEShadowMapRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 269F476C1B00893D0030CD55 /* CEShadowMapRenderer.m */; };
-		4CA5B0CE1BDA0D56006E567B /* TESTRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5B0CD1BDA0D56006E567B /* TESTRenderer.m */; };
 		4CB0F4181BD9103A00683B5D /* CEDepthTextureBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0F4171BD9103A00683B5D /* CEDepthTextureBuffer.m */; };
 		4CB61A0E1BB240E700D83856 /* CEDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F51BB1602C00686678 /* CEDatabase.m */; };
 		4CB61A101BB2410100D83856 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */; };
@@ -373,8 +372,6 @@
 		4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderLinkFunctionInfo.m; sourceTree = "<group>"; };
 		4C9D80E31BD63BE2000A5617 /* NSData+GLKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GLKit.h"; sourceTree = "<group>"; };
 		4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GLKit.m"; sourceTree = "<group>"; };
-		4CA5B0CC1BDA0D56006E567B /* TESTRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TESTRenderer.h; sourceTree = "<group>"; };
-		4CA5B0CD1BDA0D56006E567B /* TESTRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TESTRenderer.m; sourceTree = "<group>"; };
 		4CB0F40F1BD87FC100683B5D /* NormalLightEffect.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NormalLightEffect.vert; sourceTree = "<group>"; };
 		4CB0F4101BD8812900683B5D /* NormalLightEffect.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NormalLightEffect.frag; sourceTree = "<group>"; };
 		4CB0F4111BD8852900683B5D /* fragment.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
@@ -849,8 +846,6 @@
 			children = (
 				4C1703E41BA5A09400DBF84A /* CEDefaultRenderer.h */,
 				4C1703E51BA5A09400DBF84A /* CEDefaultRenderer.m */,
-				4CA5B0CC1BDA0D56006E567B /* TESTRenderer.h */,
-				4CA5B0CD1BDA0D56006E567B /* TESTRenderer.m */,
 				269F476B1B00893D0030CD55 /* CEShadowMapRenderer.h */,
 				269F476C1B00893D0030CD55 /* CEShadowMapRenderer.m */,
 				265878691AD7C99100BA2137 /* CEWireframeRenderer.h */,
@@ -1384,7 +1379,6 @@
 				4CC25DBE1BCE3F1C00DB3DA2 /* pngwrite.c in Sources */,
 				4CC25DB11BCE3F1C00DB3DA2 /* png.c in Sources */,
 				2624ABA11AD62BC800FC863C /* CEMaterial.m in Sources */,
-				4CA5B0CE1BDA0D56006E567B /* TESTRenderer.m in Sources */,
 				4CCBD8951BCCE2C500BD53F8 /* CETextureManager.m in Sources */,
 				4CF4037B1B73866800C02BAE /* CEUniformFloat.m in Sources */,
 				4CC25DCB1BCE3F1C00DB3DA2 /* trees.c in Sources */,

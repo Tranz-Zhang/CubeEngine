@@ -28,9 +28,6 @@
 #import "CETextureRenderer.h"
 
 // test
-#import "CEMainProgram.h"
-#import "TESTRenderer.h"
-
 
 
 @interface CERenderGroup : NSObject
@@ -54,9 +51,6 @@
     CEShadowMapRenderer *_shadowMapRenderer DEPRECATED_ATTRIBUTE;
     CEWireframeRenderer *_wireframeRenderer;
     CEAssistRenderer *_assistRenderer;
-    
-    // test
-    TESTRenderer *_testRenderer;
 }
 
 
@@ -85,15 +79,6 @@
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, scene.renderCore.width, scene.renderCore.height);
     for (CERenderGroup *group in renderGroups) {
-#if 0
-#warning TEST code
-        if (!_testRenderer) {
-            _testRenderer = [[TESTRenderer alloc] init];
-        }
-        _testRenderer.camera = scene.camera;
-        _testRenderer.mainLight = scene.mainLight;
-        [_testRenderer renderObjects:group.renderObjects];
-#else
         CEDefaultRenderer *renderer = [self rendererWithConfig:group.renderConfig];
         if (!renderer) continue;
         
@@ -101,7 +86,6 @@
         renderer.mainLight = scene.mainLight;
         // normally render a object
         [renderer renderObjects:group.renderObjects];
-#endif
     }
     
     if (scene.enableDebug) {
@@ -122,12 +106,6 @@
     for (CEModel *model in models) {
         for (CERenderObject *renderObject in model.renderObjects) {
             // load buffer
-#if 0
-            if (![renderObject.testVertexBuffer setupBuffer]) {
-                CEPrintf("WARNING: Fail to load buffer for render object");
-                continue;
-            }
-#else
             if (!renderObject.vertexBuffer.isReady) {
                 [renderObject.vertexBuffer setupBuffer];
             }
@@ -139,16 +117,14 @@
                 CEPrintf("WARNING: Fail to load buffer for render object");
                 continue;
             }
-#endif
             renderObject.modelMatrix = model.transformMatrix;
             
             // setup config
             CERenderConfig *config = [CERenderConfig new];
             config.materialType = renderObject.material.materialType;
-#warning TEST CODE
-//            config.enableTexture = renderObject.material.diffuseTextureID ? YES : NO;
+            config.enableTexture = renderObject.material.diffuseTextureID ? YES : NO;
             config.lightType = lightType;
-//            config.enableNormalMapping = renderObject.material.normalTextureID ? YES : NO;
+            config.enableNormalMapping = renderObject.material.normalTextureID ? YES : NO;
             
             CERenderGroup *group = renderGroupDict[config];
             if (!group) {
@@ -188,26 +164,6 @@
 }
 
 
-#pragma mark - Test Renderer
-
-- (void)testProgramGeneration {
-    printf("testProgramGeneration... ");
-    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    [EAGLContext setCurrentContext:_context];
-    CEProgramConfig *config = [CEProgramConfig new];
-    CEMainProgram *program = [CEMainProgram programWithConfig:config];
-    config.lightCount = 1;
-    program = [CEMainProgram programWithConfig:config];
-    config.enableTexture = YES;
-    program = [CEMainProgram programWithConfig:config];
-    config.enableNormalMapping = YES;
-    program = [CEMainProgram programWithConfig:config];
-    config.enableShadowMapping = YES;
-    program = [CEMainProgram programWithConfig:config];
-    printf("%.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
-}
-
-
 #pragma mark - Shadow Mapping
 
 - (void)renderShadowMapsWithShadowLight:(CEShadowLight *)shadowLight
@@ -229,7 +185,6 @@
     _shadowMapRenderer.lightVPMatrix = GLKMatrix4Multiply(shadowLight.lightProjectionMatrix, shadowLight.lightViewMatrix);
     [_shadowMapRenderer renderShadowMapWithObjects:shadowModels];
 }
-
 
 
 #pragma mark - Debug renderer

@@ -11,8 +11,7 @@
 @implementation CEUniformVector4
 
 - (void)setVector4:(GLKVector4)vector4 {
-#warning TEST Code
-    if (_index < 0 /*|| GLKVector4AllEqualToVector4(vector4, _vector4)*/) {
+    if (_index < 0 || GLKVector4AllEqualToVector4(vector4, _vector4)) {
         return;
     }
     _vector4 = vector4;

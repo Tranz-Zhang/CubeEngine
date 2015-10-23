@@ -11,8 +11,7 @@
 @implementation CEUniformVector3
 
 - (void)setVector3:(GLKVector3)vector3 {
-#warning TEST Code
-    if (_index < 0/* || GLKVector3AllEqualToVector3(_vector3, vector3)*/) {
+    if (_index < 0 || GLKVector3AllEqualToVector3(_vector3, vector3)) {
         return;
     }
     _vector3 = vector3;
