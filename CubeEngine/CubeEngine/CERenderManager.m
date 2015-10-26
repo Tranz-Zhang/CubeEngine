@@ -8,24 +8,23 @@
 
 #import "CERenderManager.h"
 
+#import "CETextureManager.h"
+
+// rendering methods
 #import "CEScene_Rendering.h"
 #import "CEModel_Rendering.h"
 #import "CECamera_Rendering.h"
 #import "CELight_Rendering.h"
 #import "CEShadowLight_Rendering.h"
 
-#import "CEMainRenderer.h"
-#import "CEShadowMapRenderer.h"
-#import "CETextureManager.h"
-
-// new renderer
+// main renderer
 #import "CEDefaultRenderer.h"
+#import "CEShadowMapRenderer.h"
 #import "CERenderConfig.h"
 
 // debug renderer
 #import "CEWireframeRenderer.h"
 #import "CEAssistRenderer.h"
-#import "CETextureRenderer.h"
 
 // test
 
@@ -46,7 +45,7 @@
 
 @implementation CERenderManager {
     EAGLContext *_context;
-    NSMutableDictionary *_rendererDict; // @{CEProgramConfig:CEMainRenderer}
+    NSMutableDictionary *_rendererDict; // @{@(CERenderConfig.hash) : CEMainRenderer}
     
     // shadow map renderer
     BOOL _enableShadowMapping;
@@ -158,14 +157,14 @@
 
 
 - (CEDefaultRenderer *)rendererWithConfig:(CERenderConfig *)config {
-    CEDefaultRenderer *render = _rendererDict[config];
+    CEDefaultRenderer *render = _rendererDict[@(config.hash)];
     if (!render) {
         render = [CEDefaultRenderer rendererWithConfig:config];
 #if DEBUG
         NSAssert(render, @"FAIL TO CREATE RENDER");
 #endif
         if (render) {
-            _rendererDict[config] = render;
+            _rendererDict[@(config.hash)] = render;
         }
     }
 

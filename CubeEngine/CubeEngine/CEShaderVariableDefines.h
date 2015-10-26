@@ -21,9 +21,6 @@
 #import "CEUniformMatrix4.h"
 #import "CEUniformSampler2D.h"
 
-
 #import "CEUniformLightInfo.h"
-
-
 
 #endif
