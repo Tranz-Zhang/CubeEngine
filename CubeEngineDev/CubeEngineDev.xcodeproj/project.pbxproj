@@ -413,7 +413,7 @@
 				44D0CCE61AECA677000C137C /* transition_icon@2x.png */,
 				44D0CCE71AECA677000C137C /* rotation_icon@2x.png */,
 			);
-			name = Accessory;
+			path = Accessory;
 			sourceTree = "<group>";
 		};
 		4C7139041B818F49005FC7C3 /* store bridge */ = {
