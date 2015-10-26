@@ -13,7 +13,7 @@
 /**
  Get uniform variable in current program. return nil if no item match the name and type;
  */
-- (CEShaderVariable *)uniformVariableWithName:(NSString *)name type:(NSString *)dataType;
+- (CEUniform *)uniformWithName:(NSString *)name type:(NSString *)dataType;
 
 
 @end

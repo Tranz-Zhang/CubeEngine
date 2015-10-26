@@ -10,7 +10,7 @@
 #import "CEProgram.h"
 #import "CEShaderInfo.h"
 #import "CEVBOAttribute.h"
-#import "CEShaderVariableDefines.h"
+#import "CEShaderUniformDefines.h"
 
 /**
  As a basic class, CEShaderProgram is used for compiling shader program with CEShaderInfo.

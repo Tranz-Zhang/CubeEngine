@@ -1,15 +1,17 @@
 //
-//  CEShaderVariableDefines.h
+//  CEShaderUniformDefines.h
 //  CubeEngine
 //
-//  Created by chance on 8/10/15.
+//  Created by chance on 10/26/15.
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#ifndef CubeEngine_CEShaderVariableDefines_h
-#define CubeEngine_CEShaderVariableDefines_h
+#ifndef CubeEngine_CEShaderUniformDefines_h
+#define CubeEngine_CEShaderUniformDefines_h
 
 #define kCEPrecisionDefault @"mediump"
+
+// uniform primaries
 #import "CEUniformBool.h"
 #import "CEUniformInteger.h"
 #import "CEUniformFloat.h"
@@ -21,6 +23,7 @@
 #import "CEUniformMatrix4.h"
 #import "CEUniformSampler2D.h"
 
+// uniform structs
 #import "CEUniformLightInfo.h"
 
 #endif

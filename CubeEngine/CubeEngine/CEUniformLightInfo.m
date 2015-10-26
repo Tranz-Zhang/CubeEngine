@@ -7,7 +7,7 @@
 //
 
 #import "CEUniformLightInfo.h"
-#import "CEShaderVariable_privates.h"
+#import "CEUniform_privates.h"
 
 @implementation CEUniformLightInfo
 

@@ -13,7 +13,7 @@
 #import "CEShaderProfile__setter.h"
 #import "CEShaderFunctionInfo_setter.h"
 #import "CEShaderLinkFunctionInfo_setter.h"
-#import "CEShaderVariableDefines.h"
+#import "CEShaderUniformDefines.h"
 
 
 @implementation CEShaderProfileParser

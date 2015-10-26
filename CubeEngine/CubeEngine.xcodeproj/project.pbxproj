@@ -98,7 +98,6 @@
 		4CBB750B1BB541FF00C3829B /* CEModelInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB74F61BB53CF200C3829B /* CEModelInfo.m */; };
 		4CBB750C1BB541FF00C3829B /* CEMeshInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB74F91BB53D0D00C3829B /* CEMeshInfo.m */; };
 		4CBB750D1BB541FF00C3829B /* CEMaterialInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB74FC1BB53D3000C3829B /* CEMaterialInfo.m */; };
-		4CBD44241B723AB600D72831 /* CEShaderVariable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBD44231B723AB600D72831 /* CEShaderVariable.m */; };
 		4CBD74F31BCBAEF50031387A /* CEModelLoader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF2BF7B1BBB933300CB1681 /* CEModelLoader.h */; };
 		4CBD74F51BCBB8550031387A /* CECommon.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CBD74F41BCBB7CE0031387A /* CECommon.h */; };
 		4CBD75011BCBD82F0031387A /* NvTriStripObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CBD74F91BCBD7C40031387A /* NvTriStripObjects.cpp */; };
@@ -234,7 +233,6 @@
 /* Begin PBXFileReference section */
 		2608E2371B78FCB500E9F601 /* CEUniformLightInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEUniformLightInfo.h; sourceTree = "<group>"; };
 		2608E2381B78FCB500E9F601 /* CEUniformLightInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEUniformLightInfo.m; sourceTree = "<group>"; };
-		2608E23A1B78FD6900E9F601 /* CEShaderVariableDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CEShaderVariableDefines.h; sourceTree = "<group>"; };
 		260949111B05981600F7465B /* CEObjMeshInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObjMeshInfo.h; sourceTree = "<group>"; };
 		260949121B05981600F7465B /* CEObjMeshInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEObjMeshInfo.m; sourceTree = "<group>"; };
 		260949141B0598E000F7465B /* CEMtlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEMtlParser.h; sourceTree = "<group>"; };
@@ -337,6 +335,8 @@
 		4CB0F4121BD8852900683B5D /* vertex.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
 		4CB0F4161BD9103A00683B5D /* CEDepthTextureBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEDepthTextureBuffer.h; sourceTree = "<group>"; };
 		4CB0F4171BD9103A00683B5D /* CEDepthTextureBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEDepthTextureBuffer.m; sourceTree = "<group>"; };
+		4CB1C3491BDE19DF00D8B46C /* CEUniform_privates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEUniform_privates.h; sourceTree = "<group>"; };
+		4CB1C34A1BDE1ABE00D8B46C /* CEShaderUniformDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CEShaderUniformDefines.h; sourceTree = "<group>"; };
 		4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/lib/libsqlite3.dylib; sourceTree = DEVELOPER_DIR; };
 		4CB61A2C1BB2A29100D83856 /* MeshInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshInfo.h; sourceTree = "<group>"; };
 		4CB61A2D1BB2A29100D83856 /* MeshInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = MeshInfo.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -356,8 +356,6 @@
 		4CBB75061BB5418900C3829B /* CEIndiceBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEIndiceBuffer.m; sourceTree = "<group>"; };
 		4CBB75081BB5419600C3829B /* CETextureBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CETextureBuffer.h; sourceTree = "<group>"; };
 		4CBB75091BB5419600C3829B /* CETextureBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CETextureBuffer.m; sourceTree = "<group>"; };
-		4CBD44221B723AB600D72831 /* CEShaderVariable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderVariable.h; sourceTree = "<group>"; };
-		4CBD44231B723AB600D72831 /* CEShaderVariable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderVariable.m; sourceTree = "<group>"; };
 		4CBD74F41BCBB7CE0031387A /* CECommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CECommon.h; sourceTree = "<group>"; };
 		4CBD74F71BCBD7C40031387A /* NvTriStrip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NvTriStrip.cpp; sourceTree = "<group>"; };
 		4CBD74F81BCBD7C40031387A /* NvTriStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NvTriStrip.h; sourceTree = "<group>"; };
@@ -529,7 +527,6 @@
 		4CF403891B7386C200C02BAE /* CEUniformMatrix4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEUniformMatrix4.m; sourceTree = "<group>"; };
 		4CF4038B1B7386CD00C02BAE /* CEUniformSampler2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEUniformSampler2D.h; sourceTree = "<group>"; };
 		4CF4038C1B7386CD00C02BAE /* CEUniformSampler2D.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEUniformSampler2D.m; sourceTree = "<group>"; };
-		4CF403941B7388CE00C02BAE /* CEShaderVariable_privates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderVariable_privates.h; sourceTree = "<group>"; };
 		4CF4649C1BB944FE006D7DE2 /* VectorList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VectorList.h; sourceTree = "<group>"; };
 		4CF4649D1BB944FE006D7DE2 /* VectorList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VectorList.m; sourceTree = "<group>"; };
 		4CF5CCA01B8C0D7F0048E833 /* CEJsonCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEJsonCoding.h; sourceTree = "<group>"; };
@@ -850,7 +847,7 @@
 				4CF3E96D1B99E4C100D42515 /* CEShaderInfo_setter.h */,
 				4CC7F95E1B969EF70078F441 /* CEShaderBuildProfileResult.h */,
 				4CC7F95F1B969EF70078F441 /* CEShaderBuildProfileResult.m */,
-				4CF403721B73853900C02BAE /* Variables */,
+				4CF403721B73853900C02BAE /* Uniforms */,
 				4CF5CCA61B8C65FA0048E833 /* Model */,
 				4CCBB3F21B8425C800200C4E /* ShaderProfile */,
 			);
@@ -1061,11 +1058,13 @@
 			name = ResourceManager;
 			sourceTree = "<group>";
 		};
-		4CF3E9671B99D6AC00D42515 /* Uniform */ = {
+		4CF403721B73853900C02BAE /* Uniforms */ = {
 			isa = PBXGroup;
 			children = (
+				4CB1C34A1BDE1ABE00D8B46C /* CEShaderUniformDefines.h */,
 				4CC4E7E71B9DB722008DEEC1 /* CEUniform.h */,
 				4CC4E7E81B9DB722008DEEC1 /* CEUniform.m */,
+				4CB1C3491BDE19DF00D8B46C /* CEUniform_privates.h */,
 				4CF4036F1B73853300C02BAE /* CEUniformBool.h */,
 				4CF403701B73853300C02BAE /* CEUniformBool.m */,
 				4CF403761B73864900C02BAE /* CEUniformInteger.h */,
@@ -1089,19 +1088,7 @@
 				2608E2371B78FCB500E9F601 /* CEUniformLightInfo.h */,
 				2608E2381B78FCB500E9F601 /* CEUniformLightInfo.m */,
 			);
-			name = Uniform;
-			sourceTree = "<group>";
-		};
-		4CF403721B73853900C02BAE /* Variables */ = {
-			isa = PBXGroup;
-			children = (
-				2608E23A1B78FD6900E9F601 /* CEShaderVariableDefines.h */,
-				4CBD44221B723AB600D72831 /* CEShaderVariable.h */,
-				4CBD44231B723AB600D72831 /* CEShaderVariable.m */,
-				4CF403941B7388CE00C02BAE /* CEShaderVariable_privates.h */,
-				4CF3E9671B99D6AC00D42515 /* Uniform */,
-			);
-			name = Variables;
+			name = Uniforms;
 			sourceTree = "<group>";
 		};
 		4CF5CCA61B8C65FA0048E833 /* Model */ = {
@@ -1307,7 +1294,6 @@
 				4CEA121D1BB1602D00686678 /* FMDatabaseQueue.m in Sources */,
 				2658786B1AD7C99100BA2137 /* CEWireframeRenderer.m in Sources */,
 				4CC25DB81BCE3F1C00DB3DA2 /* pngrtran.c in Sources */,
-				4CBD44241B723AB600D72831 /* CEShaderVariable.m in Sources */,
 				4CC25DB41BCE3F1C00DB3DA2 /* pngmem.c in Sources */,
 				260949191B0598EE00F7465B /* CEObjParser.m in Sources */,
 				2624ABAC1AD6A85500FC863C /* CERenderManager.m in Sources */,

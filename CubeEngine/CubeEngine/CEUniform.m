@@ -7,9 +7,19 @@
 //
 
 #import "CEUniform.h"
-#import "CEShaderVariable_privates.h"
+#import "CEUniform_privates.h"
 
 @implementation CEUniform
+
+- (instancetype)initWithName:(NSString *)name{
+    self = [super init];
+    if (self) {
+        _name = [name copy];
+        _index = -1;
+    }
+    return self;
+}
+
 
 - (BOOL)setupIndexWithProgram:(CEProgram *)program {
     _index = [program uniformIndex:self.name];

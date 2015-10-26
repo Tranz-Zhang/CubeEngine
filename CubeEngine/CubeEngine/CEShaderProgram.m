@@ -8,8 +8,7 @@
 
 #import "CEShaderProgram.h"
 #import "CEShaderProgram_privates.h"
-#import "CEShaderVariable_privates.h"
-#import "CEShaderVariableDefines.h"
+#import "CEUniform_privates.h"
 
 @implementation CEShaderProgram {
     NSDictionary *_uniformVariableDict;
@@ -70,7 +69,7 @@
     [uniformInfoDict enumerateKeysAndObjectsUsingBlock:^(NSString *variableName, CEShaderVariableInfo *info, BOOL *stop) {
         NSString *className = [[CEShaderProgram typeToUniformClassNameDict] objectForKey:info.type];
         if (className) {
-            CEShaderVariable *uniform = [[NSClassFromString(className) alloc] initWithName:variableName];
+            CEUniform *uniform = [[NSClassFromString(className) alloc] initWithName:variableName];
             if ([uniform setupIndexWithProgram:program]) {
                 uniformVariableDict[variableName] = uniform;
             }
@@ -86,11 +85,11 @@
 }
 
 
-- (CEShaderVariable *)uniformVariableWithName:(NSString *)name type:(NSString *)dataType {
+- (CEUniform *)uniformWithName:(NSString *)name type:(NSString *)dataType {
     if (!name.length || !dataType.length) {
         return nil;
     }
-    CEShaderVariable *variable = _uniformVariableDict[name];
+    CEUniform *variable = _uniformVariableDict[name];
     if (variable && [variable.dataType isEqualToString:dataType]) {
         return variable;
     }
