@@ -23,43 +23,51 @@
     return self;
 }
 
+
 - (void)setupSharedVertexBuffer {
-    static CEVertexBuffer_DEPRECATED *_sharedVertexBuffer;
-    static CEIndicesBuffer_DEPRECATED *_sharedIndicesBuffer;
-    if (!_sharedVertexBuffer) {
-        GLfloat red = 200.0 / 255.0, green = 150.0 / 255.0, blue = 0.0, alpha = 1.0;
-        GLfloat vertices[] = {
-            -0.5, 0.0, 0.0, red, green, blue, alpha,
-            0.25, 0.0, 0.0, red, green, blue, alpha,
-            0.5, 0.0, 0.0, red, green, blue, alpha,
-            0.25, 0.0, 0.05, red, green, blue, alpha,
-            0.25, 0.0, -0.05, red, green, blue, alpha,
-            0.25, 0.05, 0.0, red, green, blue, alpha,
-            0.25, -0.05, 0.0, red, green, blue, alpha,
-            -0.1, -0.1, -0.1, 1.0, 0.0, 0.0, 1.0,
-            0.1, -0.1, -0.1, 1.0, 0.0, 0.0, 1.0,
-            -0.1, -0.1, -0.1, 0.0, 1.0, 0.0, 1.0,
-            -0.1, 0.1, -0.1, 0.0, 1.0, 0.0, 1.0,
-            -0.1, -0.1, -0.1, 0.0, 0.0, 1.0, 1.0,
-            -0.1, -0.1, 0.1, 0.0, 0.0, 1.0, 1.0,
-        };
-        NSData *vertexData = [NSData dataWithBytes:&vertices length:sizeof(vertices)];
-        NSArray *attributes = [CELight defaultVertexBufferAttributes];
-        _sharedVertexBuffer = [[CEVertexBuffer_DEPRECATED alloc] initWithData:vertexData attributes:attributes];
+    static CERenderObject *sSharedRenderObject = nil;
+    if (!sSharedRenderObject) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            sSharedRenderObject = [[CERenderObject alloc] init];
+            
+            // setup vertex buffer
+            GLfloat red = 200.0 / 255.0, green = 150.0 / 255.0, blue = 0.0, alpha = 1.0;
+            GLfloat vertices[] = {
+                -0.5, 0.0, 0.0, red, green, blue, alpha,
+                0.25, 0.0, 0.0, red, green, blue, alpha,
+                0.5, 0.0, 0.0, red, green, blue, alpha,
+                0.25, 0.0, 0.05, red, green, blue, alpha,
+                0.25, 0.0, -0.05, red, green, blue, alpha,
+                0.25, 0.05, 0.0, red, green, blue, alpha,
+                0.25, -0.05, 0.0, red, green, blue, alpha,
+                -0.1, -0.1, -0.1, 1.0, 0.0, 0.0, 1.0,
+                0.1, -0.1, -0.1, 1.0, 0.0, 0.0, 1.0,
+                -0.1, -0.1, -0.1, 0.0, 1.0, 0.0, 1.0,
+                -0.1, 0.1, -0.1, 0.0, 1.0, 0.0, 1.0,
+                -0.1, -0.1, -0.1, 0.0, 0.0, 1.0, 1.0,
+                -0.1, -0.1, 0.1, 0.0, 0.0, 1.0, 1.0,
+            };
+            NSData *vertexData = [NSData dataWithBytes:&vertices length:sizeof(vertices)];
+            NSArray *attributes = @[@(CEVBOAttributePosition), @(CEVBOAttributeColor)];
+            CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:attributes];
+            sSharedRenderObject.vertexBuffer = vertexBuffer;
+            
+            // setup indice buffer
+            GLubyte indices[] = {
+                0, 1, 2, 3, 2, 4, 2, 5, 2, 6, 3, 5, 3, 6, 4, 5, 4, 6,// ARROW
+                7, 8, 9, 10, 11, 12 // DIRECTION
+            };
+            NSData *indicesData = [NSData dataWithBytes:&indices length:sizeof(indices)];
+            CEIndiceBuffer *indiceBuffer = [[CEIndiceBuffer alloc] initWithData:indicesData indiceCount:sizeof(indices) / sizeof(GLubyte) primaryType:GL_UNSIGNED_BYTE drawMode:GL_LINES];
+            sSharedRenderObject.indiceBuffer = indiceBuffer;
+        });
     }
     
-    if (!_sharedIndicesBuffer) {
-        GLubyte indices[] = {
-            0, 1, 2, 3, 2, 4, 2, 5, 2, 6, 3, 5, 3, 6, 4, 5, 4, 6,// ARROW
-            7, 8, 9, 10, 11, 12 // DIRECTION
-        };
-        NSData *indicesData = [NSData dataWithBytes:&indices length:sizeof(indices)];
-        _sharedIndicesBuffer = [[CEIndicesBuffer_DEPRECATED alloc] initWithData:indicesData indicesCount:sizeof(indices)];
-    }
-    
-    _vertexBuffer = _sharedVertexBuffer;
-    _indicesBuffer = _sharedIndicesBuffer;
+    _renderObject = sSharedRenderObject;
 }
+
+
 
 - (GLKVector3)lightDirection {
     return _right;
@@ -126,7 +134,7 @@
     }
     GLKVector3 center = GLKVector3Make((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
     GLfloat radius = GLKVector3Distance(center, GLKVector3Make(maxX, maxY, maxZ));
-    GLfloat aspect = self.shadowMapBuffer.textureSize.width / self.shadowMapBuffer.textureSize.height;
+    GLfloat aspect = 1.0f;
     _lightProjectionMatrix = GLKMatrix4MakeOrtho(-radius, radius, -radius / aspect, radius / aspect, 0.1, radius * 2);
     
     GLKVector3 lightDirection;

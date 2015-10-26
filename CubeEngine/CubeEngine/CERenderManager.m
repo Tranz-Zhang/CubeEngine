@@ -15,7 +15,6 @@
 #import "CEShadowLight_Rendering.h"
 
 #import "CEMainRenderer.h"
-#import "CEShadowMapRenderer_DEPRECATED.h"
 #import "CEShadowMapRenderer.h"
 #import "CETextureManager.h"
 
@@ -29,6 +28,7 @@
 #import "CETextureRenderer.h"
 
 // test
+
 
 
 @interface CERenderGroup : NSObject
@@ -51,8 +51,6 @@
     // shadow map renderer
     BOOL _enableShadowMapping;
     CEShadowMapRenderer *_shadowMapRenderer;
-    
-    CEShadowMapRenderer_DEPRECATED *_shadowMapRenderer_D DEPRECATED_ATTRIBUTE;
     
     // debug renderer
     CEWireframeRenderer *_wireframeRenderer;
@@ -201,27 +199,6 @@
     BOOL isOK = [_shadowMapRenderer renderShadowMapWithModels:shadowModels
                                                   shadowLight:shadowLight];
     return isOK;
-}
-
-
-- (void)renderShadowMapsWithShadowLight:(CEShadowLight *)shadowLight
-                           shadowModels:(NSArray *)shadowModels {
-    if (!shadowLight || !shadowModels.count) {
-        // no need to render shadow maps
-        return;
-    }
-    
-    // check shadow map renderer
-    if (!_shadowMapRenderer_D) {
-        _shadowMapRenderer_D = [[CEShadowMapRenderer_DEPRECATED alloc] init];
-    }
-    
-    // render shadow maps
-    [shadowLight.shadowMapBuffer setupBuffer];
-    [shadowLight.shadowMapBuffer prepareBuffer];
-    [shadowLight updateLightVPMatrixWithModels:shadowModels];
-    _shadowMapRenderer_D.lightVPMatrix = GLKMatrix4Multiply(shadowLight.lightProjectionMatrix, shadowLight.lightViewMatrix);
-    [_shadowMapRenderer_D renderShadowMapWithObjects:shadowModels];
 }
 
 

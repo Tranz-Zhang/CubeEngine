@@ -11,9 +11,6 @@
 #import "CEIndiceBuffer.h"
 #import "CEMaterial.h"
 
-// test
-#import "CEVertexBuffer_DEPRECATED.h"
-
 /**
  CERenderObject includes all the information needed for rendering a mesh.
  */
@@ -29,9 +26,6 @@
 
 // model matrix
 @property (nonatomic, assign) GLKMatrix4 modelMatrix;
-
-
-@property (nonatomic, strong) CEVertexBuffer_DEPRECATED *testVertexBuffer;
 
 @end
 

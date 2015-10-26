@@ -31,7 +31,6 @@
     self.scene.camera.position = GLKVector3Make(15, 15, 15);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
-    
 //    self.scene.camera.position = GLKVector3Make(0, 2, 5);
 //    [self.scene.camera lookAt:GLKVector3Make(0, 1, 0)];
 //    self.scene.camera.nearZ = 0;
@@ -162,6 +161,7 @@
                             blue:arc4random() % 127 / 255.0 + 0.5
                            alpha:1.0];
 }
+
 
 @end
 

@@ -11,7 +11,8 @@
 
 #define kCirclePointCount 16
 @implementation CESpotLight {
-    GLfloat _coneAngleCosine;
+    // used for debug rendering
+    GLfloat _lastConeAngle;
     GLfloat _vertices[(kCirclePointCount + 8) * 7];
 }
 
@@ -44,6 +45,7 @@
         _vertices[i * 7 + 6] = alpha;    // angle
     }
     [self updateVerticesWithConeAngle:_coneAngle];
+    _lastConeAngle = _coneAngle;
     
     // add other points
     GLfloat otherVertices[8 * 7] = {
@@ -62,11 +64,11 @@
     }
     
     NSData *vertexData = [NSData dataWithBytes:&_vertices length:sizeof(_vertices)];
-    NSArray *attributes = [CELight defaultVertexBufferAttributes];
-    _vertexBuffer = [[CEVertexBuffer_DEPRECATED alloc] initWithData:vertexData attributes:attributes];
+    NSArray *attributes = @[@(CEVBOAttributePosition), @(CEVBOAttributeColor)];
+    CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:attributes];
     
-    static CEIndicesBuffer_DEPRECATED *_sharedIndicesBuffer;
-    if (!_sharedIndicesBuffer) {
+    static CEIndiceBuffer *sSharedIndicesBuffer = nil;
+    if (!sSharedIndicesBuffer) {
         int indexCount = 0;
         GLubyte indices[kCirclePointCount * 2 + 16] = {0};
         for (int i = 0; i < kCirclePointCount; i++) {
@@ -84,10 +86,13 @@
             indexCount++;
         }
         NSData *indicesData = [NSData dataWithBytes:&indices length:sizeof(indices)];
-        _sharedIndicesBuffer = [[CEIndicesBuffer_DEPRECATED alloc] initWithData:indicesData indicesCount:sizeof(indices)];
+        sSharedIndicesBuffer = [[CEIndiceBuffer alloc] initWithData:indicesData indiceCount:sizeof(indices) / sizeof(GLubyte) primaryType:GL_UNSIGNED_BYTE drawMode:GL_LINES];
     }
-    _indicesBuffer = _sharedIndicesBuffer;
+    _renderObject = [[CERenderObject alloc] init];
+    _renderObject.vertexBuffer = vertexBuffer;
+    _renderObject.indiceBuffer = sSharedIndicesBuffer;
 }
+
 
 - (void)updateVerticesWithConeAngle:(GLfloat)coneAngle {
     GLfloat radius = 0.5 * tanf(GLKMathDegreesToRadians(_coneAngle));
@@ -96,6 +101,20 @@
         _vertices[i * 7 + 1] = sin(angle) * radius;  // Y
         _vertices[i * 7 + 2] = cos(angle) * radius;  // Z
     }
+}
+
+
+- (CERenderObject *)renderObject {
+    if (_lastConeAngle != _coneAngle) { // change model data
+        [self updateVerticesWithConeAngle:_coneAngle];
+        _lastConeAngle = _coneAngle;
+        
+        NSData *vertexData = [NSData dataWithBytes:&_vertices length:sizeof(_vertices)];
+        NSArray *attributes = @[@(CEVBOAttributePosition), @(CEVBOAttributeColor)];
+        CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:attributes];
+        _renderObject.vertexBuffer = vertexBuffer;
+    }
+    return _renderObject;
 }
 
 
@@ -110,11 +129,6 @@
 - (void)setConeAngle:(GLfloat)coneAngle {
     if (_coneAngle != coneAngle) {
         _coneAngle = coneAngle;
-        // change model data
-        [self updateVerticesWithConeAngle:coneAngle];
-        NSData *vertexData = [NSData dataWithBytes:&_vertices length:sizeof(_vertices)];
-        NSArray *attributes = [CELight defaultVertexBufferAttributes];
-        [_vertexBuffer updateVertexData:vertexData attributes:attributes];
         _lightInfo.spotCosCutOff = cosf(GLKMathDegreesToRadians(coneAngle));
     }
 }

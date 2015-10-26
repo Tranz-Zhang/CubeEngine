@@ -10,8 +10,8 @@
 #import "CEObjParser.h"
 #import "CEMtlParser.h"
 #import "CEModel_Rendering.h"
-#import "CEVertexBuffer_DEPRECATED.h"
-#import "CEIndicesBuffer_DEPRECATED.h"
+//#import "CEVertexBuffer_DEPRECATED.h"
+//#import "CEIndicesBuffer_DEPRECATED.h"
 #import "CEVBOAttribute.h"
 
 
@@ -75,13 +75,13 @@
                 attributes = mesh.attributes;
             }
             
-            CEVertexBuffer_DEPRECATED *vertexBuffer = [[CEVertexBuffer_DEPRECATED alloc] initWithData:vertexData attributes:attributes];
+//            CEVertexBuffer_DEPRECATED *vertexBuffer = [[CEVertexBuffer_DEPRECATED alloc] initWithData:vertexData attributes:attributes];
+//            
+//            CERenderObject *testRenderObj = [CERenderObject new];
+//            testRenderObj.testVertexBuffer = vertexBuffer;
+//            testRenderObj.material = material;
             
-            CERenderObject *testRenderObj = [CERenderObject new];
-            testRenderObj.testVertexBuffer = vertexBuffer;
-            testRenderObj.material = material;
-            
-            CEModel *model = [[CEModel alloc] initWithRenderObjects:@[testRenderObj]];//[[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
+            CEModel *model = nil;//[[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
             model.name = groupName;
             if (!material) {
                 material = [CEMaterial new];

@@ -24,17 +24,6 @@
     return self;
 }
 
-+ (NSArray *)defaultVertexBufferAttributes {
-    static NSArray *_sDefaultVertexBufferAttributes = nil;
-    if (!_sDefaultVertexBufferAttributes) {
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            _sDefaultVertexBufferAttributes = [CEVBOAttribute attributesWithNames:@[@(CEVBOAttributePosition), @(CEVBOAttributeColor)]];
-        });
-    }
-    return _sDefaultVertexBufferAttributes;
-}
-
 
 - (void)setEnabled:(BOOL)enabled {
     if (_enabled != enabled) {

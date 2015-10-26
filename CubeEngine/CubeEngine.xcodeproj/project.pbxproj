@@ -35,14 +35,12 @@
 		266E59C21ADBAA0A00F00C90 /* CEObjFileLoader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26A4E1271ACD734900847553 /* CEObjFileLoader.h */; };
 		267C42B01AB2E9280011CDC0 /* CEObject.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 265ACD571AB2D406000277F2 /* CEObject.h */; };
 		267F4D811B0CD81100F25452 /* CEMainProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 267F4D801B0CD81100F25452 /* CEMainProgram.m */; };
-		268CBC5B1ADCB72C00795A6D /* CEIndicesBuffer_DEPRECATED.m in Sources */ = {isa = PBXBuildFile; fileRef = 268CBC5A1ADCB72C00795A6D /* CEIndicesBuffer_DEPRECATED.m */; };
 		2690E8541AEA2F8E000BDD8F /* CEPointLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 2690E8531AEA2F8E000BDD8F /* CEPointLight.m */; };
 		2690E8551AEA3AC9000BDD8F /* CEPointLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2690E8521AEA2F8E000BDD8F /* CEPointLight.h */; };
 		269608ED1AF85E750045FB03 /* CEView.m in Sources */ = {isa = PBXBuildFile; fileRef = 269608EC1AF85E750045FB03 /* CEView.m */; };
 		269608F01AF85E9C0045FB03 /* CEViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 269608EF1AF85E9C0045FB03 /* CEViewController.m */; };
 		269608F11AF86C7E0045FB03 /* CEViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 269608EE1AF85E9C0045FB03 /* CEViewController.h */; };
 		269608F21AF874620045FB03 /* CEView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 269608EB1AF85E750045FB03 /* CEView.h */; };
-		269F476A1B0089030030CD55 /* CEShadowMapBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 269F47691B0089030030CD55 /* CEShadowMapBuffer.m */; };
 		26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A4E1281ACD734900847553 /* CEObjFileLoader.m */; };
 		26A9A8D71AF7744200394A4C /* CERenderCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A9A8D61AF7744200394A4C /* CERenderCore.m */; };
 		26C3B72B1AE893F10061BEFC /* CELight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 263C8E5C1AE5F546004FDFE8 /* CELight.h */; };
@@ -63,7 +61,6 @@
 		4C1815491BBA78BC00757BFC /* CETextureInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1815471BBA761F00757BFC /* CETextureInfo.m */; };
 		4C3A8EAA1B95850A00BC3BC1 /* CEShaderStructInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3A8EA91B95850A00BC3BC1 /* CEShaderStructInfo.m */; };
 		4C3A8EAB1B9588CF00BC3BC1 /* CEShaderStructInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3A8EA91B95850A00BC3BC1 /* CEShaderStructInfo.m */; };
-		4C43A4301ADC37C600761CA9 /* CEVertexBuffer_DEPRECATED.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C43A42F1ADC37C600761CA9 /* CEVertexBuffer_DEPRECATED.m */; };
 		4C43A4331ADC380A00761CA9 /* CEVBOAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C43A4321ADC380A00761CA9 /* CEVBOAttribute.m */; };
 		4C51F11E1B8B1ECB0052511E /* CEShaderFunctionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C51F11D1B8B1ECB0052511E /* CEShaderFunctionInfo.m */; };
 		4C51F11F1B8B1EE50052511E /* CEShaderFunctionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C51F11D1B8B1ECB0052511E /* CEShaderFunctionInfo.m */; };
@@ -73,7 +70,6 @@
 		4C9D75951B8F009600AEA174 /* CEShaderLinkFunctionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */; };
 		4C9D80E51BD63BE2000A5617 /* NSData+GLKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */; };
 		4C9D80E61BD63D05000A5617 /* NSData+GLKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */; };
-		4C9D80E71BD64299000A5617 /* CEShadowMapRenderer_DEPRECATED.m in Sources */ = {isa = PBXBuildFile; fileRef = 269F476C1B00893D0030CD55 /* CEShadowMapRenderer_DEPRECATED.m */; };
 		4CA5B0D11BDA35A5006E567B /* CEShadowMapRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5B0D01BDA35A5006E567B /* CEShadowMapRenderer.m */; };
 		4CB0F4181BD9103A00683B5D /* CEDepthTextureBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0F4171BD9103A00683B5D /* CEDepthTextureBuffer.m */; };
 		4CB61A0E1BB240E700D83856 /* CEDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F51BB1602C00686678 /* CEDatabase.m */; };
@@ -315,10 +311,6 @@
 		269D96011B9AB4EF00D0556A /* BuildTool-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BuildTool-Prefix.pch"; sourceTree = "<group>"; };
 		269D96021B9AC64900D0556A /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		269D96031B9AD01200D0556A /* CEShaderProgram_privates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderProgram_privates.h; sourceTree = "<group>"; };
-		269F47681B0089030030CD55 /* CEShadowMapBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowMapBuffer.h; sourceTree = "<group>"; };
-		269F47691B0089030030CD55 /* CEShadowMapBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CEShadowMapBuffer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		269F476B1B00893D0030CD55 /* CEShadowMapRenderer_DEPRECATED.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowMapRenderer_DEPRECATED.h; sourceTree = "<group>"; };
-		269F476C1B00893D0030CD55 /* CEShadowMapRenderer_DEPRECATED.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShadowMapRenderer_DEPRECATED.m; sourceTree = "<group>"; };
 		26A2468F1AFA06A800FB9B82 /* CEShadowMapGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShadowMapGenerator.h; sourceTree = "<group>"; };
 		26A246901AFA06A800FB9B82 /* CEShadowMapGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CEShadowMapGenerator.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		26A4E1271ACD734900847553 /* CEObjFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEObjFileLoader.h; sourceTree = "<group>"; };
@@ -775,8 +767,6 @@
 				4C43A42F1ADC37C600761CA9 /* CEVertexBuffer_DEPRECATED.m */,
 				268CBC591ADCB72C00795A6D /* CEIndicesBuffer_DEPRECATED.h */,
 				268CBC5A1ADCB72C00795A6D /* CEIndicesBuffer_DEPRECATED.m */,
-				269F47681B0089030030CD55 /* CEShadowMapBuffer.h */,
-				269F47691B0089030030CD55 /* CEShadowMapBuffer.m */,
 			);
 			name = Buffers_DEPRECATED;
 			sourceTree = "<group>";
@@ -852,8 +842,6 @@
 				4C1703E51BA5A09400DBF84A /* CEDefaultRenderer.m */,
 				4CA5B0CF1BDA35A5006E567B /* CEShadowMapRenderer.h */,
 				4CA5B0D01BDA35A5006E567B /* CEShadowMapRenderer.m */,
-				269F476B1B00893D0030CD55 /* CEShadowMapRenderer_DEPRECATED.h */,
-				269F476C1B00893D0030CD55 /* CEShadowMapRenderer_DEPRECATED.m */,
 				265878691AD7C99100BA2137 /* CEWireframeRenderer.h */,
 				2658786A1AD7C99100BA2137 /* CEWireframeRenderer.m */,
 				26F7FF8D1ADE45660086D9D7 /* CEAssistRenderer.h */,
@@ -1326,7 +1314,6 @@
 				4CC25DCC1BCE3F1C00DB3DA2 /* uncompr.c in Sources */,
 				4CEA12201BB1602D00686678 /* CEQueryCondition+Private.m in Sources */,
 				4CEA12141BB1602D00686678 /* CEDatabase.m in Sources */,
-				4C43A4301ADC37C600761CA9 /* CEVertexBuffer_DEPRECATED.m in Sources */,
 				4CA5B0D11BDA35A5006E567B /* CEShadowMapRenderer.m in Sources */,
 				4CC25DB51BCE3F1C00DB3DA2 /* pngpread.c in Sources */,
 				4CC25DDE1BCE48A400DB3DA2 /* CEPVRUnpacker.m in Sources */,
@@ -1340,7 +1327,6 @@
 				4CD9CAA41B8AC1FB00FDE357 /* CECodingObject.m in Sources */,
 				4CC25DD21BCE477B00DB3DA2 /* CEPVRTextureBuffer.m in Sources */,
 				26F7FF8F1ADE45660086D9D7 /* CEAssistRenderer.m in Sources */,
-				268CBC5B1ADCB72C00795A6D /* CEIndicesBuffer_DEPRECATED.m in Sources */,
 				4CC25DC41BCE3F1C00DB3DA2 /* deflate.c in Sources */,
 				4CEA121E1BB1602D00686678 /* FMResultSet.m in Sources */,
 				4CF4038D1B7386CD00C02BAE /* CEUniformSampler2D.m in Sources */,
@@ -1367,7 +1353,6 @@
 				26F7B75A1AEE31C400BEDB01 /* CESpotLight.m in Sources */,
 				4CC25DC31BCE3F1C00DB3DA2 /* crc32.c in Sources */,
 				4CC25DC91BCE3F1C00DB3DA2 /* inftrees.c in Sources */,
-				4C9D80E71BD64299000A5617 /* CEShadowMapRenderer_DEPRECATED.m in Sources */,
 				4CCBB3F91B842A0E00200C4E /* CEShaderBuilder.m in Sources */,
 				4CCBB3FC1B842A8400200C4E /* CEShaderInfo.m in Sources */,
 				261089691AAD31C60041E142 /* CECamera.m in Sources */,
@@ -1432,7 +1417,6 @@
 				4C43A4331ADC380A00761CA9 /* CEVBOAttribute.m in Sources */,
 				4CBB75011BB540AD00C3829B /* CEVertexBuffer.m in Sources */,
 				4C1703E91BA5A94100DBF84A /* CERenderConfig.m in Sources */,
-				269F476A1B0089030030CD55 /* CEShadowMapBuffer.m in Sources */,
 				4CEA12181BB1602D00686678 /* CEQueryCondition.m in Sources */,
 				4CC25DDB1BCE489500DB3DA2 /* CEPNGUnpacker.m in Sources */,
 				4CEA12291BB1833600686678 /* CERenderObject.m in Sources */,

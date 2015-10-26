@@ -20,18 +20,6 @@
     return self;
 }
 
-- (void)setEnableShadow:(BOOL)enableShadow {
-    if (_enableShadow != enableShadow) {
-        _enableShadow = enableShadow;
-        if (enableShadow && !_shadowMapBuffer) {
-            _shadowMapBuffer = [[CEShadowMapBuffer alloc] initWithTextureSize:CGSizeMake(kDefaultTextureSize, kDefaultTextureSize)];
-            
-        } else if (!enableShadow && _shadowMapBuffer) {
-            _shadowMapBuffer = nil;
-        }
-    }
-}
-
 
 - (void)setShadowDarkness:(float)shadowDarkness {
     _shadowDarkness = MIN(MAX(shadowDarkness, 0.0), 1.0);

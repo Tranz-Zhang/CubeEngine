@@ -132,6 +132,8 @@ NSString *const kWireframeFragmentSahder = CE_SHADER_STRING
             
             if (![object.vertexBuffer loadBuffer] || ![wireframeIndiceBuffer loadBuffer]) {
                 CEError(@"WireframeRenderer: Render object fail to load buffer");
+                [object.indiceBuffer unloadBuffer];
+                [object.vertexBuffer unloadBuffer];
                 return;
             }
             glDrawElements(wireframeIndiceBuffer.drawMode,

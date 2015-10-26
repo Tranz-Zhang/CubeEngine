@@ -73,8 +73,8 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
     
     _program = [[CEProgram alloc] initWithVertexShaderString:kAccessoryVertexShader
                                         fragmentShaderString:kAccessoryFragmentSahder];
-    [_program addAttribute:@"position"];
-    [_program addAttribute:@"vertexColor"];
+    [_program addAttribute:@"position" atIndex:CEVBOAttributePosition];
+    [_program addAttribute:@"vertexColor" atIndex:CEVBOAttributeColor];
     BOOL isOK = [_program link];
     if (isOK) {
         _attributePosition = [_program attributeIndex:@"position"];
@@ -191,29 +191,32 @@ NSString *const kAccessoryFragmentSahder = CE_SHADER_STRING
     }
     
     [_program use];
-    glLineWidth(1.0);
+    glLineWidth(2.0);
     for (CELight *light in lights) {
-        // setup vertex buffer
-        if (![light.vertexBuffer setupBuffer] ||
-            (light.indicesBuffer && ![light.indicesBuffer setupBuffer])) {
-            return;
+        CERenderObject *object = light.renderObject;
+        if (!object.vertexBuffer.isReady) {
+            [object.vertexBuffer setupBuffer];
         }
-        if (![light.vertexBuffer prepareAttribute:CEVBOAttributePosition withProgramIndex:_attributePosition] ||
-            ![light.vertexBuffer prepareAttribute:CEVBOAttributeColor withProgramIndex:_attributeVertexColor]) {
-            return;
+        if (!object.indiceBuffer.isReady) {
+            [object.indiceBuffer setupBuffer];
         }
-        if (light.indicesBuffer && ![light.indicesBuffer bindBuffer]) {
-            return;
+        if (![object.vertexBuffer loadBuffer] ||
+            ![object.indiceBuffer loadBuffer]) {
+            CEWarning(@"Fail to load buffer for rendering light object");
+            [object.indiceBuffer unloadBuffer];
+            [object.vertexBuffer unloadBuffer];
+            continue;
         }
+        
         GLKMatrix4 projectionMatrix = GLKMatrix4Multiply(_camera.viewMatrix, light.transformMatrix);
         projectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, projectionMatrix);
         glUniformMatrix4fv(_uniformProjection, 1, 0, projectionMatrix.m);
         
-        if (light.indicesBuffer) {
-            glDrawElements(GL_LINES, light.indicesBuffer.indicesCount, light.indicesBuffer.indicesDataType, 0);
-        } else {
-            glDrawArrays(GL_LINES, 0, light.vertexBuffer.vertexCount);
-        }
+        glDrawElements(object.indiceBuffer.drawMode,
+                       object.indiceBuffer.indiceCount,
+                       object.indiceBuffer.primaryType, 0);
+        [object.indiceBuffer unloadBuffer];
+        [object.vertexBuffer unloadBuffer];
     }
 }
 

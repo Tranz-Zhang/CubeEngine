@@ -132,6 +132,8 @@
     if (![object.vertexBuffer loadBuffer] ||
         ![object.indiceBuffer loadBuffer]) {
         CEError(@"Render object fail to load buffer");
+        [object.indiceBuffer unloadBuffer];
+        [object.vertexBuffer unloadBuffer];
         return;
     }
     

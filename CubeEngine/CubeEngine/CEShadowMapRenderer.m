@@ -127,6 +127,8 @@ NSString *const kShadowMapFragmentSahder = CE_SHADER_STRING
             if (![object.vertexBuffer loadBuffer] ||
                 ![object.indiceBuffer loadBuffer]) {
                 CEError(@"Fail to load renderObject's buffer for shadow mapping");
+                [object.indiceBuffer unloadBuffer];
+                [object.vertexBuffer unloadBuffer];
                 continue;
             }
             glDrawElements(object.indiceBuffer.drawMode,

@@ -24,42 +24,47 @@
 }
 
 - (void)setupSharedVertexBuffer {
-    static CEVertexBuffer_DEPRECATED *_sharedVertexBuffer;
-    static CEIndicesBuffer_DEPRECATED *_sharedIndicesBuffer;
-    if (!_sharedVertexBuffer) {
-        GLfloat red = 200.0 / 255.0, green = 150.0 / 255.0, blue = 0.0, alpha = 1.0;
-        GLfloat vertices[] = {
-            0.1, 0.0, 0.1, red, green, blue, alpha,
-            -0.1, 0.0, 0.1, red, green, blue, alpha,
-            0.1, 0.0, -0.1, red, green, blue, alpha,
-            -0.1, 0.0, -0.1, red, green, blue, alpha,
-            0.0, 0.2, 0.0, red, green, blue, alpha,
-            0.0, -0.2, 0.0, red, green, blue, alpha,
-            -0.15, -0.15, -0.15, 1.0, 0.0, 0.0, 1.0,
-            0.15, -0.15, -0.15, 1.0, 0.0, 0.0, 1.0,
-            -0.15, -0.15, -0.15, 0.0, 1.0, 0.0, 1.0,
-            -0.15, 0.15, -0.15, 0.0, 1.0, 0.0, 1.0,
-            -0.15, -0.15, -0.15, 0.0, 0.0, 1.0, 1.0,
-            -0.15, -0.15, 0.15, 0.0, 0.0, 1.0, 1.0,
-        };
-        NSData *vertexData = [NSData dataWithBytes:&vertices length:sizeof(vertices)];
-        NSArray *attributes = [CELight defaultVertexBufferAttributes];
-        _sharedVertexBuffer = [[CEVertexBuffer_DEPRECATED alloc] initWithData:vertexData attributes:attributes];
+    static CERenderObject *sSharedRenderObject = nil;
+    if (!sSharedRenderObject) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            sSharedRenderObject = [[CERenderObject alloc] init];
+            
+            // setup vertex buffer
+            GLfloat red = 200.0 / 255.0, green = 150.0 / 255.0, blue = 0.0, alpha = 1.0;
+            GLfloat vertices[] = {
+                0.1, 0.0, 0.1, red, green, blue, alpha,
+                -0.1, 0.0, 0.1, red, green, blue, alpha,
+                0.1, 0.0, -0.1, red, green, blue, alpha,
+                -0.1, 0.0, -0.1, red, green, blue, alpha,
+                0.0, 0.2, 0.0, red, green, blue, alpha,
+                0.0, -0.2, 0.0, red, green, blue, alpha,
+                -0.15, -0.15, -0.15, 1.0, 0.0, 0.0, 1.0,
+                0.15, -0.15, -0.15, 1.0, 0.0, 0.0, 1.0,
+                -0.15, -0.15, -0.15, 0.0, 1.0, 0.0, 1.0,
+                -0.15, 0.15, -0.15, 0.0, 1.0, 0.0, 1.0,
+                -0.15, -0.15, -0.15, 0.0, 0.0, 1.0, 1.0,
+                -0.15, -0.15, 0.15, 0.0, 0.0, 1.0, 1.0,
+            };
+            NSData *vertexData = [NSData dataWithBytes:&vertices length:sizeof(vertices)];
+            NSArray *attributes = @[@(CEVBOAttributePosition), @(CEVBOAttributeColor)];
+            CEVertexBuffer *vertexBuffer = [[CEVertexBuffer alloc] initWithData:vertexData attributes:attributes];
+            sSharedRenderObject.vertexBuffer = vertexBuffer;
+            
+            // setup indice buffer
+            GLubyte indices[] = {
+                0, 1, 0, 2, 3, 1, 3, 2,
+                4, 0, 4, 1, 4, 2, 4, 3,
+                5, 0, 5, 1, 5, 2, 5, 3,
+                6, 7, 8, 9, 10, 11
+            };
+            NSData *indicesData = [NSData dataWithBytes:&indices length:sizeof(indices)];
+            CEIndiceBuffer *indiceBuffer = [[CEIndiceBuffer alloc] initWithData:indicesData indiceCount:sizeof(indices) / sizeof(GLubyte) primaryType:GL_UNSIGNED_BYTE drawMode:GL_LINES];
+            sSharedRenderObject.indiceBuffer = indiceBuffer;
+        });
     }
     
-    if (!_sharedIndicesBuffer) {
-        GLubyte indices[] = {
-            0, 1, 0, 2, 3, 1, 3, 2,
-            4, 0, 4, 1, 4, 2, 4, 3,
-            5, 0, 5, 1, 5, 2, 5, 3,
-            6, 7, 8, 9, 10, 11
-        };
-        NSData *indicesData = [NSData dataWithBytes:&indices length:sizeof(indices)];
-        _sharedIndicesBuffer = [[CEIndicesBuffer_DEPRECATED alloc] initWithData:indicesData indicesCount:sizeof(indices)];
-    }
-    
-    _vertexBuffer = _sharedVertexBuffer;
-    _indicesBuffer = _sharedIndicesBuffer;
+    _renderObject = sSharedRenderObject;
 }
 
 - (void)setAttenuation:(GLfloat)attenuation {

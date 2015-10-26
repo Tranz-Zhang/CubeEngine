@@ -22,6 +22,14 @@
         _vertexData = vertexData;
         _attributes = [attributes copy];
         _attributesType = [CEVBOAttribute attributesTypeWithNames:attributes];
+        NSArray *attributeObjects = [CEVBOAttribute attributesWithNames:attributes];
+        CEVBOAttribute *anyObject = attributeObjects.lastObject;
+        if (vertexData.length % anyObject.elementStride == 0) {
+            _vertexCount = vertexData.length / anyObject.elementStride;
+            
+        } else {
+            CEError(@"Wrong stride for vertex data");
+        }
     }
     return self;
 }

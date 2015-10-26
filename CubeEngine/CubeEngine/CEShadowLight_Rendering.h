@@ -7,7 +7,6 @@
 //
 
 #import "CEShadowLight.h"
-#import "CEShadowMapBuffer.h"
 #import "CEModel.h"
 
 #define kDefaultTextureSize 512
@@ -15,7 +14,6 @@
 @interface CEShadowLight ()
 
 #pragma mark - ShadowMapping
-@property (nonatomic, readonly) CEShadowMapBuffer *shadowMapBuffer;
 // light view matrix, mainly used for shadow mapping
 @property (nonatomic, readonly) GLKMatrix4 lightViewMatrix;
 @property (nonatomic, readonly) GLKMatrix4 lightProjectionMatrix;

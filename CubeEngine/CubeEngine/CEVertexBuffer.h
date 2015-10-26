@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
+#import "CEVBOAttribute.h"
 
 /**
  represent a vertex buffer in opengles
@@ -20,6 +21,7 @@
 
 @property (nonatomic, readonly) NSArray *attributes;
 @property (nonatomic, readonly) uint32_t attributesType;
+@property (nonatomic, readonly) uint32_t vertexCount;
 @property (nonatomic, readonly, getter=isReady) BOOL ready;
 
 
