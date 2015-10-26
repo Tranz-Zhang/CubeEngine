@@ -9,8 +9,6 @@
 #import "ModelViewController.h"
 #import "CEObjFileLoader.h"
 #import "ObjectOperator.h"
-#import "CEDirectionalLight.h"
-#import "CEModelLoader.h"
 
 
 @implementation ModelViewController {

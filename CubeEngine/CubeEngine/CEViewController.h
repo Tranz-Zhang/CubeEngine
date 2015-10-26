@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CEView.h"
-#import "CEModel.h"
 #import "CEScene.h"
+
 
 @interface CEViewController : UIViewController
 

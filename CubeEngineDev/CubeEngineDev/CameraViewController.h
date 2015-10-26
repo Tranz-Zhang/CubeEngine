@@ -7,6 +7,7 @@
 //
 
 #import "CEViewController.h"
+#import <CubeEngine.h>
 
 @interface CameraViewController : CEViewController
 

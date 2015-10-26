@@ -13,7 +13,6 @@
 #import "DirectionalLightControl.h"
 #import "PointLightControl.h"
 #import "SpotLightControl.h"
-#import "CEModelLoader.h"
 
 
 #define kLocalWidth self.view.bounds.size.width1

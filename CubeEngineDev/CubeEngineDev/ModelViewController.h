@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CEViewController.h"
+#import <CubeEngine.h>
 
 @interface ModelViewController : CEViewController
 
