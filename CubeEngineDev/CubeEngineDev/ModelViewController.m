@@ -69,6 +69,7 @@
     [loader loadModelWithName:@"ram" completion:^(CEModel *model) {
         _testModel = model;
         _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
+        _testModel.enableShadow = YES;
         _operator.operationObject = _testModel;
         [self.scene addModel:model];
         printf("CEModelLoader load model for duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
@@ -144,7 +145,7 @@
 #pragma mark - Others
 - (void)recursiveSetColorForModel:(CEModel *)model {
     model.baseColor = [self randomColor];
-    model.castShadows = YES;
+    model.enableShadow = YES;
     model.material.shininessExponent = 20;
     model.material.specularColor = GLKVector3Make(0.5, 0.5, 0.5);
 //    model.material.diffuseTexture = nil;

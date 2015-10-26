@@ -20,13 +20,13 @@
 @property (nonatomic, readonly) GLKVector3 offsetFromOrigin;
 
 // default is white
-@property (nonatomic, copy) UIColor *baseColor;
-
-// indicates if cast shadows under light, default is NO;
-@property (nonatomic, assign) BOOL castShadows;
+@property (nonatomic, copy) UIColor *baseColor DEPRECATED_ATTRIBUTE;
 
 // materials info of the model
-@property (nonatomic, strong) CEMaterial *material;
+@property (nonatomic, strong) CEMaterial *material DEPRECATED_ATTRIBUTE;
+
+// indicates if cast shadows under light, default is NO;
+@property (nonatomic, assign) BOOL enableShadow;
 
 
 + (CEModel *)modelWithObjFile:(NSString *)objFileName DEPRECATED_ATTRIBUTE;

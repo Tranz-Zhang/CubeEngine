@@ -117,15 +117,9 @@
     _program.eyeDirection.vector3 = GLKVector3Make(0.0, 0.0, 1.0);
     
     // shadow map setting
-    if (_shadowLight.enableShadow && _shadowLight.shadowMapBuffer) {
+    if (_program.shadowDarkness) {
         _program.shadowDarkness.floatValue = 1.0 - _shadowLight.shadowDarkness;
-//        _program.shadowMapTexture.textureID = _shadowLight.shadowMapBuffer.textureId;
-        
-    } else {
-        _program.shadowDarkness.floatValue = 0.0;
-//        _program.shadowMapTexture.textureID = 0.0;
     }
-    
 }
 
 
@@ -176,6 +170,22 @@
         if (object.material.normalTextureID && _program.normalTexture) {
             uint32_t textureUnit = [[CETextureManager sharedManager] prepareTextureWithID:object.material.normalTextureID];
             _program.normalTexture.textureUnit = textureUnit;
+        }
+        
+        // setup shadow mapping
+        if (_program.shadowMapTexture && _shadowMapTextureID) {
+            uint32_t textureUnit = [[CETextureManager sharedManager] prepareTextureWithID:_shadowMapTextureID];
+            _program.shadowMapTexture.textureUnit = textureUnit;
+        }
+        if (_program.depthBiasMVP) {
+            GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
+                                                   0.0, 0.5, 0.0, 0.0,
+                                                   0.0, 0.0, 0.5, 0.0,
+                                                   0.5, 0.5, 0.5, 1.0);
+            GLKMatrix4 depthMVP = GLKMatrix4Multiply(_shadowLight.lightViewMatrix, object.modelMatrix);
+            depthMVP = GLKMatrix4Multiply(_shadowLight.lightProjectionMatrix, depthMVP);
+            depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
+            _program.depthBiasMVP.matrix4 = depthMVP;
         }
     }
     

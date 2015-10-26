@@ -16,10 +16,7 @@
 - (BOOL)setupBuffer {
     if (_ready) return YES;
     if (!_config ||
-        _config.width * _config.height == 0 ||
-        !_config.texelType ||
-        !_config.format ||
-        !_config.internalFormat) {
+        _config.width * _config.height == 0) {
         return NO;
     }
     

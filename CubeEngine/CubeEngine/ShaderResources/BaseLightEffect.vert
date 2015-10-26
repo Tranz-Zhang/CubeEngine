@@ -10,13 +10,13 @@ varying lowp float Attenuation;
 
 void BaseLightEffect() {
     // one of these methods should be executed
-    #link DirectionLightCalculation(LightDirection, Attenuation);
-    #link PointLightCalculation(LightDirection, Attenuation);
-    #link SpotLightCalculation(LightDirection, Attenuation);
+#link DirectionLightCalculation(LightDirection, Attenuation);
+#link PointLightCalculation(LightDirection, Attenuation);
+#link SpotLightCalculation(LightDirection, Attenuation);
     
     EyeDirectionOut = EyeDirection;
     Normal = normalize(NormalMatrix * VertexNormal);
     
-    #link CEVertex_ApplyShadowMap();
+#link ApplyShadowMap();
 }
 

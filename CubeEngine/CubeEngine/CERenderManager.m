@@ -15,6 +15,7 @@
 #import "CEShadowLight_Rendering.h"
 
 #import "CEMainRenderer.h"
+#import "CEShadowMapRenderer_DEPRECATED.h"
 #import "CEShadowMapRenderer.h"
 #import "CETextureManager.h"
 
@@ -47,8 +48,13 @@
     EAGLContext *_context;
     NSMutableDictionary *_rendererDict; // @{CEProgramConfig:CEMainRenderer}
     
-    // special renderer
-    CEShadowMapRenderer *_shadowMapRenderer DEPRECATED_ATTRIBUTE;
+    // shadow map renderer
+    BOOL _enableShadowMapping;
+    CEShadowMapRenderer *_shadowMapRenderer;
+    
+    CEShadowMapRenderer_DEPRECATED *_shadowMapRenderer_D DEPRECATED_ATTRIBUTE;
+    
+    // debug renderer
     CEWireframeRenderer *_wireframeRenderer;
     CEAssistRenderer *_assistRenderer;
 }
@@ -71,6 +77,7 @@
     [EAGLContext setCurrentContext:scene.context];
     
     // 2.check if need render shadow map
+    _enableShadowMapping = [self renderShadowMapForScene:scene];
     
     // 3.sort render objects
     NSArray *renderGroups = [self sortRenderGroupsWithModels:scene.allModels];
@@ -84,6 +91,9 @@
         
         renderer.camera = scene.camera;
         renderer.mainLight = scene.mainLight;
+        if (_enableShadowMapping) {
+            renderer.shadowMapTextureID = _shadowMapRenderer.shadowMapTextureID;
+        }
         // normally render a object
         [renderer renderObjects:group.renderObjects];
     }
@@ -125,6 +135,7 @@
             config.enableTexture = renderObject.material.diffuseTextureID ? YES : NO;
             config.lightType = lightType;
             config.enableNormalMapping = renderObject.material.normalTextureID ? YES : NO;
+            config.enableShadowMapping = _enableShadowMapping;
             
             CERenderGroup *group = renderGroupDict[config];
             if (!group) {
@@ -166,6 +177,33 @@
 
 #pragma mark - Shadow Mapping
 
+// check if should render shadow for current scene
+- (BOOL)renderShadowMapForScene:(CEScene *)scene {
+    if (![scene.mainLight isKindOfClass:[CEShadowLight class]]) {
+        return NO;
+    }
+    CEShadowLight *shadowLight = (CEShadowLight *)scene.mainLight;
+    if (!shadowLight.enableShadow) {
+        return NO;
+    }
+    // get models which cast shadow
+    NSMutableArray *shadowModels = [NSMutableArray array];
+    for (CEModel *model in scene.allModels) {
+        if (model.enableShadow) {
+            [shadowModels addObject:model];
+        }
+    }
+    if (!shadowModels.count) return NO;
+    // get shadow map renderer
+    if (!_shadowMapRenderer) {
+        _shadowMapRenderer = [[CEShadowMapRenderer alloc] init];
+    }
+    BOOL isOK = [_shadowMapRenderer renderShadowMapWithModels:shadowModels
+                                                  shadowLight:shadowLight];
+    return isOK;
+}
+
+
 - (void)renderShadowMapsWithShadowLight:(CEShadowLight *)shadowLight
                            shadowModels:(NSArray *)shadowModels {
     if (!shadowLight || !shadowModels.count) {
@@ -174,16 +212,16 @@
     }
     
     // check shadow map renderer
-    if (!_shadowMapRenderer) {
-        _shadowMapRenderer = [[CEShadowMapRenderer alloc] init];
+    if (!_shadowMapRenderer_D) {
+        _shadowMapRenderer_D = [[CEShadowMapRenderer_DEPRECATED alloc] init];
     }
     
     // render shadow maps
     [shadowLight.shadowMapBuffer setupBuffer];
     [shadowLight.shadowMapBuffer prepareBuffer];
     [shadowLight updateLightVPMatrixWithModels:shadowModels];
-    _shadowMapRenderer.lightVPMatrix = GLKMatrix4Multiply(shadowLight.lightProjectionMatrix, shadowLight.lightViewMatrix);
-    [_shadowMapRenderer renderShadowMapWithObjects:shadowModels];
+    _shadowMapRenderer_D.lightVPMatrix = GLKMatrix4Multiply(shadowLight.lightProjectionMatrix, shadowLight.lightViewMatrix);
+    [_shadowMapRenderer_D renderShadowMapWithObjects:shadowModels];
 }
 
 

@@ -45,3 +45,10 @@ GLKVector3 CEVec3WithColor(UIColor *color);
 GLKVector4 CEVec4WithColor(UIColor *color);
 UIColor *CEColorWithVec3(GLKVector3 vec3);
 UIColor *CEColorWithVec4(GLKVector4 vec4);
+
+
+#pragma mark - Hash
+
+uint32_t CEHashValueWithString(NSString *string);
+
+

@@ -15,6 +15,7 @@
 
 @property (nonatomic, weak) CECamera *camera;
 @property (nonatomic, weak) CELight *mainLight;
+@property (nonatomic, assign) uint32_t shadowMapTextureID;
 
 + (instancetype)rendererWithConfig:(CERenderConfig *)config;
 

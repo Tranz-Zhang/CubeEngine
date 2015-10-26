@@ -209,7 +209,15 @@ UIColor *CEColorWithVec4(GLKVector4 vec4) {
 }
 
 
-
+#pragma mark - Hash
+// use DJBHash
+uint32_t CEHashValueWithString(NSString *string) {
+    uint32_t hash = 5381;
+    for(size_t i = 0; i < string.length; i++) {
+        hash = ((hash << 5) + hash) + [string characterAtIndex:i];
+    }
+    return (hash & 0x7FFFFFFF);
+}
 
 
 

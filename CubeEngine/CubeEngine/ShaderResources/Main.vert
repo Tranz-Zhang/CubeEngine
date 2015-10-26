@@ -4,9 +4,9 @@ attribute highp vec4 VertexPosition;
 
 //*
 void main () {
-    #link BaseLightEffect();
-    #link NormalLightEffect();
-    #link ApplyTexture();
+#link BaseLightEffect();
+#link NormalLightEffect();
+#link ApplyTexture();
     
     gl_Position = MVPMatrix * VertexPosition;
 }
