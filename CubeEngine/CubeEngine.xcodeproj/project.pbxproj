@@ -69,6 +69,7 @@
 		4C9D80E61BD63D05000A5617 /* NSData+GLKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */; };
 		4CA5B0D11BDA35A5006E567B /* CEShadowMapRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5B0D01BDA35A5006E567B /* CEShadowMapRenderer.m */; };
 		4CB0F4181BD9103A00683B5D /* CEDepthTextureBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0F4171BD9103A00683B5D /* CEDepthTextureBuffer.m */; };
+		4CB53FC11BDF683A00C20B46 /* CERenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB53FC01BDF683A00C20B46 /* CERenderer.m */; };
 		4CB61A0E1BB240E700D83856 /* CEDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F51BB1602C00686678 /* CEDatabase.m */; };
 		4CB61A101BB2410100D83856 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */; };
 		4CB61A111BB2412800D83856 /* CEDatabaseNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F91BB1602C00686678 /* CEDatabaseNotifications.m */; };
@@ -349,6 +350,9 @@
 		4CB1C35F1BDE261200D8B46C /* Texture.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Texture.frag; sourceTree = "<group>"; };
 		4CB1C3601BDE261200D8B46C /* Texture.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Texture.vert; sourceTree = "<group>"; };
 		4CB1C3611BDE261200D8B46C /* vertex.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
+		4CB53FBF1BDF683A00C20B46 /* CERenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer.h; sourceTree = "<group>"; };
+		4CB53FC01BDF683A00C20B46 /* CERenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CERenderer.m; sourceTree = "<group>"; };
+		4CB53FC21BDF695700C20B46 /* CERenderer_privates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer_privates.h; sourceTree = "<group>"; };
 		4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/lib/libsqlite3.dylib; sourceTree = DEVELOPER_DIR; };
 		4CB61A2C1BB2A29100D83856 /* MeshInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshInfo.h; sourceTree = "<group>"; };
 		4CB61A2D1BB2A29100D83856 /* MeshInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = MeshInfo.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -776,6 +780,9 @@
 		4C9D80E81BD66661000A5617 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				4CB53FBF1BDF683A00C20B46 /* CERenderer.h */,
+				4CB53FC01BDF683A00C20B46 /* CERenderer.m */,
+				4CB53FC21BDF695700C20B46 /* CERenderer_privates.h */,
 				4C1703E41BA5A09400DBF84A /* CEDefaultRenderer.h */,
 				4C1703E51BA5A09400DBF84A /* CEDefaultRenderer.m */,
 				4CA5B0CF1BDA35A5006E567B /* CEShadowMapRenderer.h */,
@@ -1218,6 +1225,7 @@
 				4CA5B0D11BDA35A5006E567B /* CEShadowMapRenderer.m in Sources */,
 				4CC25DB51BCE3F1C00DB3DA2 /* pngpread.c in Sources */,
 				4CC25DDE1BCE48A400DB3DA2 /* CEPVRUnpacker.m in Sources */,
+				4CB53FC11BDF683A00C20B46 /* CERenderer.m in Sources */,
 				4CC25DBF1BCE3F1C00DB3DA2 /* pngwtran.c in Sources */,
 				4CBB750A1BB5419600C3829B /* CETextureBuffer.m in Sources */,
 				4CC25DB01BCE3F1C00DB3DA2 /* example.c in Sources */,

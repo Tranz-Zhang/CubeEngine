@@ -157,7 +157,7 @@
         CETextureBuffer *textureBuffer = _textureBufferDict[preparingID];
         if (!textureBuffer.isReady && ![textureBuffer setupBuffer]) {
             CEPrintf("Fail to setup texture Buffer");
-            return 0;
+            return -1;
         }
         
         int32_t lastBindUnit = -1;
@@ -187,7 +187,7 @@
     } else {
         CEPrintf("Not texture found for id: %08X\n", textureID);
     }
-    return 0;
+    return -1;
 }
 
 

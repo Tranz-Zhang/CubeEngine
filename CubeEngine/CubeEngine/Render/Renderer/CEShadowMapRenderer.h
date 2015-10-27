@@ -6,17 +6,13 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "CEShadowLight.h"
+#import "CERenderer.h"
 
-@interface CEShadowMapRenderer : NSObject
+@interface CEShadowMapRenderer : CERenderer
 
-@property (nonatomic, readonly) BOOL isReady;
 @property (nonatomic, readonly) uint32_t shadowMapTextureID;
 
-// models: array of CEModels
-- (BOOL)renderShadowMapWithModels:(NSArray *)shadowModels
-                      shadowLight:(CEShadowLight *)shadowLight;
++ (instancetype)renderer;
 
 @end
 

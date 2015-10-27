@@ -9,12 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "CEShaderInfo.h"
 
-//typedef NS_ENUM(int, CEShaderRenderType) {
-//    CEShaderRenderTypeSolid = 0,
-//    CEShaderRenderTypeAlpha,
-//    CEShaderRenderTypeTransparent,
-//};
-
 
 @interface CEShaderBuilder : NSObject
 

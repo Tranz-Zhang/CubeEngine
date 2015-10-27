@@ -7,79 +7,49 @@
 //
 
 #import "CEShadowMapRenderer.h"
+#import "CERenderer_privates.h"
 #import "CEUtils.h"
-#import "CEProgram.h"
+#import "CEShaderBuilder.h"
+#import "CEDefaultProgram.h"
 #import "CETextureManager.h"
 #import "CEDepthTextureBuffer.h"
-#import "CEModel_Rendering.h"
 #import "CEShadowLight_Rendering.h"
 
 
-
-NSString *const kShadowMapVertexShader = CE_SHADER_STRING
-(
- attribute highp vec4 VertexPosition;
- uniform highp mat4 MVPMatrix;
- 
- void main () {
-     gl_Position = MVPMatrix * VertexPosition;
- }
-);
-
-NSString *const kShadowMapFragmentSahder = CE_SHADER_STRING
-(
- void main() {
-     gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
- }
-);
-
-
 @implementation CEShadowMapRenderer {
-    CEProgram *_program;
-    GLint _attributePosition;
-    GLint _uniformMVPMatrix;
-    
+    BOOL _isReady;
     CEDepthTextureBuffer *_textureBuffer;
+    GLKMatrix4 _lightVPMatrix;
 }
+
+
++ (instancetype)renderer {
+    // build shader
+    CEShaderBuilder *shaderBuilder = [CEShaderBuilder new];
+    [shaderBuilder startBuildingNewShader];
+    CEShaderInfo *shaderInfo = [shaderBuilder build];
+    if (!shaderInfo) {
+        return nil;
+    }
+    // build program
+    CEDefaultProgram *program = [CEDefaultProgram buildProgramWithShaderInfo:shaderInfo];
+    if (!program) {
+        return nil;
+    }
+    // build render
+    CEShadowMapRenderer *render = [[CEShadowMapRenderer alloc] init];
+    [render setShaderProgram:program];
+    return render;
+
+}
+
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        if ([self setupRenderer] &&
-            [self setupTextureBuffer]) {
-            _isReady = YES;
-            
-        } else {
-            _isReady = NO;
-        }
+        _isReady = [self setupTextureBuffer];
     }
     return self;
-}
-
-- (BOOL)setupRenderer {
-    if (_program.initialized) return YES;
-    
-    _program = [[CEProgram alloc] initWithVertexShaderString:kShadowMapVertexShader
-                                        fragmentShaderString:kShadowMapFragmentSahder];
-    [_program addAttribute:@"VertexPosition" atIndex:CEVBOAttributePosition];
-    BOOL isOK = [_program link];
-    if (isOK) {
-        _attributePosition = [_program attributeIndex:@"VertexPosition"];
-        _uniformMVPMatrix = [_program uniformIndex:@"MVPMatrix"];
-        
-    } else {
-        // print error info
-        NSString *progLog = [_program programLog];
-        CEError(@"Program link log: %@", progLog);
-        NSString *fragLog = [_program fragmentShaderLog];
-        CEError(@"Fragment shader compile log: %@", fragLog);
-        NSString *vertLog = [_program vertexShaderLog];
-        CEError(@"Vertex shader compile log: %@", vertLog);
-        _program = nil;
-        NSAssert(0, @"Fail to Compile Program");
-    }
-    
-    return isOK;
 }
 
 
@@ -105,41 +75,39 @@ NSString *const kShadowMapFragmentSahder = CE_SHADER_STRING
 }
 
 
-- (BOOL)renderShadowMapWithModels:(NSArray *)shadowModels
-                      shadowLight:(CEShadowLight *)shadowLight {
-    if (!shadowLight.enableShadow) {
+- (BOOL)onPrepareRendering {
+    if (!_isReady || ![_mainLight isKindOfClass:[CEShadowLight class]]) return NO;
+    [_textureBuffer beginRendering];
+//    [(CEDefaultProgram *)_program diffuseColor].vector4 = GLKVector4Make(0.5, 0.5, 0.5, 1);
+    CEShadowLight *shadowLight = (CEShadowLight *)_mainLight;
+    _lightVPMatrix = GLKMatrix4Multiply(shadowLight.lightProjectionMatrix, shadowLight.lightViewMatrix);
+    return YES;
+}
+
+
+- (BOOL)renderObject:(CERenderObject *)object {
+    CEDefaultProgram *program = (CEDefaultProgram *)_program;
+    
+    if (![object.vertexBuffer loadBuffer] ||
+        ![object.indiceBuffer loadBuffer]) {
+        CEError(@"Fail to load renderObject's buffer for shadow mapping");
+        [object.indiceBuffer unloadBuffer];
+        [object.vertexBuffer unloadBuffer];
         return NO;
     }
+    program.modelViewProjectionMatrix.matrix4 = GLKMatrix4Multiply(_lightVPMatrix, object.modelMatrix);
+    glDrawElements(object.indiceBuffer.drawMode,
+                   object.indiceBuffer.indiceCount,
+                   object.indiceBuffer.primaryType, 0);
+    [object.indiceBuffer unloadBuffer];
+    [object.vertexBuffer unloadBuffer];
     
-    // update lightViewMatrix
-    [shadowLight updateLightVPMatrixWithModels:shadowModels];
-    GLKMatrix4 lightVPMatrix = GLKMatrix4Multiply(shadowLight.lightProjectionMatrix, shadowLight.lightViewMatrix);
-    // render shadow map
-    [_textureBuffer beginRendering];
-    [_program use];
-    for (CEModel *model in shadowModels) {
-        if (!model.enableShadow) {
-            continue;
-        }
-        GLKMatrix4 mvpMatrix = GLKMatrix4Multiply(lightVPMatrix, model.transformMatrix);
-        glUniformMatrix4fv(_uniformMVPMatrix, 1, GL_FALSE, mvpMatrix.m);
-        for (CERenderObject *object in model.renderObjects) {
-            if (![object.vertexBuffer loadBuffer] ||
-                ![object.indiceBuffer loadBuffer]) {
-                CEError(@"Fail to load renderObject's buffer for shadow mapping");
-                [object.indiceBuffer unloadBuffer];
-                [object.vertexBuffer unloadBuffer];
-                continue;
-            }
-            glDrawElements(object.indiceBuffer.drawMode,
-                           object.indiceBuffer.indiceCount,
-                           object.indiceBuffer.primaryType, 0);
-            [object.indiceBuffer unloadBuffer];
-            [object.vertexBuffer unloadBuffer];
-        }
-    }
-    [_textureBuffer endRendering];
     return YES;
+}
+
+
+- (void)onFinishRendering:(BOOL)hasRenderAllObjects {
+    [_textureBuffer endRendering];
 }
 
 

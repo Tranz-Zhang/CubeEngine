@@ -6,20 +6,16 @@
 //  Copyright (c) 2015 ByChance. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CERenderer.h"
 #import "CECamera.h"
 #import "CELight.h"
 #import "CERenderConfig.h"
 
-@interface CEDefaultRenderer : NSObject
+@interface CEDefaultRenderer : CERenderer
 
-@property (nonatomic, weak) CECamera *camera;
-@property (nonatomic, weak) CELight *mainLight;
 @property (nonatomic, assign) uint32_t shadowMapTextureID;
 
 + (instancetype)rendererWithConfig:(CERenderConfig *)config;
-
-- (void)renderObjects:(NSArray *)objects;
 
 @end
 

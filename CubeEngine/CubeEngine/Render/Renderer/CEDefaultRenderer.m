@@ -7,6 +7,7 @@
 //
 
 #import "CEDefaultRenderer.h"
+#import "CERenderer_privates.h"
 
 #import "CEDefaultProgram.h"
 #import "CEShaderBuilder.h"
@@ -17,7 +18,6 @@
 #import "CETextureManager.h"
 
 @implementation CEDefaultRenderer {
-    CEDefaultProgram *_program;
     CEShadowLight *_shadowLight;
 }
 
@@ -49,17 +49,9 @@
         return nil;
     }
     // build render
-    CEDefaultRenderer *render = [[CEDefaultRenderer alloc] initWithProgram:program];
+    CEDefaultRenderer *render = [[CEDefaultRenderer alloc] init];
+    [render setShaderProgram:program];
     return render;
-}
-
-
-- (instancetype)initWithProgram:(CEDefaultProgram *)program {
-    self = [super init];
-    if (self) {
-        _program = program;
-    }
-    return self;
 }
 
 
@@ -73,19 +65,8 @@
 }
 
 
-- (void)renderObjects:(NSArray *)objects {
-    if (!_program || !_camera) {
-        CEError(@"Invalid renderer environment");
-        return;
-    }
-    [_program use];
-    [self setupLightInfosForRendering];
-    for (CERenderObject *renderObject in objects) {
-        [self renderObject:renderObject];
-    }
-}
-
-- (void)setupLightInfosForRendering {
+- (BOOL)onPrepareRendering {
+    CEDefaultProgram *program = (CEDefaultProgram *)_program;
     if (_mainLight.enabled) {
         // !!!: transfer light position in view space
         if (_mainLight.lightInfo.lightType == CELightTypePoint ||
@@ -103,30 +84,32 @@
             _mainLight.lightInfo.lightDirection = lightDirection;
         }
         
-        _program.mainLight.isEnabled.boolValue = _mainLight.lightInfo.isEnabled;
-        _program.mainLight.lightType.intValue = _mainLight.lightInfo.lightType;
-        _program.mainLight.lightPosition.vector4 = _mainLight.lightInfo.lightPosition;
-        _program.mainLight.lightDirection.vector3 = _mainLight.lightInfo.lightDirection;
-        _program.mainLight.lightColor.vector3 = _mainLight.lightInfo.lightColor;
-        _program.mainLight.attenuation.floatValue = _mainLight.lightInfo.attenuation;
-        _program.mainLight.spotConsCutOff.floatValue = _mainLight.lightInfo.spotCosCutOff;
-        _program.mainLight.spotExponent.floatValue = _mainLight.lightInfo.spotExponent;
+        program.mainLight.isEnabled.boolValue = _mainLight.lightInfo.isEnabled;
+        program.mainLight.lightType.intValue = _mainLight.lightInfo.lightType;
+        program.mainLight.lightPosition.vector4 = _mainLight.lightInfo.lightPosition;
+        program.mainLight.lightDirection.vector3 = _mainLight.lightInfo.lightDirection;
+        program.mainLight.lightColor.vector3 = _mainLight.lightInfo.lightColor;
+        program.mainLight.attenuation.floatValue = _mainLight.lightInfo.attenuation;
+        program.mainLight.spotConsCutOff.floatValue = _mainLight.lightInfo.spotCosCutOff;
+        program.mainLight.spotExponent.floatValue = _mainLight.lightInfo.spotExponent;
     }
     
     // we use eye space to do the calculation, so the eye direction is always (0, 0, 1)
-    _program.eyeDirection.vector3 = GLKVector3Make(0.0, 0.0, 1.0);
+    program.eyeDirection.vector3 = GLKVector3Make(0.0, 0.0, 1.0);
     
     // shadow map setting
-    if (_program.shadowDarkness) {
-        _program.shadowDarkness.floatValue = 1.0 - _shadowLight.shadowDarkness;
+    if (program.shadowDarkness) {
+        program.shadowDarkness.floatValue = 1.0 - _shadowLight.shadowDarkness;
     }
+    
+    return YES;
 }
 
 
-- (void)renderObject:(CERenderObject *)object {
+- (BOOL)renderObject:(CERenderObject *)object {
     if (!object.vertexBuffer || !object.indiceBuffer || !object.material) {
         CEError(@"Invalid render object");
-        return;
+        return NO;
     }
     
     if (![object.vertexBuffer loadBuffer] ||
@@ -134,52 +117,53 @@
         CEError(@"Render object fail to load buffer");
         [object.indiceBuffer unloadBuffer];
         [object.vertexBuffer unloadBuffer];
-        return;
+        return NO;
     }
+    CEDefaultProgram *program = (CEDefaultProgram *)_program;
     
     // setup MVP matrix
     GLKMatrix4 modelViewMatrix = GLKMatrix4Multiply(_camera.viewMatrix, object.modelMatrix);
     GLKMatrix4 modelViewProjectionMatrix = GLKMatrix4Multiply(_camera.projectionMatrix, modelViewMatrix);
-    _program.modelViewProjectionMatrix.matrix4 = modelViewProjectionMatrix;
+    program.modelViewProjectionMatrix.matrix4 = modelViewProjectionMatrix;
     
     // setup material
     if (object.material) {
-        _program.diffuseColor.vector4 = GLKVector4MakeWithVector3(object.material.diffuseColor, 1.0);
-        _program.specularColor.vector3 = object.material.specularColor;
-        _program.ambientColor.vector3 = object.material.ambientColor;
-        _program.shininessExponent.floatValue = object.material.shininessExponent;
+        program.diffuseColor.vector4 = GLKVector4MakeWithVector3(object.material.diffuseColor, 1.0);
+        program.specularColor.vector3 = object.material.specularColor;
+        program.ambientColor.vector3 = object.material.ambientColor;
+        program.shininessExponent.floatValue = object.material.shininessExponent;
     }
     
     // setup texture
-    if (object.material.diffuseTextureID && _program.diffuseTexture) {
+    if (object.material.diffuseTextureID && program.diffuseTexture) {
         uint32_t textureUnit = [[CETextureManager sharedManager] prepareTextureWithID:object.material.diffuseTextureID];
-        _program.diffuseTexture.textureUnit = textureUnit;
+        program.diffuseTexture.textureUnit = textureUnit;
     }
     
     // setup light
     if (_mainLight.enabled) {
         // setup normal matrix
         GLKMatrix4 normalMatrix = GLKMatrix4InvertAndTranspose(modelViewMatrix, NULL);
-        _program.normalMatrix.matrix3 = GLKMatrix4GetMatrix3(normalMatrix);
+        program.normalMatrix.matrix3 = GLKMatrix4GetMatrix3(normalMatrix);
         
         // setup model view matrix for specify lights
         if (_mainLight.lightInfo.lightType == CELightTypePoint ||
             _mainLight.lightInfo.lightType == CELightTypeSpot) {
-            _program.modelViewMatrix.matrix4 = modelViewMatrix;
+            program.modelViewMatrix.matrix4 = modelViewMatrix;
         }
         
         // normal mapping
-        if (object.material.normalTextureID && _program.normalTexture) {
+        if (object.material.normalTextureID && program.normalTexture) {
             uint32_t textureUnit = [[CETextureManager sharedManager] prepareTextureWithID:object.material.normalTextureID];
-            _program.normalTexture.textureUnit = textureUnit;
+            program.normalTexture.textureUnit = textureUnit;
         }
         
         // setup shadow mapping
-        if (_program.shadowMapTexture && _shadowMapTextureID) {
+        if (program.shadowMapTexture && _shadowMapTextureID) {
             uint32_t textureUnit = [[CETextureManager sharedManager] prepareTextureWithID:_shadowMapTextureID];
-            _program.shadowMapTexture.textureUnit = textureUnit;
+            program.shadowMapTexture.textureUnit = textureUnit;
         }
-        if (_program.depthBiasMVP) {
+        if (program.depthBiasMVP) {
             GLKMatrix4 biasMatrix = GLKMatrix4Make(0.5, 0.0, 0.0, 0.0,
                                                    0.0, 0.5, 0.0, 0.0,
                                                    0.0, 0.0, 0.5, 0.0,
@@ -187,16 +171,22 @@
             GLKMatrix4 depthMVP = GLKMatrix4Multiply(_shadowLight.lightViewMatrix, object.modelMatrix);
             depthMVP = GLKMatrix4Multiply(_shadowLight.lightProjectionMatrix, depthMVP);
             depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
-            _program.depthBiasMVP.matrix4 = depthMVP;
+            program.depthBiasMVP.matrix4 = depthMVP;
         }
     }
     
     glDrawElements(object.indiceBuffer.drawMode,
                    object.indiceBuffer.indiceCount,
                    object.indiceBuffer.primaryType, 0);
-    
     [object.indiceBuffer unloadBuffer];
     [object.vertexBuffer unloadBuffer];
+    
+    return YES;
+}
+
+
+- (void)onFinishRendering:(BOOL)hasRenderAllObjects {
+    // do nothing
 }
 
 

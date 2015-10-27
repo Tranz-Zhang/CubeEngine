@@ -73,11 +73,13 @@
     CEScene *scene = [CEScene currentScene];
     [EAGLContext setCurrentContext:scene.context];
     
+    // 1.sort render groups
+    NSArray *renderGroups = [self sortRenderGroupsWithModels:scene.allModels];
+    
     // 2.check if need render shadow map
     _enableShadowMapping = [self renderShadowMapForScene:scene];
     
     // 3.sort render objects
-    NSArray *renderGroups = [self sortRenderGroupsWithModels:scene.allModels];
     glBindFramebuffer(GL_FRAMEBUFFER, scene.renderCore.defaultFramebuffer);
     glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -185,18 +187,24 @@
     }
     // get models which cast shadow
     NSMutableArray *shadowModels = [NSMutableArray array];
+    NSMutableArray *renderObjects = [NSMutableArray array];
     for (CEModel *model in scene.allModels) {
         if (model.enableShadow) {
             [shadowModels addObject:model];
+            [renderObjects addObjectsFromArray:model.renderObjects];
         }
     }
-    if (!shadowModels.count) return NO;
+    if (!shadowModels.count || !renderObjects.count) return NO;
     // get shadow map renderer
     if (!_shadowMapRenderer) {
-        _shadowMapRenderer = [[CEShadowMapRenderer alloc] init];
+        _shadowMapRenderer = [CEShadowMapRenderer renderer];
+        _shadowMapRenderer.camera = scene.camera;
     }
-    BOOL isOK = [_shadowMapRenderer renderShadowMapWithModels:shadowModels
-                                                  shadowLight:shadowLight];
+    // update light view matrix
+    [shadowLight updateLightVPMatrixWithModels:shadowModels];
+    _shadowMapRenderer.mainLight = shadowLight;
+    
+    BOOL isOK = [_shadowMapRenderer renderObjects:renderObjects];
     return isOK;
 }
 
