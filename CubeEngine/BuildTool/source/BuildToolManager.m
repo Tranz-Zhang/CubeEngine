@@ -135,7 +135,7 @@
         NSLog(@"WARNING: process no model in Path:%@\n", kResourcesDirectory);
         return YES;
     }
-
+    
     NSLog(@"%@", objFilePathList);
     // parse obj file
     NSMutableArray *objFileInfos = [NSMutableArray array];
@@ -147,7 +147,8 @@
 //        NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
 //    }
     
-    NSString *objFilePath = objFilePathList[14];//[objFilePathList lastObject]; //
+    // 5: darksiders_war 9:ram 14:sample_scene_noleaf
+    NSString *objFilePath = objFilePathList[5];//[objFilePathList lastObject];
     OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
     if (info) {
         [objFileInfos addObject:info];

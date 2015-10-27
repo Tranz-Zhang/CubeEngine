@@ -19,6 +19,7 @@
 
 // main renderer
 #import "CEDefaultRenderer.h"
+#import "CEAlphaTestRenderer.h"
 #import "CEShadowMapRenderer.h"
 #import "CERenderConfig.h"
 
@@ -73,13 +74,25 @@
     CEScene *scene = [CEScene currentScene];
     [EAGLContext setCurrentContext:scene.context];
     
-    // 1.sort render groups
-    NSArray *renderGroups = [self sortRenderGroupsWithModels:scene.allModels];
+    // 1. prepare render objects
+    for (CEModel *model in scene.allModels) {
+        for (CERenderObject *renderObject in model.renderObjects) {
+            // load buffer
+            if (!renderObject.vertexBuffer.isReady) {
+                [renderObject.vertexBuffer setupBuffer];
+            }
+            if (!renderObject.indiceBuffer.isReady) {
+                [renderObject.indiceBuffer setupBuffer];
+            }
+            renderObject.modelMatrix = model.transformMatrix;
+        }
+    }
     
     // 2.check if need render shadow map
     _enableShadowMapping = [self renderShadowMapForScene:scene];
     
     // 3.sort render objects
+    NSArray *renderGroups = [self sortRenderGroupsWithModels:scene.allModels];
     glBindFramebuffer(GL_FRAMEBUFFER, scene.renderCore.defaultFramebuffer);
     glClearColor(scene.vec4BackgroundColor.r, scene.vec4BackgroundColor.g, scene.vec4BackgroundColor.b, scene.vec4BackgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -114,19 +127,11 @@
     
     for (CEModel *model in models) {
         for (CERenderObject *renderObject in model.renderObjects) {
-            // load buffer
-            if (!renderObject.vertexBuffer.isReady) {
-                [renderObject.vertexBuffer setupBuffer];
-            }
-            if (!renderObject.indiceBuffer.isReady) {
-                [renderObject.indiceBuffer setupBuffer];
-            }
             if (!renderObject.vertexBuffer.isReady ||
                 !renderObject.indiceBuffer.isReady) {
                 CEPrintf("WARNING: Fail to load buffer for render object");
                 continue;
             }
-            renderObject.modelMatrix = model.transformMatrix;
             
             // setup config
             CERenderConfig *config = [CERenderConfig new];
@@ -161,7 +166,20 @@
 - (CEDefaultRenderer *)rendererWithConfig:(CERenderConfig *)config {
     CEDefaultRenderer *render = _rendererDict[@(config.hash)];
     if (!render) {
-        render = [CEDefaultRenderer rendererWithConfig:config];
+        switch (config.materialType) {
+            case CEMaterialSolid:
+            case CEMaterialTransparent:
+                render = [CEDefaultRenderer rendererWithConfig:config];
+                break;
+                
+            case CEMaterialAlphaTested:
+                render = [CEAlphaTestRenderer rendererWithConfig:config];
+                break;
+                
+            default:
+                break;
+        }
+        
 #if DEBUG
         NSAssert(render, @"FAIL TO CREATE RENDER");
 #endif

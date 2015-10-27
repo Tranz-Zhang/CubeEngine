@@ -41,8 +41,8 @@
     hashValue += (_enableNormalMapping ? 1 : 0) << 1;
     hashValue += (_enableShadowMapping ? 1 : 0) << 2;
     // 6 x 4bit for value property
-    hashValue += (_materialType & 0x0000000f << 8);
-    hashValue += (_lightType    & 0x0000000F << 12);
+    hashValue += ((_materialType & 0x0000000f) << 8);
+    hashValue += ((_lightType    & 0x0000000F) << 12);
     return hashValue;
 }
 

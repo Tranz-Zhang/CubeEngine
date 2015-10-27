@@ -49,7 +49,7 @@
         return nil;
     }
     // build render
-    CEDefaultRenderer *render = [[CEDefaultRenderer alloc] init];
+    CEDefaultRenderer *render = [[[self class] alloc] init];
     [render setShaderProgram:program];
     return render;
 }

@@ -63,7 +63,7 @@
 #else
     CEModelLoader *loader = [CEModelLoader new];
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    [loader loadModelWithName:@"sample_scene_noleaf" completion:^(CEModel *model) {
+    [loader loadModelWithName:@"darksiders_war" completion:^(CEModel *model) { //sample_scene_noleaf
         _testModel = model;
         _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
         _testModel.enableShadow = YES;

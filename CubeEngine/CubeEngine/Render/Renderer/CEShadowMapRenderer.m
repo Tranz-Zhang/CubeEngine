@@ -78,7 +78,6 @@
 - (BOOL)onPrepareRendering {
     if (!_isReady || ![_mainLight isKindOfClass:[CEShadowLight class]]) return NO;
     [_textureBuffer beginRendering];
-//    [(CEDefaultProgram *)_program diffuseColor].vector4 = GLKVector4Make(0.5, 0.5, 0.5, 1);
     CEShadowLight *shadowLight = (CEShadowLight *)_mainLight;
     _lightVPMatrix = GLKMatrix4Multiply(shadowLight.lightProjectionMatrix, shadowLight.lightViewMatrix);
     return YES;
