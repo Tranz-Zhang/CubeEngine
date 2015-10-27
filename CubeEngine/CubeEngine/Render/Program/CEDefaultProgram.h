@@ -34,6 +34,9 @@
 @property (nonatomic, readonly) CEUniformFloat *shadowDarkness;
 @property (nonatomic, readonly) CEUniformSampler2D *shadowMapTexture;
 
+// transparency
+@property (nonatomic, readonly) CEUniformFloat *transparency;
+
 
 @end
 

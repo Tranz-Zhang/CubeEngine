@@ -71,6 +71,7 @@
 		4CB0F4181BD9103A00683B5D /* CEDepthTextureBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0F4171BD9103A00683B5D /* CEDepthTextureBuffer.m */; };
 		4CB53FC11BDF683A00C20B46 /* CERenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB53FC01BDF683A00C20B46 /* CERenderer.m */; };
 		4CB53FC61BDF786500C20B46 /* CEAlphaTestRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB53FC51BDF786500C20B46 /* CEAlphaTestRenderer.m */; };
+		4CB53FCA1BDF9ECC00C20B46 /* CETransparentRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB53FC91BDF9ECC00C20B46 /* CETransparentRenderer.m */; };
 		4CB61A0E1BB240E700D83856 /* CEDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F51BB1602C00686678 /* CEDatabase.m */; };
 		4CB61A101BB2410100D83856 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */; };
 		4CB61A111BB2412800D83856 /* CEDatabaseNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEA11F91BB1602C00686678 /* CEDatabaseNotifications.m */; };
@@ -356,6 +357,9 @@
 		4CB53FC21BDF695700C20B46 /* CERenderer_privates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CERenderer_privates.h; sourceTree = "<group>"; };
 		4CB53FC41BDF786500C20B46 /* CEAlphaTestRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEAlphaTestRenderer.h; sourceTree = "<group>"; };
 		4CB53FC51BDF786500C20B46 /* CEAlphaTestRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEAlphaTestRenderer.m; sourceTree = "<group>"; };
+		4CB53FC81BDF9ECC00C20B46 /* CETransparentRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CETransparentRenderer.h; sourceTree = "<group>"; };
+		4CB53FC91BDF9ECC00C20B46 /* CETransparentRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CETransparentRenderer.m; sourceTree = "<group>"; };
+		4CB53FCB1BDFA7F300C20B46 /* Transparent.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Transparent.frag; sourceTree = "<group>"; };
 		4CB61A0F1BB2410100D83856 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/lib/libsqlite3.dylib; sourceTree = DEVELOPER_DIR; };
 		4CB61A2C1BB2A29100D83856 /* MeshInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshInfo.h; sourceTree = "<group>"; };
 		4CB61A2D1BB2A29100D83856 /* MeshInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = MeshInfo.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -790,6 +794,8 @@
 				4C1703E51BA5A09400DBF84A /* CEDefaultRenderer.m */,
 				4CB53FC41BDF786500C20B46 /* CEAlphaTestRenderer.h */,
 				4CB53FC51BDF786500C20B46 /* CEAlphaTestRenderer.m */,
+				4CB53FC81BDF9ECC00C20B46 /* CETransparentRenderer.h */,
+				4CB53FC91BDF9ECC00C20B46 /* CETransparentRenderer.m */,
 				4CA5B0CF1BDA35A5006E567B /* CEShadowMapRenderer.h */,
 				4CA5B0D01BDA35A5006E567B /* CEShadowMapRenderer.m */,
 				265878691AD7C99100BA2137 /* CEWireframeRenderer.h */,
@@ -815,25 +821,26 @@
 		4CB1C34D1BDE261200D8B46C /* ShaderResources */ = {
 			isa = PBXGroup;
 			children = (
-				4CB1C34E1BDE261200D8B46C /* AlphaTest.frag */,
 				4CB1C34F1BDE261200D8B46C /* BaseLightEffect.frag */,
 				4CB1C3501BDE261200D8B46C /* BaseLightEffect.vert */,
-				4CB1C3511BDE261200D8B46C /* DirectionalLightCalculation.vert */,
-				4CB1C3521BDE261200D8B46C /* fragment.glsl */,
-				4CB1C3531BDE261200D8B46C /* Main.frag */,
-				4CB1C3541BDE261200D8B46C /* Main.vert */,
 				4CB1C3551BDE261200D8B46C /* NormalLightEffect.frag */,
 				4CB1C3561BDE261200D8B46C /* NormalLightEffect.vert */,
+				4CB1C3511BDE261200D8B46C /* DirectionalLightCalculation.vert */,
 				4CB1C3571BDE261200D8B46C /* PointLightCalculation.vert */,
+				4CB1C35A1BDE261200D8B46C /* SpotLightCalculation.vert */,
+				4CB1C35F1BDE261200D8B46C /* Texture.frag */,
+				4CB1C3601BDE261200D8B46C /* Texture.vert */,
 				4CB1C3581BDE261200D8B46C /* ShadowMap.frag */,
 				4CB1C3591BDE261200D8B46C /* ShadowMap.vert */,
-				4CB1C35A1BDE261200D8B46C /* SpotLightCalculation.vert */,
+				4CB1C34E1BDE261200D8B46C /* AlphaTest.frag */,
+				4CB53FCB1BDFA7F300C20B46 /* Transparent.frag */,
+				4CB1C3541BDE261200D8B46C /* Main.vert */,
+				4CB1C3531BDE261200D8B46C /* Main.frag */,
 				4CB1C35B1BDE261200D8B46C /* template.glsl */,
 				4CB1C35C1BDE261200D8B46C /* TestFunction1.vert */,
 				4CB1C35D1BDE261200D8B46C /* TestFunction2.vert */,
 				4CB1C35E1BDE261200D8B46C /* TestFunction3.vert */,
-				4CB1C35F1BDE261200D8B46C /* Texture.frag */,
-				4CB1C3601BDE261200D8B46C /* Texture.vert */,
+				4CB1C3521BDE261200D8B46C /* fragment.glsl */,
 				4CB1C3611BDE261200D8B46C /* vertex.glsl */,
 			);
 			path = ShaderResources;
@@ -1321,6 +1328,7 @@
 				4CF403841B7386B000C02BAE /* CEUniformMatrix2.m in Sources */,
 				4CF403811B7386A400C02BAE /* CEUniformVector4.m in Sources */,
 				4CF403711B73853300C02BAE /* CEUniformBool.m in Sources */,
+				4CB53FCA1BDF9ECC00C20B46 /* CETransparentRenderer.m in Sources */,
 				4CF2BF7D1BBB933300CB1681 /* CEModelLoader.m in Sources */,
 				4CBB74FA1BB53D0D00C3829B /* CEMeshInfo.m in Sources */,
 				4C43A4331ADC380A00761CA9 /* CEVBOAttribute.m in Sources */,

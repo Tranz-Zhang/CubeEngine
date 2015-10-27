@@ -66,15 +66,15 @@ NSString *CEShaderDirectory() {
     switch (materialType) {
         case CEMaterialSolid:
             [self removeProfileWithName:@"AlphaTest"];
-            //remove tranparency
+            [self removeProfileWithName:@"Transparent"];
             break;
         case CEMaterialAlphaTested:
             [self loadProfileWithName:@"AlphaTest"];
-            //remove tranparency
+            [self removeProfileWithName:@"Transparent"];
             break;
         case CEMaterialTransparent:
             [self loadProfileWithName:@"AlphaTest"];
-            // load transparent
+            [self loadProfileWithName:@"Transparent"];
             break;
             
         default:

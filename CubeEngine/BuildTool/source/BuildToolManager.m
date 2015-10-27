@@ -148,7 +148,7 @@
 //    }
     
     // 5: darksiders_war 9:ram 14:sample_scene_noleaf
-    NSString *objFilePath = objFilePathList[5];//[objFilePathList lastObject];
+    NSString *objFilePath = objFilePathList[14];//[objFilePathList lastObject];
     OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
     if (info) {
         [objFileInfos addObject:info];
@@ -349,7 +349,7 @@
             dbMaterialInfo.diffuseColorData = [NSData dataWithVector3:mtlInfo.diffuseColor];
             dbMaterialInfo.specularColorData = [NSData dataWithVector3:mtlInfo.specularColor];
             dbMaterialInfo.shininessExponent = mtlInfo.shininessExponent;
-            dbMaterialInfo.transparent = mtlInfo.transparency > 0 ?: -1;
+            dbMaterialInfo.transparent = MIN(mtlInfo.transparency > 0 ? mtlInfo.transparency : 1, 1);
             dbMaterialInfo.diffuseTextureID = mtlInfo.diffuseTexture.resourceID;
             dbMaterialInfo.normalTextureID = mtlInfo.normalTexture.resourceID;
             dbMaterialInfo.specularTextureID = mtlInfo.specularTexture.resourceID;

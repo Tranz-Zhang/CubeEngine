@@ -9,6 +9,7 @@ void main() {
 #link AlphaTest(inputColor);
 #link BaseLightEffect(inputColor);
 #link NormalLightEffect(inputColor);
+#link ApplyTransparent(inputColor);
     
     gl_FragColor = inputColor;
 }

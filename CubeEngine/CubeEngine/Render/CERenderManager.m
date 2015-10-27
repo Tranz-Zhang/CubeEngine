@@ -20,6 +20,7 @@
 // main renderer
 #import "CEDefaultRenderer.h"
 #import "CEAlphaTestRenderer.h"
+#import "CETransparentRenderer.h"
 #import "CEShadowMapRenderer.h"
 #import "CERenderConfig.h"
 
@@ -156,7 +157,13 @@
     NSArray *renderGroups = [renderGroupDict allValues];
     // sort groups by renderMode
     renderGroups = [renderGroups sortedArrayUsingComparator:^NSComparisonResult(CERenderGroup *group1, CERenderGroup *group2) {
-        return group2.renderPriority - group1.renderPriority;
+        if (group1.renderPriority < group2.renderPriority) {
+            return NSOrderedAscending;
+        } else if (group1.renderPriority > group2.renderPriority) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
     }];
     
     return renderGroups.copy;
@@ -168,8 +175,11 @@
     if (!render) {
         switch (config.materialType) {
             case CEMaterialSolid:
-            case CEMaterialTransparent:
                 render = [CEDefaultRenderer rendererWithConfig:config];
+                break;
+                
+            case CEMaterialTransparent:
+                render = [CETransparentRenderer rendererWithConfig:config];
                 break;
                 
             case CEMaterialAlphaTested:

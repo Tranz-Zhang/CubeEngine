@@ -98,9 +98,7 @@
     program.eyeDirection.vector3 = GLKVector3Make(0.0, 0.0, 1.0);
     
     // shadow map setting
-    if (program.shadowDarkness) {
-        program.shadowDarkness.floatValue = 1.0 - _shadowLight.shadowDarkness;
-    }
+    
     
     return YES;
 }
@@ -173,6 +171,14 @@
             depthMVP = GLKMatrix4Multiply(biasMatrix, depthMVP);
             program.depthBiasMVP.matrix4 = depthMVP;
         }
+        if (program.shadowDarkness) {
+            program.shadowDarkness.floatValue = (1.0 - _shadowLight.shadowDarkness) * object.material.transparency;
+        }
+    }
+    
+    // transparency
+    if (program.transparency) {
+        program.transparency.floatValue = object.material.transparency;
     }
     
     glDrawElements(object.indiceBuffer.drawMode,

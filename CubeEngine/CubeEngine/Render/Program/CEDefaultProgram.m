@@ -36,6 +36,8 @@
     _shadowDarkness =   (CEUniformFloat *)      [self uniformWithName:@"ShadowDarkness"     type:@"float"];
     _shadowMapTexture = (CEUniformSampler2D *)  [self uniformWithName:@"ShadowMapTexture"   type:@"sampler2D"];
     
+    // transparency
+    _transparency =     (CEUniformFloat *)      [self uniformWithName:@"Transparency"       type:@"float"];
 }
 
 
