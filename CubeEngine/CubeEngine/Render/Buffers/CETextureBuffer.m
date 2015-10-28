@@ -53,6 +53,9 @@
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _config.wrap_t);
     }
     if (_config.useMipmap) {
+        if (_config.mipmapLevel > 0) {
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL_APPLE, _config.mipmapLevel);
+        }
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -91,6 +94,7 @@
         _min_filter = GL_LINEAR;
         _wrap_s = GL_CLAMP_TO_EDGE;
         _wrap_t = GL_CLAMP_TO_EDGE;
+        _mipmapLevel = 3;
     }
     return self;
 }

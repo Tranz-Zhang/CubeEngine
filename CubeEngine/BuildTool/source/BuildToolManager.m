@@ -139,16 +139,17 @@
     NSLog(@"%@", objFilePathList);
     // parse obj file
     NSMutableArray *objFileInfos = [NSMutableArray array];
-//    for (NSString *objFilePath in objFilePathList) {
-//        OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
-//        if (info) {
-//            [objFileInfos addObject:info];
-//        }
-//        NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
-//    }
-    
-    // 5: darksiders_war 9:ram 14:sample_scene_noleaf
-    NSString *objFilePath = objFilePathList[14];//[objFilePathList lastObject];
+#if 1
+    for (NSString *objFilePath in objFilePathList) {
+        OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
+        if (info) {
+            [objFileInfos addObject:info];
+        }
+        NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
+    }
+#else
+//    // 5: darksiders_war 9:ram 14:sample_scene_noleaf
+    NSString *objFilePath = objFilePathList[0];//[objFilePathList lastObject];
     OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
     if (info) {
         [objFileInfos addObject:info];
@@ -161,7 +162,7 @@
     if (floorMax) {
         [objFileInfos addObject:floorMax];
     }
-    
+#endif
     // process resources
     if (![self processModelResourcesDataWithObjInfos:objFileInfos]) {
         return NO;

@@ -18,7 +18,7 @@
 
 
 - (BOOL)renderObjects:(NSArray *)objects {
-    if (!_program || !_camera || !_mainLight) {
+    if (!_program || !_camera) {
         CEError(@"Invalid renderer environment");
         return NO;
     }

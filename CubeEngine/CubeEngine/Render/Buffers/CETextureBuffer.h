@@ -23,11 +23,12 @@
 @property (nonatomic, assign) GLenum wrap_t;        // default: GL_CLAMP_TO_EDGE
 
 @property (nonatomic, assign) BOOL useMipmap;       // default: NO
+@property (nonatomic, assign) GLint mipmapLevel;    // default: 3
 
 @end
 
 
-@interface CETextureBuffer : NSObject{
+@interface CETextureBuffer : NSObject {
     NSData *_textureData;
     GLuint _textureBufferID;
     

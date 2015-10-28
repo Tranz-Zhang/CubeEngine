@@ -103,7 +103,7 @@
         if (!renderer) continue;
         
         renderer.camera = scene.camera;
-        renderer.mainLight = scene.mainLight;
+        renderer.mainLight = group.renderConfig.lightType != CELightTypeNone ? scene.mainLight : nil;
         if (_enableShadowMapping) {
             renderer.shadowMapTextureID = _shadowMapRenderer.shadowMapTextureID;
         }
@@ -138,7 +138,12 @@
             CERenderConfig *config = [CERenderConfig new];
             config.materialType = renderObject.material.materialType;
             config.enableTexture = renderObject.material.diffuseTextureID ? YES : NO;
-            config.lightType = lightType;
+            if (lightType != CELightTypeNone &&
+                [renderObject.vertexBuffer.attributes containsObject:@(CEVBOAttributeNormal)]) {
+                config.lightType = lightType;
+            } else {
+                config.lightType = CELightTypeNone;
+            }
             config.enableNormalMapping = renderObject.material.normalTextureID ? YES : NO;
             config.enableShadowMapping = _enableShadowMapping;
             

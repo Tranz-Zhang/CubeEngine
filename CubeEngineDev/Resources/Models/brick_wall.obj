@@ -1,0 +1,15 @@
+# This file uses centimeters as units for non-parametric coordinates.
+
+mtllib brick_wall.mtl
+v -10.244017 -0.000000 10.244017
+v 10.244017 -0.000000 10.244017
+v -10.244017 0.000000 -10.244017
+v 10.244017 0.000000 -10.244017
+vt 0.000000 0.000000
+vt 1.000000 0.000000
+vt 0.000000 1.000000
+vt 1.000000 1.000000
+g pPlane1
+usemtl initialShadingGroup
+f 1/1 2/2 4/4 3/3
+

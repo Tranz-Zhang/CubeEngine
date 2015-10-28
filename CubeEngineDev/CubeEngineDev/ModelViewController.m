@@ -63,7 +63,7 @@
 #else
     CEModelLoader *loader = [CEModelLoader new];
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-    [loader loadModelWithName:@"sample_scene_noleaf" completion:^(CEModel *model) { //sample_scene_noleaf
+    [loader loadModelWithName:@"brick_wall" completion:^(CEModel *model) { //sample_scene_noleaf
         _testModel = model;
         _testModel.scale = GLKVector3Make(1.2, 1.2, 1.2);
         _testModel.enableShadow = YES;
@@ -72,9 +72,9 @@
         printf("CEModelLoader load model for duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
     }];
     
-    [loader loadModelWithName:@"floor_max" completion:^(CEModel *model) {
-        [self.scene addModel:model];
-    }];
+//    [loader loadModelWithName:@"floor_max" completion:^(CEModel *model) {
+//        [self.scene addModel:model];
+//    }];
 #endif
     
 #if 0

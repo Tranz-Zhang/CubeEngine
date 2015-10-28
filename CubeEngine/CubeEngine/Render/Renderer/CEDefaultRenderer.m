@@ -67,7 +67,7 @@
 
 - (BOOL)onPrepareRendering {
     CEDefaultProgram *program = (CEDefaultProgram *)_program;
-    if (_mainLight.enabled) {
+    if (_mainLight.enabled && program.mainLight) {
         // !!!: transfer light position in view space
         if (_mainLight.lightInfo.lightType == CELightTypePoint ||
             _mainLight.lightInfo.lightType == CELightTypeSpot) {
@@ -139,7 +139,7 @@
     }
     
     // setup light
-    if (_mainLight.enabled) {
+    if (_mainLight.enabled && program.mainLight) {
         // setup normal matrix
         GLKMatrix4 normalMatrix = GLKMatrix4InvertAndTranspose(modelViewMatrix, NULL);
         program.normalMatrix.matrix3 = GLKMatrix4GetMatrix3(normalMatrix);
