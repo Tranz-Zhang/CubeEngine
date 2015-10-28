@@ -82,16 +82,16 @@
 //            testRenderObj.material = material;
             
             CEModel *model = nil;//[[CEModel alloc] initWithVertexBuffer:vertexBuffer indicesBuffer:nil];
-            model.name = groupName;
-            if (!material) {
-                material = [CEMaterial new];
-                material.name = @"DefaultMaterial";
-                material.materialType = CEMaterialSolid;
-                material.diffuseColor = GLKVector3Make(1.0, 1.0, 1.0);
-            }
-            model.material = material;
-            modelDict[[mesh description]] = model;
-            [topMostModels addObject:model];
+//            model.name = groupName;
+//            if (!material) {
+//                material = [CEMaterial new];
+//                material.name = @"DefaultMaterial";
+//                material.materialType = CEMaterialSolid;
+//                material.diffuseColor = GLKVector3Make(1.0, 1.0, 1.0);
+//            }
+//            model.material = material;
+//            modelDict[[mesh description]] = model;
+//            [topMostModels addObject:model];
             
         } else if (refGroups.count > 1) {
             // *** create model group ***

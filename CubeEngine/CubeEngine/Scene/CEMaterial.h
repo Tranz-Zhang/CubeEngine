@@ -11,11 +11,11 @@
 
 @interface CEMaterial : NSObject<NSCopying>
 
-@property (nonatomic, strong) NSString *name DEPRECATED_ATTRIBUTE;
+//@property (nonatomic, strong) NSString *name DEPRECATED_ATTRIBUTE;
 @property (nonatomic, assign) CEMaterialType materialType;
 
-@property (nonatomic, strong) NSString *diffuseTexture DEPRECATED_ATTRIBUTE;
-@property (nonatomic, strong) NSString *normalTexture DEPRECATED_ATTRIBUTE;
+//@property (nonatomic, strong) NSString *diffuseTexture DEPRECATED_ATTRIBUTE;
+//@property (nonatomic, strong) NSString *normalTexture DEPRECATED_ATTRIBUTE;
 
 @property (nonatomic, assign) uint32_t diffuseTextureID;
 @property (nonatomic, assign) uint32_t normalTextureID;

@@ -12,7 +12,7 @@
 
 @interface CEModel ()
 
-- (instancetype)initWithRenderObjects:(NSArray *)renderObjects;
+- (instancetype)initWithName:(NSString *)name renderObjects:(NSArray *)renderObjects;
 
 @property (nonatomic, readwrite) GLKVector3 bounds;
 @property (nonatomic, readwrite) GLKVector3 offsetFromOrigin;

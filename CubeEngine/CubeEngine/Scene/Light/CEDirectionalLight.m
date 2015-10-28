@@ -119,12 +119,12 @@
     GLfloat maxX = 0, maxY = 0, maxZ = 0, minX = MAXFLOAT, minY = MAXFLOAT, minZ = MAXFLOAT;
     for (CEModel *model in models) {
         GLKVector3 position = model.positionInWorldSpace;
-        GLfloat modelMaxX = position.x + model.offsetFromOrigin.x + model.bounds.x / 2;
-        GLfloat modelMaxY = position.y + model.offsetFromOrigin.y + model.bounds.y / 2;
-        GLfloat modelMaxZ = position.z + model.offsetFromOrigin.z + model.bounds.z / 2;
-        GLfloat modelMinX = position.x + model.offsetFromOrigin.x - model.bounds.x / 2;
-        GLfloat modelMinY = position.y + model.offsetFromOrigin.y - model.bounds.y / 2;
-        GLfloat modelMinZ = position.z + model.offsetFromOrigin.z - model.bounds.z / 2;
+        GLfloat modelMaxX = position.x + (model.offsetFromOrigin.x + model.bounds.x / 2) * model.scale.x;
+        GLfloat modelMaxY = position.y + (model.offsetFromOrigin.y + model.bounds.y / 2) * model.scale.y;
+        GLfloat modelMaxZ = position.z + (model.offsetFromOrigin.z + model.bounds.z / 2) * model.scale.z;
+        GLfloat modelMinX = position.x + (model.offsetFromOrigin.x - model.bounds.x / 2) * model.scale.x;
+        GLfloat modelMinY = position.y + (model.offsetFromOrigin.y - model.bounds.y / 2) * model.scale.y;
+        GLfloat modelMinZ = position.z + (model.offsetFromOrigin.z - model.bounds.z / 2) * model.scale.z;
         if (maxX < modelMaxX) maxX = modelMaxX;
         if (maxY < modelMaxY) maxY = modelMaxY;
         if (maxZ < modelMaxZ) maxZ = modelMaxZ;

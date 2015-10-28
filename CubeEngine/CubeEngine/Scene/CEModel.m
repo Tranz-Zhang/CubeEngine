@@ -11,19 +11,12 @@
 #import "CEModelLoader.h"
 #import "CEUtils.h"
 
-@implementation CEModel {
-    
-}
+@implementation CEModel
 
-
-+ (CEModel *)modelWithObjFile:(NSString *)objFileName {
-    return nil;
-}
-
-
-- (instancetype)initWithRenderObjects:(NSArray *)renderObjects {
+- (instancetype)initWithName:(NSString *)name renderObjects:(NSArray *)renderObjects {
     self = [super init];
     if (self) {
+        _name = [name copy];
         _renderObjects = renderObjects;
     }
     return self;
@@ -37,16 +30,6 @@
 
 - (NSString *)debugDescription {
     return _name;
-}
-
-#pragma mark - Setters & Getters
-
-- (void)setBaseColor:(UIColor *)baseColor {
-    _material.diffuseColor = CEVec3WithColor(baseColor);
-}
-
-- (UIColor *)baseColor {
-    return _material ? CEColorWithVec3(_material.diffuseColor) : nil;
 }
 
 
@@ -65,11 +48,6 @@
             return childChild;
         }
     }
-    return nil;
-}
-
-
-- (CEModel *)duplicate {
     return nil;
 }
 

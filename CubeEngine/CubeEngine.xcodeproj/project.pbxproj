@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2608E2391B78FCB500E9F601 /* CEUniformLightInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2608E2381B78FCB500E9F601 /* CEUniformLightInfo.m */; };
-		260949131B05981600F7465B /* CEObjMeshInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 260949121B05981600F7465B /* CEObjMeshInfo.m */; };
-		260949161B0598E000F7465B /* CEMtlParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 260949151B0598E000F7465B /* CEMtlParser.m */; };
-		260949191B0598EE00F7465B /* CEObjParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 260949181B0598EE00F7465B /* CEObjParser.m */; };
 		261089661AAD31AF0041E142 /* CEScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 261089651AAD31AF0041E142 /* CEScene.m */; };
 		261089691AAD31C60041E142 /* CECamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 261089681AAD31C60041E142 /* CECamera.m */; };
 		26193F4C1AA8324600787C64 /* CubeEngine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26193F4B1AA8324600787C64 /* CubeEngine.h */; };
@@ -38,7 +35,6 @@
 		269608F01AF85E9C0045FB03 /* CEViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 269608EF1AF85E9C0045FB03 /* CEViewController.m */; };
 		269608F11AF86C7E0045FB03 /* CEViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 269608EE1AF85E9C0045FB03 /* CEViewController.h */; };
 		269608F21AF874620045FB03 /* CEView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 269608EB1AF85E750045FB03 /* CEView.h */; };
-		26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A4E1281ACD734900847553 /* CEObjFileLoader.m */; };
 		26A9A8D71AF7744200394A4C /* CERenderCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A9A8D61AF7744200394A4C /* CERenderCore.m */; };
 		26C3B72B1AE893F10061BEFC /* CELight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 263C8E5C1AE5F546004FDFE8 /* CELight.h */; };
 		26C3B72C1AE893F40061BEFC /* CEDirectionalLight.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2625B8BE1AE7D340002FD478 /* CEDirectionalLight.h */; };
@@ -1317,10 +1313,8 @@
 				2658786B1AD7C99100BA2137 /* CEWireframeRenderer.m in Sources */,
 				4CC25DB81BCE3F1C00DB3DA2 /* pngrtran.c in Sources */,
 				4CC25DB41BCE3F1C00DB3DA2 /* pngmem.c in Sources */,
-				260949191B0598EE00F7465B /* CEObjParser.m in Sources */,
 				2624ABAC1AD6A85500FC863C /* CERenderManager.m in Sources */,
 				4CF3E96C1B99E3E400D42515 /* CEShaderProgram.m in Sources */,
-				260949161B0598E000F7465B /* CEMtlParser.m in Sources */,
 				26A9A8D71AF7744200394A4C /* CERenderCore.m in Sources */,
 				4CC25DBA1BCE3F1C00DB3DA2 /* pngset.c in Sources */,
 				4CC25DCA1BCE3F1C00DB3DA2 /* ioapi.c in Sources */,
@@ -1339,11 +1333,9 @@
 				4CEA12291BB1833600686678 /* CERenderObject.m in Sources */,
 				4CF2BF811BBBC9FE00CB1681 /* CEResourceManager.m in Sources */,
 				263BBBE11AB91A3600F88F65 /* CEUtils.m in Sources */,
-				26A4E1291ACD734900847553 /* CEObjFileLoader.m in Sources */,
 				4CC25DB61BCE3F1C00DB3DA2 /* pngread.c in Sources */,
 				4CC25DB31BCE3F1C00DB3DA2 /* pngget.c in Sources */,
 				4CEA12191BB1602D00686678 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
-				260949131B05981600F7465B /* CEObjMeshInfo.m in Sources */,
 				269608ED1AF85E750045FB03 /* CEView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

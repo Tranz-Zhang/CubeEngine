@@ -237,7 +237,8 @@
     }
     
     if (cache.completion) {
-        CEModel *model = [[CEModel alloc] initWithRenderObjects:renderObjects.copy];
+        CEModel *model = [[CEModel alloc] initWithName:cache.modelInfo.modelName
+                                         renderObjects:renderObjects.copy];
         if (cache.modelInfo.boundsData) {
             model.bounds = GLKVector3MakeWithData(cache.modelInfo.boundsData);
         }

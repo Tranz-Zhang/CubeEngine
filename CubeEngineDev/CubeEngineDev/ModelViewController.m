@@ -140,17 +140,6 @@
 
 
 #pragma mark - Others
-- (void)recursiveSetColorForModel:(CEModel *)model {
-    model.baseColor = [self randomColor];
-    model.enableShadow = YES;
-    model.material.shininessExponent = 20;
-    model.material.specularColor = GLKVector3Make(0.5, 0.5, 0.5);
-//    model.material.diffuseTexture = nil;
-//    model.material.normalTexture = nil;
-    for (CEModel *child in model.childObjects) {
-        [self recursiveSetColorForModel:child];
-    }
-}
 
 
 - (UIColor *)randomColor {

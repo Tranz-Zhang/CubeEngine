@@ -29,12 +29,12 @@
 
 - (id)copyWithZone:(NSZone *)zone {
     CEMaterial *material = [[CEMaterial allocWithZone:zone] init];
-    material.name = _name;
     material.materialType = _materialType;
-    material.diffuseTexture = _diffuseTexture;
-    material.normalTexture = _normalTexture;
     material.ambientColor = _ambientColor;
     material.diffuseColor = _diffuseColor;
+    material.diffuseTextureID = _diffuseTextureID;
+    material.normalTextureID = _normalTextureID;
+    material.specularTextureID = _specularTextureID;
     material.specularColor = _specularColor;
     material.shininessExponent = _shininessExponent;
     material.transparency = _transparency;

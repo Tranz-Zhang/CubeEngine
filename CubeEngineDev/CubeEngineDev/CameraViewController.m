@@ -18,12 +18,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.scene.camera.position = GLKVector3Make(0, 0, 30);
 //    [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
-    CEModel *testModel = [CEModel modelWithObjFile:@"teapot"];
-    testModel.showAccessoryLine = YES;
-    [self.scene addModel:testModel];
+    CEModelLoader *loader = [CEModelLoader new];
+    [loader loadModelWithName:@"teapot" completion:^(CEModel *model) {
+        model.showAccessoryLine = YES;
+        [self.scene addModel:model];
+    }];
     
     // add gesture
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGesture:)];

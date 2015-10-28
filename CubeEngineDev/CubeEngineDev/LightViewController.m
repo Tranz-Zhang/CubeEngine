@@ -220,14 +220,14 @@
 
 
 - (IBAction)onMaterialSwitch:(UISwitch *)sender {
-    if (sender.on) {
-        _testModel.material.diffuseTexture = @"char_ram_col.png";
-        _testModel.material.normalTexture = @"char_ram_nor.png";
-        
-    } else {
-        _testModel.material.normalTexture = nil;
-        _testModel.material.diffuseTexture = nil;
-    }
+//    if (sender.on) {
+//        _testModel.material.diffuseTexture = @"char_ram_col.png";
+//        _testModel.material.normalTexture = @"char_ram_nor.png";
+//        
+//    } else {
+//        _testModel.material.normalTexture = nil;
+//        _testModel.material.diffuseTexture = nil;
+//    }
 }
 
 

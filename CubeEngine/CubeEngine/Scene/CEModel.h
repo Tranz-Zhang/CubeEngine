@@ -19,22 +19,11 @@
 // the model's center's offset from original point in Model Space.
 @property (nonatomic, readonly) GLKVector3 offsetFromOrigin;
 
-// default is white
-@property (nonatomic, copy) UIColor *baseColor DEPRECATED_ATTRIBUTE;
-
-// materials info of the model
-@property (nonatomic, strong) CEMaterial *material DEPRECATED_ATTRIBUTE;
-
 // indicates if cast shadows under light, default is NO;
 @property (nonatomic, assign) BOOL enableShadow;
 
-
-+ (CEModel *)modelWithObjFile:(NSString *)objFileName DEPRECATED_ATTRIBUTE;
-
 // recursive search child model with the indicated name
 - (CEModel *)childWithName:(NSString *)modelName;
-
-- (CEModel *)duplicate DEPRECATED_ATTRIBUTE;
 
 
 #pragma mark - debug

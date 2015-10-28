@@ -31,4 +31,8 @@
     return [NSString stringWithFormat:@"uniform %@ %@(%d)", [self dataType], self.name, _index];
 }
 
+- (NSString *)dataType {
+    return @"unknown";
+}
+
 @end
