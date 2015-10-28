@@ -321,7 +321,7 @@ bool GenerateStrips(const unsigned short* in_indices, const unsigned int in_numI
 				stripLength = i - startingLoc;
 			}
 			else
-				stripLength = stripIndices.size();
+				stripLength = (int)stripIndices.size();
 			
 			primGroupArray[stripCtr].type       = PT_STRIP;
 			primGroupArray[stripCtr].indices    = new unsigned short[stripLength];
@@ -342,7 +342,7 @@ bool GenerateStrips(const unsigned short* in_indices, const unsigned int in_numI
 			int faceGroupLoc = (*numGroups) - 1;    //the face group is the last one
 			primGroupArray[faceGroupLoc].type       = PT_LIST;
 			primGroupArray[faceGroupLoc].indices    = new unsigned short[tempFaces.size() * 3];
-			primGroupArray[faceGroupLoc].numIndices = tempFaces.size() * 3;
+			primGroupArray[faceGroupLoc].numIndices = (unsigned int)(tempFaces.size() * 3);
 			int indexCtr = 0;
 			for(int i = 0; i < tempFaces.size(); i++)
 			{
