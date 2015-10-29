@@ -139,6 +139,25 @@
 }
 
 
+- (IBAction)onMipmapSegmentChanged:(UISegmentedControl *)sender {
+    switch (sender.selectedSegmentIndex) {
+        case 0:
+            _testModel.mipmapQuality = CETextureMipmapNone;
+            break;
+        case 1:
+            _testModel.mipmapQuality = CETextureMipmapLow;
+            break;
+        case 2:
+            _testModel.mipmapQuality = CETextureMipmapNormal;
+            break;
+        case 3:
+            _testModel.mipmapQuality = CETextureMipmapHigh;
+            break;
+        default:
+            break;
+    }
+}
+
 #pragma mark - Others
 
 

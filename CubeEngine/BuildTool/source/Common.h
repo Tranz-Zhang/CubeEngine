@@ -29,7 +29,8 @@ extern NSString *kResourcesDirectory;
 
 #define kToolVersion 1
 
-#define ENABLE_INCREMENTAL_UPDATE 1
+#define CONVERT_TEXTURE_TO_PVR 0
+#define ENABLE_INCREMENTAL_UPDATE 0
 #define ENABLE_TRIANGLE_STRIP 0
 
 #endif

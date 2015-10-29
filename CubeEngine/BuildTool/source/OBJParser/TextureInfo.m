@@ -12,17 +12,18 @@
 @implementation TextureInfo
 
 + (TextureInfo *)textureInfoWithFilePath:(NSString *)filePath {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath] || ![filePath hasSuffix:@".png"]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        return nil;
+    }
+    CETextureFormat format = [self textureFormatForFileAtPath:filePath];
+    if (format == CETextureFormatUnknown) {
         return nil;
     }
     
     TextureInfo *info = [TextureInfo new];
     info.name = [filePath lastPathComponent];
     info.filePath = filePath;
-    // get format
-    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:filePath];
-    NSData *firstByte = [fileHandle readDataOfLength:1];
-    info.format = [TextureInfo textureFormatImageData:firstByte];
+    info.format = format;
     // get image size
     NSURL *imageFileURL = [NSURL fileURLWithPath:filePath];
     CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)imageFileURL, NULL);
@@ -34,15 +35,28 @@
         info.size = CGSizeMake(width.floatValue, height.floatValue);
         info.hasAlpha = [imageProperties[(id)kCGImagePropertyHasAlpha] boolValue];
         info.bitsPerPixel = [imageProperties[(id)kCGImagePropertyDepth] shortValue];
-        
-        // TODO: try to get image format from these properties...
-        
     }
     
     return info;
 }
 
++ (CETextureFormat )textureFormatForFileAtPath:(NSString *)filePath {
+    if ([filePath hasSuffix:@".png"]) {
+        return CETextureFormatPNG;
+        
+    } else if ([filePath hasSuffix:@".jpg"] || [filePath hasSuffix:@".jpeg"]) {
+        return CETextureFormatJPEG;
+        
+    } else if ([filePath hasSuffix:@".pvr"]) {
+        return CETextureFormatPVR;
+        
+    } else {
+        return CETextureFormatUnknown;
+    }
+}
 
+
+/*
 + (TextureFormat )textureFormatImageData:(NSData *)data {
     uint8_t c;
     [data getBytes:&c length:1];
@@ -56,9 +70,12 @@
         case 0x49:
         case 0x4D:
             return TextureFormatTIFF;
+        default:
+            break;
     }
     return TextureFormatUnknown;
 }
+//*/
 
 
 - (instancetype)init {

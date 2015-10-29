@@ -118,7 +118,6 @@
 }
 
 
-
 #pragma mark - process models
 
 - (BOOL)processModelResources {
@@ -139,7 +138,7 @@
     NSLog(@"%@", objFilePathList);
     // parse obj file
     NSMutableArray *objFileInfos = [NSMutableArray array];
-#if 1
+#if 0
     for (NSString *objFilePath in objFilePathList) {
         OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
         if (info) {
@@ -148,7 +147,6 @@
         NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
     }
 #else
-//    // 5: darksiders_war 9:ram 14:sample_scene_noleaf
     NSString *objFilePath = objFilePathList[0];//[objFilePathList lastObject];
     OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
     if (info) {
@@ -157,11 +155,11 @@
     NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
     NSLog(@"%@", info);
     
-    NSString *floorMaxPath = objFilePathList[7];//[objFilePathList lastObject]; //
-    OBJFileInfo *floorMax = [OBJFileParser parseBaseInfoWithFilePath:floorMaxPath];
-    if (floorMax) {
-        [objFileInfos addObject:floorMax];
-    }
+//    NSString *floorMaxPath = objFilePathList[7];//[objFilePathList lastObject]; //
+//    OBJFileInfo *floorMax = [OBJFileParser parseBaseInfoWithFilePath:floorMaxPath];
+//    if (floorMax) {
+//        [objFileInfos addObject:floorMax];
+//    }
 #endif
     // process resources
     if (![self processModelResourcesDataWithObjInfos:objFileInfos]) {
@@ -367,6 +365,7 @@
             if (mtlInfo.diffuseTexture) {
                 CETextureInfo *diffuseTextureInfo = [CETextureInfo new];
                 diffuseTextureInfo.textureID = mtlInfo.diffuseTexture.resourceID;
+                diffuseTextureInfo.format = mtlInfo.diffuseTexture.format;
                 diffuseTextureInfo.textureSize = mtlInfo.diffuseTexture.size;
                 diffuseTextureInfo.hasAlpha = mtlInfo.diffuseTexture.hasAlpha;
                 [dbTextureInfoList addObject:diffuseTextureInfo];
@@ -374,6 +373,7 @@
             if (mtlInfo.normalTexture) {
                 CETextureInfo *normalTextureInfo = [CETextureInfo new];
                 normalTextureInfo.textureID = mtlInfo.normalTexture.resourceID;
+                normalTextureInfo.format = mtlInfo.normalTexture.format;
                 normalTextureInfo.textureSize = mtlInfo.normalTexture.size;
                 normalTextureInfo.hasAlpha = mtlInfo.normalTexture.hasAlpha;
                 [dbTextureInfoList addObject:normalTextureInfo];
@@ -381,6 +381,7 @@
             if (mtlInfo.specularTexture) {
                 CETextureInfo *specularTextureInfo = [CETextureInfo new];
                 specularTextureInfo.textureID = mtlInfo.specularTexture.resourceID;
+                specularTextureInfo.format = mtlInfo.specularTexture.format;
                 specularTextureInfo.textureSize = mtlInfo.specularTexture.size;
                 specularTextureInfo.hasAlpha = mtlInfo.specularTexture.hasAlpha;
                 [dbTextureInfoList addObject:specularTextureInfo];

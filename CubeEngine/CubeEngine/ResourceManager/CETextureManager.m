@@ -8,7 +8,8 @@
 
 #import "CETextureManager.h"
 #import "CEResourceManager.h"
-#import "CEPNGUnpacker.h"
+#import "CEImageDecoder.h"
+#import "CEImageConverter.h"
 
 @interface CETextureManager () <CEResourceDataProcessProtocol> {
     // runtime
@@ -18,6 +19,7 @@
     
     // resource loading
     NSMutableDictionary *_textureConfigDict;
+    NSMutableDictionary *_textureInfoDict;
 }
 
 @end
@@ -63,6 +65,7 @@
         _textureBufferDict = [NSMutableDictionary dictionary];
         _textureUnitBindingDict = [NSMutableDictionary dictionary];
         _textureConfigDict = [NSMutableDictionary dictionary];
+        _textureInfoDict = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -70,27 +73,32 @@
 
 - (void)loadTextureWithInfos:(NSArray *)textureInfos completion:(CETextureLoadCompletion)completion {
     CGFloat maxTextureSize = [CETextureManager maxTextureSize];
-    NSMutableDictionary *textureInfoDict = [NSMutableDictionary dictionary]; // @{@(resourceID) : CETextureInfo}
+    NSMutableDictionary *loadingInfoDict = [NSMutableDictionary dictionary]; // @{@(resourceID) : CETextureInfo}
     for (CETextureInfo *textureInfo in textureInfos) {
         if (textureInfo.textureSize.width <= maxTextureSize &&
             textureInfo.textureSize.height <= maxTextureSize) {
-            textureInfoDict[@(textureInfo.textureID)] = textureInfo;
+            loadingInfoDict[@(textureInfo.textureID)] = textureInfo;
         }
     }
+    @synchronized(self) {
+        [_textureInfoDict addEntriesFromDictionary:loadingInfoDict];
+    }
     
-    [[CEResourceManager sharedManager] loadResourceDataWithIDs:textureInfoDict.allKeys processDelegate:self completion:^(NSDictionary *resourceDataDict) {
+    [[CEResourceManager sharedManager] loadResourceDataWithIDs:loadingInfoDict.allKeys processDelegate:self completion:^(NSDictionary *resourceDataDict) {
         // generate texture buffer
         NSMutableDictionary *textureBufferDict = [NSMutableDictionary dictionary];
         [resourceDataDict enumerateKeysAndObjectsUsingBlock:^(NSNumber *resourceID, NSData *textureData, BOOL *stop) {
-            CETextureInfo *info = textureInfoDict[resourceID];
+            CETextureInfo *info = _textureInfoDict[resourceID];
             CETextureBufferConfig *config = _textureConfigDict[resourceID];
             if (info && config) {
                 CETextureBuffer *textureBuffer = [[CETextureBuffer alloc] initWithConfig:config resourceID:info.textureID data:textureData];
                 textureBufferDict[resourceID] = textureBuffer;
             }
         }];
+        
         @synchronized(self) {
             [_textureBufferDict addEntriesFromDictionary:textureBufferDict];
+            [_textureInfoDict removeObjectsForKeys:loadingInfoDict.allKeys];
         }
         if (completion) {
             completion([NSSet setWithArray:textureBufferDict.allKeys]);
@@ -105,21 +113,43 @@
     NSMutableDictionary *unpackDataDict = [NSMutableDictionary dictionary];
     NSMutableDictionary *configDict = [NSMutableDictionary dictionary];
     [resourceDataDict enumerateKeysAndObjectsUsingBlock:^(NSNumber *resourceID, NSData *textureData, BOOL *stop) {
-        // unpack png data
-        CEPNGUnpackResult *result = [[CEPNGUnpacker defaultPacker] unpackPNGData:textureData];
-        // [CEPNGUnpacker convertPNGTo16Bits4444:result];
-        unpackDataDict[resourceID] = result.data;
-        
-        CETextureBufferConfig *config = [CETextureBufferConfig new];
-        config.width = result.width;
-        config.height = result.height;
-        config.format = result.format;
-        config.internalFormat = result.internalFormat;
-        config.texelType = result.texelType;
-        config.wrap_s = GL_REPEAT;
-        config.wrap_t = GL_REPEAT;
-        configDict[resourceID] = config;
-        
+        // get texture info
+        CETextureInfo *textureInfo = _textureInfoDict[resourceID];
+        if (textureInfo) {
+            // unpack png data
+            CEImageDecoder *imageDecoder = nil;
+            switch (textureInfo.format) {
+                case CETextureFormatPNG:
+                    imageDecoder = [CEImageDecoder defaultPNGDecoder];
+                    break;
+                case CETextureFormatJPEG:
+                    imageDecoder = [CEImageDecoder defaultJPEGDecoder];
+                    break;
+                case CETextureFormatPVR:
+                    imageDecoder = [CEImageDecoder defaultPVRDecoder];
+                    break;
+                default:
+                    break;
+            }
+            
+            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+            CEImageDecodeResult *result = [imageDecoder decodeImageData:textureData];
+            printf("decompress duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+            if (result) {
+//                [CEImageConverter convertImageTo16Bits565:result];
+                unpackDataDict[resourceID] = result.data;
+                
+                CETextureBufferConfig *config = [CETextureBufferConfig new];
+                config.width = result.width;
+                config.height = result.height;
+                config.format = result.format;
+                config.internalFormat = result.internalFormat;
+                config.texelType = result.texelType;
+                config.wrap_s = GL_REPEAT;
+                config.wrap_t = GL_REPEAT;
+                configDict[resourceID] = config;
+            }
+        }
     }];
     @synchronized(_textureConfigDict) {
         [_textureConfigDict addEntriesFromDictionary:configDict];
@@ -188,6 +218,15 @@
         CEPrintf("Not texture found for id: %08X\n", textureID);
     }
     return -1;
+}
+
+
+- (CETextureBuffer *)textureBufferWithID:(uint32_t)textureID {
+    CETextureBuffer *textureBuffer = nil;
+    @synchronized(self) {
+        textureBuffer = _textureBufferDict[@(textureID)];
+    }
+    return textureBuffer;
 }
 
 

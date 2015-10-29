@@ -17,13 +17,16 @@
 @property (nonatomic, assign) GLenum internalFormat;// default: RGBA
 @property (nonatomic, assign) GLenum texelType;     // default: GL_UNSIGNED_BYTE
 
+// texture filter
 @property (nonatomic, assign) GLenum mag_filter;    // default: GL_LINEAR
 @property (nonatomic, assign) GLenum min_filter;    // default: GL_LINEAR
 @property (nonatomic, assign) GLenum wrap_s;        // default: GL_CLAMP_TO_EDGE
 @property (nonatomic, assign) GLenum wrap_t;        // default: GL_CLAMP_TO_EDGE
 
-@property (nonatomic, assign) BOOL useMipmap;       // default: NO
-@property (nonatomic, assign) GLint mipmapLevel;    // default: 3
+// mipmap
+@property (nonatomic, assign) BOOL enableMipmap;                // default: NO
+@property (nonatomic, assign) BOOL enableAnisotropicFiltering;  // default: NO
+@property (nonatomic, assign) GLint mipmapLevel;                // default: 3
 
 @end
 
@@ -47,9 +50,18 @@
                   resourceID:(uint32_t)resourceID
                         data:(NSData *)textureData;
 
+/** 
+ update config of texture 
+ @note: only #texture filter# params and #mipmap# params can be changed after texture buffer is setup
+ */
+- (void)updateConfig:(CETextureBufferConfig *)config;
 
-- (BOOL)setupBuffer;    // initializing a buffer block in video memory
-- (void)destoryBuffer;  // delete a buffer from video memory
+
+/** load the texture into GPU */
+- (BOOL)setupBuffer;
+
+/** remove the texture from GPU */
+- (void)destoryBuffer;
 
 // load texture into specify texture index in program
 - (BOOL)loadBufferToUnit:(GLuint)textureUnit;

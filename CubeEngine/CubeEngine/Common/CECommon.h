@@ -16,4 +16,13 @@ typedef NS_ENUM(int, CEMaterialType) {
     CEMaterialTransparent,
 };
 
+
+typedef NS_ENUM(int, CETextureMipmapQuality) {
+    CETextureMipmapNone = 0, // disable mipmap
+    CETextureMipmapLow,
+    CETextureMipmapNormal,
+    CETextureMipmapHigh,
+};
+
+
 #endif

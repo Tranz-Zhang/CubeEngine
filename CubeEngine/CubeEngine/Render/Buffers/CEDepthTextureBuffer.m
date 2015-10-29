@@ -40,7 +40,7 @@
     if (_config.wrap_t) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _config.wrap_t);
     }
-    if (_config.useMipmap) {
+    if (_config.enableMipmap) {
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     

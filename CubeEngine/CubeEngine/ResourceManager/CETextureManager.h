@@ -18,6 +18,7 @@ typedef void(^CETextureLoadCompletion)(NSSet *loadedTextureIds);
 
 + (GLint)maxTextureUnitCount;
 + (GLint)maxTextureSize;
++ (BOOL)supportAnisotropicFiltering;
 
 
 /**
@@ -41,6 +42,13 @@ typedef void(^CETextureLoadCompletion)(NSSet *loadedTextureIds);
          returns -1 when failed.
  */
 - (int32_t)prepareTextureWithID:(uint32_t)textureID;
+
+
+/**
+ get cached CETextureBuffer with the specify id
+ @return texture buffer, return nil if texture is not loaded
+ */
+- (CETextureBuffer *)textureBufferWithID:(uint32_t)textureID;
 
 
 /**

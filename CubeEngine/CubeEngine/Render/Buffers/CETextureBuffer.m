@@ -8,7 +8,24 @@
 
 #import "CETextureBuffer.h"
 
-@implementation CETextureBuffer
+#warning add anisotropy filter for texture
+
+@implementation CETextureBuffer {
+    BOOL _hasMipmap;
+}
+
++ (BOOL)supportAnisotropicFiltering {
+    static NSNumber *supportAnisotropicFiltering = nil;
+    if (!supportAnisotropicFiltering) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            NSString *extensionsString = [NSString stringWithCString:(char *)glGetString(GL_EXTENSIONS) encoding:NSUTF8StringEncoding];
+            NSArray *extensionsNames = [extensionsString componentsSeparatedByString:@" "];
+            supportAnisotropicFiltering = @([extensionsNames containsObject:@"GL_EXT_texture_filter_anisotropic"]);
+        });
+    }
+    return [supportAnisotropicFiltering boolValue];
+}
 
 
 - (instancetype)initWithConfig:(CETextureBufferConfig *)config resourceID:(uint32_t)resourceID {
@@ -23,8 +40,30 @@
         _resourceID = resourceID;
         _config = config;
         _textureData = textureData;
+        _hasMipmap = NO;
     }
     return self;
+}
+
+- (void)updateConfig:(CETextureBufferConfig *)config {
+    if (!_ready) {
+        _config = config;
+        return;
+    }
+    
+    if (_config != config) {
+        _config.wrap_s = config.wrap_s;
+        _config.wrap_t = config.wrap_t;
+        _config.mag_filter = config.mag_filter;
+        _config.min_filter = config.min_filter;
+        _config.enableMipmap = config.enableMipmap;
+        _config.mipmapLevel = config.mipmapLevel;
+    }
+    if (_textureBufferID) {
+        glBindTexture(GL_TEXTURE_2D, _textureBufferID);
+        [self setupTextureParameterWithConfig:_config];
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 }
 
 
@@ -40,27 +79,46 @@
     glGenTextures(1, &_textureBufferID);
     glBindTexture(GL_TEXTURE_2D, _textureBufferID);
     glTexImage2D(GL_TEXTURE_2D, 0, _config.internalFormat, _config.width, _config.height, 0, _config.format, _config.texelType, _textureData.bytes);
-    if (_config.mag_filter) {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _config.mag_filter);
-    }
-    if (_config.min_filter) {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _config.min_filter);
-    }
-    if (_config.wrap_s) {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _config.wrap_s);
-    }
-    if (_config.wrap_t) {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _config.wrap_t);
-    }
-    if (_config.useMipmap) {
-        if (_config.mipmapLevel > 0) {
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL_APPLE, _config.mipmapLevel);
-        }
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
+    [self setupTextureParameterWithConfig:_config];
     glBindTexture(GL_TEXTURE_2D, 0);
     _ready = YES;
     return YES;
+}
+
+
+- (void)setupTextureParameterWithConfig:(CETextureBufferConfig *)config {
+    if (config.mag_filter) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, config.mag_filter);
+    }
+    if (config.min_filter) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, config.min_filter);
+    }
+    if (config.wrap_s) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, config.wrap_s);
+    }
+    if (config.wrap_t) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, config.wrap_t);
+    }
+    if (config.enableMipmap) {
+        if (_config.mipmapLevel > 0) {
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL_APPLE, config.mipmapLevel);
+            if ([CETextureBuffer supportAnisotropicFiltering]) {
+                if (_config.enableAnisotropicFiltering) {
+                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, _config.mipmapLevel);
+                } else {
+                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
+                }
+            }
+        }
+        if (!_hasMipmap) {
+            glGenerateMipmap(GL_TEXTURE_2D);
+            _hasMipmap = YES;
+        }
+    } else {
+        if ([CETextureBuffer supportAnisotropicFiltering]) {
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
+        }
+    }
 }
 
 

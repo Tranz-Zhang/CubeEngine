@@ -8,20 +8,20 @@
 
 #import "BaseDataPacker.h"
 
-typedef NS_ENUM(NSInteger, TextureFormat) {
-    TextureFormatUnknown = 0,
-    TextureFormatJPEG,
-    TextureFormatPNG,
-    TextureFormatGIF,
-    TextureFormatTIFF,
-};
+//typedef NS_ENUM(NSInteger, TextureFormat) {
+//    TextureFormatUnknown = 0,
+//    TextureFormatPNG,
+//    TextureFormatJPEG,
+//    TextureFormatPVR,
+//};
+
 
 @interface TextureInfo : BaseDataPacker
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, readonly) uint32_t resourceID;
 @property (nonatomic, strong) NSString *filePath;
-@property (nonatomic, assign) TextureFormat format;
+@property (nonatomic, assign) CETextureFormat format;
 @property (nonatomic, assign) uint16_t bitsPerPixel;
 @property (nonatomic, assign) CGSize size;
 @property (nonatomic, assign) BOOL hasAlpha;

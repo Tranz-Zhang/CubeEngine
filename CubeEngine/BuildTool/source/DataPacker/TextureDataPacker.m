@@ -9,6 +9,7 @@
 #import "TextureDataPacker.h"
 #import "BaseDataPacker_private.h"
 
+
 @implementation TextureDataPacker
 
 - (NSString *)packTextureDataWithInfo:(TextureInfo *)textureInfo {

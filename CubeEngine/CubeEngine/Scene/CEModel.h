@@ -7,7 +7,7 @@
 //
 
 #import "CEObject.h"
-#import "CEMaterial.h"
+#import "CECommon.h"
 
 @interface CEModel : CEObject
 
@@ -23,10 +23,11 @@
 @property (nonatomic, assign) BOOL enableShadow;
 
 /** 
- indicates if use mipmap texture for current model, default is NO;
+ indicates if which quality the mipmap texture use, default is CETextureMipmapNone;
  @note: this property can only be changed before adding CEModel to CEScene;
  */
-@property (nonatomic, assign) BOOL enableMipmap;
+@property (nonatomic, assign) CETextureMipmapQuality mipmapQuality;
+
 
 /** recursive search child model with the indicated name */
 - (CEModel *)childWithName:(NSString *)modelName;

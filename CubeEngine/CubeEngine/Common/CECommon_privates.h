@@ -25,6 +25,12 @@ typedef NS_ENUM(NSInteger, CELightType) {
     CELightTypeSpot,
 };
 
+typedef NS_ENUM(NSInteger, CETextureFormat) {
+    CETextureFormatUnknown = 0,
+    CETextureFormatPNG,
+    CETextureFormatJPEG,
+    CETextureFormatPVR,
+};
 
 
 #endif
