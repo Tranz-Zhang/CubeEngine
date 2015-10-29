@@ -167,7 +167,7 @@
             [hashString appendFormat:@"%d_%@_%@_%@_%d;", (int)variableInfo.usage, variableInfo.precision,
              variableInfo.type, variableInfo.name, variableInfo.arrayItemCount];
         }
-        structInfo.structID = [hashString hash];
+        structInfo.structID = HashValueWithString(hashString);
         [structInfos addObject:structInfo];
     }];
     
@@ -465,9 +465,9 @@
         ![variableInfo.type hasPrefix:@"mat"]) {
         variableInfo.precision = nil;
     }
-    variableInfo.variableID = [[NSString stringWithFormat:@"%d_%@_%@_%@",
-                               (int)variableInfo.usage, variableInfo.precision,
-                               variableInfo.type, variableInfo.name] hash];
+    NSString *hashString = [NSString stringWithFormat:@"%d_%@_%@_%@", (int)variableInfo.usage, variableInfo.precision,
+                            variableInfo.type, variableInfo.name];
+    variableInfo.variableID = HashValueWithString(hashString);
     variableInfo.arrayItemCount = arrayItemCount;
     return variableInfo;
 }

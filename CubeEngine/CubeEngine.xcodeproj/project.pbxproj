@@ -124,6 +124,7 @@
 		4CCD00811BE21A23003A9C07 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD00641BE219F0003A9C07 /* FMResultSet.m */; };
 		4CCD00821BE21A23003A9C07 /* CEDatabasePrivateCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD00681BE219F0003A9C07 /* CEDatabasePrivateCommon.m */; };
 		4CCD00831BE21A23003A9C07 /* CEQueryCondition+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD006A1BE219F0003A9C07 /* CEQueryCondition+Private.m */; };
+		4CCD00861BE220AB003A9C07 /* CEPVRDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD00851BE220AB003A9C07 /* CEPVRDecoder.m */; };
 		4CCDFEB31BE1FBA6003A9C07 /* CEImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDFEB21BE1FBA6003A9C07 /* CEImageDecoder.m */; };
 		4CCDFEB61BE1FBFD003A9C07 /* CEImageDecodeResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDFEB51BE1FBFD003A9C07 /* CEImageDecodeResult.m */; };
 		4CCDFEB91BE1FC79003A9C07 /* CEImageConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDFEB81BE1FC79003A9C07 /* CEImageConverter.m */; };
@@ -417,6 +418,8 @@
 		4CCD00681BE219F0003A9C07 /* CEDatabasePrivateCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEDatabasePrivateCommon.m; sourceTree = "<group>"; };
 		4CCD00691BE219F0003A9C07 /* CEQueryCondition+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CEQueryCondition+Private.h"; sourceTree = "<group>"; };
 		4CCD006A1BE219F0003A9C07 /* CEQueryCondition+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CEQueryCondition+Private.m"; sourceTree = "<group>"; };
+		4CCD00841BE220AB003A9C07 /* CEPVRDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEPVRDecoder.h; sourceTree = "<group>"; };
+		4CCD00851BE220AB003A9C07 /* CEPVRDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEPVRDecoder.m; sourceTree = "<group>"; };
 		4CCDFEB11BE1FBA6003A9C07 /* CEImageDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEImageDecoder.h; sourceTree = "<group>"; };
 		4CCDFEB21BE1FBA6003A9C07 /* CEImageDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEImageDecoder.m; sourceTree = "<group>"; };
 		4CCDFEB41BE1FBFD003A9C07 /* CEImageDecodeResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEImageDecodeResult.h; sourceTree = "<group>"; };
@@ -967,6 +970,8 @@
 				4CCDFEBB1BE1FD55003A9C07 /* CEPNGDecoder.m */,
 				4CCDFEBD1BE20125003A9C07 /* CEJPEGDecoder.h */,
 				4CCDFEBE1BE20125003A9C07 /* CEJPEGDecoder.m */,
+				4CCD00841BE220AB003A9C07 /* CEPVRDecoder.h */,
+				4CCD00851BE220AB003A9C07 /* CEPVRDecoder.m */,
 				4CCDFEB71BE1FC79003A9C07 /* CEImageConverter.h */,
 				4CCDFEB81BE1FC79003A9C07 /* CEImageConverter.m */,
 			);
@@ -1179,6 +1184,7 @@
 				26F7FF8F1ADE45660086D9D7 /* CEAssistRenderer.m in Sources */,
 				4CF4038D1B7386CD00C02BAE /* CEUniformSampler2D.m in Sources */,
 				4CF403751B73862900C02BAE /* CEUniformVector2.m in Sources */,
+				4CCD00861BE220AB003A9C07 /* CEPVRDecoder.m in Sources */,
 				4CC7F9601B969EF70078F441 /* CEShaderBuildProfileResult.m in Sources */,
 				4CBB74FD1BB53D3000C3829B /* CEMaterialInfo.m in Sources */,
 				2690E8541AEA2F8E000BDD8F /* CEPointLight.m in Sources */,

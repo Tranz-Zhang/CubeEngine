@@ -117,7 +117,7 @@ NSString *CEShaderVariableTypeStringWithType(CEShaderVariableType type) {
 - (instancetype)initWithJsonDict:(NSDictionary *)jsonDict {
     self = [super init];
     if (self) {
-        _variableID = [jsonDict[kCEJsonObjectKey_variableID] unsignedLongLongValue];
+        _variableID = [jsonDict[kCEJsonObjectKey_variableID] unsignedIntValue];
         _name = jsonDict[kCEJsonObjectKey_name];
         _type = jsonDict[kCEJsonObjectKey_type];
         _precision = jsonDict[kCEJsonObjectKey_precision];

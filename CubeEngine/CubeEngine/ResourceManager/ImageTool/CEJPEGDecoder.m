@@ -17,6 +17,7 @@ struct ce_error_mgr {
 };
 typedef struct ce_error_mgr * ce_error_ptr;
 
+
 void ce_error_exit (j_common_ptr cinfo)
 {
     /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
@@ -93,18 +94,21 @@ void ce_error_exit (j_common_ptr cinfo)
     }
     
     // get decompressed image data
-    NSMutableData *sourceData = [NSMutableData data];
     row_stride = cinfo.output_width * cinfo.output_components;
+    size_t outputSize = row_stride * cinfo.output_height * sizeof(unsigned char);
+    unsigned char *outputBuffer = (unsigned char *)malloc(outputSize);
+    
     buffer = (*cinfo.mem->alloc_sarray)((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
     while (cinfo.output_scanline < cinfo.output_height) {
         jpeg_read_scanlines(&cinfo, buffer, 1);
-        [sourceData appendBytes:buffer[0] length:row_stride];
-        //        put_scanline_someplace(buffer[0], row_stride);
+        int outputLine = cinfo.output_height - cinfo.output_scanline - 1;
+        unsigned char *outputPtr = outputBuffer + (outputLine * row_stride);
+        memcpy(outputPtr, buffer[0], row_stride);
     }
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
     
-    result.data = sourceData.copy;
+    result.data = [NSData dataWithBytesNoCopy:outputBuffer length:outputSize];
     
     return result;
 }
@@ -112,3 +116,4 @@ void ce_error_exit (j_common_ptr cinfo)
 
 
 @end
+

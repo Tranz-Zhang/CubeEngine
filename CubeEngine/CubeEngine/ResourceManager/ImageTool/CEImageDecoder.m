@@ -9,6 +9,7 @@
 #import "CEImageDecoder.h"
 #import "CEPNGDecoder.h"
 #import "CEJPEGDecoder.h"
+#import "CEPVRDecoder.h"
 
 @implementation CEImageDecoder
 
@@ -23,7 +24,7 @@
 
 
 + (instancetype)defaultPVRDecoder {
-    return nil;
+    return [[CEPVRDecoder alloc] init];
 }
 
 

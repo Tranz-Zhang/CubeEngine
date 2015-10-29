@@ -137,7 +137,6 @@
             printf("decompress duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
             if (result) {
 //                [CEImageConverter convertImageTo16Bits565:result];
-                unpackDataDict[resourceID] = result.data;
                 
                 CETextureBufferConfig *config = [CETextureBufferConfig new];
                 config.width = result.width;
@@ -148,6 +147,12 @@
                 config.wrap_s = GL_REPEAT;
                 config.wrap_t = GL_REPEAT;
                 configDict[resourceID] = config;
+                
+                unpackDataDict[resourceID] = result.data;
+                
+            } else {
+                CEError(@"Fail to decode texture image: %08X format:%d",
+                        resourceID.unsignedIntValue, textureInfo.format);
             }
         }
     }];

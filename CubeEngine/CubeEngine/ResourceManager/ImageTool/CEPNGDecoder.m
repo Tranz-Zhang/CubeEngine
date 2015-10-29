@@ -136,3 +136,4 @@ void CEPNGDecoder_onReadImageData( png_structp structp, png_bytep bytep, png_siz
 @implementation CEPNGDataProvider
 
 @end
+

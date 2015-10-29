@@ -10,7 +10,7 @@
 
 @interface CEShaderStructInfo ()
 
-@property (nonatomic, assign, readwrite) unsigned long long structID;
+@property (nonatomic, assign, readwrite) uint32_t structID;
 @property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, strong, readwrite) NSArray *variables;
 

@@ -20,7 +20,7 @@
 - (instancetype)initWithJsonDict:(NSDictionary *)jsonDict {
     self = [super init];
     if (self) {
-        _structID = [jsonDict[kCEJsonObjectKey_structID] unsignedLongLongValue];
+        _structID = [jsonDict[kCEJsonObjectKey_structID] unsignedIntValue];
         _name = jsonDict[kCEJsonObjectKey_name];
         NSArray *variableDicts = jsonDict[kCEJsonObjectKey_variables];
         NSMutableArray *variables = [NSMutableArray arrayWithCapacity:variableDicts.count];

@@ -18,7 +18,6 @@ typedef void(^CETextureLoadCompletion)(NSSet *loadedTextureIds);
 
 + (GLint)maxTextureUnitCount;
 + (GLint)maxTextureSize;
-+ (BOOL)supportAnisotropicFiltering;
 
 
 /**
