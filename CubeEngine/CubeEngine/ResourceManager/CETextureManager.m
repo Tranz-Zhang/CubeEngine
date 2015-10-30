@@ -151,7 +151,7 @@
                 unpackDataDict[resourceID] = result.data;
                 
             } else {
-                CEError(@"Fail to decode texture image: %08X format:%d",
+                CEError(@"Fail to decode texture image: %08X format:%ld",
                         resourceID.unsignedIntValue, textureInfo.format);
             }
         }

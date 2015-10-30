@@ -65,10 +65,31 @@
         return;
     }
     
+    [self testPVR];
+    
 //    [self testShaderBuilder];
     [[FileUpdateManager sharedManager] cleanUp];
 }
 
+
+- (void)testPVR {
+    NSTask *task = [[NSTask alloc] init];
+//    [task setStandardOutput:[NSPipe pipe]];
+    task.currentDirectoryPath = @"~/Desktop/texturetool";
+    task.launchPath = @"/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/texturetool";
+    // -f PVR -e PVRTC ./Brick.png -o ./Brick.pvr
+//    task.arguments = @[@"-f", @"PVR", @"-e", @"PVRTC", @"~/Desktop/texturetool/Brick.png", @"-o", @"~/Desktop/texturetool/Brick_v.pvr"];
+    task.arguments = @[@"-f", @"PVR", @"-e", @"PVRTC", @"~/Desktop/texturetool/Brick.png", @"-o", @"/Users/chance/My Development/cube-engine/CubeEngine/BuildTool/Brick_v.pvr"];
+    [task launch];
+    [task waitUntilExit];
+    
+    printf("");
+}
+
+- (void)readCompleted:(NSNotification *)notification {
+    NSLog(@"Read data: %@", [[notification userInfo] objectForKey:NSFileHandleNotificationDataItem]);
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:[notification object]];
+}
 
 #pragma mark - process shaders
 

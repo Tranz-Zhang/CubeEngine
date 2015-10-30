@@ -25,7 +25,7 @@
         NSArray *attributeObjects = [CEVBOAttribute attributesWithNames:attributes];
         CEVBOAttribute *anyObject = attributeObjects.lastObject;
         if (vertexData.length % anyObject.elementStride == 0) {
-            _vertexCount = vertexData.length / anyObject.elementStride;
+            _vertexCount = (uint32_t)vertexData.length / anyObject.elementStride;
             
         } else {
             CEError(@"Wrong stride for vertex data");

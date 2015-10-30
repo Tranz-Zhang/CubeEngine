@@ -59,6 +59,7 @@
 		4C51F11F1B8B1EE50052511E /* CEShaderFunctionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C51F11D1B8B1ECB0052511E /* CEShaderFunctionInfo.m */; };
 		4C51F1221B8B20DD0052511E /* CEShaderProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C51F1211B8B20DD0052511E /* CEShaderProfile.m */; };
 		4C51F1231B8B20F10052511E /* CEShaderProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C51F1211B8B20DD0052511E /* CEShaderProfile.m */; };
+		4C7FCBC91BE3562E00BF9312 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7FCBC81BE3562E00BF9312 /* libjpeg.a */; };
 		4C9D75941B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */; };
 		4C9D75951B8F009600AEA174 /* CEShaderLinkFunctionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */; };
 		4C9D80E51BD63BE2000A5617 /* NSData+GLKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9D80E41BD63BE2000A5617 /* NSData+GLKit.m */; };
@@ -96,7 +97,6 @@
 		4CCBB3FC1B842A8400200C4E /* CEShaderInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3FB1B842A8400200C4E /* CEShaderInfo.m */; };
 		4CCBD8951BCCE2C500BD53F8 /* CETextureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBD8941BCCE2C500BD53F8 /* CETextureManager.m */; };
 		4CCBD8981BCCE2F700BD53F8 /* TextureDataPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBD8971BCCE2F700BD53F8 /* TextureDataPacker.m */; };
-		4CCD00461BE219CD003A9C07 /* libjpeg in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCD003A1BE219CD003A9C07 /* libjpeg */; };
 		4CCD00471BE219CD003A9C07 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCD003C1BE219CD003A9C07 /* libpng.a */; };
 		4CCD00481BE219CD003A9C07 /* zlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCD00431BE219CD003A9C07 /* zlib.a */; };
 		4CCD006B1BE219F0003A9C07 /* CEDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD004C1BE219F0003A9C07 /* CEDatabase.m */; };
@@ -133,6 +133,7 @@
 		4CD7D4B41BD48B60002DEC82 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD7D4B31BD48B60002DEC82 /* Utils.m */; };
 		4CD7F1381B91BA9900C118D7 /* CEShaderBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3F81B842A0E00200C4E /* CEShaderBuilder.m */; };
 		4CD7F1391B91BA9900C118D7 /* CEShaderInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3FB1B842A8400200C4E /* CEShaderInfo.m */; };
+		4CD8E5CE1BE304E100AD2F51 /* PVRTextureConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD8E5CD1BE304E100AD2F51 /* PVRTextureConverter.m */; };
 		4CD9CA9F1B8AB56600FDE357 /* CEShaderVariableInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CA9E1B8AB56600FDE357 /* CEShaderVariableInfo.m */; };
 		4CD9CAA41B8AC1FB00FDE357 /* CECodingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CAA31B8AC1FB00FDE357 /* CECodingObject.m */; };
 		4CD9CAA51B8AC39900FDE357 /* CEShaderProfileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCBB3FF1B842F3100200C4E /* CEShaderProfileParser.m */; };
@@ -293,6 +294,7 @@
 		4C51F11D1B8B1ECB0052511E /* CEShaderFunctionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderFunctionInfo.m; sourceTree = "<group>"; };
 		4C51F1201B8B20DD0052511E /* CEShaderProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderProfile.h; sourceTree = "<group>"; };
 		4C51F1211B8B20DD0052511E /* CEShaderProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderProfile.m; sourceTree = "<group>"; };
+		4C7FCBC81BE3562E00BF9312 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjpeg.a; sourceTree = "<group>"; };
 		4C9D75921B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderLinkFunctionInfo.h; sourceTree = "<group>"; };
 		4C9D75931B8EFAF600AEA174 /* CEShaderLinkFunctionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderLinkFunctionInfo.m; sourceTree = "<group>"; };
 		4C9D80E31BD63BE2000A5617 /* NSData+GLKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GLKit.h"; sourceTree = "<group>"; };
@@ -379,7 +381,6 @@
 		4CCD00371BE219CD003A9C07 /* jerror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jerror.h; sourceTree = "<group>"; };
 		4CCD00381BE219CD003A9C07 /* jmorecfg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jmorecfg.h; sourceTree = "<group>"; };
 		4CCD00391BE219CD003A9C07 /* jpeglib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jpeglib.h; sourceTree = "<group>"; };
-		4CCD003A1BE219CD003A9C07 /* libjpeg */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjpeg; sourceTree = "<group>"; };
 		4CCD003C1BE219CD003A9C07 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpng.a; sourceTree = "<group>"; };
 		4CCD003D1BE219CD003A9C07 /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
 		4CCD003E1BE219CD003A9C07 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
@@ -432,6 +433,8 @@
 		4CCDFEBE1BE20125003A9C07 /* CEJPEGDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEJPEGDecoder.m; sourceTree = "<group>"; };
 		4CD7D4B21BD48B60002DEC82 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		4CD7D4B31BD48B60002DEC82 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		4CD8E5CC1BE304E100AD2F51 /* PVRTextureConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRTextureConverter.h; sourceTree = "<group>"; };
+		4CD8E5CD1BE304E100AD2F51 /* PVRTextureConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVRTextureConverter.m; sourceTree = "<group>"; };
 		4CD9CA9D1B8AB56600FDE357 /* CEShaderVariableInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CEShaderVariableInfo.h; sourceTree = "<group>"; };
 		4CD9CA9E1B8AB56600FDE357 /* CEShaderVariableInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEShaderVariableInfo.m; sourceTree = "<group>"; };
 		4CD9CAA21B8AC1FB00FDE357 /* CECodingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CECodingObject.h; sourceTree = "<group>"; };
@@ -495,12 +498,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CCD00461BE219CD003A9C07 /* libjpeg in Frameworks */,
 				26193F6D1AA832F800787C64 /* Foundation.framework in Frameworks */,
 				26193F6B1AA832F000787C64 /* CoreGraphics.framework in Frameworks */,
 				26193F691AA832EB00787C64 /* QuartzCore.framework in Frameworks */,
 				26193F671AA832E700787C64 /* GLKit.framework in Frameworks */,
 				26193F651AA832E400787C64 /* UIKit.framework in Frameworks */,
+				4C7FCBC91BE3562E00BF9312 /* libjpeg.a in Frameworks */,
 				4CCD00481BE219CD003A9C07 /* zlib.a in Frameworks */,
 				4CCD00471BE219CD003A9C07 /* libpng.a in Frameworks */,
 			);
@@ -875,7 +878,7 @@
 				4CCD00371BE219CD003A9C07 /* jerror.h */,
 				4CCD00381BE219CD003A9C07 /* jmorecfg.h */,
 				4CCD00391BE219CD003A9C07 /* jpeglib.h */,
-				4CCD003A1BE219CD003A9C07 /* libjpeg */,
+				4C7FCBC81BE3562E00BF9312 /* libjpeg.a */,
 			);
 			name = libjpeg;
 			path = Libraries/libjpeg;
@@ -999,6 +1002,8 @@
 				4CE611151BC910A80052F451 /* ModelDataPacker.m */,
 				4CCBD8961BCCE2F700BD53F8 /* TextureDataPacker.h */,
 				4CCBD8971BCCE2F700BD53F8 /* TextureDataPacker.m */,
+				4CD8E5CC1BE304E100AD2F51 /* PVRTextureConverter.h */,
+				4CD8E5CD1BE304E100AD2F51 /* PVRTextureConverter.m */,
 			);
 			path = DataPacker;
 			sourceTree = "<group>";
@@ -1122,7 +1127,7 @@
 		26193F401AA8324600787C64 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = ByChance;
 				TargetAttributes = {
 					26193F471AA8324600787C64 = {
@@ -1294,6 +1299,7 @@
 				4CB61A321BB2A29100D83856 /* MeshInfo.mm in Sources */,
 				4CBB750B1BB541FF00C3829B /* CEModelInfo.m in Sources */,
 				4CE6111A1BC928E10052F451 /* CEResourceDataInfo.m in Sources */,
+				4CD8E5CE1BE304E100AD2F51 /* PVRTextureConverter.m in Sources */,
 				4CCD00831BE21A23003A9C07 /* CEQueryCondition+Private.m in Sources */,
 				4CCD007A1BE21A23003A9C07 /* CEDatabaseNotifications.m in Sources */,
 				4CCBD8981BCCE2F700BD53F8 /* TextureDataPacker.m in Sources */,
@@ -1335,6 +1341,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1393,10 +1400,7 @@
 		26193F5D1AA8324600787C64 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CubeEngine/Common/libjpeg",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREFIX_HEADER = "CubeEngine/CubeEngine-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1405,9 +1409,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/CubeEngine/Common/libjpeg",
-					"$(PROJECT_DIR)/CubeEngine/Common/libpng",
-					"$(PROJECT_DIR)/CubeEngine/Common/zlib",
 					"$(PROJECT_DIR)/CubeEngine/Libraries/libjpeg",
 					"$(PROJECT_DIR)/CubeEngine/Libraries/libpng",
 					"$(PROJECT_DIR)/CubeEngine/Libraries/zlib",
@@ -1421,10 +1422,7 @@
 		26193F5E1AA8324600787C64 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CubeEngine/Common/libjpeg",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREFIX_HEADER = "CubeEngine/CubeEngine-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1433,9 +1431,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/CubeEngine/Common/libjpeg",
-					"$(PROJECT_DIR)/CubeEngine/Common/libpng",
-					"$(PROJECT_DIR)/CubeEngine/Common/zlib",
 					"$(PROJECT_DIR)/CubeEngine/Libraries/libjpeg",
 					"$(PROJECT_DIR)/CubeEngine/Libraries/libpng",
 					"$(PROJECT_DIR)/CubeEngine/Libraries/zlib",
@@ -1450,10 +1445,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CubeEngine/Common/libjpeg",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREFIX_HEADER = "BuildTool/source/BuildTool-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1471,10 +1463,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CubeEngine/Common/libjpeg",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREFIX_HEADER = "BuildTool/source/BuildTool-Prefix.pch";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
