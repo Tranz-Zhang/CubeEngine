@@ -168,7 +168,7 @@
         NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
     }
 #else
-    NSString *objFilePath = objFilePathList[6];//[objFilePathList lastObject];
+    NSString *objFilePath = objFilePathList[0];//[objFilePathList lastObject];
     OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
     if (info) {
         [objFileInfos addObject:info];
