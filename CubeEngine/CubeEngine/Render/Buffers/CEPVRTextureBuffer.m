@@ -77,6 +77,7 @@
         _config.enableMipmap = YES;
         _config.mag_filter = GL_LINEAR;
         _config.min_filter = GL_LINEAR_MIPMAP_LINEAR;
+        _config.mipmapLevel = _dataBlocks.count - 1;
     }
 }
 
@@ -100,7 +101,7 @@
     }
     // properties that can't changed in pvr texture
     _config.enableMipmap = _hasMipmap;
-    _config.mipmapLevel = _dataBlocks.count;
+    _config.mipmapLevel = (GLint)_dataBlocks.count;
     
     if (_textureBufferID) {
         glBindTexture(GL_TEXTURE_2D, _textureBufferID);
@@ -123,11 +124,15 @@
     
     glGenTextures(1, &_textureBufferID);
     glBindTexture(GL_TEXTURE_2D, _textureBufferID);
+//    [self setupTextureParameterWithConfig:_config];
+    
+    
+    
     uint32_t width = _config.width;
     uint32_t height = _config.height;
     for (int i = 0; i < _dataBlocks.count; i++) {
         NSData *textureData = _dataBlocks[i];
-        glCompressedTexImage2D(GL_TEXTURE_2D, i, _config.internalFormat, width, height, 0, textureData.length, textureData.bytes);
+        glCompressedTexImage2D(GL_TEXTURE_2D, i, _config.internalFormat, width, height, 0, (GLsizei)textureData.length, textureData.bytes);
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) { // once fail to setup, PVR Texture can no longer be used.
             CEError(@"ERROR: Fail to setup PVR texture.");
@@ -140,6 +145,7 @@
         height = MAX(height >> 1, 1);
     }
     [self setupTextureParameterWithConfig:_config];
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL_APPLE, _config.mipmapLevel - 1);
     glBindTexture(GL_TEXTURE_2D, 0);
     _ready = YES;
     return _ready;

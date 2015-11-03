@@ -8,8 +8,6 @@
 
 #import "CETextureBuffer.h"
 
-#warning add anisotropy filter for texture
-
 @implementation CETextureBuffer {
     NSData *_textureData;
     BOOL _hasSetupMipmap;
