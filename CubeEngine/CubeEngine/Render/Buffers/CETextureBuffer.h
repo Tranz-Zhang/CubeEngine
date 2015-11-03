@@ -32,8 +32,8 @@
 
 
 @interface CETextureBuffer : NSObject {
-    NSData *_textureData;
     GLuint _textureBufferID;
+    uint32_t _resourceID;
     
     CETextureBufferConfig *_config;
     BOOL _ready;
@@ -42,6 +42,8 @@
 @property (nonatomic, readonly) uint32_t resourceID;
 @property (nonatomic, readonly) CETextureBufferConfig *config;
 @property (nonatomic, readonly, getter=isReady) BOOL ready;
+
++ (BOOL)supportAnisotropicFiltering;
 
 - (instancetype)initWithConfig:(CETextureBufferConfig *)config
                     resourceID:(uint32_t)resourceID;

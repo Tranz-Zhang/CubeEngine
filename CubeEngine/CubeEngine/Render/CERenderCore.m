@@ -109,6 +109,7 @@
     }
     
     if (_enableStencilBuffer) {
+#warning Wrong implementation, use GL_DEPTH24_STENCIL8_OES
         if (!_stencilRenderBuffer) {
             glGenRenderbuffers(1, &_stencilRenderBuffer);
             NSAssert(_depthRenderbuffer, @"Can't create stencil buffer");

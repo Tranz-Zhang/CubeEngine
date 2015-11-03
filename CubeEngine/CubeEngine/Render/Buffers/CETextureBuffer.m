@@ -11,7 +11,8 @@
 #warning add anisotropy filter for texture
 
 @implementation CETextureBuffer {
-    BOOL _hasMipmap;
+    NSData *_textureData;
+    BOOL _hasSetupMipmap;
 }
 
 + (BOOL)supportAnisotropicFiltering {
@@ -40,7 +41,7 @@
         _resourceID = resourceID;
         _config = config;
         _textureData = textureData;
-        _hasMipmap = NO;
+        _hasSetupMipmap = NO;
     }
     return self;
 }
@@ -110,9 +111,9 @@
                 }
             }
         }
-        if (!_hasMipmap) {
+        if (!_hasSetupMipmap) {
             glGenerateMipmap(GL_TEXTURE_2D);
-            _hasMipmap = YES;
+            _hasSetupMipmap = YES;
         }
     } else {
         if ([CETextureBuffer supportAnisotropicFiltering]) {

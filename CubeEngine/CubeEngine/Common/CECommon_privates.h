@@ -33,4 +33,23 @@ typedef NS_ENUM(NSInteger, CETextureFormat) {
 };
 
 
+typedef struct _CEPVRTexHeader
+{
+    uint32_t headerLength;
+    uint32_t height;
+    uint32_t width;
+    uint32_t numMipmaps;
+    uint32_t flags;
+    uint32_t dataLength;
+    uint32_t bpp;
+    uint32_t bitmaskRed;
+    uint32_t bitmaskGreen;
+    uint32_t bitmaskBlue;
+    uint32_t bitmaskAlpha;
+    uint32_t pvrTag;
+    uint32_t numSurfs;
+} CEPVRTexHeader;
+
+
+
 #endif

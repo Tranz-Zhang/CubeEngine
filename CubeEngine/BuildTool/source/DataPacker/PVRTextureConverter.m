@@ -27,7 +27,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        NSString *cacheDirectory = [kEngineProjectDirectory stringByAppendingString:@"\\BuildTool\\Cache"];
+        NSString *cacheDirectory = [kEngineProjectDirectory stringByAppendingString:@"/BuildTool/Cache"];
         if ([self createDirectoryAtPath:cacheDirectory]) {
             _cacheDirectory = cacheDirectory;
         }
@@ -36,7 +36,7 @@
 }
 
 
-- (NSString *)convertImageAtPath:(NSString *)imagePath {
+- (NSString *)convertImageAtPath:(NSString *)imagePath generateMipmap:(BOOL)enableMipmap {
     if (!_cacheDirectory) return nil;
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -45,17 +45,39 @@
         return nil;
     }
     
+    NSString *fileName = [imagePath.lastPathComponent stringByDeletingPathExtension];
+    NSString *cachePath = [_cacheDirectory stringByAppendingFormat:@"/%@.pvr", fileName];
+    if ([fileManager fileExistsAtPath:cachePath]) {
+        [fileManager removeItemAtPath:cachePath error:nil];
+    }
+    
+    NSMutableArray *arguments = [NSMutableArray array];
+    [arguments addObject:@"-f"];
+    [arguments addObject:@"PVR"];
+    if (enableMipmap) {
+        [arguments addObject:@"-m"];
+    }
+    [arguments addObject:@"-e"];
+    [arguments addObject:@"PVRTC"];
+    [arguments addObject:imagePath];
+    [arguments addObject:@"-o"];
+    [arguments addObject:cachePath];
+    
+    // example: texturetool -m -e PVRTC -f PVR -p Preview.png -o Grid16.pvr Grid16.png
+    // ref:http://m.oschina.net/blog/70095
     NSTask *task = [[NSTask alloc] init];
-//    [task setStandardOutput:[NSPipe pipe]];
     task.currentDirectoryPath = @"~/Desktop/texturetool";
     task.launchPath = @"/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/texturetool";
-    // -f PVR -e PVRTC ./Brick.png -o ./Brick.pvr
-    //    task.arguments = @[@"-f", @"PVR", @"-e", @"PVRTC", @"~/Desktop/texturetool/Brick.png", @"-o", @"~/Desktop/texturetool/Brick_v.pvr"];
-    task.arguments = @[@"-f", @"PVR", @"-e", @"PVRTC", @"~/Desktop/texturetool/Brick.png", @"-o", @"/Users/chance/My Development/cube-engine/CubeEngine/BuildTool/Brick_v.pvr"];
+    task.arguments = arguments.copy;
     [task launch];
     [task waitUntilExit];
     
-    return nil;
+    
+    if ([fileManager fileExistsAtPath:cachePath]) {
+        return cachePath;
+    } else {
+        return nil;
+    }
 }
 
 

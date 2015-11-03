@@ -10,6 +10,7 @@
 #import "CEResourceManager.h"
 #import "CEImageDecoder.h"
 #import "CEImageConverter.h"
+#import "CEPVRTextureBuffer.h"
 
 @interface CETextureManager () <CEResourceDataProcessProtocol> {
     // runtime
@@ -91,7 +92,16 @@
             CETextureInfo *info = _textureInfoDict[resourceID];
             CETextureBufferConfig *config = _textureConfigDict[resourceID];
             if (info && config) {
-                CETextureBuffer *textureBuffer = [[CETextureBuffer alloc] initWithConfig:config resourceID:info.textureID data:textureData];
+                CETextureBuffer *textureBuffer = nil;
+                if (info.format == CETextureFormatPVR) {
+                    textureBuffer = [[CEPVRTextureBuffer alloc] initWithConfig:config
+                                                                    resourceID:info.textureID
+                                                                          data:textureData];
+                } else {
+                    textureBuffer = [[CETextureBuffer alloc] initWithConfig:config
+                                                                 resourceID:info.textureID
+                                                                       data:textureData];
+                }
                 textureBufferDict[resourceID] = textureBuffer;
             }
         }];
@@ -152,7 +162,7 @@
                 
             } else {
                 CEError(@"Fail to decode texture image: %08X format:%ld",
-                        resourceID.unsignedIntValue, textureInfo.format);
+                        resourceID.unsignedIntValue, (long)textureInfo.format);
             }
         }
     }];

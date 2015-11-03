@@ -15,6 +15,7 @@
 /** 
  @return converted texture path, nil if fail
  */
-- (NSString *)convertImageAtPath:(NSString *)imagePath;
+- (NSString *)convertImageAtPath:(NSString *)imagePath
+                  generateMipmap:(BOOL)enableMipmap;
 
 @end

@@ -19,6 +19,7 @@
 #import "OBJFileParser.h"
 #import "ModelDataPacker.h"
 #import "TextureDataPacker.h"
+#import "PVRTextureConverter.h"
 
 // db object
 #import "CEModelInfo.h"
@@ -168,7 +169,7 @@
         NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
     }
 #else
-    NSString *objFilePath = objFilePathList[0];//[objFilePathList lastObject];
+    NSString *objFilePath = objFilePathList[2];//[objFilePathList lastObject];
     OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
     if (info) {
         [objFileInfos addObject:info];
@@ -176,11 +177,11 @@
     NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
     NSLog(@"%@", info);
     
-//    NSString *floorMaxPath = objFilePathList[7];//[objFilePathList lastObject]; //
-//    OBJFileInfo *floorMax = [OBJFileParser parseBaseInfoWithFilePath:floorMaxPath];
-//    if (floorMax) {
-//        [objFileInfos addObject:floorMax];
-//    }
+    NSString *floorMaxPath = objFilePathList[4];//[objFilePathList lastObject]; //
+    OBJFileInfo *floorMax = [OBJFileParser parseBaseInfoWithFilePath:floorMaxPath];
+    if (floorMax) {
+        [objFileInfos addObject:floorMax];
+    }
 #endif
     // process resources
     if (![self processModelResourcesDataWithObjInfos:objFileInfos]) {
@@ -316,7 +317,7 @@
             }
         }
         for (TextureInfo *info in textureInfos) {
-            if (![[FileUpdateManager sharedManager] isFileUpToDateAtPath:info.filePath autoDelete:YES]) {
+            if (![[FileUpdateManager sharedManager] isFileUpToDateAtPath:info.filePath autoDelete:YES]) {                
                 NSString *resultPath = [texturePacker packTextureDataWithInfo:info];
                 if (resultPath) {
                     [[FileUpdateManager sharedManager] updateInfoWithSourcePath:info.filePath resultPath:resultPath];
