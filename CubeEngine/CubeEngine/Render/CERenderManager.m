@@ -114,7 +114,7 @@
     if (scene.enableDebug) {
         [self renderDebugSceneWithObjects:scene.allModels];
     }
-    printf("render duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
+//    printf("render duration: %.5f\n", CFAbsoluteTimeGetCurrent() - startTime);
 }
 
 

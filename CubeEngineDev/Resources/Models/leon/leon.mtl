@@ -1,6 +1,6 @@
 newmtl leonmesh_01SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 0.50 0.50 0.50
 Ka 0.40 0.40 0.40
 Tf 1.00 1.00 1.00
 map_Kd pl0014.tga
@@ -9,7 +9,7 @@ Ni 1.00
 Ks 0.28 0.28 0.28
 newmtl leonmesh_02SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 0.50 0.50 0.50
 Ka 0.40 0.40 0.40
 Tf 1.00 1.00 1.00
 map_Kd pl0012.tga
@@ -18,7 +18,7 @@ Ni 1.00
 Ks 0.23 0.23 0.23
 newmtl leonmesh_03SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 0.50 0.50 0.50
 Ka 0.40 0.40 0.40
 Tf 1.00 1.00 1.00
 map_Kd pl0005.tga
@@ -27,7 +27,7 @@ Ni 1.00
 Ks 0.25 0.25 0.25
 newmtl leonmesh_04SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 0.50 0.50 0.50
 Ka 0.40 0.40 0.40
 Tf 1.00 1.00 1.00
 map_Kd leon_tex.tga
@@ -35,7 +35,7 @@ Ni 1.00
 Ks 0.16 0.16 0.16
 newmtl leonmesh_05SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 0.50 0.50 0.50
 Ka 0.40 0.40 0.40
 Tf 1.00 1.00 1.00
 map_Kd pl0004.tga
@@ -44,7 +44,7 @@ Ni 1.00
 Ks 0.42 0.42 0.42
 newmtl leonmesh_06SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 0.50 0.50 0.50
 Ka 0.40 0.40 0.40
 Tf 1.00 1.00 1.00
 map_Kd pl0011.tga
@@ -53,7 +53,7 @@ Ni 1.00
 Ks 0.32 0.32 0.32
 newmtl leonmesh_07SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 0.50 0.50 0.50
 Ka 0.40 0.40 0.40
 Tf 1.00 1.00 1.00
 map_Kd leon_kami_n.tga
@@ -61,7 +61,7 @@ Ni 1.00
 Ks 0.23 0.23 0.23
 newmtl leonmesh_08SG
 illum 4
-Kd 0.00 0.00 0.00
+Kd 0.50 0.50 0.50
 Ka 0.40 0.40 0.40
 Tf 1.00 1.00 1.00
 map_Kd pl0013.tga

@@ -13,7 +13,7 @@ struct LightInfo {
 uniform LightInfo MainLight;
 
 attribute highp vec4 VertexPosition;
-uniform lowp mat4 MVMatrix;
+uniform highp mat4 MVMatrix;
 
 void PointLightCalculation(vec3 LightDirection, float Attenuation) {
     LightDirection = vec3(MainLight.LightPosition) - vec3(MVMatrix * VertexPosition);

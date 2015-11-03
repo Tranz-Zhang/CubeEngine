@@ -252,6 +252,18 @@
 }
 
 
+- (NSArray *)allModelNames {
+    NSArray *allModels = [_modelContext queryAllWithError:nil];
+    if (!allModels.count) return nil;
+    
+    NSMutableArray *modelNames = [NSMutableArray array];
+    for (CEModelInfo *modelInfo in allModels) {
+        [modelNames addObject:modelInfo.modelName];
+    }
+    return modelNames.copy;
+}
+
+
 - (GLKVector3)vector3WithData:(NSData *)vectorData {
     GLKVector3 vec3;
     [vectorData getBytes:vec3.v length:sizeof(GLKVector3)];

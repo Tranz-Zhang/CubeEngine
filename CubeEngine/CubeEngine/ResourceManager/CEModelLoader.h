@@ -15,6 +15,10 @@ typedef void(^CEModelLoadingCompletion)(CEModel *model);
 
 + (instancetype)defaultLoader;
 
+/** Asynchronously load a model's resouces with the specify name */
 - (void)loadModelWithName:(NSString *)name completion:(CEModelLoadingCompletion)completion;
+
+/** Fetch all model names in db */
+- (NSArray *)allModelNames;
 
 @end

@@ -4,7 +4,7 @@ Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd bridge.jpg
-bump bridge_normal.jpg -bm -0.037594
+//bump bridge_normal.jpg -bm -0.037594
 Ni 1.00
 Ks 0.00 0.00 0.00
 map_Ks bridge_spec.jpg

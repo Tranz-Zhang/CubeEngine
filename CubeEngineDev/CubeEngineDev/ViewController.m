@@ -235,6 +235,8 @@ GLfloat gArrowXVertexData[108] =
 }
 
 
+
+
 - (IBAction)onReset:(id)sender {
     self.triangleObject.position = GLKVector3Make(0, 0, 0);
     self.triangleObject.scale = GLKVector3Make(1, 1, 1);

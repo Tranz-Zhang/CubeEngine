@@ -1,7 +1,6 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
 mtllib store_bridge.mtl
-g default
 v 2.749715 6.956778 -7.404802
 v -2.676986 6.956778 -7.404802
 v -2.676986 6.956778 -4.168297

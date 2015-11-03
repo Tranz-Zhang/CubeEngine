@@ -160,7 +160,7 @@
     NSLog(@"%@", objFilePathList);
     // parse obj file
     NSMutableArray *objFileInfos = [NSMutableArray array];
-#if 0
+#if 1
     for (NSString *objFilePath in objFilePathList) {
         OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
         if (info) {
@@ -177,11 +177,11 @@
     NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
     NSLog(@"%@", info);
     
-//    NSString *floorMaxPath = objFilePathList[4];//[objFilePathList lastObject]; //
-//    OBJFileInfo *floorMax = [OBJFileParser parseBaseInfoWithFilePath:floorMaxPath];
-//    if (floorMax) {
-//        [objFileInfos addObject:floorMax];
-//    }
+    NSString *floorMaxPath = objFilePathList[4];//[objFilePathList lastObject]; //
+    OBJFileInfo *floorMax = [OBJFileParser parseBaseInfoWithFilePath:floorMaxPath];
+    if (floorMax) {
+        [objFileInfos addObject:floorMax];
+    }
 #endif
     // process resources
     if (![self processModelResourcesDataWithObjInfos:objFileInfos]) {

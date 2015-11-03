@@ -177,7 +177,7 @@ static uint32_t sNextRuntimeResourceID = kBaseRuntimeResourceID;
         return;
     }
     
-    while (_currentCacheSize >= _maxCacheSize) {
+    while (_currentCacheSize >= _maxCacheSize || !_resourceCacheQueue.count) {
         NSNumber *lastResourceID = [_resourceCacheQueue lastObject];
         [_resourceCacheQueue removeLastObject];
         NSData *lastData = _resourceCacheDict[lastResourceID];

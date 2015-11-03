@@ -6,11 +6,13 @@
 //  Copyright (c) 2015年 ByChance. All rights reserved.
 //
 
-#define TESTSTRING(text) @ #text
 
 #import "AppDelegate.h"
+#import "RenderViewController.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () {
+    UIViewController *_baseViewController;
+}
 
 @end
 
@@ -34,6 +36,12 @@
 //    [data getBytes:output range:NSMakeRange(0, 2)];
 //    [data getBytes:output + 1 range:NSMakeRange(2, 2)];
 //    [data getBytes:output + 2 range:NSMakeRange(4, 2)];
+    
+    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    _baseViewController = [[RenderViewController alloc] init];
+    _window.rootViewController = _baseViewController;
+    [_window makeKeyAndVisible];
+    
     return YES;
 }
 

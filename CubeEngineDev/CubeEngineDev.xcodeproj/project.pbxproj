@@ -30,6 +30,8 @@
 		4C595B001AEC90CC006900EF /* hide_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C595AFF1AEC90CC006900EF /* hide_icon@2x.png */; };
 		4C595B031AEC9480006900EF /* LightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C595B021AEC9480006900EF /* LightViewController.m */; };
 		4CACA1F41BD0F2430095A530 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26193F841AA833BF00787C64 /* Main.storyboard */; };
+		4CC70A141BE89BE5002AB151 /* RenderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC70A121BE89BE5002AB151 /* RenderViewController.m */; };
+		4CC70A151BE89BE5002AB151 /* RenderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC70A131BE89BE5002AB151 /* RenderViewController.xib */; };
 		4CCDFE711BE1C6F3003A9C07 /* Brick.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4CCDFE701BE1C6F3003A9C07 /* Brick.jpg */; };
 		4CEA12221BB1609C00686678 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEA12211BB1609C00686678 /* libsqlite3.dylib */; };
 /* End PBXBuildFile section */
@@ -186,6 +188,9 @@
 		4C93CA8C1B4A14790017648B /* ram.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram.mtl; sourceTree = "<group>"; };
 		4CC25CA51BCDF5E500DB3DA2 /* char_ram_col.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; path = char_ram_col.pvr; sourceTree = "<group>"; };
 		4CC25CA91BCDFA9B00DB3DA2 /* new_char_ram_col.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new_char_ram_col.png; sourceTree = "<group>"; };
+		4CC70A111BE89BE5002AB151 /* RenderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderViewController.h; sourceTree = "<group>"; };
+		4CC70A121BE89BE5002AB151 /* RenderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenderViewController.m; sourceTree = "<group>"; };
+		4CC70A131BE89BE5002AB151 /* RenderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RenderViewController.xib; sourceTree = "<group>"; };
 		4CCBD88F1BCCA84200BD53F8 /* ram_blinn_nonormal.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram_blinn_nonormal.mtl; sourceTree = "<group>"; };
 		4CCBD8901BCCA84200BD53F8 /* ram_blinn_nonormal.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ram_blinn_nonormal.obj; sourceTree = "<group>"; };
 		4CCD81731B68CFBD008041AB /* floor_max.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor_max.obj; sourceTree = "<group>"; };
@@ -247,6 +252,9 @@
 				263C8E6F1AE63271004FDFE8 /* Common.m */,
 				26193F7E1AA833BF00787C64 /* AppDelegate.h */,
 				26193F7F1AA833BF00787C64 /* AppDelegate.m */,
+				4CC70A111BE89BE5002AB151 /* RenderViewController.h */,
+				4CC70A121BE89BE5002AB151 /* RenderViewController.m */,
+				4CC70A131BE89BE5002AB151 /* RenderViewController.xib */,
 				26193F811AA833BF00787C64 /* ViewController.h */,
 				26193F821AA833BF00787C64 /* ViewController.m */,
 				261CD42B1AD3DE0000C521CC /* ModelViewController.h */,
@@ -579,6 +587,7 @@
 				4CACA1F41BD0F2430095A530 /* Main.storyboard in Resources */,
 				44D0CCEE1AED26E8000C137C /* PointLightControl.xib in Resources */,
 				44D0CCE91AECA677000C137C /* rotation_icon@2x.png in Resources */,
+				4CC70A151BE89BE5002AB151 /* RenderViewController.xib in Resources */,
 				44D0CCE81AECA677000C137C /* transition_icon@2x.png in Resources */,
 				4C595AF71AEC7CCD006900EF /* DirectionalLightControl.xib in Resources */,
 				4461FD091AEE9A3700A59229 /* SpotLightControl.xib in Resources */,
@@ -621,6 +630,7 @@
 				26193F831AA833BF00787C64 /* ViewController.m in Sources */,
 				44D0CCEC1AECFEBC000C137C /* PointLightControl.m in Sources */,
 				26193F801AA833BF00787C64 /* AppDelegate.m in Sources */,
+				4CC70A141BE89BE5002AB151 /* RenderViewController.m in Sources */,
 				263C8E701AE63271004FDFE8 /* Common.m in Sources */,
 				4C595AF51AEC7C60006900EF /* DirectionalLightControl.m in Sources */,
 				4C595AFB1AEC835D006900EF /* UINibView.m in Sources */,
