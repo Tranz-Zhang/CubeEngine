@@ -39,9 +39,9 @@
     self.scene.camera.position = GLKVector3Make(15, 15, 15);
     [self.scene.camera lookAt:GLKVector3Make(0, 0, 0)];
     
-    [[CEModelLoader defaultLoader] loadModelWithName:@"floor_max" completion:^(CEModel *model) {
-        [self.scene addModel:model];
-    }];
+//    [[CEModelLoader defaultLoader] loadModelWithName:@"floor_max" completion:^(CEModel *model) {
+//        [self.scene addModel:model];
+//    }];
     
     self.lightSegment.selectedSegmentIndex = 2;
     [self onChangeLightType:self.lightSegment];

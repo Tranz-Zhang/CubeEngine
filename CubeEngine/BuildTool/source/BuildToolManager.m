@@ -169,7 +169,7 @@
         NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
     }
 #else
-    NSString *objFilePath = objFilePathList[0];//[objFilePathList lastObject];
+    NSString *objFilePath = objFilePathList[13];//[objFilePathList lastObject];
     OBJFileInfo *info = [OBJFileParser parseBaseInfoWithFilePath:objFilePath];
     if (info) {
         [objFileInfos addObject:info];
@@ -177,11 +177,11 @@
     NSLog(@"parsing obj file: %@ %@\n", info.name, info ? @"√" : @"X");
     NSLog(@"%@", info);
     
-    NSString *floorMaxPath = objFilePathList[4];//[objFilePathList lastObject]; //
-    OBJFileInfo *floorMax = [OBJFileParser parseBaseInfoWithFilePath:floorMaxPath];
-    if (floorMax) {
-        [objFileInfos addObject:floorMax];
-    }
+//    NSString *floorMaxPath = objFilePathList[4];//[objFilePathList lastObject]; //
+//    OBJFileInfo *floorMax = [OBJFileParser parseBaseInfoWithFilePath:floorMaxPath];
+//    if (floorMax) {
+//        [objFileInfos addObject:floorMax];
+//    }
 #endif
     // process resources
     if (![self processModelResourcesDataWithObjInfos:objFileInfos]) {
@@ -317,15 +317,20 @@
             }
         }
         for (TextureInfo *info in textureInfos) {
+            NSString *sizeWarning = nil;
+            if (!IsPowerOfTwo(info.size.width) ||
+                !IsPowerOfTwo(info.size.height)) {
+                sizeWarning = [NSString stringWithFormat:@"WARNING: Texture size is not power of 2: %.0fx%.0f", info.size.width, info.size.height];
+            }
             if (![[FileUpdateManager sharedManager] isFileUpToDateAtPath:info.filePath autoDelete:YES]) {                
                 NSString *resultPath = [texturePacker packTextureDataWithInfo:info];
                 if (resultPath) {
                     [[FileUpdateManager sharedManager] updateInfoWithSourcePath:info.filePath resultPath:resultPath];
                 }
-                NSLog(@" - Texture[%08X]: %@ %@\n", info.resourceID, info.name, resultPath ? @"√" : @"X");
+                NSLog(@" - Texture[%08X]: %@ %@ %@", info.resourceID, info.name, resultPath ? @"√" : @"X", sizeWarning ? sizeWarning : @"");
                 
             } else {
-                NSLog(@" - Texture[%08X]: %@ ∆\n", info.resourceID, info.name);
+                NSLog(@" - Texture[%08X]: %@ ∆ %@", info.resourceID, info.name, sizeWarning ? sizeWarning : @"");
             }
         }
     }

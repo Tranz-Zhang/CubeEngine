@@ -16,3 +16,9 @@ uint32_t HashValueWithString(NSString *string) {
     }
     return (hash & 0x7FFFFFFF);
 }
+
+
+BOOL IsPowerOfTwo(uint32_t value) {
+    return ((value != 0) && !(value & (value - 1)));
+}
+

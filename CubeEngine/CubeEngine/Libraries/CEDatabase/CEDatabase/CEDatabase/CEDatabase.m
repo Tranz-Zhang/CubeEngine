@@ -46,12 +46,14 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
 
 - (void)dealloc
 {
+#if !OS_OBJECT_USE_OBJC
     if (self.dispatchQueue) {
-//        dispatch_release(self.dispatchQueue);
+        dispatch_release(self.dispatchQueue);
         self.dispatchQueue = nil;
         
-        CEDatabaseLog(@"AsyncDBInfo: Delete Queue");
+        SYBDatabaseLog(@"AsyncDBInfo: Delete Queue");
     }
+#endif
 }
 
 @end

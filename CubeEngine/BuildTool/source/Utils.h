@@ -14,6 +14,8 @@ extern "C" {
     
     uint32_t HashValueWithString(NSString *string);
     
+    BOOL IsPowerOfTwo(uint32_t value);
+    
 #ifdef __cplusplus
 }
 #endif
