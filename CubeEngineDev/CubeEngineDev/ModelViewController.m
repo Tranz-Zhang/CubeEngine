@@ -105,7 +105,6 @@
 }
 
 
-
 - (IBAction)onWireframeSwitchChanged:(UISwitch *)switcher {
     _testModel.showWireframe = switcher.on;
 }
