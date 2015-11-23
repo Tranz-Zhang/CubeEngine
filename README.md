@@ -1,5 +1,5 @@
 ## CubeEngine
-CubeEngine is an iOS RenderEngine base on OpenGLES 2.0. 
+CubeEngine is an iOS render engine base on OpenGLES 2.0. 
 ***
 ### What it does ?
 * support .obj file importing
