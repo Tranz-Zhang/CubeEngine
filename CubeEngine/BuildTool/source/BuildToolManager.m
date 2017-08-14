@@ -66,7 +66,7 @@
         return;
     }
     
-    [self testPVR];
+//    [self testPVR];
     
 //    [self testShaderBuilder];
     [[FileUpdateManager sharedManager] cleanUp];

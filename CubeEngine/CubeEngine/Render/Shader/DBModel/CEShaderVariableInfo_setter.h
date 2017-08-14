@@ -11,9 +11,9 @@
 @interface CEShaderVariableInfo ()
 
 @property (nonatomic, assign, readwrite) uint32_t variableID;
-@property (nonatomic, strong, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) NSString *type;
-@property (nonatomic, strong, readwrite) NSString *precision;
+@property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, copy, readwrite) NSString *type;
+@property (nonatomic, copy, readwrite) NSString *precision;
 @property (nonatomic, assign, readwrite) CEShaderVariableUsage usage;
 @property (nonatomic, assign, readwrite) int arrayItemCount;
 
