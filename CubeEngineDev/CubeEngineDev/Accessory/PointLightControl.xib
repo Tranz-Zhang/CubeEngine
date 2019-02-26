@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <deployment version="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,7 +18,7 @@
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="5lN-uR-VUw">
                     <rect key="frame" x="14" y="129" width="292" height="31"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <action selector="onRedSliderChanged:" destination="z9n-Eg-XEr" eventType="valueChanged" id="33u-zs-6HC"/>
                     </connections>
@@ -29,7 +33,7 @@
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="7jk-8j-PEM">
                     <rect key="frame" x="14" y="167" width="292" height="31"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <color key="tintColor" red="0.28243491279999999" green="0.82700892859999997" blue="0.0026009810880000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="0.28243491279999999" green="0.82700892859999997" blue="0.0026009810880000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <action selector="onBlueSliderChanged:" destination="z9n-Eg-XEr" eventType="valueChanged" id="xmx-xp-86I"/>
                     </connections>
@@ -37,7 +41,7 @@
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="slo-u3-L8h">
                     <rect key="frame" x="14" y="56" width="292" height="31"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <color key="tintColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <action selector="onAttributeSliderChanged:" destination="z9n-Eg-XEr" eventType="valueChanged" id="Cnh-Qq-8Xj"/>
                     </connections>
@@ -49,7 +53,7 @@
                         <segment title="Ambient Color"/>
                         <segment title="Light Color"/>
                     </segments>
-                    <color key="tintColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <action selector="onColorSegmentChanged:" destination="z9n-Eg-XEr" eventType="valueChanged" id="Qtw-UX-j1O"/>
                     </connections>
@@ -62,7 +66,7 @@
                         <segment title="Itensity"/>
                         <segment title="Attenuation"/>
                     </segments>
-                    <color key="tintColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <action selector="onAttributeSegmentChanged:" destination="z9n-Eg-XEr" eventType="valueChanged" id="hr6-50-g1L"/>
                     </connections>
@@ -78,12 +82,7 @@
                 <outlet property="greenSlider" destination="7jk-8j-PEM" id="9fj-zj-Xkt"/>
                 <outlet property="redSlider" destination="5lN-uR-VUw" id="J0E-Oq-Iqb"/>
             </connections>
-            <point key="canvasLocation" x="254" y="355.5"/>
+            <point key="canvasLocation" x="406.39999999999998" y="319.79010494752629"/>
         </view>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

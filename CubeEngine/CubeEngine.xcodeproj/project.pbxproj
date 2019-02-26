@@ -503,8 +503,8 @@
 				26193F691AA832EB00787C64 /* QuartzCore.framework in Frameworks */,
 				26193F671AA832E700787C64 /* GLKit.framework in Frameworks */,
 				26193F651AA832E400787C64 /* UIKit.framework in Frameworks */,
-				4C7FCBC91BE3562E00BF9312 /* libjpeg.a in Frameworks */,
 				4CCD00481BE219CD003A9C07 /* zlib.a in Frameworks */,
+				4C7FCBC91BE3562E00BF9312 /* libjpeg.a in Frameworks */,
 				4CCD00471BE219CD003A9C07 /* libpng.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
